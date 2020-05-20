@@ -284,11 +284,11 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
                     onMonthChange={e => this.handleMonthChange(e)}
                     inline={true}
                     minDate={isHandoff && moment()}
-                    excludeTimes={this.state.excludedTimes}
+                    excludeTimes={this.state.loading ? [moment().startOf('day')] : this.state.excludedTimes}
                     tabIndex={1}
                     dateFormat={withTime ? dateFormatWithTime : dateFormat}
                     showTimeSelect={withTime}
-                    timeIntervals={this.state.duration}
+                    timeIntervals={this.state.loading ? 24 * 60 * 60 : this.state.duration}
                 />
                 <button type="button" className="gd-no-workable-appointment" onClick={e => this.clickNoWorkableAppointment(e) } title="nomatch">
                     None of these appointments work for me
