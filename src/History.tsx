@@ -343,8 +343,6 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
 
         const { activity, format } = this.props;
 
-        console.log('props: ', this.props);
-
         switch (activity.id) {
             case undefined:
                 timeLine = <span>{ format.strings.messageSending }</span>;
