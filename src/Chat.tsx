@@ -172,15 +172,6 @@ export class Chat extends React.Component<ChatProps, State> {
         });
     }
 
-    private preventBodyScroll = (preventScroll: boolean) => {
-
-        if (preventScroll && document.body.className.indexOf('noScroll') === -1) {
-            document.body.className = this.state.orginalBodyClass + ' noScroll';
-        } else if (!preventScroll) {
-            document.body.className = this.state.orginalBodyClass;
-        }
-    }
-
     private setSize() {
         this.store.dispatch<ChatActions>({
             type: 'Set_Size',
@@ -484,10 +475,6 @@ export class Chat extends React.Component<ChatProps, State> {
                 <div
                     className={`wc-wrap ${display ? '' : 'hide'}`}
                     style={{ display: 'none'}}
-                    onMouseOver={e => this.preventBodyScroll(true)}
-                    onMouseLeave={e => this.preventBodyScroll(false)}
-                    onTouchStart={e => this.preventBodyScroll(true)}
-                    onTouchEnd={e => this.preventBodyScroll(false)}
                 >
                     <FloatingIcon
                         visible={!open && !opened}
