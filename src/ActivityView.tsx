@@ -69,6 +69,9 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
     }
 
     addFormattedKey = (currentText: string, key: string, json: { [key: string]: string }) => {
+      if (!(key in json)) {
+        return currentText;
+      }
       const newLine = key + ': ' + json[key];
       if (currentText !== '') {
         return currentText.concat('\n', newLine);
@@ -83,11 +86,9 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
         const o = JSON.parse(text);
         let formattedText = '';
         if (o && typeof o === 'object') {
-          for (const key in o) {
-            if (key in o) {
-              formattedText = this.addFormattedKey(formattedText, key, o);
-            }
-          }
+          formattedText = this.addFormattedKey(formattedText, 'name', o);
+          formattedText = this.addFormattedKey(formattedText, 'email', o);
+          formattedText = this.addFormattedKey(formattedText, 'phone', o);
           return formattedText;
         }
       } catch (e) {
