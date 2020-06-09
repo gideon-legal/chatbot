@@ -1,4 +1,5 @@
 import { Activity, CardAction, DirectLineOptions, Message} from 'botframework-directlinejs';
+import { parsePhoneNumberFromString } from 'libphonenumber-js/max';
 import * as moment from 'moment';
 import * as React from 'react';
 import { connect } from 'react-redux';
@@ -87,7 +88,8 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
   }
 
   validatePhone = (phone: string) => {
-    return (/^\d{7,}$/).test(phone.replace(/[\s()+\-\.]|ext/gi, ''));
+    const phoneNumber = parsePhoneNumberFromString(phone);
+    return phoneNumber && phoneNumber.isValid();
   }
 
   validateContactInformation = () => {
