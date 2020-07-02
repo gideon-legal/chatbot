@@ -114,14 +114,6 @@
             max-width: $chatWidthMobile;
         }
 
-        .wc-header--attourney-logo-container {
-          width: $logo-size;
-          min-width: $logo-size;
-          height: $logo-size;
-          display: inline-block;
-          vertical-align: middle;
-        }
-
         span {
             font-size: 18px;
             vertical-align: middle;
@@ -132,12 +124,12 @@
         }
 
         &--logo {
-            position: absolute;
             vertical-align: middle;
             max-height: $logo-size;
             min-height: $logo-size;
             min-width: $logo-size;
             max-width: $logo-size;
+            margin: 0;
         }
 
         $topMargin: 10px;
