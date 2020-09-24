@@ -5,14 +5,12 @@ export const verifyUserConnection = (
     baseUrl: string,
     msftUserId: string,
     directLine: string,
-    originatingUrl: string,
-    campaignParams: object
+    originatingUrl: string
 ): any => {
     return axios.post(`${baseUrl}/api/v1/bot/conversations`, {
         originating_url: originatingUrl,
         msft_user_id: msftUserId,
-        directLine,
-        campaignParams
+        directLine
     });
 };
 
@@ -23,7 +21,8 @@ export const newConversation = (
     msftUserId: string,
     organizationId: string,
     directLine: string,
-    originatingUrl: string
+    originatingUrl: string,
+    campainParams: string
 ): any => {
     return axios.post(`${baseUrl}/api/v1/bot/new_conversation`, {
         bot_id: botId,
@@ -31,7 +30,8 @@ export const newConversation = (
         msft_user_id: msftUserId,
         organization_id: organizationId,
         directLine,
-        originating_url: originatingUrl
+        originating_url: originatingUrl,
+        campainParams
     });
 };
 

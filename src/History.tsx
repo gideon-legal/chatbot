@@ -1,3 +1,4 @@
+import { parseReferrer } from 'analytics-utils';
 import { Activity, CardActionTypes, DirectLine, DirectLineOptions, IBotConnection, Message, User } from 'botframework-directlinejs';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
@@ -101,6 +102,8 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
                 const botCopy: any = botConnection;
                 const conversationId = botCopy.conversationId;
 
+                const campaign = parseReferrer(document.referrer, window.location.href);
+
                 if (isNew) {
                     newConversation(
                         gid,
@@ -109,7 +112,8 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
                         user.id,
                         organizationId,
                         directLine.secret,
-                        window.location.toString()
+                        window.location.toString(),
+                        campaign
                     ).then(({data: {conversation}}: any) => {
                         handleNewConversation(conversation);
                     });
