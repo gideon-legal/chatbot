@@ -7,7 +7,7 @@ $gd_dark_sky_blue: #31ace2;
 .react-datepicker__header--time {
     padding-bottom: 8px;
     height: 63px;
-    
+
 }
 
 $width: 280px;
@@ -15,9 +15,9 @@ $width: 280px;
 .gd-date-picker {
     width: $width;
     max-width: $width;
-    
+
     padding:2px;
-    
+
     &-inner-container {
       display: flex;
       flex-direction: column;
@@ -77,9 +77,9 @@ $width: 280px;
       align-content: flex-start;
     }
 
-    .gd-date-picker-select-day:focus, 
+    .gd-date-picker-select-day:focus,
     .gd-date-picker-select-day:hover:enabled,
-    .gd-date-picker-select-hour:focus, 
+    .gd-date-picker-select-hour:focus,
     .gd-date-picker-select-hour:hover:enabled {
       background-color: $gd_dark_sky_blue;
       color: white;
@@ -119,13 +119,13 @@ $width: 280px;
         stroke-dashoffset: 280;
         transform: rotate(0);
       }
-      
+
       50%,
       75% {
         stroke-dashoffset: 75;
         transform: rotate(45deg);
       }
-      
+
       100% {
         stroke-dashoffset: 280;
         transform: rotate(360deg);
@@ -239,7 +239,7 @@ $width: 280px;
     }
 
     &.withTime {
-        
+
         max-width: 421px;
 
         @include mobile {
@@ -302,7 +302,7 @@ $width: 280px;
         margin-top: -.15em;
         width: 100%;
     }
-    
+
     .gd-date-picker-header, .gd-selected-date-container {
         font-size: 14px;
         text-align: center;
@@ -358,7 +358,7 @@ $width: 280px;
         border-radius: 0;
         border: 0;
         border-bottom: 1px solid $gd_dark_sky_blue !important;
-        
+
         &__navigation--previous {
             border-right-color: $gd_dark_sky_blue;
         }
@@ -379,7 +379,7 @@ $width: 280px;
             width: 100%;
         }
 
-    
+
         &__time-container {
             border-left: 1px solid $gd_dark_sky_blue;
             width: 30% !important;
@@ -416,7 +416,7 @@ $width: 280px;
         &__day-names {
             margin: 7px 0 -8px;
         }
-        
+
         &__month-container {
             color:$gd_dark_sky_blue !important;
         }
@@ -433,6 +433,19 @@ $width: 280px;
 
         &__day--disabled {
             color:#CCC;
+        }
+
+        &__year-dropdown-container--select, &__month-dropdown-container--select {
+          padding: 3px;
+          margin-top: 10px;
+
+          select {
+            border: 1px solid $gd_dark_sky_blue;
+            padding: 5px;
+            border-radius: 5px;
+            outline: none;
+            color: $gd_dark_sky_blue;
+          }
         }
     }
 
