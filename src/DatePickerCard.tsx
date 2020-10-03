@@ -410,8 +410,6 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
 
     renderForDateNode = () => {
         const { startDate, endDate, withTime, withRange, timeSelected } = this.state;
-        const { node } = this.props;
-        const isHandoff = node.node_type === 'handoff';
 
         let headerMessage = withRange ? (!startDate ? 'Select a start date' : 'Select an end date') : 'Select a date';
         const dateSelectedCheck = withRange ? startDate && endDate : !!startDate;
@@ -427,29 +425,36 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         }
 
         return (
-            <div className={`gd-date-picker ${withTime && 'withTime'} date-node`}>
-                <div className="gd-selected-date-container">
-                    <span className="gd-selected-date">{headerMessage}</span>
-                </div>
-
-                <ReactDatePicker endDate={endDate}
-                    startDate={startDate}
-                    selected={startDate}
-                    onChange={(date, event) => this.handleDateChange(event, date, withTime)}
-                    onMonthChange={e => this.handleMonthChange(e)}
-                    inline={true}
-                    minDate={isHandoff && moment()}
-                    tabIndex={1}
-                    dateFormat={withTime ? dateFormatWithTime : dateFormat}
-                    showTimeSelect={withTime}
-                />
-                <button type="button" className="gd-no-workable-appointment" onClick={e => this.clickNoWorkableAppointment(e) } title="nomatch">
-                    None of these appointments work for me
-                </button>
-                <button type="button" className="gd-submit-date-button" onClick={e => this.clickToSubmitDate(e) } title="Submit">
-                    Submit
-                </button>
+          <div className={`gd-date-picker ${withTime && 'withTime'} date-node`}>
+            <div className="gd-selected-date-container">
+              <span className="gd-selected-date">{headerMessage}</span>
             </div>
+
+            <ReactDatePicker
+              endDate={endDate}
+              startDate={startDate}
+              selected={startDate}
+              onChange={(date, event) =>
+                this.handleDateChange(event, date, withTime)
+              }
+              onMonthChange={e => this.handleMonthChange(e)}
+              inline={true}
+              tabIndex={1}
+              dateFormat={withTime ? dateFormatWithTime : dateFormat}
+              showTimeSelect={withTime}
+              showMonthDropdown
+              showYearDropdown
+              dropdownMode="select"
+            />
+            <button
+              type="button"
+              className="gd-submit-date-button"
+              onClick={e => this.clickToSubmitDate(e)}
+              title="Submit"
+            >
+              Submit
+            </button>
+          </div>
         );
     }
 
