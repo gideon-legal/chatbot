@@ -62,6 +62,10 @@ const coreConfig = {
                 exclude: [/node_modules/]
             },
             {
+                test: /\.css$/i,
+                use: ['style-loader', 'css-loader']
+            },
+            {
                 test: require.resolve('adaptivecards'),
                 use: [{ loader: 'expose-loader', options: 'AdaptiveCards' }]
             }
