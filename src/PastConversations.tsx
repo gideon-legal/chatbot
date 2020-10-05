@@ -1,6 +1,7 @@
 import * as moment from 'moment';
 import * as React from 'react';
 import { connect } from 'react-redux';
+import * as Spinner from 'react-spinkit';
 import { findInitial } from './History';
 import { ChatState, Conversation, FormatState } from './Store';
 
@@ -8,11 +9,12 @@ export interface Props {
   conversations: Conversation[];
   setSelectedConversation: (conversation: Conversation) => void;
   format: FormatState;
+  loading: boolean;
 }
 
 class PastConversationsView extends React.Component<Props> {
   render() {
-    const { conversations, setSelectedConversation, format: {display_name, themeColor, strings} } = this.props;
+    const { conversations, setSelectedConversation, format: {display_name, themeColor, strings}, loading } = this.props;
 
     const avatarColor = themeColor ? themeColor : '#c3ccd0';
     const avatarInitial = display_name && typeof(display_name) === 'string' ? findInitial(display_name) : 'B';
@@ -39,7 +41,7 @@ class PastConversationsView extends React.Component<Props> {
     return (
       <div className="conversations-wrapper">
         <div className="conversations-header">Conversations</div>
-        <div className="conversations">
+        {!loading ? <div className="conversations">
           {conversations.length > 0 &&
             conversations
               .filter(
@@ -73,6 +75,9 @@ class PastConversationsView extends React.Component<Props> {
                 );
               })}
         </div>
+        : <div className="spinner-container">
+            <Spinner name="ball-clip-rotate-multiple" style={{ color: avatarColor }} className="spinner" fadeIn="none" />
+          </div>}
       </div>
     );
   }
@@ -87,6 +92,7 @@ export const PastConversations = connect(
   (stateProps: any, dispatchProps: any, ownProps: any): Props => ({
     format: stateProps.format,
     conversations: stateProps.conversations.conversations,
-    setSelectedConversation: ownProps.setSelectedConversation
+    setSelectedConversation: ownProps.setSelectedConversation,
+    loading: ownProps.loading
   })
 )(PastConversationsView);

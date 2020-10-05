@@ -539,6 +539,17 @@
         margin-top: 62px;
         width: 100%;
 
+        .spinner-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+
+            .spinner {
+                height: 50px;
+                margin-top: 55px;
+            }
+        }
+
         .conversations-header {
             font-size: 16px;
             color: $gideon-dark-grey;

@@ -423,6 +423,7 @@ export interface ConversationState {
     selectedConversation?: Conversation;
     botId: string;
     organizationId: string;
+    loading: boolean;
 }
 
 export interface Conversation {
@@ -450,6 +451,9 @@ export type ConversationAction = {
 } | {
     type: 'Add_Conversation';
     conversation: Conversation;
+} | {
+    type: 'Set_Conversations_Loading',
+    loading: boolean;
 };
 
 export type HistoryAction = {
@@ -487,15 +491,23 @@ export const conversations: Reducer<ConversationState> = (
         conversations: [],
         selectedConversation: null,
         botId: null,
-        organizationId: null
+        organizationId: null,
+        loading: false
     },
     action: ConversationAction
 ) => {
     switch (action.type) {
+        case 'Set_Conversations_Loading': {
+            return {
+                ...state,
+                loading: action.loading
+            };
+        }
         case 'Set_Conversations': {
             return {
                 ...state,
-                conversations: action.conversations
+                conversations: action.conversations,
+                loading: false
             };
         }
         case 'Set_Selected_Conversation': {

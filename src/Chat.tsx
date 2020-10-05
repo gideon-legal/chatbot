@@ -267,6 +267,11 @@ export class Chat extends React.Component<ChatProps, State> {
         }
 
         this.store.dispatch<ChatActions>({
+            type: 'Set_Conversations_Loading',
+            loading: true
+        });
+
+        this.store.dispatch<ChatActions>({
             type: 'Set_Verification',
             verification: {
                 attempted: true
@@ -287,6 +292,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     type: 'Set_Conversations',
                     conversations: formattedConversations
                 });
+                this.forceUpdate();
             });
 
         verifyUserConnection(
@@ -449,7 +455,7 @@ export class Chat extends React.Component<ChatProps, State> {
     render() {
         const state = this.store.getState();
         const { open, display, isNew } = this.state;
-        const { selectedConversation } = state.conversations;
+        const { selectedConversation, loading } = state.conversations;
         const color = state.format.themeColor;
 
         const chatviewPanelStyle = this.calculateChatviewPanelStyle(state.format);
@@ -537,7 +543,10 @@ export class Chat extends React.Component<ChatProps, State> {
                                 isNew={isNew}
                                 handleNewConversation={(conversation: Conversation) => this.handleNewConversation(conversation)}
                             />
-                            :  <PastConversations setSelectedConversation={setSelectedConversation} />
+                            : <PastConversations
+                                setSelectedConversation={setSelectedConversation}
+                                loading={loading}
+                            />
                         }
 
                         {selectedConversation
