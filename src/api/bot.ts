@@ -91,7 +91,8 @@ export const mapMessagesToActivities = (messages: any, userId: any): Activity[] 
             from: {
                 id: m.sender_type === 'bot' ? '' : userId
             },
-            text: m.message
+            text: m.message,
+            textFormat: 'plain'
         };
     });
 };
