@@ -581,45 +581,48 @@
 
         .contact__form__card {
           $contact_padding_v: 8px;
+          $contact_border_radius_v: 8px;
           $contact_width: 260px;
           width: $contact_width;
 
           &__container {
             display: flex;
             flex-direction: column;
-            padding-bottom: $contact_padding_v + 2px;
+            padding-bottom: $contact_padding_v + 3px;
 
             &__input {
               width: 100%;
               padding-left: $contact_padding_v;
-              border-radius: $contact_padding_v;
+              border-radius: $contact_border_radius_v;
               border-width: 1px;
               border-color: $gideon-dark-blue;
               border-style: solid;
               height: 2em;
               outline-style: none;
               color: black;
+              background: $gideon-grey-two;
             }
 
             &__title {
               margin: 0;
-              padding-bottom: $contact_padding_v - 2px;
+              padding-bottom: $contact_padding_v - 4px;
               color: #31ace2;
             }
 
             &__error {
-              padding-top: 6px;
+              padding-top: 4px;
               color: red;
               font-size: 12px;
+              letter-spacing: 0.04em;
             }
           }
 
           &__submit {
-            width: 70%;
-            margin-top: $contact_padding_v;
-            margin-left:15%;
+            width: 100%;
+            margin-top: $contact_padding_v - 4px;
+            //margin-left:15%;
             height: 2em;
-            border-radius: 6px;
+            border-radius: $contact_border_radius_v;
             border-width: 1px;
             border-color: $gideon-dark-blue;
             color: white;
