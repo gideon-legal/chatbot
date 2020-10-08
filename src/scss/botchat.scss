@@ -65,15 +65,14 @@
 
     .wc-footer {
       position: absolute;
-      width: 156px;
+      width: 100%;
       bottom: 0;
       color: #444444;
       font-weight: 500;
-      margin-left: auto;
-      margin-right: auto;
-      left: 0;
-      right: 0;
-      margin-bottom: 9px;
+      display: flex;
+      justify-content: center;
+      background-color: #fff;
+      padding-bottom: 9px;
 
       a {
         text-decoration: none;
@@ -620,7 +619,6 @@
           &__submit {
             width: 100%;
             margin-top: $contact_padding_v - 4px;
-            //margin-left:15%;
             height: 2em;
             border-radius: $contact_border_radius_v;
             border-width: 1px;
@@ -1019,8 +1017,8 @@
         left: 0;
         position: absolute;
         right: 0;
-        transition: background-color .4s;
-
+        transition: height 0.4s, margin-left 0.4s;
+        transition-timing-function: ease-in-out;
         @include mobileAndTablet {
             max-width: $chatWidthMobile;
         }
@@ -1043,7 +1041,11 @@
         }
 
         &__disabled {
-          background-color: #eff0f1;
+          height: 40px;
+          > .wc-textbox,
+          > .wc-send {
+              display: none;
+            }
         }
 
         &__disabled::before {
