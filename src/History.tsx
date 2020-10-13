@@ -453,6 +453,11 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
      */
     renderAdditionalActivity(contentClassName: string, wrapperClassName: string) {
         const { lastMessage, activity, doCardAction } = this.props;
+
+        if (activity.type === 'message' && activity.text === 'This conversation has completed.') {
+            return;
+        }
+
         const activityCopy: any = activity;
         // Entities is an array for some reason
         const activityRequiresAdditionalInput = activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type !== null;
