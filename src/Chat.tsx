@@ -44,6 +44,8 @@ export interface State {
     display: boolean;
     orginalBodyClass: string;
     isNew: boolean;
+    orgId?: number;
+    botId?: number;
 }
 
 import { FloatingIcon } from './FloatingIcon';
@@ -58,7 +60,9 @@ export class Chat extends React.Component<ChatProps, State> {
         opened: false,
         display: false,
         orginalBodyClass: document.body.className,
-        isNew: false
+        isNew: false,
+        orgId: 0,
+        botId: 0
     };
 
     private store = createStore();
@@ -257,6 +261,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
         // Generate random user ID if there is none
         if (!user && !msftUserId) {
+            this.setState({ isNew: true });
             user = {
                 id: guid()
             };
@@ -312,6 +317,11 @@ export class Chat extends React.Component<ChatProps, State> {
                 });
 
                 const { bot_display_options, bot_id, organization_id } = res.data;
+
+                this.setState({
+                    orgId: organization_id,
+                    botId: bot_id
+                });
 
                 this.store.dispatch<ChatActions>({
                     type: 'Set_Conversation_Ids',
@@ -454,7 +464,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
     render() {
         const state = this.store.getState();
-        const { open, display, isNew } = this.state;
+        const { open, display, isNew, orgId, botId } = this.state;
         const { selectedConversation, loading } = state.conversations;
         const color = state.format.themeColor;
 
@@ -533,7 +543,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                 </div>
                         }
 
-                        {(selectedConversation || isNew)
+                        {((selectedConversation || isNew) && orgId !== 0 && botId !== 0)
                             ? <History
                                 onCardAction={this._handleCardAction}
                                 ref={this._saveHistoryRef}
@@ -542,6 +552,8 @@ export class Chat extends React.Component<ChatProps, State> {
                                 handleIncomingActivity={(activity: Activity) => this.handleIncomingActivity(activity)}
                                 isNew={isNew}
                                 handleNewConversation={(conversation: Conversation) => this.handleNewConversation(conversation)}
+                                orgId={orgId}
+                                botId={botId}
                             />
                             : <PastConversations
                                 setSelectedConversation={setSelectedConversation}
