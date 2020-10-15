@@ -22,7 +22,7 @@ export interface HistoryProps {
     hasActivityWithSuggestedActions: Activity;
     selectedConversation: Conversation;
     botId: string;
-    organizationId: string;
+    orgId: string;
 
     setMeasurements: (carouselMargin: number) => void;
     onClickRetry: (activity: Activity) => void;
@@ -85,8 +85,10 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
             selectedConversation,
             gid,
             botId,
-            organizationId
+            orgId
         } = this.props;
+        console.log('TCL: HistoryView -> componentDidMount -> orgId', orgId);
+        console.log('TCL: HistoryView -> componentDidMount -> botId', botId);
 
         botConnection = directLine
             ? isNew
@@ -110,7 +112,7 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
                         botId,
                         conversationId,
                         user.id,
-                        organizationId,
+                        orgId,
                         directLine.secret,
                         window.location.toString(),
                         campaign
@@ -360,8 +362,6 @@ export const History = connect(
         bot: stateProps.bot,
         selectedActivity: stateProps.selectedActivity,
         selectedConversation: stateProps.conversationsState.selectedConversation,
-        botId: stateProps.conversationsState.botId,
-        organizationId: stateProps.conversationsState.organizationId,
         // from dispatchProps
         setMeasurements: dispatchProps.setMeasurements,
         onClickRetry: dispatchProps.onClickRetry,
@@ -380,7 +380,9 @@ export const History = connect(
         directLine: ownProps.directLine,
         handleIncomingActivity: ownProps.handleIncomingActivity,
         isNew: ownProps.isNew,
-        handleNewConversation: ownProps.handleNewConversation
+        handleNewConversation: ownProps.handleNewConversation,
+        botId: ownProps.botId,
+        orgId: ownProps.orgId
     }), {
         withRef: true
     }
