@@ -539,7 +539,8 @@ export const conversations: Reducer<ConversationState> = (
                         updated_at: now
                     },
                     ...updatedConversations
-                ]
+                ],
+                loading: false
             };
         }
         case 'Add_Conversation': {
