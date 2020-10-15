@@ -127,14 +127,12 @@ class AddressForm extends React.Component<AddressFormProps, AddressFormState> {
             />
             {suggestions && suggestions.length > 0 && <div className="autocomplete-dropdown-container">
               {suggestions.map((suggestion, index) => {
-                const className = suggestion.active
-                  ? 'suggestion-item--active'
-                  : 'suggestion-item';
-                // this check and suggestionsShown forces a rerender the first time 
+                const className = suggestion.active ? 'suggestion-item--active' : 'suggestion-item';
+                // this check and suggestionsShown forces a rerender the first time
                 // the suggestions are rendered, to force it to the bottom of the scrollable view
                 if (index === suggestions.length - 1 && !this.state.suggestionsShown) {
-                    this.setState({...this.state, suggestionsShown: true});
-                  }
+                  this.setState({...this.state, suggestionsShown: true});
+                }
                 return (
                   <div
                     {...getSuggestionItemProps(suggestion, {
