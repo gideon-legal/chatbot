@@ -447,6 +447,8 @@
                 }
             }
         }
+
+
     }
 
     .wc-floating-wrap {
@@ -749,6 +751,70 @@
             margin-top: $contact_padding_v - 4px;
             height: 2em;
             border-radius: $contact_border_radius_v;
+            border-width: 1px;
+            border-color: $gideon-dark-blue;
+            color: white;
+            background-color:$gideon-dark-blue;
+          }
+
+          &__submit:hover {
+            background-color: $gideon-dark-blue;
+            color: white;
+          }
+        }
+
+        .address__form__card {
+          display: flex;
+          flex-direction: column;
+
+          &__title {
+            margin: 0;
+            padding-bottom: 4px;
+            color: $gideon-dark-blue;
+          }
+
+          &__places__autocomplete {
+            width: 260px;
+            .location-search-input {
+              outline-style: none;
+              border-radius: 4px;
+              border-width: 1px;
+              border-color: $gideon-dark-blue;
+              border-style: solid;
+              color: black;
+              width: 100%;
+              height: 2em;
+              padding-left: 8px;
+            }
+    
+            .autocomplete-dropdown-container {
+              border-style: solid;
+              border-color: $gideon-dark-blue;
+              border-width: 0 1px 1px 1px;
+              border-radius: 4px;
+              padding-top: 4px;
+              padding-bottom: 4px;
+
+              .suggestion-item {
+                color: black;
+                padding-left: 4px;
+                padding-right: 4px;
+    
+                &--active {
+                  padding-left: 4px;
+                  padding-right: 4px;
+                  color: black;
+                  font-weight: 600;
+                }
+              }
+            }
+          }
+
+          &__submit {
+            width: 100%;
+            margin-top: 10px;
+            height: 2em;
+            border-radius: 8px;
             border-width: 1px;
             border-color: $gideon-dark-blue;
             color: white;
@@ -1080,7 +1146,14 @@
       border-color:$gideon-dark-blue;
       border-style:solid;
       border-width:1px;
-  }
+    }
+
+    .wc-message-from-me .wc-message-content-address {
+      background-color:white;
+      border-color:$gideon-dark-blue;
+      border-style:solid;
+      border-width:1px;
+    }
 
     .wc-message-from-me svg.wc-message-callout path {
         fill: $c_messageFromMe;
@@ -1120,7 +1193,7 @@
         left: -6px;
     }
 
-    .wc-message-contact {
+    .wc-message-contact, .wc-message-address {
       margin-left: auto;
     }
 

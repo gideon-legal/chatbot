@@ -1,6 +1,7 @@
 import { Activity, CardAction, DirectLineOptions, Message} from 'botframework-directlinejs';
 import * as moment from 'moment';
 import * as React from 'react';
+import PlacesAutocomplete from 'react-places-autocomplete';
 import { connect } from 'react-redux';
 import { ChatState } from './Store';
 import { ChatActions, sendMessage } from './Store';
@@ -21,36 +22,38 @@ interface AddressFormProps {
 }
 
 export interface AddressFormState {
-  address: string;
+  addressTyped: string;
+  addressSelected: string;
   addressError: string;
+  loaded: boolean;
+  suggestionsShown: boolean;
 }
 
 class AddressForm extends React.Component<AddressFormProps, AddressFormState> {
+  private bottomDiv: HTMLDivElement;
 
   constructor(props: AddressFormProps) {
     super(props);
 
     this.state = {
-      address: '',
-      addressError: undefined
+      addressTyped: '',
+      addressSelected: '',
+      addressError: undefined,
+      loaded: false,
+      suggestionsShown: false
     };
-
-    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
   componentDidMount() {
+    loadGMaps(() => this.setState({...this.state, loaded: true}));
     this.props.updateInput(
         true,
-        'Please enter your contact information.'
+        'Please enter your address.'
     );
   }
 
-  private handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>): any {
-    if (e.key === 'Enter' && this.validateAddress()) {
-        this.resetShell();
-        this.props.sendMessage(this.state.address);
-        document.removeEventListener('keypress', this.handleKeyDown.bind(this));
-    }
+  componentDidUpdate() {
+    this.scrollToBottom();
   }
 
   resetShell = () => {
@@ -65,8 +68,8 @@ class AddressForm extends React.Component<AddressFormProps, AddressFormState> {
 
     let addressError;
 
-    if (this.state.address === '') {
-      addressError = 'Please enter your address';
+    if (this.state.addressSelected === '') {
+      addressError = 'Please select your address';
       validated = false;
     }
 
@@ -78,30 +81,98 @@ class AddressForm extends React.Component<AddressFormProps, AddressFormState> {
     return validated;
   }
 
-  clickToSubmitContactInformation(e: React.MouseEvent<HTMLButtonElement>) {
+  clickToSubmitAddressInformation(e: React.MouseEvent<HTMLButtonElement>) {
     if (!this.validateAddress()) { return; }
 
     this.resetShell();
-    this.props.sendMessage(this.state.address);
-
-    document.removeEventListener('keypress', this.handleKeyDown.bind(this));
+    this.props.sendMessage(this.state.addressSelected);
 
     e.stopPropagation();
   }
 
-  private onKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === 'Enter' && this.validateAddress()) {
-        this.resetShell();
-        this.props.sendMessage(this.state.address);
-        document.removeEventListener('keypress', this.handleKeyDown.bind(this));
+  handleAddressChange = (value: string) => {
+    this.setState({ addressTyped: value, addressSelected: '' });
+  }
+
+  handleAddressSelect = (address: string, placeId: string) => {
+    if (this.state.addressSelected === address) {
+      this.resetShell();
+      this.props.sendMessage(this.state.addressSelected);
+      return;
     }
+
+    this.setState({...this.state, addressSelected: address, addressTyped: address});
+  }
+
+  scrollToBottom = () => {
+    this.bottomDiv.scrollIntoView({ behavior: 'auto' });
   }
 
   render() {
-    console.log('AddressFormCard');
-    return <div><span>ADDRESS FORM CARD</span></div>;
+    return (
+      <div className="address__form__card">
+        <span className="address__form__card__title">Address</span>
+        {this.state.loaded && <PlacesAutocomplete
+          value={this.state.addressTyped}
+          onChange={this.handleAddressChange}
+          onSelect={this.handleAddressSelect}
+        >
+          {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+          <div className="address__form__card__places__autocomplete">
+            <input
+              {...getInputProps({
+                placeholder: 'Type and select your address...',
+                className: 'location-search-input'
+              })}
+            />
+            {suggestions && suggestions.length > 0 && <div className="autocomplete-dropdown-container">
+              {suggestions.map((suggestion, index) => {
+                const className = suggestion.active
+                  ? 'suggestion-item--active'
+                  : 'suggestion-item';
+                // this check and suggestionsShown forces a rerender the first time 
+                // the suggestions are rendered, to force it to the bottom of the scrollable view
+                if (index === suggestions.length - 1 && !this.state.suggestionsShown) {
+                    this.setState({...this.state, suggestionsShown: true});
+                  }
+                return (
+                  <div
+                    {...getSuggestionItemProps(suggestion, {
+                      className
+                    })}
+                  >
+                    <span>{suggestion.description}</span>
+                    {index < (suggestions.length - 1) && <hr></hr>}
+                  </div>
+                );
+              })}
+            </div>}
+          </div>
+        )}
+        </PlacesAutocomplete>}
+        <button className="address__form__card__submit" onClick={e => this.clickToSubmitAddressInformation(e)}>Submit</button>
+        <div ref={el => this.bottomDiv = el}></div>
+      </div>
+    );
   }
 }
+
+const loadGMaps = (callback: () => void): void => {
+  const existingScript = document.getElementById('googleMaps');
+  const apiKey = 'AIzaSyAOv4N527oPcQv88xxMKEILQuQ4Y0CcgG0';
+  if (!existingScript) {
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+    script.id = 'googleMaps';
+    document.body.appendChild(script);
+    script.onload = () => {
+      if (callback) { callback(); }
+    };
+  }
+  if (existingScript && callback) { callback(); }
+};
+
+export default loadGMaps;
 
 export const AddressFormCard = connect(
   (state: ChatState) => {
