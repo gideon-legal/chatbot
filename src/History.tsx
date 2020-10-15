@@ -87,8 +87,6 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
             botId,
             orgId
         } = this.props;
-        console.log('TCL: HistoryView -> componentDidMount -> orgId', orgId);
-        console.log('TCL: HistoryView -> componentDidMount -> botId', botId);
 
         botConnection = directLine
             ? isNew
