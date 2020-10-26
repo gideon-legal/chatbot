@@ -124,9 +124,10 @@
 
             svg {
                 position: absolute;
-                top: 0;
+                top: 4px;
                 left: -10px;
-                fill: $gideon-dark-blue;
+                fill: #444444d4;
+                height: 33px;
             }
         }
 
@@ -152,9 +153,9 @@
         $topMargin: 10px;
 
         &--close {
-            height: 16px;
+            height: 14px;
             float: right;
-            margin-top: $topMargin + 2;
+            margin-top: $topMargin + 5;
             margin-right: 0px;
             margin-left: auto;
             padding-right: 0px;

@@ -564,6 +564,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                     }
                                     <img
                                         className="wc-header--logo"
+                                        style={{marginLeft: selectedConversation ? 10 : 0}}
                                         src={state.format.logoUrl ?
                                             state.format.logoUrl :
                                             'https://s3.amazonaws.com/com.gideon.static.dev/chatbot-header-default-v1.1.2.png'
