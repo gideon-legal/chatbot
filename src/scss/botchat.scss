@@ -1205,32 +1205,36 @@
       margin-left: auto;
     }
 
-    .wc-message-content.wc-message-content-restart {
-        width: 260px;
-        margin-left: 25px;
+    .wc-message.wc-message-from-me.wc-message-restart {
+        width: 100%;
 
-        .actions {
-            margin-top: 10px;
-            display: flex;
-            justify-content: space-between;
+        .wc-message-content.wc-message-content-restart {
+            width: 100%;
+            padding: 0px;
+            margin-left: 20px;
+            margin-top: 5px;
+            background-color: white;
+            box-shadow: none;
 
-            button {
-                font-size: 11px;
-                width: 48%;
-                padding: 10px;
-                border: 1px solid #31ace2;
-                background-color: $c_messageFromThem;
-                border-radius: 5px;
-                color: #31ace2;
-                font-weight: 600;
+            .actions {
+                display: flex;
+                justify-content: space-between;
+
+                button {
+                    font-size: 11px;
+                    width: 48%;
+                    padding: 10px;
+                    border: 1px solid #31ace2;
+                    background-color: $c_messageFromThem;
+                    border-radius: 5px;
+                    color: #31ace2;
+                    font-weight: 600;
+                }
             }
         }
     }
 
 /* console */
-
-
-
     .wc-console {
         bottom: 0;
         box-sizing: border-box;
