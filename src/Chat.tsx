@@ -46,6 +46,7 @@ export interface State {
     isNew: boolean;
     orgId?: number;
     botId?: number;
+    initialLoad: boolean;
 }
 
 import { FloatingIcon } from './FloatingIcon';
@@ -62,7 +63,8 @@ export class Chat extends React.Component<ChatProps, State> {
         orginalBodyClass: document.body.className,
         isNew: false,
         orgId: 0,
-        botId: 0
+        botId: 0,
+        initialLoad: true
     };
 
     private store = createStore();
@@ -284,6 +286,97 @@ export class Chat extends React.Component<ChatProps, State> {
             user
         });
 
+        verifyUserConnection(
+            this.props.gid,
+            user.id,
+            this.props.directLine.secret,
+            window.location.toString()
+        ).then((res: any) => {
+            // Only save these when we successfully connect
+            // uncomment when re-enabling chat history
+            window.localStorage.setItem('gid', this.props.gid);
+            window.localStorage.setItem('msft_user_id', user.id);
+
+            this.setState({
+                display: true
+            });
+
+            const { bot_display_options, bot_id, organization_id, conversation: conversationArr } = res.data;
+
+            if (conversationArr && conversationArr[0]) {
+                const conversation = conversationArr[0];
+
+                this.store.dispatch<ChatActions>({
+                    type: 'Set_Messages',
+                    activities: mapMessagesToActivities(conversation.conversation_messages.reverse(), user.id)
+                });
+
+                this.store.dispatch<ChatActions>({
+                    type: 'Set_Selected_Conversation',
+                    conversation: {
+                        ...conversation,
+                        conversation_messages: conversation.conversation_messages.reverse()
+                    }
+                });
+            }
+
+            this.setState({
+                orgId: organization_id,
+                botId: bot_id
+            });
+
+            this.store.dispatch<ChatActions>({
+                type: 'Set_Conversation_Ids',
+                botId: bot_id,
+                organizationId: organization_id
+            });
+
+            if (bot_display_options && bot_display_options.display_title) {
+                this.store.dispatch<ChatActions>({
+                    type: 'Set_Chat_Title',
+                    chatTitle: bot_display_options.display_title
+                });
+            }
+
+            if (bot_display_options && bot_display_options.color) {
+                this.store.dispatch<ChatActions>({
+                    type: 'Set_Theme_Color',
+                    themeColor: bot_display_options.color
+                });
+            }
+
+            if (bot_display_options) {
+                const { alignment, bottomOffset, topOffset, leftOffset, rightOffset, fullHeight, display_name, widget_url, widget_same_as_logo  } = bot_display_options;
+
+                this.store.dispatch({
+                    type: 'Set_Format_Options',
+                    formatOptions: {
+                        alignment,
+                        bottomOffset,
+                        topOffset,
+                        leftOffset,
+                        rightOffset,
+                        fullHeight,
+                        display_name,
+                        widgetSameAsLogo: widget_same_as_logo,
+                        widgetUrl: widget_url
+                    }
+                });
+            }
+
+            if (bot_display_options && bot_display_options.logo_url) {
+                this.store.dispatch<ChatActions>({
+                    type: 'Set_Logo_Img',
+                    logoUrl: bot_display_options.logo_url
+                });
+            }
+
+            if (!isMobile && bot_display_options && bot_display_options.open_on_load) {
+                this.toggle();
+            }
+
+        });
+
         getPastConversations(this.props.gid, user.id, this.props.directLine.secret)
             .then(({data: { conversations }}: any) => {
                 const formattedConversations =
@@ -298,81 +391,6 @@ export class Chat extends React.Component<ChatProps, State> {
                     conversations: formattedConversations
                 });
                 this.forceUpdate();
-            });
-
-        verifyUserConnection(
-            this.props.gid,
-            user.id,
-            this.props.directLine.secret,
-            window.location.toString()
-        )
-            .then((res: any) => {
-                // Only save these when we successfully connect
-                // uncomment when re-enabling chat history
-                window.localStorage.setItem('gid', this.props.gid);
-                window.localStorage.setItem('msft_user_id', user.id);
-
-                this.setState({
-                    display: true
-                });
-
-                const { bot_display_options, bot_id, organization_id } = res.data;
-
-                this.setState({
-                    orgId: organization_id,
-                    botId: bot_id
-                });
-
-                this.store.dispatch<ChatActions>({
-                    type: 'Set_Conversation_Ids',
-                    botId: bot_id,
-                    organizationId: organization_id
-                });
-
-                if (bot_display_options && bot_display_options.display_title) {
-                    this.store.dispatch<ChatActions>({
-                        type: 'Set_Chat_Title',
-                        chatTitle: bot_display_options.display_title
-                    });
-                }
-
-                if (bot_display_options && bot_display_options.color) {
-                    this.store.dispatch<ChatActions>({
-                        type: 'Set_Theme_Color',
-                        themeColor: bot_display_options.color
-                    });
-                }
-
-                if (bot_display_options) {
-                    const { alignment, bottomOffset, topOffset, leftOffset, rightOffset, fullHeight, display_name, widget_url, widget_same_as_logo  } = bot_display_options;
-
-                    this.store.dispatch({
-                        type: 'Set_Format_Options',
-                        formatOptions: {
-                            alignment,
-                            bottomOffset,
-                            topOffset,
-                            leftOffset,
-                            rightOffset,
-                            fullHeight,
-                            display_name,
-                            widgetSameAsLogo: widget_same_as_logo,
-                            widgetUrl: widget_url
-                        }
-                    });
-                }
-
-                if (bot_display_options && bot_display_options.logo_url) {
-                    this.store.dispatch<ChatActions>({
-                        type: 'Set_Logo_Img',
-                        logoUrl: bot_display_options.logo_url
-                    });
-                }
-
-                if (!isMobile && bot_display_options && bot_display_options.open_on_load) {
-                    this.toggle();
-                }
-
             });
     }
 
@@ -457,6 +475,29 @@ export class Chat extends React.Component<ChatProps, State> {
         return styles;
     }
 
+    fetchConversations = () => {
+        const { connection } = this.store.getState();
+        getPastConversations(this.props.gid, connection.user.id, this.props.directLine.secret)
+            .then(({data: { conversations }}: any) => {
+                const formattedConversations =
+                    conversations.map((conversation: Conversation) => {
+                        return {
+                            ...conversation,
+                            conversation_messages: conversation.conversation_messages.reverse()
+                        };
+                    }).reverse();
+                this.store.dispatch<ChatActions>({
+                    type: 'Set_Conversations',
+                    conversations: formattedConversations
+                });
+                this.forceUpdate();
+            });
+    }
+
+    toggleInitialLoad = () => {
+        this.setState({ initialLoad: !this.state.initialLoad });
+    }
+
     // At startup we do three render passes:
     // 1. To determine the dimensions of the chat panel (nothing needs to actually render here, so we don't)
     // 2. To determine the margins of any given carousel (we just render one mock activity so that we can measure it)
@@ -464,7 +505,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
     render() {
         const state = this.store.getState();
-        const { open, display, isNew, orgId, botId } = this.state;
+        const { open, display, isNew, orgId, botId, initialLoad } = this.state;
         const { selectedConversation, loading } = state.conversations;
         const color = state.format.themeColor;
 
@@ -543,7 +584,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                 </div>
                         }
 
-                        {((selectedConversation || isNew) && orgId !== 0 && botId !== 0)
+                        {(selectedConversation || isNew) && orgId !== 0 && botId !== 0
                             ? <History
                                 onCardAction={this._handleCardAction}
                                 ref={this._saveHistoryRef}
@@ -554,10 +595,14 @@ export class Chat extends React.Component<ChatProps, State> {
                                 handleNewConversation={(conversation: Conversation) => this.handleNewConversation(conversation)}
                                 orgId={orgId}
                                 botId={botId}
+                                initialLoad={initialLoad}
+                                toggleInitialLoad={this.toggleInitialLoad}
+                                setNewConversation={this.newConversationClick}
                             />
                             : <PastConversations
                                 setSelectedConversation={setSelectedConversation}
                                 loading={loading}
+                                fetchConversations={this.fetchConversations}
                             />
                         }
 

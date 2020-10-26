@@ -33,6 +33,7 @@ export interface HistoryProps {
     onClickActivity: (activity: Activity) => React.MouseEventHandler<HTMLDivElement>;
     startConversation: (action: ChatActions) => void;
     restartConversation: (action: ChatActions) => void;
+    promptUser: () => void;
     startConnection: (user: User, bot: User, botConnection: IBotConnection, selectedActivity: BehaviorSubject<ActivityOrID>) => void;
     selectActivity: (activity: Activity) => void;
 
@@ -47,6 +48,9 @@ export interface HistoryProps {
     handleIncomingActivity: (activity: Activity) => void;
     handleNewConversation: (conversation: Conversation) => void;
     speechOptions?: SpeechOptions;
+    initialLoad: boolean;
+    toggleInitialLoad: () => void;
+    setNewConversation: () => void;
 }
 
 export class HistoryView extends React.Component<HistoryProps, {}> {
@@ -65,7 +69,7 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
         super(props);
     }
 
-    componentDidMount() {
+    handleLoad = () => {
         let botConnection: any = null;
         const {
             user,
@@ -78,6 +82,7 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
             handleIncomingActivity,
             startConversation,
             restartConversation,
+            promptUser,
             handleNewConversation,
             format,
             selectActivity,
@@ -85,11 +90,13 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
             selectedConversation,
             gid,
             botId,
-            orgId
+            orgId,
+            initialLoad,
+            toggleInitialLoad
         } = this.props;
 
         botConnection = directLine
-            ? isNew
+            ? isNew || !selectedConversation
                 ? (this.botConnection = new DirectLine(directLine))
                 : (this.botConnection = new DirectLine({...directLine, conversationId: selectedConversation.msft_conversation_id}))
             : botConnection;
@@ -121,6 +128,10 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
                     // Send initial message to start conversation
                     startConversation(sendMessage(format.strings.pingMessage, user, format.locale));
                 } else {
+                    if (initialLoad) {
+                        toggleInitialLoad();
+                        return promptUser();
+                    }
                     restartConversation(sendMessage(format.strings.restartMessage, user, format.locale));
                 }
             }
@@ -145,6 +156,10 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
         }
     }
 
+    componentDidMount() {
+        this.handleLoad();
+    }
+
     componentWillUpdate(nextProps: HistoryProps) {
         let scrollToBottomDetectionTolerance = 1;
 
@@ -155,7 +170,10 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
         this.scrollToBottom = (Math.abs(this.scrollMe.scrollHeight - this.scrollMe.scrollTop - this.scrollMe.offsetHeight) <= scrollToBottomDetectionTolerance);
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps: any) {
+        if (this.props.isNew !== prevProps.isNew) {
+            this.handleLoad();
+        }
 
         if (this.props.format.carouselMargin === undefined) {
             // After our initial render we need to measure the carousel width
@@ -227,6 +245,7 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
             selected={ false }
             showTimestamp={ false }
             gid={null}
+            setNewConversation={this.props.setNewConversation}
         >
             <div style={ { width: this.largeWidth } }>&nbsp;</div>
         </WrappedActivity>
@@ -284,6 +303,7 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
                             } }
                             gid={ this.props.gid }
                             directLine={ this.props.directLine }
+                            setNewConversation={this.props.setNewConversation}
                         >
                             <ActivityView
                                 format={ this.props.format }
@@ -294,6 +314,7 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
                                 onImageLoad={ () => this.autoscroll() }
                                 gid={ this.props.gid}
                                 directLine={ this.props.directLine }
+                                setNewConversation={this.props.setNewConversation}
                             />
                         </WrappedActivity> : ''
                 );
@@ -340,6 +361,7 @@ export const History = connect(
         onClickCardAction: () => ({ type: 'Card_Action_Clicked'}),
         startConversation: (action: ChatActions) => action,
         restartConversation: (action: ChatActions) => action,
+        promptUser: () => ({type: 'Prompt_User'}),
         selectActivity: (activity: Activity) => ({type: 'Select_Activity', selectedActivity: activity}),
         startConnection: (user: User, bot: User, botConnection: IBotConnection, selectedActivity: BehaviorSubject<ActivityOrID>) => ({
             type: 'Start_Connection',
@@ -368,6 +390,7 @@ export const History = connect(
         restartConversation: dispatchProps.restartConversation,
         selectActivity: dispatchProps.selectActivity,
         startConnection: dispatchProps.startConnection,
+        promptUser: dispatchProps.promptUser,
         // helper functions
         doCardAction: doCardAction(stateProps.botConnection, stateProps.user, stateProps.format.locale, dispatchProps.sendMessage),
         isFromMe: (activity: Activity) => activity.from.id === stateProps.user.id,
@@ -380,7 +403,10 @@ export const History = connect(
         isNew: ownProps.isNew,
         handleNewConversation: ownProps.handleNewConversation,
         botId: ownProps.botId,
-        orgId: ownProps.orgId
+        orgId: ownProps.orgId,
+        initialLoad: ownProps.initialLoad,
+        toggleInitialLoad: ownProps.toggleInitialLoad,
+        setNewConversation: ownProps.setNewConversation
     }), {
         withRef: true
     }
@@ -438,6 +464,7 @@ export interface WrappedActivityProps {
     onClickRetry: React.MouseEventHandler<HTMLAnchorElement>;
     gid: string;
     directLine?: DirectLineOptions;
+    setNewConversation: () => void;
 }
 
 export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
@@ -452,7 +479,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
      * method will handle rendering the additional cmp.
      */
     renderAdditionalActivity(contentClassName: string, wrapperClassName: string) {
-        const { lastMessage, activity, doCardAction } = this.props;
+        const { lastMessage, activity, doCardAction, setNewConversation } = this.props;
 
         if (activity.type === 'message' && activity.text === 'This conversation has completed.') {
             return;
@@ -477,10 +504,13 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                 nodeType = activityActions.actions[0].type;
             }
 
-            if (nodeType === 'date' || nodeType === 'handoff' || nodeType === 'file' || nodeType === 'imBack' || nodeType === 'contact' || nodeType === 'address') {
+            if (nodeType === 'date' || nodeType === 'handoff' || nodeType === 'file' || nodeType === 'imBack' || nodeType === 'contact' || nodeType === 'address' || nodeType === 'restart') {
                 return (
                     <div data-activity-id={activity.id } className={wrapperClassName}>
-                        <div className={'wc-message wc-message-from-me wc-message-' + nodeType} ref={ div => this.messageDiv = div }>
+                        <div
+                            className={`wc-message wc-message-from-me wc-message-${nodeType}`}
+                            ref={ div => this.messageDiv = div }
+                        >
                             <div className={ contentClassName + contactClassName }>
                                 <ActivityView
                                     format={this.props.format}
@@ -491,6 +521,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                                     onImageLoad={null}
                                     gid={this.props.gid}
                                     directLine={this.props.directLine}
+                                    setNewConversation={setNewConversation}
                                 />
                             </div>
                         </div>

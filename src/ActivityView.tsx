@@ -11,6 +11,7 @@ import { DisclaimerCard } from './DisclaimerCard';
 import { FileUploadCard } from './FileUploadCard';
 import { FormattedText } from './FormattedText';
 import { MultipleChoiceCard } from './MultipleChoiceCard';
+import { RestartPromptCard } from './RestartPromptCard';
 import { FormatState, SizeState } from './Store';
 
 const Attachments = (props: {
@@ -53,6 +54,7 @@ export interface ActivityViewProps {
     onImageLoad: () => void;
     gid: string;
     directLine: DirectLineOptions;
+    setNewConversation: () => void;
 }
 
 export class ActivityView extends React.Component<ActivityViewProps, {}> {
@@ -149,7 +151,7 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
     }
 
     render() {
-        const { activity, type, ...props } = this.props;
+        const { activity, type, setNewConversation, ...props } = this.props;
         const activityCopy: any = activity;
         const isDisclaimer = activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer';
 
@@ -192,6 +194,10 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
         } else if (type === 'address') {
             return (
                 <AddressFormCard { ...props } node={activityCopy.entities[0]} />
+            );
+        } else if (type === 'restart') {
+            return (
+              <RestartPromptCard { ...props } node={activityCopy.entities[0]} setNewConversation={setNewConversation} />
             );
         }
     }

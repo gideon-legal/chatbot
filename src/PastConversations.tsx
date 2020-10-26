@@ -1,3 +1,4 @@
+import { User } from 'botframework-directlinejs';
 import * as moment from 'moment';
 import * as React from 'react';
 import { connect } from 'react-redux';
@@ -10,9 +11,18 @@ export interface Props {
   setSelectedConversation: (conversation: Conversation) => void;
   format: FormatState;
   loading: boolean;
+  fetchConversations: () => void;
+  user: User;
 }
 
 class PastConversationsView extends React.Component<Props> {
+
+  componentDidMount() {
+    if (this.props.user) {
+      this.props.fetchConversations();
+    }
+  }
+
   render() {
     const { conversations, setSelectedConversation, format: {display_name, themeColor, strings}, loading } = this.props;
 
@@ -86,13 +96,16 @@ class PastConversationsView extends React.Component<Props> {
 export const PastConversations = connect(
   (state: ChatState) => ({
     conversations: state.conversations,
-    format: state.format
+    format: state.format,
+    user: state.connection.user
   }),
   {},
   (stateProps: any, dispatchProps: any, ownProps: any): Props => ({
+    user: stateProps.user,
     format: stateProps.format,
     conversations: stateProps.conversations.conversations,
     setSelectedConversation: ownProps.setSelectedConversation,
-    loading: ownProps.loading
+    loading: ownProps.loading,
+    fetchConversations: ownProps.fetchConversations
   })
 )(PastConversationsView);

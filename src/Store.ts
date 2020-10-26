@@ -478,6 +478,8 @@ export type HistoryAction = {
 } | {
     type: 'Clear_Typing',
     id: string
+} | {
+    type: 'Prompt_User'
 };
 
 const copyArrayWithUpdatedItem = <T>(array: T[], i: number, item: T) => [
@@ -627,6 +629,20 @@ export const history: Reducer<HistoryState> = (
                     ...state.activities.filter(activity => activity.type === 'typing')
                 ],
                 clientActivityCounter: state.clientActivityCounter + 1
+            };
+        case 'Prompt_User':
+            return {
+                ...state,
+                activities: [
+                    ...state.activities.filter(activity => activity.type !== 'typing'),
+                    {
+                        type: 'message',
+                        text: 'It looks like you have been here before! What would you like to do?',
+                        from: { id: '0' },
+                        entities: [{ node_type: 'restart' }]
+                    },
+                    ...state.activities.filter(activity => activity.type === 'typing')
+                ]
             };
 
         case 'Send_Message_Retry': {
