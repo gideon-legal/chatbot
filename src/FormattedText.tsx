@@ -17,7 +17,7 @@ export const FormattedText = (props: IFormattedTextProps) => {
         case 'plain':
             return renderPlainText(props.text);
         default:
-            return props.format ? renderMarkdown(props.text, props.onImageLoad) : renderPlainText(props.text);
+            return renderMarkdown(props.text, props.onImageLoad);
     }
 };
 
