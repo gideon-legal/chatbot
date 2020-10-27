@@ -409,28 +409,39 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
     }
 
     renderForDateNode = () => {
-        const { startDate } = this.state;
-        let headerMessage = 'Select a date';
+        const { startDate, endDate, withTime, withRange, timeSelected } = this.state;
+
+        let headerMessage = withRange ? (!startDate ? 'Select a start date' : 'Select an end date') : 'Select a date';
+        const dateSelectedCheck = withRange ? startDate && endDate : !!startDate;
+        if (withTime && !timeSelected && dateSelectedCheck) {
+            headerMessage = 'Select a time';
+        }
 
         if (this.validateSelection()) {
             headerMessage = startDate.format('MMMM D, YYYY');
+            if (withRange) {
+                headerMessage += ' to ' + endDate.format('MMMM D, YYYY');
+            }
         }
 
         return (
-          <div className={`gd-date-picker date-node`}>
+          <div className={`gd-date-picker ${withTime && 'withTime'} date-node`}>
             <div className="gd-selected-date-container">
               <span className="gd-selected-date">{headerMessage}</span>
             </div>
 
             <ReactDatePicker
+              endDate={endDate}
+              startDate={startDate}
               selected={startDate}
               onChange={(date, event) =>
-                this.handleDateChange(event, date, false)
+                this.handleDateChange(event, date, withTime)
               }
               onMonthChange={e => this.handleMonthChange(e)}
               inline={true}
               tabIndex={1}
-              dateFormat={dateFormat}
+              dateFormat={withTime ? dateFormatWithTime : dateFormat}
+              showTimeSelect={withTime}
               showMonthDropdown
               showYearDropdown
               dropdownMode="select"
