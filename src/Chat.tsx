@@ -318,6 +318,8 @@ export class Chat extends React.Component<ChatProps, State> {
                         conversation_messages: conversation.conversation_messages.reverse()
                     }
                 });
+            } else {
+                this.setState({ isNew: true });
             }
 
             this.setState({
