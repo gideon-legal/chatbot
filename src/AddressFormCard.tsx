@@ -228,13 +228,18 @@ class AddressForm extends React.Component<AddressFormProps, AddressFormState> {
                 if (index === suggestions.length - 1 && !this.state.suggestionsShown) {
                   this.setState({...this.state, suggestionsShown: true});
                 }
+
+                const classNameFormatted = `${className}-formatted-suggestion`;
                 return (
                   <div
                     {...getSuggestionItemProps(suggestion, {
                       className
                     })}
                   >
-                    <span>{suggestion.description}</span>
+                    <span className={classNameFormatted}>
+                      <span className={`${classNameFormatted}-main`}>{suggestion.formattedSuggestion.mainText}</span>
+                      <span className={`${classNameFormatted}-secondary`}>{` ${suggestion.formattedSuggestion.secondaryText}`}</span>
+                    </span>
                     {index < (suggestions.length - 1) && <hr></hr>}
                   </div>
                 );
@@ -263,6 +268,7 @@ class AddressForm extends React.Component<AddressFormProps, AddressFormState> {
                 }
               })
             }
+            autoFocus
           />
           <span>City</span>
           <input
