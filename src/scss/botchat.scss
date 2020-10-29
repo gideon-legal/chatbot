@@ -786,6 +786,9 @@
               width: 100%;
               height: 2em;
               padding-left: 8px;
+              padding-right: 8px;
+              overflow: hidden;
+              text-overflow: ellipsis;
             }
 
             .autocomplete-dropdown-container {
@@ -796,17 +799,38 @@
               padding-top: 4px;
               padding-bottom: 4px;
 
-              .suggestion-item {
-                color: black;
+              .suggestion-item, .suggestion-item--active {
                 padding-left: 4px;
                 padding-right: 4px;
-
-                &--active {
-                  padding-left: 4px;
-                  padding-right: 4px;
-                  color: black;
-                  font-weight: 600;
+                
+                hr {
+                  margin-top: 4px;
+                  margin-bottom: 4px;
                 }
+              }
+
+              .suggestion-item-formatted-suggestion, .suggestion-item--active-formatted-suggestion {
+                line-height: 1.2em;
+              }
+
+              .suggestion-item-formatted-suggestion-main {
+                color: black;
+                font-weight: 450;
+              }
+
+              .suggestion-item-formatted-suggestion-secondary {
+                color: $gideon-dark-grey;
+                font-weight: 200;
+              }
+
+              .suggestion-item--active-formatted-suggestion-main {
+                color: black;
+                font-weight: 600;
+              }
+
+              .suggestion-item--active-formatted-suggestion-secondary {
+                color: $gideon-dark-grey;
+                font-weight: 350;
               }
             }
           }
