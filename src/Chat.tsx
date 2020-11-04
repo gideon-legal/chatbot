@@ -318,6 +318,11 @@ export class Chat extends React.Component<ChatProps, State> {
                         conversation_messages: conversation.conversation_messages.reverse()
                     }
                 });
+
+                this.store.dispatch<ChatActions>({
+                    type: 'Set_Conversations',
+                    conversations: [conversation]
+                });
             } else {
                 this.setState({ isNew: true });
             }
@@ -378,22 +383,6 @@ export class Chat extends React.Component<ChatProps, State> {
             }
 
         });
-
-        getPastConversations(this.props.gid, user.id, this.props.directLine.secret)
-            .then(({data: { conversations }}: any) => {
-                const formattedConversations =
-                    conversations.map((conversation: Conversation) => {
-                        return {
-                            ...conversation,
-                            conversation_messages: conversation.conversation_messages.reverse()
-                        };
-                    }).reverse();
-                this.store.dispatch<ChatActions>({
-                    type: 'Set_Conversations',
-                    conversations: formattedConversations
-                });
-                this.forceUpdate();
-            });
     }
 
     componentWillUnmount() {
