@@ -467,8 +467,8 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     fetchConversations = () => {
-        const { connection } = this.store.getState();
-        getPastConversations(this.props.gid, connection.user.id, this.props.directLine.secret)
+        const { connection, conversations: { botId } } = this.store.getState();
+        getPastConversations(this.props.gid, connection.user.id, this.props.directLine.secret, botId)
             .then(({data: { conversations }}: any) => {
                 const formattedConversations =
                     conversations.map((conversation: Conversation) => {
