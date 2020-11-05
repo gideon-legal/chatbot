@@ -481,7 +481,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
     renderAdditionalActivity(contentClassName: string, wrapperClassName: string) {
         const { lastMessage, activity, doCardAction, setNewConversation } = this.props;
 
-        if (activity.type === 'message' && activity.text === 'This conversation has completed.') {
+        if (activity.type === 'message' && activity.text === 'You have reached the end of this conversation. If you have any new questions, feel free start a new conversation. Thank you!') {
             return;
         }
 
