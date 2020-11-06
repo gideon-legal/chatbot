@@ -65,14 +65,15 @@
 
     .wc-footer {
       position: absolute;
-      width: 100%;
+      width: 156px;
       bottom: 0;
       color: #444444;
       font-weight: 500;
-      display: flex;
-      justify-content: center;
-      background-color: #fff;
-      padding-bottom: 9px;
+      margin-left: auto;
+      margin-right: auto;
+      left: 0;
+      right: 0;
+      margin-bottom: 9px;
 
       a {
         text-decoration: none;
@@ -385,7 +386,6 @@
             background-color: white;
             bottom: $consoleHeight;
             top: $headerTotalHeight;
-            width: 100%;
             display:flex;
             flex-direction: column;
             position:absolute;
@@ -711,47 +711,45 @@
 
         .contact__form__card {
           $contact_padding_v: 8px;
-          $contact_border_radius_v: 8px;
           $contact_width: 260px;
           width: $contact_width;
 
           &__container {
             display: flex;
             flex-direction: column;
-            padding-bottom: $contact_padding_v + 3px;
+            padding-bottom: $contact_padding_v + 2px;
 
             &__input {
               width: 100%;
               padding-left: $contact_padding_v;
-              border-radius: $contact_border_radius_v;
+              border-radius: $contact_padding_v;
               border-width: 1px;
               border-color: $gideon-dark-blue;
               border-style: solid;
               height: 2em;
               outline-style: none;
               color: black;
-              background: $gideon-grey-two;
             }
 
             &__title {
               margin: 0;
-              padding-bottom: $contact_padding_v - 4px;
+              padding-bottom: $contact_padding_v - 2px;
               color: #31ace2;
             }
 
             &__error {
-              padding-top: 4px;
+              padding-top: 6px;
               color: red;
               font-size: 12px;
-              letter-spacing: 0.04em;
             }
           }
 
           &__submit {
             width: 100%;
             margin-top: $contact_padding_v - 4px;
+            //margin-left:15%;
             height: 2em;
-            border-radius: $contact_border_radius_v;
+            border-radius: 6px;
             border-width: 1px;
             border-color: $gideon-dark-blue;
             color: white;
@@ -1298,8 +1296,8 @@
         left: 0;
         position: absolute;
         right: 0;
-        transition: height 0.4s, margin-left 0.4s;
-        transition-timing-function: ease-in-out;
+        transition: background-color .4s;
+
         @include mobileAndTablet {
             max-width: $chatWidthMobile;
         }
@@ -1322,11 +1320,7 @@
         }
 
         &__disabled {
-          height: 40px;
-          > .wc-textbox,
-          > .wc-send {
-              display: none;
-            }
+          background-color: #eff0f1;
         }
 
         &__disabled::before {
