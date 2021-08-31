@@ -555,13 +555,14 @@ export class Chat extends React.Component<ChatProps, State> {
                         <Shell ref={ this._saveShellRef } />
 
                               <div className="wc-footer">
-                                <a href="https://gideon.legal">
+                                {/* TODO - temporarily commented out for all users to accomodate a new client */}
+                                {/* <a href="https://gideon.legal">
                                   <span>Powered by</span>
                                   <img
                                       className="wc-footer--logo"
                                       src="https://s3.amazonaws.com/com.gideon.static.dev/logotype-v1.1.0.svg"
                                     />
-                                </a>
+                                </a> */}
 
                               </div>
 
