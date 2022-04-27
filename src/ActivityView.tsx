@@ -5,6 +5,7 @@ import { AttachmentView } from './Attachment';
 import { Carousel } from './Carousel';
 import { IDoCardAction } from './Chat';
 import { ContactFormCard } from './ContactFormCard';
+import { AddressCard } from './AddressCard';
 import { dateFormat, dateFormatWithTime, DatePickerCard } from './DatePickerCard';
 import { DisclaimerCard } from './DisclaimerCard';
 import { FileUploadCard } from './FileUploadCard';
@@ -188,6 +189,11 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
             return (
                   <ContactFormCard { ...props } node={activityCopy.entities[0]} />
             );
+        } else if (type === 'address') {
+            return (
+                  <AddressCard { ...props } node={activityCopy.entities[0]} />
+            );
         }
+        
     }
 }

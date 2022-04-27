@@ -28,8 +28,44 @@ export interface MessageWithAddress extends Message {
     address: string
 }
 
-export interface ContactFormState {
+export interface AddressState {
     address: string;
     addressError: string; 
     formattedMessage: string;
   }
+
+  class AddressForm extends React.Component<AddressProps, AddressState> {
+    private textInputAddress: HTMLInputElement;
+  }
+
+  export const AddressCard = connect(
+    (state: ChatState) => {
+      return {
+        // passed down to MessagePaneView
+        locale:       state.format.locale,
+        user: state.connection.user,
+        conversationId: state.connection.botConnection.conversationId
+      };
+    }, {
+      updateInput: (disable: boolean, placeholder: string) =>
+            ({
+                type: 'Update_Input',
+                placeholder,
+                disable,
+                source: 'text'
+            } as ChatActions),
+      sendMessage
+    }, (stateProps: any, dispatchProps: any, ownProps: any): AddressProps => {
+      return {
+        // from stateProps
+        node:       ownProps.node,
+        withTime: ownProps.withTime,
+        // from dispatchProps
+        sendMessage: (text: string) => dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),
+        gid: ownProps.gid,
+        directLine: ownProps.directLine,
+        conversationId: stateProps.conversationId,
+        updateInput: dispatchProps.updateInput
+      };
+    }
+  )(AddressForm);
