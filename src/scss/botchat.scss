@@ -953,6 +953,19 @@
       border-width:1px;
   }
 
+    .wc-message-from-me .wc-message-address {
+        background-color: $c_messageFromMe;
+        color: $c01;
+        border-top-right-radius: 0px;
+    }
+
+    .wc-message-from-me .wc-message-content-address {
+        background-color:white;
+        border-color:$gideon-dark-blue;
+        border-style:solid;
+        border-width:1px;
+    }
+
     .wc-message-from-me svg.wc-message-callout path {
         fill: $c_messageFromMe;
     }

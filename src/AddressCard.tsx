@@ -62,7 +62,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
 
     getFormattedAddress = () => {
         return JSON.stringify({
-            ...this.state.address && { email: this.state.address }
+            ...this.state.address && { address: this.state.address }
 
         });
     }
@@ -90,14 +90,22 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
         }
     }
 
+    clickToSubmitContactInformation(e: React.MouseEvent<HTMLButtonElement>) {
+      // if (!this.validateContactInformation()) { return; }
+      this.resetShell();
+      this.props.sendMessage(this.getFormattedAddress());
+      document.removeEventListener('keypress', this.handleKeyDown.bind(this));
+      e.stopPropagation();
+    }
+
     render() {
         return (
-            <div className="address__card">
-                <div className="address__card__container">
-                    <span className={'address__card__container__title'}>Name</span>
+            <div className="contact__form__card">
+                <div className="contact__form__card__container">
+                    <span className={'contact__form__card__container__title'}>Address</span>
                     <input
                         type="text"
-                        className={'address__card__container__input'}
+                        className={'contact__form__card__container__input'}
                         ref={input => this.textInputAddress = input}
                         autoFocus={true}
                         value={this.state.address}
@@ -111,8 +119,11 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
                         aria-label={null}
                         aria-live="polite"
                     />
-                    {this.state.addressError && <span className="address__card__container__error">{this.state.addressError}</span>}
+                    {this.state.addressError && <span className="contact__form__card__container__error">{this.state.addressError}</span>}
                 </div>
+                <button type="button" className="contact__form__card__submit" onClick={e => this.clickToSubmitContactInformation(e) } title="Submit">
+                  Submit
+                </button>
             </div>
         );
     }
