@@ -21,6 +21,10 @@
         overflow: hidden;
     }
 
+    .pac-container {
+        z-index: 1100 !important;
+    }
+
     .wc-app button {
         background-color: $c_brand;
         border: 1px solid $c05;

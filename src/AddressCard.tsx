@@ -1,7 +1,12 @@
+/* eslint-disable */
 import { Activity, CardAction, DirectLine, DirectLineOptions, Message } from 'botframework-directlinejs';
 import * as moment from 'moment';
 import * as React from 'react';
-import Autocomplete from 'react-google-autocomplete';
+import Autocomplete, { usePlacesWidget } from 'react-google-autocomplete';
+import PlacesAutocomplete, {
+    geocodeByAddress,
+    getLatLng
+  } from 'react-places-autocomplete';
 import { connect } from 'react-redux';
 import { activityWithSuggestedActions } from './activityWithSuggestedActions';
 import { doCardAction, IDoCardAction } from './Chat';
@@ -51,6 +56,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
         console.log(this.props);
 
         this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     componentDidMount() {
@@ -98,27 +104,61 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
       e.stopPropagation();
     }
 
+    handleChange(address: string) {
+        this.setState({ address });
+    }
+
+    handleSelect(address: string) {
+        geocodeByAddress(address)
+            .then(results => getLatLng(results[0]))
+            .then(latLang => {
+                console.log('Success', address);
+            })
+            .catch(error => console.error('Error', error));
+    }
+
     render() {
         return (
             <div className="contact__form__card">
                 <div className="contact__form__card__container">
                     <span className={'contact__form__card__container__title'}>Address</span>
-                    <input
-                        type="text"
-                        className={'contact__form__card__container__input'}
-                        ref={input => this.textInputAddress = input}
-                        autoFocus={true}
+                    <PlacesAutocomplete
                         value={this.state.address}
-                        onChange={e => this.setState({
-                            ...this.state,
-                            address: e.target.value
-                        })}
-                        onKeyPress={e => this.onKeyPress(e)}
-                        // onFocus={ () => this.onTextInputFocus() }
-                        placeholder="Address"
-                        aria-label={null}
-                        aria-live="polite"
-                    />
+                        onChange={this.handleChange}
+                        onSelect={this.handleSelect}
+                    >
+                        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                            <div>
+                                <input
+                                    {...getInputProps({
+                                        placeholder: 'Search Places ...',
+                                        className: 'location-search-input'
+                                    })}
+                                />
+                                <div className="autocomplete-dropdown-container">
+                                    {loading && <div>Loading...</div>}
+                                    {suggestions.map(suggestion => {
+                                        const className = suggestion.active
+                                            ? 'suggestion-item-active'
+                                            : 'suggestion-item';
+                                        const style = suggestion.active
+                                            ? { backgroundColor: '#fafafa', cursor: 'pointer', color: 'black' }
+                                            : { backgroundColor: '#ffffff', cursor: 'pointer', color: 'black' };
+                                        return (
+                                            <div
+                                                {...getSuggestionItemProps(suggestion, {
+                                                    className,
+                                                    style
+                                                })}
+                                            >
+                                                <span>{suggestion.description}</span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        )}
+                    </PlacesAutocomplete>
                     {this.state.addressError && <span className="contact__form__card__container__error">{this.state.addressError}</span>}
                 </div>
                 <button type="button" className="contact__form__card__submit" onClick={e => this.clickToSubmitContactInformation(e) } title="Submit">
