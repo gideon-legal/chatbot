@@ -22,7 +22,7 @@
     }
 
     .wc-app button {
-        background-color: $c_brand;
+        background-color: #3F6DE1;
         border: 1px solid $c05;
         border-radius: 1px;
         color: $c01;
@@ -56,7 +56,7 @@
 
 /* docking */
 
-    $chatWidth: 360px;
+    $chatWidth: 530px;
     $chatWidthMobile: 100%;
 
     .wc-hidden {
@@ -93,9 +93,9 @@
     }
 
     .wc-header {
-        background-color: #fff;
+        background-color: #3F6DE1;
         box-sizing: border-box;
-        color: #444444;
+        color: #fff;
         font-weight: 500;
         left: 0;
         letter-spacing: 0.5px;
@@ -104,7 +104,6 @@
         right: 0;
         top: 0;
         z-index: 1;
-        box-shadow: 0 4px 16px 0 rgba(156, 112, 0, 0.12);
         max-width: $chatWidth;
         display: flex;
         line-height: 1.2em;
@@ -121,6 +120,8 @@
             margin-left: 18px;
             margin-right: 18px;
             display: inline-flex;
+            flex-grow: 1;
+            justify-content: center;
             align-items: center;
         }
 
@@ -214,8 +215,8 @@
                 text-align: right;
 
                 button {
-                    background-color: $c_brand;
-                    border: 1px solid #31ace2;
+                    background-color: #3F6DE1;
+                    border: 1px solid #3F6DE1;
                     border-radius: 10px;
                     border-top-right-radius: 0px;
                     color: #ffffff;
@@ -232,13 +233,13 @@
                 button:focus,
                 button:hover {
                     background-color: #fff;
-                    border-color: $c_brand;
-                    color: $c_brand;
+                    border-color: #3F6DE1;
+                    color: #3F6DE1;
                 }
 
                 button:active {
-                    background-color: $c_brand;
-                    border-color: $c_brand;
+                    background-color: #3F6DE1;
+                    border-color: #3F6DE1;
                     color: $c01;
                 }
             }
@@ -323,7 +324,7 @@
             display: block;
             width: $chatWidth;
             max-width: 80vw;
-            height: calc(100vh - #{$bottom} - 20px);
+            height: calc(80vh - #{$bottom} - 20px);
 
             @include mobileAndTablet {
                 max-width: $chatWidthMobile;
@@ -373,7 +374,7 @@
                 box-shadow: 2px 2px 9px 2px $c_shadow;
                 border-style: solid;
                 border-width: 1px;
-                border-color: $gideon-dark-blue;
+                border-color: #3F6DE1;
                 border-radius: 8px;
             }
 
@@ -387,8 +388,8 @@
                     flex-direction: column;
 
                     button {
-                        background-color: $c_brand;
-                        border: 1px solid #31ace2;
+                        background-color: #3F6DE1;
+                        border: 1px solid #3F6DE1;
                         border-radius: 10px;
                         border-top-right-radius: 0px;
                         color: #ffffff;
@@ -410,13 +411,13 @@
                     button:focus,
                     button:hover {
                         background-color: #fff;
-                        border-color: $c_brand;
-                        color: $c_brand;
+                        border-color: #3F6DE1;
+                        color: #3F6DE1;
                     }
 
                     button:active {
-                        background-color: $c_brand;
-                        border-color: $c_brand;
+                        background-color: #3F6DE1;
+                        border-color: #3F6DE1;
                         color: $c01;
                     }
                 }
@@ -594,7 +595,7 @@
               padding-left: $contact_padding_v;
               border-radius: $contact_padding_v;
               border-width: 1px;
-              border-color: $gideon-dark-blue;
+              border-color: #3F6DE1;
               border-style: solid;
               height: 2em;
               outline-style: none;
@@ -604,7 +605,7 @@
             &__title {
               margin: 0;
               padding-bottom: $contact_padding_v - 2px;
-              color: #31ace2;
+              color: #3F6DE1;
             }
 
             &__error {
@@ -621,13 +622,13 @@
             height: 2em;
             border-radius: 6px;
             border-width: 1px;
-            border-color: $gideon-dark-blue;
+            border-color: #3F6DE1;
             color: white;
-            background-color:$gideon-dark-blue;
+            background-color:#3F6DE1;
           }
 
           &__submit:hover {
-            background-color: $gideon-dark-blue;
+            background-color: #3F6DE1;
             color: white;
           }
         }
@@ -677,7 +678,7 @@
 
         button {
             background-color: transparent;
-            color: $c_brand;
+            color: #3F6DE1;
             min-height: 32px;
             width: 100%;
             padding: 0 16px;
@@ -685,13 +686,13 @@
 
         button:hover {
             background-color: transparent;
-            border-color: $c_brand;
-            color: $c_brand;
+            border-color: #3F6DE1;
+            color: #3F6DE1;
         }
 
         button:active {
-            background-color: $c_brand;
-            border-color: $c_brand;
+            background-color: #3F6DE1;
+            border-color: #3F6DE1;
             color: $c01;
         }
 
@@ -941,20 +942,20 @@
     }
 
     .wc-message-from-me .wc-message-content {
-        background-color: $c_messageFromMe;
+        background-color: #3F6DE1;
         color: $c01;
-        border-top-right-radius: 0px;
+        border-radius: 3px 3px 0px 3px;
     }
 
     .wc-message-from-me .wc-message-content-contact {
       background-color:white;
-      border-color:$gideon-dark-blue;
+      border-color:#3F6DE1;
       border-style:solid;
       border-width:1px;
   }
 
     .wc-message-from-me svg.wc-message-callout path {
-        fill: $c_messageFromMe;
+        fill: #3F6DE1;
     }
 
     .wc-message-from-me svg.wc-message-callout path.point-left {
@@ -1025,9 +1026,9 @@
 
         .wc-border {
           display: block;
-          height: 2px;
+          height: 1px;
           width: 100%;
-          background-image: linear-gradient(90deg, #eabd4c, #f6e083, #c3c3c3, #dddddd);
+          background-color: #E5E5E5;
           background-position: 0%;
           background-size: 300%;
           transition: background-position .4s;
@@ -1052,7 +1053,6 @@
         > .wc-send,
         > .wc-mic {
             position: absolute;
-            top: 2px;
             vertical-align: middle;
         }
 
@@ -1064,7 +1064,7 @@
 
         svg {
             fill: $c03;
-            margin-top: 11px;
+            margin-top: 19px;
             margin-right: 16px;
         }
 
@@ -1072,7 +1072,7 @@
         textarea {
             border: none;
             color: #000 !important;
-            height: 45px;
+            height: 55px;
             outline: none;
             padding: 0;
             resize: none;
@@ -1096,7 +1096,7 @@
 
 
         &.has-text .wc-send svg {
-            fill: $c07;
+            fill: #3F6DE1;
         }
 
         .wc-upload {
@@ -1134,15 +1134,14 @@
 
         .wc-textbox {
             bottom: 0;
-            left: 12px;
-            right: 60px;
-            top: 12px;
+            left: 20px;
+            right: 76px;
+            top: 20px;
 
 
             input {
-                background-color: rgba(128, 128, 128, 0.1);
+                background-color: #F7F7F7;
                 padding-left: 12px;
-                border-radius:10px;
             }
         }
 
@@ -1160,7 +1159,6 @@
             border: 0;
             padding: 0;
             right: 0;
-            max-width: 50px;
 
             &.hidden {
                 visibility: hidden;
@@ -1169,7 +1167,7 @@
 
         .wc-send {
             svg {
-                width: 40px;
+                width: 55px;
             }
         }
 
@@ -1285,11 +1283,11 @@
         }
 
         &:hover {
-            @include link-and-svg-arrow($c_brand, 1);
+            @include link-and-svg-arrow(#3F6DE1, 1);
         }
 
         &:active {
-            @include link-and-svg-arrow($c_brand, 0.8);
+            @include link-and-svg-arrow(#3F6DE1, 0.8);
         }
     }
 

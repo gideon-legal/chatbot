@@ -473,7 +473,7 @@ export class Chat extends React.Component<ChatProps, State> {
         const bottomOffset = fullHeight ? 0 : (format && format.bottomOffset ? format.bottomOffset + 99 : 17);
         const topOffset = format && format.topOffset ? format.topOffset : 0;
         const rightOffset = fullHeight ? 0 : (alignment !== 'left' && format && format.rightOffset ? format.rightOffset : -1);
-        const height = fullHeight ? '100vh' : `calc(100vh - ${bottomOffset}px - ${topOffset}px - 20px)`;
+        const height = fullHeight ? '100vh' : `calc(80vh - ${bottomOffset}px - ${topOffset}px - 20px)`;
 
         let styles = {
             bottom: bottomOffset,
