@@ -26,6 +26,7 @@ export interface FileUploadState {
     uploadPhase: string;
     isUploading: boolean;
     signedUrl: string;
+    signedUrls: string[];
 }
 
 export const UPLOAD_PHASES = {
@@ -47,7 +48,8 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
             files: [],
             uploadPhase: UPLOAD_PHASES.OPEN,
             isUploading: false,
-            signedUrl: null
+            signedUrl: null,
+            signedUrls: []
         };
 
         this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -86,17 +88,19 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         this.props.sendMessage('Skip Upload');
     }
 
+    // returns signedUrls, [] of urls for the files
     getSignedUrl = (data: any) => {
         return new Promise((resolve, reject) => {
-            if (this.state.signedUrl) {
-                resolve({s3Url: this.state.signedUrl});
+            if (this.state.signedUrls) {
+                resolve({s3Urls: this.state.signedUrls});
             } else {
-                axios.post(this.props.gid + '/api/v1/nodes/presigned_url_for_node', data)
-                .then((result: any) => {
+                // try new upload function
+                axios.post( this.props.gid + '/api/v1/nodes/presigned_url_for_multi_node', data).then((result: any) => {
+                    // returns urls
                     if (result.data.success) {
-                        const signedUrl = result.data.url;
-                        this.setState({signedUrl});
-                        resolve({s3Url: this.state.signedUrl});
+                        const signedUrls = result.data.urls;
+                        this.setState({signedUrls});
+                        resolve({s3Urls: this.state.signedUrls});
                     } else {
                         reject('Request failed');
                     }
@@ -116,20 +120,31 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         this.props.fileSelected(true);
 
         const file = this.state.files[0];
+        const files = this.state.files;
+        const contentTypeArr: any[] = [];
+        files.forEach((f: { type: any; }) => {
+            contentTypeArr.push(f.type);
+        });
         const dataToGetSignedUrl = {
             node_id: this.props.node.node_id,
             content_type: file.type,
+            content_type_arr: contentTypeArr,
             msft_conversation_id: this.props.node.conversation_id
         };
 
         this.getSignedUrl(dataToGetSignedUrl).then((result: any) => {
-                const options = {
-                  headers: {
-                    'Content-Type': file.type
-                  }
-                };
-
-                return axios.put(result.s3Url, file, options);
+                if (result.s3Urls) {
+                    files.forEach((f: { type: any; }) => {
+                        result.s3Urls.forEach((url: string) => {
+                            const options = {
+                                headers: {
+                                    'Content-Type': f.type
+                                }
+                            };
+                            axios.put(url, f, options);
+                        });
+                    });
+                }
             }).then((result: any) => {
                 if (result.status === 200) {
                   this.props.fileSelected(false);
