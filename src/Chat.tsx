@@ -533,11 +533,17 @@ export class Chat extends React.Component<ChatProps, State> {
                                       />
 
                                   <span>{typeof state.format.chatTitle === 'string' ? state.format.chatTitle : 'Gideon' }</span>
-
-                                    <img
+                                       
+                                     {/* Close X image on chat */}
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <title>wc-header--close</title>
+                                        <path className="wc-header--close" d="M18 2L2 18" stroke="#FCFCFC" stroke-width="3" stroke-linecap="round" />
+                                        <path className="wc-header--close" d="M2 2L18 18" stroke="#FCFCFC" stroke-width="3" stroke-linecap="round" />
+                                    </svg>
+                                    {/* <img
                                         className="wc-header--close"
                                         onClick={() => {this.toggle(); }}
-                                        src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/close.svg" />
+                                        src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/close.svg" /> */}
 
                                     {/* <img
                                         className="wc-header--back"

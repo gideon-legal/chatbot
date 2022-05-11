@@ -153,6 +153,10 @@
             padding-right: 28px;
             cursor: pointer;
         }
+
+        svg {
+            margin-top: 10px;
+        }
     }
 
     .wc-time {
@@ -530,6 +534,7 @@
         justify-content: center;
         color: #f6f7f8;
         margin: auto 0 10px 0;
+        background: #3F6DE1 !important;
     }
 
     .wc-message-avatar.blank{
@@ -570,7 +575,7 @@
 
     .wc-message-content {
         border-radius: 2px;
-        box-shadow: 0px 1px 1px 0px $c_shadow;
+        // box-shadow: 0px 1px 1px 0px $c_shadow;
         padding: 14px;
         word-break: break-word;
         border-radius: $messageBorderRadius;
@@ -975,9 +980,9 @@
     }
 
     .wc-message-from-bot .wc-message-content {
-        background-color: $c_messageFromThem;
-        color: $c00;
-        border-top-left-radius: 0px;
+        background-color: #EEF7F9;
+        color: #262626;
+        border-radius: 3px 3px 3px 0px;
     }
 
     .wc-message-from-bot svg.wc-message-callout path {
@@ -1063,7 +1068,7 @@
         }
 
         svg {
-            fill: $c03;
+            fill: #3f6de1;
             margin-top: 19px;
             margin-right: 16px;
         }
@@ -1219,7 +1224,7 @@
         margin-bottom: 0px;
         line-height: 1.2em;
         color: inherit;
-        font-size: inherit;
+        font-size: 14px;
     }
 
     .format-markdown code {
