@@ -91,16 +91,15 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
     // returns signedUrls, [] of urls for the files
     getSignedUrl = (data: any) => {
         return new Promise((resolve, reject) => {
-            if (this.state.signedUrls) {
-                resolve({s3Urls: this.state.signedUrls});
+            if (this.state.signedUrl) {
+                resolve({s3Url: this.state.signedUrl});
             } else {
-                // try new upload function
-                axios.post( this.props.gid + '/api/v1/nodes/presigned_url_for_multi_node', data).then((result: any) => {
-                    // returns urls
+                axios.post(this.props.gid + '/api/v1/nodes/presigned_url_for_node', data)
+                .then((result: any) => {
                     if (result.data.success) {
-                        const signedUrls = result.data.urls;
-                        this.setState({signedUrls});
-                        resolve({s3Urls: this.state.signedUrls});
+                        const signedUrl = result.data.url;
+                        this.setState({signedUrl});
+                        resolve({s3Url: this.state.signedUrl});
                     } else {
                         reject('Request failed');
                     }
@@ -116,50 +115,51 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         }
         console.log('here');
         console.log(this.state.files);
-        this.setState({isUploading: true});
+        this.setState({ isUploading: true });
         this.props.fileSelected(true);
-
-        const file = this.state.files[0];
         const files = this.state.files;
         const contentTypeArr: any[] = [];
         files.forEach((f: { type: any; }) => {
             contentTypeArr.push(f.type);
         });
         console.log(contentTypeArr);
-        const dataToGetSignedUrl = {
-            node_id: this.props.node.node_id,
-            content_type: file.type,
-            content_type_arr: contentTypeArr,
-            msft_conversation_id: this.props.node.conversation_id
-        };
+        /* const dataToGetSignedUrl = {
+             node_id: this.props.node.node_id,
+             content_type: file.type,
+             content_type_arr: contentTypeArr,
+             msft_conversation_id: this.props.node.conversation_id
+         }; */
+        for (const i of files) {
+            const file = i;
+            const dataToGetSignedUrl = {
+                node_id: this.props.node.node_id,
+                content_type: file.type,
+                content_type_arr: contentTypeArr,
+                msft_conversation_id: this.props.node.conversation_id
+            };
+            this.getSignedUrl(dataToGetSignedUrl).then((result: any) => {
+                const options = {
+                    headers: {
+                        'Content-Type': file.type
+                    }
+                };
 
-        this.getSignedUrl(dataToGetSignedUrl).then((result: any) => {
-                if (result.s3Urls) {
-                    files.forEach((f: { type: any; }) => {
-                        result.s3Urls.forEach((url: string) => {
-                            const options = {
-                                headers: {
-                                    'Content-Type': f.type
-                                }
-                            };
-                            axios.put(url, f, options);
-                        });
-                    });
-                }
+                return axios.put(result.s3Url, file, options);
             }).then((result: any) => {
                 if (result.status === 200) {
-                  this.props.fileSelected(false);
-                  this.setState({isUploading: false, files: [], uploadPhase: 'success'});
+                    this.props.fileSelected(false);
+                    this.setState({ isUploading: false, files: [], uploadPhase: 'success' });
 
-                  this.props.sendMessage(this.state.signedUrls[0]);
+                    this.props.sendMessage(this.state.signedUrl.split('?')[0]);
                 } else {
                     throw Error('Something went wrong. Try again.');
                 }
             }).catch(err => {
                 this.props.fileSelected(false);
-                this.setState({isUploading: false, files: [], uploadPhase: UPLOAD_PHASES.ERROR});
+                this.setState({ isUploading: false, files: [], uploadPhase: UPLOAD_PHASES.ERROR });
             });
         }
+    }
     clickToSubmitFile(e?: React.MouseEvent<HTMLDivElement>) {
         if (this.state.uploadPhase !== UPLOAD_PHASES.PREVIEW) { return; }
         this.submitFiles();
