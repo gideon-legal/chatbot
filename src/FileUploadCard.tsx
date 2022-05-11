@@ -110,12 +110,12 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
             }
         });
     }
-
     submitFiles = () => {
         if (this.state.files.length === 0 || this.state.isUploading) {
             return;
         }
-
+        console.log('here');
+        console.log(this.state.files);
         this.setState({isUploading: true});
         this.props.fileSelected(true);
 
@@ -125,6 +125,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         files.forEach((f: { type: any; }) => {
             contentTypeArr.push(f.type);
         });
+        console.log(contentTypeArr);
         const dataToGetSignedUrl = {
             node_id: this.props.node.node_id,
             content_type: file.type,
@@ -150,7 +151,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                   this.props.fileSelected(false);
                   this.setState({isUploading: false, files: [], uploadPhase: 'success'});
 
-                  this.props.sendMessage(this.state.signedUrl.split('?')[0]);
+                  this.props.sendMessage(this.state.signedUrls[0]);
                 } else {
                     throw Error('Something went wrong. Try again.');
                 }
@@ -159,7 +160,6 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                 this.setState({isUploading: false, files: [], uploadPhase: UPLOAD_PHASES.ERROR});
             });
         }
-
     clickToSubmitFile(e?: React.MouseEvent<HTMLDivElement>) {
         if (this.state.uploadPhase !== UPLOAD_PHASES.PREVIEW) { return; }
         this.submitFiles();
@@ -178,8 +178,13 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
 
     onDrop(imageFiles: FileList) {
         if (imageFiles.length > 0) {
+            let curFiles = [];
+            curFiles = this.state.files;
+            for (const f of Array.from(imageFiles)) {
+                curFiles.push(f);
+            }
             this.setState({
-                files: imageFiles,
+                files: curFiles,
                 uploadPhase: UPLOAD_PHASES.PREVIEW
             });
         }
@@ -187,42 +192,55 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
 
     showDropzone = () => {
         let returnDropzone = (
-            <div>
-                <div className="file-upload-title">Upload a file</div>
-                <Dropzone
-                    onDrop={this.onDrop.bind(this)}
-                    maxSize={1048576}
-                >
-                    <div className="drop-text">
-                        <span className="bold-line">Drop files here to upload</span>
-                        <br />
-                        <span>or <br /> click here to select files </span>
-                    </div>
-                </Dropzone>
-                <div className="upload-skip" onClick={e => this.handleSkipFile(e)}>Skip</div>
-            </div>
-        );
-
-        if (this.state.uploadPhase === UPLOAD_PHASES.PREVIEW) {
-            returnDropzone = (
                 <div>
-                    <div className="file-upload-title">{this.state.files[0].name}</div>
-                    <div className="file_chunk no-border">
-                        <div className="drop-text add-padding">
-                            <div className="fileAttach">
-                            {/*<img src="/assets/file.svg">*/}
-                            </div>
-                            <span className="bold-line">{this.state.files[0].name} </span>
+                    <div className="file-upload-title">Upload file(s)</div>
+                    <Dropzone onDrop={this.onDrop.bind(this)}>
+                        <div className="drop-text">
+                            <span className="bold-line">Drop files here to upload</span>
                             <br />
-                            <br />
-                            <a onClick={this.removeFile} className="remove_link" href="#"> remove file</a>
+                            <span>or <br /> click here to select files </span>
                         </div>
-                    </div>
-                    <div className="upload-skip" onClick={e => this.clickToSubmitFile(e)}>Press Enter to Submit</div>
+                    </Dropzone>;
+                    <div className="upload-skip" onClick={e => this.handleSkipFile(e)}>Skip</div>
                 </div>
+        );
+        if (this.state.uploadPhase === UPLOAD_PHASES.PREVIEW) {
+            console.log(this.state.files);
+            returnDropzone = (
+                <section>
+                    <div>
+                        <div className="file-upload-title">Upload file(s)</div>
+                        <Dropzone onDrop={this.onDrop.bind(this)}>
+                            <div className="drop-text">
+                                <span className="bold-line">Drop files here to upload</span>
+                                <br />
+                                <span>or <br /> click here to select files </span>
+                            </div>
+                        </Dropzone>;
+                    </div>
+                    <aside>
+                        <div>
+                            <h2> Dropped files </h2>
+                            <ul>
+                                {this.state.files.map((f: any) => (
+                                    <div className="file_chunk no-border">
+                                        <div className="drop-text add-padding">
+                                            <li className="bold-line" key={f.name}>
+                                                {f.name}
+                                                <br />
+                                                <br />
+                                                <a onClick={this.removeFile} className="remove_link" href="#"> remove file</a>
+                                            </li>
+                                        </div>
+                                    </div>
+                                ))};
+                            </ul>
+                            <div className="upload-skip" onClick={e => this.clickToSubmitFile(e)}>Press Enter to Submit</div>
+                        </div>
+                    </aside>
+                </section>
             );
         }
-
         if (this.state.uploadPhase === UPLOAD_PHASES.ERROR) {
             returnDropzone = (
                 <div>
