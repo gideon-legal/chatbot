@@ -98,9 +98,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                 .then((result: any) => {
                     if (result.data.success) {
                         const signedUrl = result.data.url;
-                        console.log(result.data.url);
                         this.setState({signedUrl});
-                        console.log(this.state.signedUrl);
                         resolve({s3Url: this.state.signedUrl});
                     } else {
                         reject('Request failed');
@@ -115,8 +113,6 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         if (this.state.files.length === 0 || this.state.isUploading) {
             return;
         }
-        console.log('here');
-        console.log(this.state.files);
         this.setState({ isUploading: true });
         this.props.fileSelected(true);
         const files = this.state.files;
@@ -124,13 +120,6 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         files.forEach((f: { type: any; }) => {
             contentTypeArr.push(f.type);
         });
-        console.log(contentTypeArr);
-        /* const dataToGetSignedUrl = {
-             node_id: this.props.node.node_id,
-             content_type: file.type,
-             content_type_arr: contentTypeArr,
-             msft_conversation_id: this.props.node.conversation_id
-         }; */
         for (const i of files) {
             const file = i;
             let currUrl = '';
@@ -208,7 +197,6 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                 </div>
         );
         if (this.state.uploadPhase === UPLOAD_PHASES.PREVIEW) {
-            console.log(this.state.files);
             returnDropzone = (
                 <section>
                     <div>
