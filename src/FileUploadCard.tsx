@@ -98,7 +98,9 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                 .then((result: any) => {
                     if (result.data.success) {
                         const signedUrl = result.data.url;
+                        console.log(result.data.url);
                         this.setState({signedUrl});
+                        console.log(this.state.signedUrl);
                         resolve({s3Url: this.state.signedUrl});
                     } else {
                         reject('Request failed');
@@ -131,26 +133,27 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
          }; */
         for (const i of files) {
             const file = i;
+            let currUrl = '';
             const dataToGetSignedUrl = {
                 node_id: this.props.node.node_id,
                 content_type: file.type,
                 content_type_arr: contentTypeArr,
                 msft_conversation_id: this.props.node.conversation_id
             };
-            this.getSignedUrl(dataToGetSignedUrl).then((result: any) => {
+            this.getSignedUrl(dataToGetSignedUrl).then((resultUrl: any) => {
                 const options = {
                     headers: {
                         'Content-Type': file.type
                     }
                 };
-
-                return axios.put(result.s3Url, file, options);
+                currUrl = resultUrl.s3Url;
+                return axios.put(resultUrl.s3Url, file, options);
             }).then((result: any) => {
                 if (result.status === 200) {
                     this.props.fileSelected(false);
                     this.setState({ isUploading: false, files: [], uploadPhase: 'success' });
 
-                    this.props.sendMessage(this.state.signedUrl.split('?')[0]);
+                    this.props.sendMessage(currUrl.split('?')[0]);
                 } else {
                     throw Error('Something went wrong. Try again.');
                 }
