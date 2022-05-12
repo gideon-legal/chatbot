@@ -55,10 +55,15 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         this.handleKeyDown = this.handleKeyDown.bind(this);
     }
 
-    removeFile = () => {
+    removeFile = (file: any) => {
+        const index = this.state.files.indexOf(file);
+        const newFiles = this.state.files;
+        if (index > -1) {
+            newFiles.splice(index, 1);
+        }
         this.setState({
-            files: [],
-            uploadPhase: UPLOAD_PHASES.OPEN
+            files: newFiles,
+            uploadPhase: UPLOAD_PHASES.PREVIEW
         });
     }
 
@@ -220,7 +225,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                                                 {f.name}
                                                 <br />
                                                 <br />
-                                                <a onClick={this.removeFile} className="remove_link" href="#"> remove file</a>
+                                                <a onClick={() => this.removeFile(f)} className="remove_link" href="#"> remove file</a>
                                             </li>
                                         </div>
                                     </div>
