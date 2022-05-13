@@ -21,8 +21,12 @@
         overflow: hidden;
     }
 
+    .pac-container {
+        z-index: 1100 !important;
+    }
+
     .wc-app button {
-        background-color: $c_brand;
+        background-color: #3F6DE1;
         border: 1px solid $c05;
         border-radius: 1px;
         color: $c01;
@@ -56,7 +60,7 @@
 
 /* docking */
 
-    $chatWidth: 360px;
+    $chatWidth: 530px;
     $chatWidthMobile: 100%;
 
     .wc-hidden {
@@ -93,9 +97,9 @@
     }
 
     .wc-header {
-        background-color: #fff;
+        background-color: #3F6DE1;
         box-sizing: border-box;
-        color: #444444;
+        color: #fff;
         font-weight: 500;
         left: 0;
         letter-spacing: 0.5px;
@@ -104,7 +108,6 @@
         right: 0;
         top: 0;
         z-index: 1;
-        box-shadow: 0 4px 16px 0 rgba(156, 112, 0, 0.12);
         max-width: $chatWidth;
         display: flex;
         line-height: 1.2em;
@@ -112,7 +115,8 @@
         $logo-size: 42px;
 
         @include mobileAndTablet {
-            max-width: $chatWidthMobile;
+            // max-width: $chatWidthMobile; -TO 5/1/22
+            max-width: 100%;
         }
 
         span {
@@ -121,6 +125,8 @@
             margin-left: 18px;
             margin-right: 18px;
             display: inline-flex;
+            flex-grow: 1;
+            justify-content: center;
             align-items: center;
         }
 
@@ -152,6 +158,10 @@
             padding-right: 28px;
             cursor: pointer;
         }
+
+        svg {
+            margin-top: 10px;
+        }
     }
 
     .wc-time {
@@ -176,9 +186,10 @@
         right: 0;
         top: $headerTotalHeight;
         transition: transform $actionTransition;
-        max-width: $chatWidth;
+        // max-width: $chatWidth; -TO 5/1/22
         @include mobileAndTablet {
-            max-width: $chatWidthMobile;
+            // max-width: $chatWidthMobile; -TO 5/1/22
+            max-width: 100%;
         }
 
         &.no-header {
@@ -188,6 +199,8 @@
 
     .wc-message-group-content {
         overflow: hidden;
+        width: 66%;
+        float: right;
     }
 
     .wc-suggested-actions {
@@ -214,8 +227,8 @@
                 text-align: right;
 
                 button {
-                    background-color: $c_brand;
-                    border: 1px solid #31ace2;
+                    background-color: #3F6DE1;
+                    border: 1px solid #3F6DE1;
                     border-radius: 10px;
                     border-top-right-radius: 0px;
                     color: #ffffff;
@@ -232,13 +245,13 @@
                 button:focus,
                 button:hover {
                     background-color: #fff;
-                    border-color: $c_brand;
-                    color: $c_brand;
+                    border-color: #3F6DE1;
+                    color: #3F6DE1;
                 }
 
                 button:active {
-                    background-color: $c_brand;
-                    border-color: $c_brand;
+                    background-color: #3F6DE1;
+                    border-color: #3F6DE1;
                     color: $c01;
                 }
             }
@@ -292,6 +305,50 @@
         }
     }
 
+    .wc-suggested-options {
+        display: flex;
+        flex-direction: column; 
+    }
+        .wc-suggested-options ul {
+          overflow-y: auto;
+          overflow-x: hidden; 
+        }
+        @media (min-width: 1024px) {
+            .wc-suggested-options ul {
+              max-height: 28vh; 
+            } 
+        }
+        .wc-suggested-options li {
+          color: #3F6DE1;
+          border: 1px solid #3F6DE1;
+          /* border-radius: 8px; */
+          padding: 8px;
+          margin-bottom: 10px;
+          margin-right: 5px;
+          cursor: pointer;
+          white-space: normal;
+          width: 100%;
+          overflow-wrap: break-word;
+          display: inline-block;
+          text-align: center; 
+        }
+        .wc-suggested-options li:hover {
+          background-color: #3F6DE1;
+          color: #ffffff; 
+        }
+        .wc-suggested-options li:active {
+          background-color: #3F6DE1;
+          color: #ffffff; 
+        }
+        .wc-suggested-options-submit {
+          align-self: center;
+          width: 60%; 
+        }
+        li.wc-suggested-options-option-selected {
+        background-color: #3F6DE1;
+        color: #ffffff; 
+        }
+
 /* views */
 
     $rightWeight:3px;
@@ -304,14 +361,14 @@
     .wc-chatview-panel {
         box-sizing: border-box;
         overflow: hidden;
-        position: fixed;
+        // position: fixed;
         right: $rightWeight + 14px;
         bottom: $floatingBottom + $floatingHeight + 20px;
         height: 0;
-        width: 200px;
-        border-radius: 8px;
+        // width: 200px; -TO 5/1/22
+        // border-radius: 8px; -TO 5/1/22
         z-index: 200000;
-        box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.16), 0 4px 10px 0 rgba(0, 0, 0, 0.26);
+        // box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.16), 0 4px 10px 0 rgba(0, 0, 0, 0.26); -TO 5/1/22
         visibility: hidden;
         opacity: 0;
         transition:visibility 1s $cubic, opacity 1s $cubic, height 0.5s $cubic, width 0.5s $cubic;
@@ -323,7 +380,7 @@
             display: block;
             width: $chatWidth;
             max-width: 80vw;
-            height: calc(100vh - #{$bottom} - 20px);
+            height: calc(80vh - #{$bottom} - 20px);
 
             @include mobileAndTablet {
                 max-width: $chatWidthMobile;
@@ -373,7 +430,7 @@
                 box-shadow: 2px 2px 9px 2px $c_shadow;
                 border-style: solid;
                 border-width: 1px;
-                border-color: $gideon-dark-blue;
+                border-color: #3F6DE1;
                 border-radius: 8px;
             }
 
@@ -387,8 +444,8 @@
                     flex-direction: column;
 
                     button {
-                        background-color: $c_brand;
-                        border: 1px solid #31ace2;
+                        background-color: #3F6DE1;
+                        border: 1px solid #3F6DE1;
                         border-radius: 10px;
                         border-top-right-radius: 0px;
                         color: #ffffff;
@@ -410,13 +467,13 @@
                     button:focus,
                     button:hover {
                         background-color: #fff;
-                        border-color: $c_brand;
-                        color: $c_brand;
+                        border-color: #3F6DE1;
+                        color: #3F6DE1;
                     }
 
                     button:active {
-                        background-color: $c_brand;
-                        border-color: $c_brand;
+                        background-color: #3F6DE1;
+                        border-color: #3F6DE1;
                         color: $c01;
                     }
                 }
@@ -426,7 +483,7 @@
 
     .wc-floating-wrap {
         position: fixed;
-        right: $rightWeight;
+        // right: $rightWeight; -TO 5/1/22
         bottom: $floatingBottom;
         width:150px;
         z-index: 200000;
@@ -529,10 +586,13 @@
         justify-content: center;
         color: #f6f7f8;
         margin: auto 0 10px 0;
+        background: #3F6DE1 !important;
     }
 
     .wc-message-avatar.blank{
-      color: transparent;
+    //   color: transparent; -TO 5/1/22
+        color: #f6f7f8; 
+        background: #3F6DE1;
     }
 
     @keyframes animationFrames{
@@ -569,11 +629,12 @@
 
     .wc-message-content {
         border-radius: 2px;
-        box-shadow: 0px 1px 1px 0px $c_shadow;
+        // box-shadow: 0px 1px 1px 0px $c_shadow;
         padding: 14px;
         word-break: break-word;
-        border-radius: $messageBorderRadius;
+        // border-radius: $messageBorderRadius; -TO 5/1/22
         font-size: $message_font_size;
+        background-color: #3F6DE1;
 
         .wc-message-date &, .wc-message-handoff & {
             padding:0 !important;
@@ -594,7 +655,7 @@
               padding-left: $contact_padding_v;
               border-radius: $contact_padding_v;
               border-width: 1px;
-              border-color: $gideon-dark-blue;
+              border-color: #3F6DE1;
               border-style: solid;
               height: 2em;
               outline-style: none;
@@ -604,7 +665,7 @@
             &__title {
               margin: 0;
               padding-bottom: $contact_padding_v - 2px;
-              color: #31ace2;
+              color: #3F6DE1;
             }
 
             &__error {
@@ -619,15 +680,18 @@
             margin-top: $contact_padding_v;
             margin-left:15%;
             height: 2em;
-            border-radius: 6px;
+            // border-radius: 6px; -TO 5/1/22
+            border-color: #3F6DE1;
+            background: #3F6DE1;
+            border-radius: 3px;
             border-width: 1px;
-            border-color: $gideon-dark-blue;
+            border-color: #3F6DE1;
             color: white;
-            background-color:$gideon-dark-blue;
+            background-color:#3F6DE1;
           }
 
           &__submit:hover {
-            background-color: $gideon-dark-blue;
+            background-color: #3F6DE1;
             color: white;
           }
         }
@@ -677,7 +741,7 @@
 
         button {
             background-color: transparent;
-            color: $c_brand;
+            color: #3F6DE1;
             min-height: 32px;
             width: 100%;
             padding: 0 16px;
@@ -685,13 +749,13 @@
 
         button:hover {
             background-color: transparent;
-            border-color: $c_brand;
-            color: $c_brand;
+            border-color: #3F6DE1;
+            color: #3F6DE1;
         }
 
         button:active {
-            background-color: $c_brand;
-            border-color: $c_brand;
+            background-color: #3F6DE1;
+            border-color: #3F6DE1;
             color: $c01;
         }
 
@@ -934,6 +998,7 @@
     .wc-message-from-me {
         float: right;
         margin-right: 6px;
+        margin-left: auto;
     }
 
     .wc-message-from-me.wc-message-from {
@@ -941,20 +1006,43 @@
     }
 
     .wc-message-from-me .wc-message-content {
+        background-color: #3F6DE1;
+        color: $c01;
+        border-radius: 3px 3px 0px 3px;
+    }
+
+    .wc-message-from-me .wc-message-content-contact {
+      background-color:white;
+      border-color:#3F6DE1;
+      border-style:solid;
+      border-width:1px;
+      border-top: 5px solid #3f6de1;
+  }
+
+    .wc-message-from-me.wc-message-file .wc-message-content {
+        background-color: transparent;
+        border: 1px solid #3F6DE1;
+        border-top-right-radius: 4px;
+        border-top-left-radius: 4px;
+        padding: 0px; 
+    }
+
+    .wc-message-from-me .wc-message-address {
         background-color: $c_messageFromMe;
         color: $c01;
         border-top-right-radius: 0px;
     }
 
-    .wc-message-from-me .wc-message-content-contact {
-      background-color:white;
-      border-color:$gideon-dark-blue;
-      border-style:solid;
-      border-width:1px;
-  }
+    .wc-message-from-me .wc-message-content-address {
+        background-color:white;
+        // border-color:$gideon-dark-blue; -TO 5/1/22
+        border-color: #3F6DE1;
+        border-style:solid;
+        border-width:1px;
+    }
 
     .wc-message-from-me svg.wc-message-callout path {
-        fill: $c_messageFromMe;
+        fill: #3F6DE1;
     }
 
     .wc-message-from-me svg.wc-message-callout path.point-left {
@@ -974,9 +1062,9 @@
     }
 
     .wc-message-from-bot .wc-message-content {
-        background-color: $c_messageFromThem;
-        color: $c00;
-        border-top-left-radius: 0px;
+        background-color: #EEF7F9;
+        color: #262626;
+        border-radius: 3px 3px 3px 0px;
     }
 
     .wc-message-from-bot svg.wc-message-callout path {
@@ -1003,6 +1091,46 @@
       margin-left: auto;
     }
 
+    .file-upload-title {
+        background-color: none !important;
+        font-size: 14px;
+        // font-weight: bold;
+        max-width: 250px;
+        text-align: center;
+        color: #262626;
+        padding: 17px 5px 20px;
+        border-top: 5px solid #3F6DE1;
+        border-radius: 3px 0px 0px 0px;
+        // border-top-left-radius: 13px; 
+    }
+      
+    .file-upload-title + div {
+        border: 1px dashed #3F6DE1 !important;
+        margin: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center; 
+    }
+
+    .drop-text {
+        color: #3F6DE1;
+        text-align: center;
+        width: 200px;
+        word-wrap: break-word; 
+    }   
+    
+    .bold-line {
+        font-weight: 600; 
+    }
+      
+    .upload-skip {
+        color: #3F6DE1;
+        text-align: center;
+        padding: 14px 0px;
+        border-top: 1px solid #3F6DE1;
+        cursor: pointer;
+        font-weight: 600; 
+    }
 /* console */
 
 
@@ -1012,8 +1140,7 @@
         box-sizing: border-box;
         background: white;
         height: $consoleHeight;
-        max-width: $chatWidth;
-        left: 0;
+        width: 66%;
         position: absolute;
         right: 0;
         transition: background-color .4s;
@@ -1025,22 +1152,17 @@
 
         .wc-border {
           display: block;
-          height: 2px;
+          height: 1px;
           width: 100%;
-          background-image: linear-gradient(90deg, #eabd4c, #f6e083, #c3c3c3, #dddddd);
+          background-color: #E5E5E5;
           background-position: 0%;
           background-size: 300%;
-          transition: background-position .4s;
         }
 
         &::after {
           content: "";
           display: block;
           clear: both;
-        }
-
-        &__disabled {
-          background-color: #eff0f1;
         }
 
         &__disabled::before {
@@ -1052,7 +1174,6 @@
         > .wc-send,
         > .wc-mic {
             position: absolute;
-            top: 2px;
             vertical-align: middle;
         }
 
@@ -1063,8 +1184,8 @@
         }
 
         svg {
-            fill: $c03;
-            margin-top: 11px;
+            fill: #3f6de1;
+            margin-top: 19px;
             margin-right: 16px;
         }
 
@@ -1072,7 +1193,7 @@
         textarea {
             border: none;
             color: #000 !important;
-            height: 45px;
+            height: 55px;
             outline: none;
             padding: 0;
             resize: none;
@@ -1096,7 +1217,7 @@
 
 
         &.has-text .wc-send svg {
-            fill: $c07;
+            fill: #3F6DE1;
         }
 
         .wc-upload {
@@ -1134,15 +1255,14 @@
 
         .wc-textbox {
             bottom: 0;
-            left: 12px;
-            right: 60px;
-            top: 12px;
+            left: 20px;
+            right: 76px;
+            top: 20px;
 
 
             input {
-                background-color: rgba(128, 128, 128, 0.1);
+                background-color: #F7F7F7;
                 padding-left: 12px;
-                border-radius:10px;
             }
         }
 
@@ -1160,7 +1280,6 @@
             border: 0;
             padding: 0;
             right: 0;
-            max-width: 50px;
 
             &.hidden {
                 visibility: hidden;
@@ -1169,7 +1288,7 @@
 
         .wc-send {
             svg {
-                width: 40px;
+                width: 55px;
             }
         }
 
@@ -1221,7 +1340,7 @@
         margin-bottom: 0px;
         line-height: 1.2em;
         color: inherit;
-        font-size: inherit;
+        font-size: 14px;
     }
 
     .format-markdown code {
@@ -1285,11 +1404,11 @@
         }
 
         &:hover {
-            @include link-and-svg-arrow($c_brand, 1);
+            @include link-and-svg-arrow(#3F6DE1, 1);
         }
 
         &:active {
-            @include link-and-svg-arrow($c_brand, 0.8);
+            @include link-and-svg-arrow(#3F6DE1, 0.8);
         }
     }
 

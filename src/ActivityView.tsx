@@ -1,6 +1,7 @@
 import { Activity, Attachment, AttachmentLayout, DirectLineOptions } from 'botframework-directlinejs';
 import * as moment from 'moment';
 import * as React from 'react';
+import { AddressCard } from './AddressCard';
 import { AttachmentView } from './Attachment';
 import { Carousel } from './Carousel';
 import { IDoCardAction } from './Chat';
@@ -151,6 +152,7 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
         const { activity, type, ...props } = this.props;
         const activityCopy: any = activity;
         const isDisclaimer = activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer';
+        console.log(type);
 
         if (type === 'message' && activity.type === 'message' && !isDisclaimer) {
             return (
@@ -187,6 +189,11 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
         } else if (type === 'contact') {
             return (
                   <ContactFormCard { ...props } node={activityCopy.entities[0]} />
+            );
+        } else if (type === 'address') {
+            console.log('uhhhhhhhhhhhhh');
+            return (
+                  <AddressCard { ...props } node={activityCopy.entities[0]} />
             );
         }
     }
