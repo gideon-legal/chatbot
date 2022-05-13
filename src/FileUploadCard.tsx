@@ -26,7 +26,6 @@ export interface FileUploadState {
     uploadPhase: string;
     isUploading: boolean;
     signedUrl: string;
-    signedUrls: string[];
 }
 
 export const UPLOAD_PHASES = {
@@ -48,8 +47,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
             files: [],
             uploadPhase: UPLOAD_PHASES.OPEN,
             isUploading: false,
-            signedUrl: null,
-            signedUrls: []
+            signedUrl: null
         };
 
         this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -93,7 +91,6 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         this.props.sendMessage('Skip Upload');
     }
 
-    // returns signedUrls, [] of urls for the files
     getSignedUrl = (data: any) => {
         return new Promise((resolve, reject) => {
             if (this.state.signedUrl) {
