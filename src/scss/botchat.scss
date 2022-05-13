@@ -129,6 +129,8 @@
             margin-left: 18px;
             margin-right: 18px;
             display: inline-flex;
+            flex-grow: 1;
+            justify-content: center;
             align-items: center;
         }
 
@@ -1014,7 +1016,7 @@
         // color: $c01;
         background-color: #3F6DE1;
         color: #ffffff;
-        border-top-right-radius: 0px;
+        border-radius: 3px 3px 0px 3px;
     }
 
     .wc-message-from-me .wc-message-content-contact {
@@ -1072,7 +1074,7 @@
     .wc-message-from-bot .wc-message-content {
         background-color: #EEF7F9;
         color: #262626;
-        border-top-left-radius: 0px;
+        border-radius: 3px 3px 3px 0px;
     }
 
     .wc-message-from-bot svg.wc-message-callout path {
@@ -1148,8 +1150,7 @@
         box-sizing: border-box;
         background: white;
         height: $consoleHeight;
-        max-width: $chatWidth;
-        left: 0;
+        width: 66%;
         position: absolute;
         right: 0;
         transition: background-color .4s;
@@ -1161,22 +1162,17 @@
 
         .wc-border {
           display: block;
-          height: 2px;
+          height: 1px;
           width: 100%;
-          background-image: linear-gradient(90deg, #eabd4c, #f6e083, #c3c3c3, #dddddd);
-          background-position: 0%;
+          background-color: #E5E5E5;
+          background-position: 0;
           background-size: 300%;
-          transition: background-position .4s;
         }
 
         &::after {
           content: "";
           display: block;
           clear: both;
-        }
-
-        &__disabled {
-          background-color: #eff0f1;
         }
 
         &__disabled::before {
@@ -1188,7 +1184,6 @@
         > .wc-send,
         > .wc-mic {
             position: absolute;
-            top: 2px;
             vertical-align: middle;
         }
 
@@ -1200,7 +1195,7 @@
 
         svg {
             fill: $c03;
-            margin-top: 11px;
+            margin-top: 19px;
             margin-right: 16px;
         }
 
@@ -1208,7 +1203,7 @@
         textarea {
             border: none;
             color: #000 !important;
-            height: 45px;
+            height: 55px;
             outline: none;
             padding: 0;
             resize: none;
@@ -1232,7 +1227,7 @@
 
 
         &.has-text .wc-send svg {
-            fill: $c07;
+            fill: #3F6DE1;
         }
 
         .wc-upload {
@@ -1270,15 +1265,14 @@
 
         .wc-textbox {
             bottom: 0;
-            left: 12px;
-            right: 60px;
-            top: 12px;
+            left: 20px;
+            right: 68px;
+            top: 20px;
 
 
             input {
-                background-color: rgba(128, 128, 128, 0.1);
+                background-color: #F7F7F7;
                 padding-left: 12px;
-                border-radius:10px;
             }
         }
 
@@ -1296,7 +1290,6 @@
             border: 0;
             padding: 0;
             right: 0;
-            max-width: 50px;
 
             &.hidden {
                 visibility: hidden;
@@ -1305,7 +1298,7 @@
 
         .wc-send {
             svg {
-                width: 40px;
+                width: 55px;
             }
         }
 
