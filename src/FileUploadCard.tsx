@@ -53,10 +53,15 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         this.handleKeyDown = this.handleKeyDown.bind(this);
     }
 
-    removeFile = () => {
+    removeFile = (file: any) => {
+        const index = this.state.files.indexOf(file);
+        const newFiles = this.state.files;
+        if (index > -1) {
+            newFiles.splice(index, 1);
+        }
         this.setState({
-            files: [],
-            uploadPhase: UPLOAD_PHASES.OPEN
+            files: newFiles,
+            uploadPhase: UPLOAD_PHASES.PREVIEW
         });
     }
 
@@ -106,45 +111,49 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
             }
         });
     }
-
     submitFiles = () => {
         if (this.state.files.length === 0 || this.state.isUploading) {
             return;
         }
-
-        this.setState({isUploading: true});
+        this.setState({ isUploading: true });
         this.props.fileSelected(true);
-
-        const file = this.state.files[0];
-        const dataToGetSignedUrl = {
-            node_id: this.props.node.node_id,
-            content_type: file.type,
-            msft_conversation_id: this.props.node.conversation_id
-        };
-
-        this.getSignedUrl(dataToGetSignedUrl).then((result: any) => {
+        const files = this.state.files;
+        const contentTypeArr: any[] = [];
+        files.forEach((f: { type: any; }) => {
+            contentTypeArr.push(f.type);
+        });
+        for (const i of files) {
+            const file = i;
+            let currUrl = '';
+            const dataToGetSignedUrl = {
+                node_id: this.props.node.node_id,
+                content_type: file.type,
+                content_type_arr: contentTypeArr,
+                msft_conversation_id: this.props.node.conversation_id
+            };
+            this.getSignedUrl(dataToGetSignedUrl).then((resultUrl: any) => {
                 const options = {
-                  headers: {
-                    'Content-Type': file.type
-                  }
+                    headers: {
+                        'Content-Type': file.type
+                    }
                 };
-
-                return axios.put(result.s3Url, file, options);
+                currUrl = resultUrl.s3Url;
+                return axios.put(resultUrl.s3Url, file, options);
             }).then((result: any) => {
                 if (result.status === 200) {
-                  this.props.fileSelected(false);
-                  this.setState({isUploading: false, files: [], uploadPhase: 'success'});
+                    this.props.fileSelected(false);
+                    this.setState({ isUploading: false, files: [], uploadPhase: 'success' });
 
-                  this.props.sendMessage(this.state.signedUrl.split('?')[0]);
+                    this.props.sendMessage(currUrl.split('?')[0]);
                 } else {
                     throw Error('Something went wrong. Try again.');
                 }
             }).catch(err => {
                 this.props.fileSelected(false);
-                this.setState({isUploading: false, files: [], uploadPhase: UPLOAD_PHASES.ERROR});
+                this.setState({ isUploading: false, files: [], uploadPhase: UPLOAD_PHASES.ERROR });
             });
         }
-
+    }
     clickToSubmitFile(e?: React.MouseEvent<HTMLDivElement>) {
         if (this.state.uploadPhase !== UPLOAD_PHASES.PREVIEW) { return; }
         this.submitFiles();
@@ -163,8 +172,13 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
 
     onDrop(imageFiles: FileList) {
         if (imageFiles.length > 0) {
+            let curFiles = [];
+            curFiles = this.state.files;
+            for (const f of Array.from(imageFiles)) {
+                curFiles.push(f);
+            }
             this.setState({
-                files: imageFiles,
+                files: curFiles,
                 uploadPhase: UPLOAD_PHASES.PREVIEW
             });
         }
@@ -172,42 +186,54 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
 
     showDropzone = () => {
         let returnDropzone = (
-            <div>
-                <div className="file-upload-title">Upload a file</div>
-                <Dropzone
-                    onDrop={this.onDrop.bind(this)}
-                    maxSize={1048576}
-                >
-                    <div className="drop-text">
-                        <span className="bold-line">Drop files here to upload</span>
-                        <br />
-                        <span>or <br /> click here to select files </span>
-                    </div>
-                </Dropzone>
-                <div className="upload-skip" onClick={e => this.handleSkipFile(e)}>Skip</div>
-            </div>
+                <div>
+                    <div className="file-upload-title">Upload file(s)</div>
+                    <Dropzone onDrop={this.onDrop.bind(this)}>
+                        <div className="drop-text">
+                            <span className="bold-line">Drop files here to upload</span>
+                            <br />
+                            <span>or <br /> click here to select files </span>
+                        </div>
+                    </Dropzone>;
+                    <div className="upload-skip" onClick={e => this.handleSkipFile(e)}>Skip</div>
+                </div>
         );
-
         if (this.state.uploadPhase === UPLOAD_PHASES.PREVIEW) {
             returnDropzone = (
-                <div>
-                    <div className="file-upload-title">{this.state.files[0].name}</div>
-                    <div className="file_chunk no-border">
-                        <div className="drop-text add-padding">
-                            <div className="fileAttach">
-                            {/*<img src="/assets/file.svg">*/}
+                <section>
+                    <div>
+                        <div className="file-upload-title">Upload file(s)</div>
+                        <Dropzone onDrop={this.onDrop.bind(this)}>
+                            <div className="drop-text">
+                                <span className="bold-line">Drop files here to upload</span>
+                                <br />
+                                <span>or <br /> click here to select files </span>
                             </div>
-                            <span className="bold-line">{this.state.files[0].name} </span>
-                            <br />
-                            <br />
-                            <a onClick={this.removeFile} className="remove_link" href="#"> remove file</a>
-                        </div>
+                        </Dropzone>;
                     </div>
-                    <div className="upload-skip" onClick={e => this.clickToSubmitFile(e)}>Press Enter to Submit</div>
-                </div>
+                    <aside>
+                        <div>
+                            <h2> Dropped files </h2>
+                            <ul>
+                                {this.state.files.map((f: any) => (
+                                    <div className="file_chunk no-border">
+                                        <div className="drop-text add-padding">
+                                            <li className="bold-line" key={f.name}>
+                                                {f.name}
+                                                <br />
+                                                <br />
+                                                <a onClick={() => this.removeFile(f)} className="remove_link" href="#"> remove file</a>
+                                            </li>
+                                        </div>
+                                    </div>
+                                ))};
+                            </ul>
+                            <div className="upload-skip" onClick={e => this.clickToSubmitFile(e)}>Press Enter to Submit</div>
+                        </div>
+                    </aside>
+                </section>
             );
         }
-
         if (this.state.uploadPhase === UPLOAD_PHASES.ERROR) {
             returnDropzone = (
                 <div>
