@@ -640,6 +640,10 @@
             padding:0 !important;
         }
 
+        .prefix__radio label {
+            color: black;
+        }
+
         .contact__form__card {
           $contact_padding_v: 8px;
           $contact_width: 260px;

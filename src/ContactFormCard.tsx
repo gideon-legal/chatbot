@@ -30,6 +30,8 @@ export interface MessageWithContact extends Message {
 }
 
 export interface ContactFormState {
+  prefix: string;
+  prefixError: string;
   name: string;
   nameError: string;
   email: string;
@@ -40,6 +42,7 @@ export interface ContactFormState {
 }
 
 class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
+  private radialInputPrefix: HTMLInputElement;
   private textInputName: HTMLInputElement;
   private textInputEmail: HTMLInputElement;
   private textInputPhone: HTMLInputElement;
@@ -48,6 +51,8 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
     super(props);
 
     this.state = {
+      prefix: '',
+      prefixError: undefined,
       name: '',
       nameError: undefined,
       email: '',
@@ -58,6 +63,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
     };
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.onChangeValue = this.onChangeValue.bind(this);
   }
 
   componentDidMount() {
@@ -98,6 +104,12 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
     let nameError;
     let phoneError;
     let emailError;
+    let prefixError;
+
+    if (this.prefixActive() && !(this.state.prefix && this.state.prefix !== '')) {
+      prefixError = 'Please select a prefix';
+      validated = false;
+    }
 
     if (this.nameActive() && !(this.state.name && this.state.name !== '')) {
       nameError = 'Please enter your name';
@@ -116,6 +128,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
 
     this.setState({
       ...this.state,
+      prefixError,
       nameError,
       emailError,
       phoneError
@@ -128,8 +141,13 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
     return JSON.stringify({
       ...this.state.email && { email: this.state.email },
         ...this.state.phone && { phone: this.state.phone },
+        ...this.state.prefix && { prefix: this.state.prefix },
         ...this.state.name && { name: this.state.name }
     });
+  }
+
+  prefixActive = () => {
+    return this.props.node.meta && this.props.node.meta.prefix;
   }
 
   nameActive = () => {
@@ -163,9 +181,58 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
     }
   }
 
+  onChangeValue(event: React.ChangeEvent<HTMLInputElement>) {
+    const prefix = event.target.value;
+    this.setState({
+      ...this.state,
+      prefix
+    });
+  }
+
   render() {
     return (
       <div className="contact__form__card">
+        {this.prefixActive() && (<div className="contact__form__card__container">
+          <span className={'contact__form__card__container__title'}>Prefix</span>
+          <div className="prefix__radio">
+            <input
+              type="radio"
+              name="prefix"
+              value="Mr."
+              id="mr"
+              onChange={this.onChangeValue}/>
+            <label>Mr.</label>
+            <input
+              type="radio"
+              name="prefix"
+              value="Mrs."
+              id="mrs"
+              onChange={this.onChangeValue}/>
+            <label>Mrs.</label>
+            <input
+              type="radio"
+              name="prefix"
+              value="Ms."
+              id="ms"
+              onChange={this.onChangeValue}/>
+            <label>Ms.</label>
+            <input
+              type="radio"
+              name="prefix"
+              value="Mx."
+              id="mx"
+              onChange={this.onChangeValue}/>
+            <label>Mx.</label>
+            <input
+              type="radio"
+              name="prefix"
+              value="Dr."
+              id="dr"
+              onChange={this.onChangeValue}/>
+            <label>Dr.</label>
+          </div>
+          {this.state.prefixError && <span className="contact__form__card__container__error">{this.state.prefixError}</span>}
+        </div>)}
         {this.nameActive() && (<div className="contact__form__card__container">
           <span className={'contact__form__card__container__title'}>Name</span>
           <input
