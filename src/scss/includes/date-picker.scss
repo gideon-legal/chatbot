@@ -2,7 +2,7 @@
 @import "settings";
 @import "media-queries";
 
-$gd_dark_sky_blue: #31ace2;
+$gd_gideon_blue: #3F6DE1;
 
 .react-datepicker__header--time {
     padding-bottom: 8px;
@@ -31,8 +31,8 @@ $width: 280px;
       padding: 4px 0px 4px 0px;
       border-radius: 4px;
       background-color: white;
-      border-color: $gd_dark_sky_blue;
-      color: $gd_dark_sky_blue;
+      border-color: $gd_gideon_blue;
+      color: $gd_gideon_blue;
       outline: 0;
     }
 
@@ -43,7 +43,7 @@ $width: 280px;
       margin-bottom: 10px;
       height: 20px;
       span {
-        color: $gd_dark_sky_blue;
+        color: $gd_gideon_blue;
         height: 1.2em;
         line-height: 20px;
       }
@@ -60,8 +60,8 @@ $width: 280px;
       max-height: 2em;
       border-radius: 4px;
       background-color: white;
-      border-color: $gd_dark_sky_blue;
-      color: $gd_dark_sky_blue;
+      border-color: $gd_gideon_blue;
+      color: $gd_gideon_blue;
       outline: 0;
       width: 40%;
     }
@@ -81,7 +81,7 @@ $width: 280px;
     .gd-date-picker-select-day:hover:enabled,
     .gd-date-picker-select-hour:focus,
     .gd-date-picker-select-hour:hover:enabled {
-      background-color: $gd_dark_sky_blue;
+      background-color: $gd_gideon_blue;
       color: white;
     }
 
@@ -96,7 +96,7 @@ $width: 280px;
       margin-bottom: 10px;
 
       span {
-        color: $gd_dark_sky_blue;
+        color: $gd_gideon_blue;
         margin-left: 10px;
         margin-right: 10px;
       }
@@ -151,7 +151,7 @@ $width: 280px;
         animation: 1.4s ease-in-out infinite both circle-animation;
         display: block;
         fill: transparent;
-        stroke: $gd_dark_sky_blue;
+        stroke: $gd_gideon_blue;
         stroke-linecap: round;
         stroke-dasharray: 283;
         stroke-dashoffset: 280;
@@ -167,7 +167,7 @@ $width: 280px;
 
     .gd-date-picker-next, .gd-date-picker-prev {
       background-color: white;
-      color: $gd_dark_sky_blue;
+      color: $gd_gideon_blue;
       border-style: none;
       margin-right: auto;
       margin-left: auto;
@@ -177,7 +177,7 @@ $width: 280px;
 
     .gd-date-picker-next:hover:enabled, .gd-date-picker-prev:hover:enabled {
       color: white;
-      background-color: $gd_dark_sky_blue;
+      background-color: $gd_gideon_blue;
     }
 
     .gd-date-picker-next {
@@ -203,7 +203,7 @@ $width: 280px;
       margin-left: 10px;
 
       svg {
-        fill: $gd_dark_sky_blue;
+        fill: $gd_gideon_blue;
         height: 24px;
         width: 24px;
         border-radius: 4px;
@@ -211,7 +211,7 @@ $width: 280px;
 
       svg:hover {
         fill: white;
-        background-color: $gd_dark_sky_blue;
+        background-color: $gd_gideon_blue;
         cursor: pointer;
       }
     }
@@ -274,28 +274,28 @@ $width: 280px;
         width: 100%;
         height: 42px;
         background: white;
-        border-top: 2px solid $gd_dark_sky_blue;
+        border-top: 2px solid $gd_gideon_blue;
         border-bottom-left-radius: $messageBorderRadius - 2px;
         border-bottom-right-radius: $messageBorderRadius - 2px;
         border-bottom: 0;
         border-left: 0;
         border-right: 0;
-        color:$gd_dark_sky_blue;
+        color:$gd_gideon_blue;
         font-size: 14px;
         font-weight: bold;
     }
 
     .gd-submit-date-button:hover {
-      background: $gd_dark_sky_blue;
+      background: $gd_gideon_blue;
       color: white;
     }
 
     .gd-no-workable-appointment {
         background: white;
         border: 0;
-        border-bottom: 2px solid $gd_dark_sky_blue;
-        border-top: 2px solid $gd_dark_sky_blue;
-        color: $gd_dark_sky_blue;
+        border-bottom: 2px solid $gd_gideon_blue;
+        border-top: 2px solid $gd_gideon_blue;
+        color: $gd_gideon_blue;
         font-size: 14px;
         font-weight: bold;
         height: 42px;
@@ -357,14 +357,14 @@ $width: 280px;
         width: 100%;
         border-radius: 0;
         border: 0;
-        border-bottom: 1px solid $gd_dark_sky_blue !important;
+        border-bottom: 1px solid $gd_gideon_blue !important;
 
         &__navigation--previous {
-            border-right-color: $gd_dark_sky_blue;
+            border-right-color: $gd_gideon_blue;
         }
 
         &__navigation--next {
-            border-left-color: $gd_dark_sky_blue;
+            border-left-color: $gd_gideon_blue;
 
             &--with-time {
                 right: 126px !important;
@@ -381,12 +381,12 @@ $width: 280px;
 
 
         &__time-container {
-            border-left: 1px solid $gd_dark_sky_blue;
+            border-left: 1px solid $gd_gideon_blue;
             width: 30% !important;
 
             @include mobile {
                 border-left:0;
-                border-top:  1px solid $gd_dark_sky_blue;
+                border-top:  1px solid $gd_gideon_blue;
             }
         }
 
@@ -395,7 +395,7 @@ $width: 280px;
             padding-right: 0px !important;
 
             &-item--selected {
-                background-color: $gd_dark_sky_blue !important;
+                background-color: $gd_gideon_blue !important;
             }
 
             &-item--disabled {
@@ -418,16 +418,16 @@ $width: 280px;
         }
 
         &__month-container {
-            color:$gd_dark_sky_blue !important;
+            color:$gd_gideon_blue !important;
         }
 
         &__day-name, &__day, &__time-name, &__current-month {
-            color:$gd_dark_sky_blue;
+            color:$gd_gideon_blue;
             font-size: 14px;
         }
 
         &__day--selected, &__day--in-range {
-            background-color: $gd_dark_sky_blue;
+            background-color: $gd_gideon_blue;
             color:white;
         }
 
@@ -440,11 +440,11 @@ $width: 280px;
           margin-top: 10px;
 
           select {
-            border: 1px solid $gd_dark_sky_blue;
+            border: 1px solid $gd_gideon_blue;
             padding: 5px;
             border-radius: 5px;
             outline: none;
-            color: $gd_dark_sky_blue;
+            color: $gd_gideon_blue;
           }
         }
     }
