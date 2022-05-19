@@ -7,6 +7,7 @@ export interface FormatOptions {
     leftOffset?: number;
     rightOffset?: number;
     fullHeight?: boolean;
+    fullscreen?: boolean;
     display_name?: string;
     alignment?: string;
     widgetUrl?: string;

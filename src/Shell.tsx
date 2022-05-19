@@ -15,6 +15,7 @@ interface Props {
     listeningState: ListeningState;
     showUploadButton: boolean;
     inputDisabled: boolean;
+    fullscreen: boolean;
     themeColor: string;
     onChangeText: (inputText: string) => void;
     sendMessage: (inputText: string) => void;
@@ -105,12 +106,12 @@ class ShellContainer extends React.Component<Props> implements ShellFunctions {
                 backgroundImage: `linear-gradient(90deg, ${this.props.themeColor}, ${color(this.props.themeColor).lighten(0.5)})`
             };
         }
-
         const className = classList(
             'wc-console',
             this.props.inputDisabled && 'wc-console__disabled',
             this.props.inputText.length > 0 && 'has-text',
-            showUploadButton && 'has-upload-button'
+            showUploadButton && 'has-upload-button',
+            this.props.fullscreen && 'wc-console-fullscreen'
         );
 
         const showMicButton = this.props.listeningState !== ListeningState.STOPPED || (Speech.SpeechRecognizer.speechIsAvailable()  && !this.props.inputText.length);
@@ -225,6 +226,7 @@ export const Shell = connect(
         locale: state.format.locale,
         user: state.connection.user,
         listeningState: state.shell.listeningState,
+        fullscreen: state.format.fullscreen,
         themeColor: state.format.themeColor
     }), {
         // passed down to ShellContainer
@@ -242,6 +244,7 @@ export const Shell = connect(
         inputDisabled: stateProps.inputDisabled,
         strings: stateProps.strings,
         listeningState: stateProps.listeningState,
+        fullscreen: stateProps.fullscreen,
         themeColor: stateProps.themeColor,
         // from dispatchProps
         onChangeText: dispatchProps.onChangeText,

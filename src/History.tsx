@@ -183,7 +183,7 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
             }
         }
 
-        const groupsClassName = classList('wc-message-groups', !this.props.format.chatTitle && 'no-header');
+        const groupsClassName = classList('wc-message-groups', !this.props.format.chatTitle && 'no-header',  this.props.format.fullscreen && 'wc-message-groups-fullscreen');
 
         return (
             <div>
