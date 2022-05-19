@@ -580,9 +580,9 @@ export class Chat extends React.Component<ChatProps, State> {
                                 </div>
                         }
                         <div className="wc-chatbot-content">
-                            <div className="wc-chatbot-content-left">
-                                here
-                            </div>
+                            {fullscreen && <div className="wc-chatbot-content-left">
+                                {/* TODO - Put content to display on left side of fullscreen */}
+                            </div>}
                             <div className="wc-chatbot-content-right">
                                 <History
                                     onCardAction={ this._handleCardAction }
