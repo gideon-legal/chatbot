@@ -214,6 +214,7 @@ export interface FormatState {
     topOffset: number;
     rightOffset: number;
     fullHeight: boolean;
+    fullscreen: boolean;
     display_name: string;
 }
 
@@ -255,6 +256,7 @@ export const format: Reducer<FormatState> = (
         topOffset: undefined,
         rightOffset: undefined,
         fullHeight: false,
+        fullscreen: false,
         display_name: undefined
     },
     action: FormatAction
