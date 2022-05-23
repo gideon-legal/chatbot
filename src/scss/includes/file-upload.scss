@@ -1,7 +1,7 @@
-$gd_dark_sky_blue: #31ace2;
+$gd_gideon_blue: #3F6DE1;
 
 .file-upload-title{
-    background-color: $gd_dark_sky_blue;
+    background-color: $gd_gideon_blue;
     font-size: 14px;
     font-weight: bold;
     max-width: 250px;
@@ -12,7 +12,7 @@ $gd_dark_sky_blue: #31ace2;
 }
 
 .file-upload-title + div{
-    border: 1px dashed $gd_dark_sky_blue !important;
+    border: 1px dashed $gd_gideon_blue !important;
     margin: 14px;
     display: flex;    
     align-items: center;    
@@ -24,14 +24,14 @@ $gd_dark_sky_blue: #31ace2;
     &.wc-message-file{
         .wc-message-content {
             background-color: transparent;
-            border: 1px solid $gd_dark_sky_blue;
+            border: 1px solid $gd_gideon_blue;
             padding: 0px;
         }
     }
 } 
 
 .drop-text {    
-    color: $gd_dark_sky_blue;
+    color: $gd_gideon_blue;
     text-align: center;
     width: 200px;
     word-wrap: break-word;
@@ -42,10 +42,10 @@ $gd_dark_sky_blue: #31ace2;
 }
 
 .upload-skip {
-    color: $gd_dark_sky_blue;
+    color: $gd_gideon_blue;
     text-align: center;
     padding: 14px 0px;
-    border-top: 1px solid $gd_dark_sky_blue;
+    border-top: 1px solid $gd_gideon_blue;
     cursor: pointer;
     font-weight: 600;
 }
@@ -61,7 +61,7 @@ $gd_dark_sky_blue: #31ace2;
 }
 
 a.remove_link{
-    color: $gd_dark_sky_blue;
+    color: $gd_gideon_blue;
     text-decoration: underline;
     font-size: 14px;
     
