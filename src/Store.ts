@@ -210,6 +210,7 @@ export interface FormatState {
     logoUrl: string;
     widgetUrl: string;
     widgetSameAsLogo: boolean;
+    fullscreenImageUrl: string;
     bottomOffset: number;
     topOffset: number;
     rightOffset: number;
@@ -237,6 +238,9 @@ export type FormatAction = {
     type: 'Set_Logo_Img',
     logoUrl: string
 } | {
+    type: 'Set_Fullscreen_Img',
+    fullscreenImageUrl: string
+} | {
     type: 'Set_Format_Options',
     formatOptions: FormatOptions
 };
@@ -252,6 +256,7 @@ export const format: Reducer<FormatState> = (
         logoUrl: undefined,
         widgetUrl: undefined,
         widgetSameAsLogo: false,
+        fullscreenImageUrl: undefined,
         bottomOffset: undefined,
         topOffset: undefined,
         rightOffset: undefined,
@@ -292,6 +297,11 @@ export const format: Reducer<FormatState> = (
             return {
                 ...state,
                 logoUrl: action.logoUrl
+            };
+        case 'Set_Fullscreen_Img':
+            return {
+                ...state,
+                fullscreenImageUrl: action.fullscreenImageUrl
             };
         case 'Set_Format_Options':
             return {

@@ -37,6 +37,7 @@ export interface ChatProps {
     formatOptions?: FormatOptions;
     themeColor?: string;
     logoUrl?: string;
+    fullscreenImageUrl?: string;
     resize?: 'none' | 'window' | 'detect';
 }
 
@@ -49,6 +50,7 @@ export interface State {
 }
 
 import { FloatingIcon } from './FloatingIcon';
+import { FullscreenStaticContent } from './FullscreenStaticContent';
 import { History } from './History';
 import { Shell, ShellFunctions } from './Shell';
 
@@ -373,6 +375,12 @@ export class Chat extends React.Component<ChatProps, State> {
                         }
 
                         if (bot_display_options && bot_display_options.open_fullscreen) {
+                            if (bot_display_options.fullscreen_url) {
+                                this.store.dispatch<ChatActions>({
+                                    type: 'Set_Fullscreen_Img',
+                                    fullscreenImageUrl: bot_display_options.fullscreen_url
+                                });
+                            }
                             this.toggleFullscreen();
                         }
 
@@ -528,6 +536,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
     render() {
         const state = this.store.getState();
+        console.log('state', state);
         const { open, opened, display, fullscreen } = this.state;
 
         const chatviewPanelStyle = this.calculateChatviewPanelStyle(state.format);
@@ -582,6 +591,11 @@ export class Chat extends React.Component<ChatProps, State> {
                         <div className="wc-chatbot-content">
                             {fullscreen && <div className="wc-chatbot-content-left">
                                 {/* TODO - Put content to display on left side of fullscreen */}
+                                <FullscreenStaticContent
+                                    imageUrl={state.format.fullscreenImageUrl ?
+                                                state.format.fullscreenImageUrl :
+                                                state.format.logoUrl}
+                                />
                             </div>}
                             <div className="wc-chatbot-content-right">
                                 <History

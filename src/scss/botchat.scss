@@ -175,6 +175,7 @@
 
     .wc-chatbot-content-left {
         flex: 1;
+        margin-top: $headerTotalHeight;
     }
 
     .wc-chatbot-content-right {
@@ -1456,4 +1457,21 @@
         &:active {
             @include link-and-svg-arrow($c01, 0.6);
         }
+    }
+
+    // The following is for the left side of when the Chatbot is in Fullscreen Mode
+    .wc-chatbot-content-left-wrap {
+        height: 100%;
+        width: 100%;
+    }
+
+    .wc-fullscreen-logo {
+        min-height: 73px;
+        min-width: 250px;
+        max-height: 20%;
+        max-width: 80%;
+        margin-left: 23px;
+        margin-top: 30px;
+        -o-object-fit: contain;
+        object-fit: contain;
     }
