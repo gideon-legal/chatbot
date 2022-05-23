@@ -194,7 +194,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
     showDropzone = () => {
         let returnDropzone = (
                 <div>
-                    <div className="file-upload-title">Upload file(s)</div>
+                    <div className="file-upload-title">File Upload</div>
                     <Dropzone onDrop={this.onDrop.bind(this)}>
                         <div className="drop-text">
                             <span className="bold-line">Drop files here to upload</span>
@@ -209,18 +209,21 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
             returnDropzone = (
                 <section>
                     <div>
-                        <div className="file-upload-title">Upload file(s)</div>
+                        <div className="file-upload-title">File Upload</div>
                         <Dropzone onDrop={this.onDrop.bind(this)}>
                             <div className="drop-text">
-                                <span className="bold-line">Drop files here to upload</span>
+                                <span className="bold-line">Choose file</span>
                                 <br />
-                                <span>or <br /> click here to select files </span>
+                                <span>or <br /> drag and drop here </span>
+                                <br>
+                                <span className="supported-files"> Supported files: PDF, JPG, Word</span>
+                                </br>
                             </div>
                         </Dropzone>;
                     </div>
                     <aside>
                         <div>
-                            <h2> Dropped files </h2>
+                            <h2> Uploaded Files </h2>
                             <ul>
                                 {this.state.files.map((f: any) => (
                                     <div className="file_chunk no-border">
