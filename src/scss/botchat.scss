@@ -1239,6 +1239,16 @@
             }
         }
 
+        .wc-upload-background {
+            position: center;
+            box-sizing: border-box;
+            width: 387px;
+            height: 181px;
+            background: #F7F7F7;
+            border: 1.5px dashed #EBEBEB;
+            border-radius: 5px;
+        }
+
         #wc-upload-input {
             font-size: 0;
             height: 0;

@@ -193,13 +193,15 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
 
     showDropzone = () => {
         let returnDropzone = (
-                <div>
+                <div className="add-rectangle">
                     <div className="file-upload-title">File Upload</div>
                     <Dropzone onDrop={this.onDrop.bind(this)}>
                         <div className="drop-text">
-                            <span className="bold-line">Drop files here to upload</span>
+                            <span className="bold-line">Choose file</span>
                             <br />
-                            <span>or <br /> click here to select files </span>
+                            <span className="bold-line">or <br /> drag and drop here  </span>
+                            <br />
+                            <span className="supported-files"> Supported files: PDF, JPG, Word</span>
                         </div>
                     </Dropzone>;
                     <div className="upload-skip" onClick={e => this.handleSkipFile(e)}>Skip</div>
@@ -208,29 +210,25 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         if (this.state.uploadPhase === UPLOAD_PHASES.PREVIEW) {
             returnDropzone = (
                 <section>
-                    <div>
+                    <div className="add-rectangle">
                         <div className="file-upload-title">File Upload</div>
                         <Dropzone onDrop={this.onDrop.bind(this)}>
                             <div className="drop-text">
                                 <span className="bold-line">Choose file</span>
-                                <br />
                                 <span>or <br /> drag and drop here </span>
-                                <br>
                                 <span className="supported-files"> Supported files: PDF, JPG, Word</span>
-                                </br>
                             </div>
                         </Dropzone>;
                     </div>
                     <aside>
                         <div>
-                            <h2> Uploaded Files </h2>
+                            <h2 className="upload-header"> Uploaded Files </h2>
                             <ul>
                                 {this.state.files.map((f: any) => (
                                     <div className="file_chunk no-border">
                                         <div className="drop-text add-padding">
-                                            <li className="bold-line" key={f.name}>
+                                            <li className="uploaded-files" key={f.name}>
                                                 {f.name}
-                                                <br />
                                                 <br />
                                                 <a onClick={() => this.removeFile(f)} className="remove_link" href="#"> remove file</a>
                                             </li>
@@ -238,7 +236,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                                     </div>
                                 ))};
                             </ul>
-                            <div className="upload-skip" onClick={e => this.clickToSubmitFile(e)}>Press Enter to Submit</div>
+                            <div className="upload-submit send" onClick={e => this.clickToSubmitFile(e)}>Submit</div>
                         </div>
                     </aside>
                 </section>
