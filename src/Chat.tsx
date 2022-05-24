@@ -536,7 +536,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
     render() {
         const state = this.store.getState();
-        console.log('state', state);
+
         const { open, opened, display, fullscreen } = this.state;
 
         const chatviewPanelStyle = this.calculateChatviewPanelStyle(state.format);

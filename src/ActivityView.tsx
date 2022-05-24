@@ -152,13 +152,12 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
         const { activity, type, ...props } = this.props;
         const activityCopy: any = activity;
         const isDisclaimer = activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer';
-        console.log(type);
 
-        if (type === 'message' && activity.type === 'message' && !isDisclaimer) {
+        if (type === 'message' && activity.type === 'message') {
             return (
                 <div>
                     <FormattedText
-                        text={ this.formatText(activity.text) }
+                        text={ isDisclaimer ? 'Disclaimer' : this.formatText(activity.text) }
                         format={activity.textFormat}
                         onImageLoad={ props.onImageLoad }
                     />
@@ -194,6 +193,10 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
             console.log('uhhhhhhhhhhhhh');
             return (
                   <AddressCard { ...props } node={activityCopy.entities[0]} />
+            );
+        } else if (type === 'disclaimer') {
+            return (
+                  <DisclaimerCard { ...props } activity={activityCopy} />
             );
         }
     }

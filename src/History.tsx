@@ -142,10 +142,9 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
 
                 activityDisclaimer = activities.length > 0 ? activities[activities.length - 1] : undefined;
                 lastActivityIsDisclaimer = activityDisclaimer && activityDisclaimer.entities && activityDisclaimer.entities.length > 0 && activityDisclaimer.entities[0].node_type === 'disclaimer';
-
                 content = activities
                 .map((activity, index) =>
-                    ((activity.type !== 'message' || activity.text || (activity.attachments && !!activity.attachments.length)) && !activityIsDisclaimer(activity)) &&
+                    ((activity.type !== 'message' || activity.text || (activity.attachments && !!activity.attachments.length))) &&
                         <WrappedActivity
                             format={ this.props.format }
                             key={ 'message' + index }
@@ -197,7 +196,7 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
                     { content }
                 </div>
             </div>
-            {lastActivityIsDisclaimer && <DisclaimerCard activity={activityDisclaimer} onImageLoad={ () => this.autoscroll() }/>}
+            {/* {lastActivityIsDisclaimer && <DisclaimerCard activity={activityDisclaimer} onImageLoad={ () => this.autoscroll() }/>} */}
             </div>
         );
     }
@@ -324,13 +323,13 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
         // Check if there's an additional activity to render to get the user's input
         if (lastMessage && (activityRequiresAdditionalInput || activityHasSuggestedActions)) {
             let nodeType = '';
-            if (activityRequiresAdditionalInput && !activityHasSuggestedActions) {
+            if (activityRequiresAdditionalInput && (!activityHasSuggestedActions || activityCopy.entities[0].node_type === 'disclaimer')) {
                 nodeType = activityCopy.entities[0].node_type;
             } else if (activityHasSuggestedActions) {
                 nodeType = activityActions.actions[0].type;
             }
 
-            if (nodeType === 'date' || nodeType === 'handoff' || nodeType === 'file' || nodeType === 'imBack' || nodeType === 'contact' || nodeType === 'address') {
+            if (nodeType === 'date' || nodeType === 'handoff' || nodeType === 'file' || nodeType === 'imBack' || nodeType === 'contact' || nodeType === 'address' || nodeType === 'disclaimer') {
                 return (
                     <div data-activity-id={activity.id } className={wrapperClassName}>
                         <div className={'wc-message wc-message-from-me wc-message-' + nodeType} ref={ div => this.messageDiv = div }>
