@@ -438,24 +438,25 @@
         .disclaimer__card {
             animation: disclaimerAnimation 1s;
             background-color: white;
-            bottom: $consoleHeight;
+            // bottom: $consoleHeight;
             top: $headerTotalHeight;
             display:flex;
             flex-direction: column;
             position:absolute;
             overflow-y: scroll;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);
+            border-radius: 3px 0px 3px 3px;
+            border-top: 5px solid #3F6DE1;
+            border-radius: 3px 3px 0px 0px;
+            margin: 30px 30px 0;
+
 
             &__message {
                 font-size: 14px;
                 font-weight: 450;
-                padding: 20px;
+                padding: 30px;
                 line-height: 1.3em;
-                margin: 10px 10px 20px;
-                box-shadow: 2px 2px 9px 2px $c_shadow;
-                border-style: solid;
-                border-width: 1px;
-                border-color: #3F6DE1;
-                border-radius: 8px;
+                // margin: 10px 10px 20px;
             }
 
             &__buttons {
@@ -470,8 +471,7 @@
                     button {
                         background-color: #3F6DE1;
                         border: 1px solid #3F6DE1;
-                        border-radius: 10px;
-                        border-top-right-radius: 0px;
+                        border-radius: 3px;
                         color: #ffffff;
                         min-height: 32px;
                         height: auto;
@@ -481,9 +481,9 @@
                         overflow-wrap: break-word;
                         text-align: right;
                         padding: 10px;
-                        margin-left: 25%;
-                        margin-right: 25%;
-                        margin-bottom: 20px;
+                        margin-left: 6.4%;
+                        margin-right: 6.4%;
+                        margin-bottom: 30px;
                         text-align: center;
                         box-shadow: 2px 2px 4px 0px $c_shadow;
                     }
