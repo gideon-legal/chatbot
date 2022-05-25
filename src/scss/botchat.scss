@@ -436,7 +436,9 @@
         }
 
         .disclaimer__card {
-            animation: disclaimerAnimation 1s;
+            // animation: disclaimerAnimation 1s;
+            animation: animationFrames 2s;
+            animation-iteration-count: 1;
             background-color: white;
             // bottom: $consoleHeight;
             top: $headerTotalHeight;
@@ -447,7 +449,17 @@
             border-radius: 3px 0px 3px 3px;
             border-top: 5px solid #3F6DE1;
             border-radius: 3px 3px 0px 0px;
+            width: 100%;
 
+            &__title {
+                font-weight: 700;
+                font-size: 16px;
+                line-height: 19px;
+                letter-spacing: 0.04em;
+                padding: 10px 30px 0px;
+                color: #262626;
+            }
+            
             &__message {
                 font-size: 14px;
                 font-weight: 450;
@@ -612,6 +624,7 @@
 
     .wc-message-avatar.blank{
       color: transparent; 
+      opacity: 0;
         // color: #f6f7f8; 
         // background: #3F6DE1;
     }
@@ -1111,6 +1124,10 @@
 
     .wc-message-handoff {
       margin-left: auto;
+    }
+
+    .wc-message-disclaimer {
+        width: 100%;
     }
 
     // Stuff for full screen that isn't working yet -TO 5/13

@@ -5,6 +5,7 @@ import { ActivityView } from './ActivityView';
 import { activityWithSuggestedActions } from './activityWithSuggestedActions';
 import { classList, doCardAction, IDoCardAction } from './Chat';
 import { activityIsDisclaimer, DisclaimerCard } from './DisclaimerCard';
+import { DisclaimerCardReadOnly } from './DisclaimerCardReadOnly';
 import * as konsole from './Konsole';
 import { ChatState, FormatState, SizeState } from './Store';
 import { sendMessage } from './Store';
@@ -349,6 +350,16 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                     </div>
                 );
             }
+        } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer') {
+            return (
+                <div data-activity-id={activity.id } className={wrapperClassName}>
+                    <div className={'wc-message wc-message-from-me wc-message-disclaimer'} ref={ div => this.messageDiv = div }>
+                        <div className={ contentClassName + contactClassName }>
+                            <DisclaimerCardReadOnly text={activityCopy.text}/>
+                        </div>
+                    </div>
+                </div>
+            );
         }
     }
 
