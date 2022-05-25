@@ -26,6 +26,7 @@ export interface FileUploadState {
     uploadPhase: string;
     isUploading: boolean;
     signedUrl: string;
+    signedUrls: string[];
 }
 
 export const UPLOAD_PHASES = {
@@ -47,7 +48,8 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
             files: [],
             uploadPhase: UPLOAD_PHASES.OPEN,
             isUploading: false,
-            signedUrl: null
+            signedUrl: null,
+            signedUrls: []
         };
 
         this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -94,12 +96,15 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
     getSignedUrl = (data: any) => {
         return new Promise((resolve, reject) => {
             if (this.state.signedUrl) {
+                this.state.signedUrls.push(this.state.signedUrl);
                 resolve({s3Url: this.state.signedUrl});
             } else {
                 axios.post(this.props.gid + '/api/v1/nodes/presigned_url_for_node', data)
                 .then((result: any) => {
                     if (result.data.success) {
                         const signedUrl = result.data.url;
+                        this.state.signedUrls.push(signedUrl.split('?')[0]);
+                        console.log('pushed ' + this.state.signedUrls);
                         this.setState({signedUrl});
                         resolve({s3Url: this.state.signedUrl});
                     } else {
@@ -141,13 +146,15 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                 return axios.put(resultUrl.s3Url, file, options);
             }).then((result: any) => {
                 if (result.status === 200) {
+                    console.log('signed 2: ' + JSON.stringify(this.state.signedUrls));
                     this.props.fileSelected(false);
                     this.setState({ isUploading: false, files: [], uploadPhase: 'success' });
-
-                    this.props.sendMessage(currUrl.split('?')[0]);
-                } else {
-                    throw Error('Something went wrong. Try again.');
-                }
+                    if ( files.indexOf(i) === 0) {
+                        this.props.sendMessage(JSON.stringify(this.state.signedUrls));
+                    }
+                     } else {
+                        throw Error('Something went wrong. Try again.');
+                    }
             }).catch(err => {
                 this.props.fileSelected(false);
                 this.setState({ isUploading: false, files: [], uploadPhase: UPLOAD_PHASES.ERROR });
