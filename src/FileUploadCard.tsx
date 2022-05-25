@@ -210,10 +210,10 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         if (this.state.uploadPhase === UPLOAD_PHASES.PREVIEW) {
             returnDropzone = (
                 <section>
-                    <div className="add-rectangle">
-                        <div className="file-upload-title">File Upload</div>
+                    <div>
+                        <div className="add-rectangle file-upload-title">File Upload</div>
                         <Dropzone onDrop={this.onDrop.bind(this)}>
-                            <div className="drop-text">
+                            <div>
                                 <span className="bold-line">Choose file</span>
                                 <span>or <br /> drag and drop here </span>
                                 <span className="supported-files"> Supported files: PDF, JPG, Word</span>
