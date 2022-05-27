@@ -223,53 +223,38 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
 
     showDropzone = () => {
         let returnDropzone = (
-                <div className="add-rectangle">
-                    <div className="file-upload-title">File Upload</div>
-                    <Dropzone onDrop={this.onDrop.bind(this)}>
-                        <div className="drop-text">
-                            <span className="bold-line">Choose file</span>
-                            <br />
-                            <span className="bold-line">or <br /> drag and drop here  </span>
-                            <br />
-                            <span className="supported-files"> Supported files: PDF, JPG, Word</span>
+            <Dropzone onDrop={this.onDrop.bind(this)}>
+                {({getRootProps, getInputProps, isFocused, isDragActive, isDragAccept, isDragReject}: {getRootProps: any, getInputProps: any, isFocused: boolean, isDragActive: boolean, isDragAccept: boolean, isDragReject: boolean}) => (
+                    <section className="file-upload-box" style={this.getFileDropzoneStyle(isFocused, isDragActive, isDragAccept, isDragReject)}>
+                        <div {...getRootProps({className: 'dropzone'})}>
+                        <input {...getInputProps()} />
+                            <img className="file-upload-icon" src={'./assets/icons/upload-file.svg'} alt="Upload File" />
+                            <div className="file-upload-choose-file">Choose file</div>
+                            <div className="file-upload-choose-file-subtext">or</div>
+                            <div className="file-upload-choose-file-subtext">drag and drop here</div>
+                            <div className="file-upload-supported-files">Supported files: PDF, JPG, Word</div>
                         </div>
-                    </Dropzone>;
-                    <div className="upload-skip" onClick={e => this.handleSkipFile(e)}>Skip</div>
-                </div>
+                    </section>
+                )}
+            </Dropzone>
         );
         if (this.state.uploadPhase === UPLOAD_PHASES.PREVIEW) {
             returnDropzone = (
-                <section>
-                    <div>
-                        <div className="add-rectangle file-upload-title">File Upload</div>
-                        <Dropzone onDrop={this.onDrop.bind(this)}>
-                            <div>
-                                <span className="bold-line">Choose file</span>
-                                <span>or <br /> drag and drop here </span>
-                                <span className="supported-files"> Supported files: PDF, JPG, Word</span>
+                <div>
+                    {returnDropzone}
+                    <div className="uploaded-files-container">
+                        <div className="uploaded-files-text">Uploaded Files</div>
+                        {this.state.files.map((f: any) => (
+                            <div className="listed-file">
+                                <div className="uploaded-file-name">{f.name}</div>
+                                <div className="remove-uploaded-file" onClick={() => this.removeFile(f)}>X</div>
                             </div>
-                        </Dropzone>;
+                        ))};
+
+                        {/* <div className="upload-submit send" onClick={e => this.clickToSubmitFile(e)}>Submit</div> */}
+                        <button type="button" onClick={e => this.clickToSubmitFile()}></button>
                     </div>
-                    <aside>
-                        <div>
-                            <h2 className="upload-header"> Uploaded Files </h2>
-                            <ul>
-                                {this.state.files.map((f: any) => (
-                                    <div className="file_chunk no-border">
-                                        <div className="drop-text add-padding">
-                                            <li className="uploaded-files" key={f.name}>
-                                                {f.name}
-                                                <br />
-                                                <a onClick={() => this.removeFile(f)} className="remove_link" href="#"> remove file</a>
-                                            </li>
-                                        </div>
-                                    </div>
-                                ))};
-                            </ul>
-                            <div className="upload-submit send" onClick={e => this.clickToSubmitFile(e)}>Submit</div>
-                        </div>
-                    </aside>
-                </section>
+                </div>
             );
         }
         if (this.state.uploadPhase === UPLOAD_PHASES.ERROR) {
@@ -293,24 +278,10 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         const { node } = this.props;
 
         return (
-            // <div className="fileUpload">
-            //     { (this.state.isUploading) ? <div className="loading"></div> : null}
-            //     { this.showDropzone() }
-            // </div>
-            <Dropzone onDrop={this.onDrop.bind(this)}>
-                {({getRootProps, getInputProps, isFocused, isDragActive, isDragAccept, isDragReject}: {getRootProps: any, getInputProps: any, isFocused: boolean, isDragActive: boolean, isDragAccept: boolean, isDragReject: boolean}) => (
-                    <section className="file-upload-box" style={this.getFileDropzoneStyle(isFocused, isDragActive, isDragAccept, isDragReject)}>
-                        <div {...getRootProps({className: 'dropzone'})}>
-                        <input {...getInputProps()} />
-                            <img className="file-upload-icon" src={'./assets/icons/upload-file.svg'} alt="Upload File" />
-                            <div className="file-upload-choose-file">Choose file</div>
-                            <div className="file-upload-choose-file-subtext">or</div>
-                            <div className="file-upload-choose-file-subtext">drag and drop here</div>
-                            <div className="file-upload-supported-files">Supported files: PDF, JPG, Word</div>
-                        </div>
-                    </section>
-                )}
-            </Dropzone>
+            <div>
+                { (this.state.isUploading) ? <div className="loading"></div> : null}
+                { this.showDropzone() }
+            </div>
         );
     }
 }
