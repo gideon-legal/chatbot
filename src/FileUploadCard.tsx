@@ -36,6 +36,22 @@ export const UPLOAD_PHASES = {
     SUCCESS: 'success'
 };
 
+const focusedStyle = {
+    borderColor: '#2196f3'
+};
+
+const activeStyle = {
+    borderColor: 'blue'
+};
+
+const acceptStyle = {
+    borderColor: '#00e676'
+};
+
+const rejectStyle = {
+    borderColor: '#ff1744'
+};
+
 /**
  * File Upload card which renders in response to node of types 'file'
  * Used for file upload
@@ -191,6 +207,20 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         }
     }
 
+    getFileDropzoneStyle(isFocused: boolean, isDragActive: boolean, isDragAccept: boolean, isDragReject: boolean) {
+        if (isFocused) {
+            return focusedStyle;
+        } else if (isDragActive) {
+            return activeStyle;
+        } else if (isDragAccept) {
+            return acceptStyle;
+        } else if (isDragReject) {
+            return rejectStyle;
+        } else {
+            return {};
+        }
+    }
+
     showDropzone = () => {
         let returnDropzone = (
                 <div className="add-rectangle">
@@ -263,10 +293,24 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         const { node } = this.props;
 
         return (
-            <div className="fileUpload">
-                { (this.state.isUploading) ? <div className="loading"></div> : null}
-                { this.showDropzone() }
-            </div>
+            // <div className="fileUpload">
+            //     { (this.state.isUploading) ? <div className="loading"></div> : null}
+            //     { this.showDropzone() }
+            // </div>
+            <Dropzone onDrop={this.onDrop.bind(this)}>
+                {({getRootProps, getInputProps, isFocused, isDragActive, isDragAccept, isDragReject}: {getRootProps: any, getInputProps: any, isFocused: boolean, isDragActive: boolean, isDragAccept: boolean, isDragReject: boolean}) => (
+                    <section className="file-upload-box" style={this.getFileDropzoneStyle(isFocused, isDragActive, isDragAccept, isDragReject)}>
+                        <div {...getRootProps({className: 'dropzone'})}>
+                        <input {...getInputProps()} />
+                            <img className="file-upload-icon" src={'./assets/icons/upload-file.svg'} alt="Upload File" />
+                            <div className="file-upload-choose-file">Choose file</div>
+                            <div className="file-upload-choose-file-subtext">or</div>
+                            <div className="file-upload-choose-file-subtext">drag and drop here</div>
+                            <div className="file-upload-supported-files">Supported files: PDF, JPG, Word</div>
+                        </div>
+                    </section>
+                )}
+            </Dropzone>
         );
     }
 }
