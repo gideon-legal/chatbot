@@ -19,6 +19,8 @@ interface FileUploadProps {
     inputDisabled: boolean;
     gid: string;
     updateInput: (disabled: boolean, placeholder: string) => void;
+    index: number;
+    addFilesToState: (index: number, files: string[]) => void;
  }
 
 export interface FileUploadState {
@@ -164,13 +166,15 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                 if (result.status === 200) {
                     console.log('signed 2: ' + JSON.stringify(this.state.signedUrls));
                     this.props.fileSelected(false);
+                    const filenames = this.state.files.map((f: any) => f.name);
                     this.setState({ isUploading: false, files: [], uploadPhase: 'success' });
                     if ( files.indexOf(i) === 0) {
-                        this.props.sendMessage(JSON.stringify(this.state.signedUrls));
+                        this.props.sendMessage('File(s) Uploaded');
+                        this.props.addFilesToState(this.props.index, filenames);
                     }
-                     } else {
-                        throw Error('Something went wrong. Try again.');
-                    }
+                } else {
+                    throw Error('Something went wrong. Try again.');
+                }
             }).catch(err => {
                 this.props.fileSelected(false);
                 this.setState({ isUploading: false, files: [], uploadPhase: UPLOAD_PHASES.ERROR });
@@ -251,8 +255,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                             </div>
                         ))};
 
-                        {/* <div className="upload-submit send" onClick={e => this.clickToSubmitFile(e)}>Submit</div> */}
-                        <button type="button" onClick={e => this.clickToSubmitFile()}></button>
+                        <div className="upload-submit send" onClick={e => this.clickToSubmitFile(e)}>Submit</div>
                     </div>
                 </div>
             );
@@ -280,6 +283,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         return (
             <div>
                 { (this.state.isUploading) ? <div className="loading"></div> : null}
+                <div className="file-upload-title">File Upload</div>
                 { this.showDropzone() }
             </div>
         );
@@ -317,6 +321,8 @@ export const FileUploadCard = connect(
       dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),
     sendFiles: (files: FileList) =>
       dispatchProps.sendFiles(files, stateProps.user, stateProps.locale),
-    gid: ownProps.gid
+    gid: ownProps.gid,
+    addFilesToState: ownProps.addFilesToState,
+    index: ownProps.index
   })
 )(FileUpload);

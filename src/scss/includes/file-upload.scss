@@ -12,21 +12,13 @@ border-radius: 3px 3px 0px 3px;
 }
 
 .file-upload-title{
-  position: center;
-  width: 98px;
-  height: 22px;
-  left: 993px;
-  top: 349px;
-  font-family: 'Lato';
   font-style: normal;
   font-weight: 700;
   font-size: 18px;
   line-height: 22px;
-  display: flex;
-  text-align: left;
-  /* Gideon/Primary text */
-  
+  letter-spacing: 0.04em;
   color: #262626;
+  margin-left: 30px;
 }
 
 .file-upload-box {
@@ -240,12 +232,13 @@ color: #262626;
 
   font-family: 'Lato';
   font-style: normal;
- font-weight: 600;
- font-size: 18px;
- line-height: 22px;
- display: flex;
- align-items: center;
- text-align: center;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 
 /* Gideon / White */
 
