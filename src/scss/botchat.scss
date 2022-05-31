@@ -1214,6 +1214,9 @@
 
         &__disabled {
             background-color: #eff0f1;
+            @include mobileAndTablet {
+                display: none;
+            }
         }  
 
         &__disabled::before {
