@@ -5,8 +5,8 @@ import { ActivityView } from './ActivityView';
 import { activityWithSuggestedActions } from './activityWithSuggestedActions';
 import { classList, doCardAction, IDoCardAction } from './Chat';
 import { activityIsDisclaimer, DisclaimerCard } from './DisclaimerCard';
-import { FileUploadCardReadOnly } from './FileUploadCardReadOnly';
 import { DisclaimerCardReadOnly } from './DisclaimerCardReadOnly';
+import { FileUploadCardReadOnly } from './FileUploadCardReadOnly';
 import * as konsole from './Konsole';
 import { ChatState, FormatState, SizeState } from './Store';
 import { sendMessage } from './Store';
@@ -380,6 +380,10 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                     <div className={'wc-message wc-message-from-me wc-message-file'} ref={ div => this.messageDiv = div }>
                         <div className={ contentClassName + contactClassName }>
                             <FileUploadCardReadOnly filenames={this.props.filenames}/>
+                        </div>
+                    </div>
+                </div>
+            );
         } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer') {
             return (
                 <div data-activity-id={activity.id } className={wrapperClassName}>

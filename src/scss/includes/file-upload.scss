@@ -2,13 +2,13 @@ $gd_gideon_blue: #3F6DE1;
 
 .background{
  
-/* Gideon / White */
+  /* Gideon / White */
 
-background: #FEFEFE;
-/* Gideon / Box shadow */
+  background: #FEFEFE;
+  /* Gideon / Box shadow */
 
-box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);
-border-radius: 3px 3px 0px 3px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);
+  border-radius: 3px 3px 0px 3px;
 }
 
 // .file-upload-title{
@@ -237,14 +237,14 @@ border-radius: 3px 3px 0px 3px;
   font-weight: 400;
   font-size: 14px;
   line-height: 17px;
-/* identical to box height */
+  /* identical to box height */
 
-display: flex;
-align-items: center;
+  display: flex;
+  align-items: center;
 
-/* Gideon/Primary text */
+  /* Gideon/Primary text */
 
-color: #262626;
+  color: #262626;
 
 }
 
@@ -271,7 +271,7 @@ color: #262626;
 
 /* Gideon / White */
 
-color: #FEFEFE;
+  color: #FEFEFE;
 }
 
 .upload-header {
@@ -347,7 +347,7 @@ div.no-border{
     border: none !important;
 }
 
-  .wc-app {
+  // .wc-app {
 /** Spinner CSS**/
 /* Absolute CSS Spinner */
 /*
