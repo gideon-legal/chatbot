@@ -4,6 +4,8 @@ import Dropzone from 'react-dropzone';
 import { connect } from 'react-redux';
 import { ChatActions, ChatState, sendFiles , sendMessage } from './Store';
 
+import { FileUploadIcon } from './assets/icons/FileUploadIcon';
+
 export interface Node {
     node_type: string;
     upload_url: string;
@@ -232,7 +234,9 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                     <section className="file-upload-box" style={this.getFileDropzoneStyle(isFocused, isDragActive, isDragAccept, isDragReject)}>
                         <div {...getRootProps({className: 'dropzone'})}>
                         <input {...getInputProps()} />
-                            <img className="file-upload-icon" src={'./assets/icons/upload-file.svg'} alt="Upload File" />
+                            <div className="file-upload-icon">
+                                <FileUploadIcon />
+                            </div>
                             <div className="file-upload-choose-file">Choose file</div>
                             <div className="file-upload-choose-file-subtext">or</div>
                             <div className="file-upload-choose-file-subtext">drag and drop here</div>
