@@ -1075,18 +1075,17 @@
         padding: 10px 0px 30px; 
     }
 
-    .wc-message-from-me .wc-message-address {
+    .wc-message-from-me.wc-message-address {
         background-color: $c_messageFromMe;
         color: $c01;
-        border-top-right-radius: 0px;
+        border-radius: 3px 3px 0px 3px;
+        margin-left: auto;
     }
 
-    .wc-message-from-me .wc-message-content-address {
-        background-color:white;
-        // border-color:$gideon-dark-blue; -TO 5/1/22
-        border-color: #3F6DE1;
-        border-style:solid;
-        border-width:1px;
+    .wc-message-content-address {
+        background-color: white;
+        box-shadow: 0px 1px 10px $c_shadow;
+        padding: 5px 0px 0px 0px;
     }
 
     .wc-message-from-me svg.wc-message-callout path {
