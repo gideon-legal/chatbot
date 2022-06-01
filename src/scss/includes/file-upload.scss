@@ -7,19 +7,19 @@ $gd_gideon_blue: #3F6DE1;
   background: #FEFEFE;
   /* Gideon / Box shadow */
 
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.2);
   border-radius: 3px 3px 0px 3px;
 }
 
-// .file-upload-title{
-//   font-style: normal;
-//   font-weight: 700;
-//   font-size: 18px;
-//   line-height: 22px;
-//   letter-spacing: 0.04em;
-//   color: #262626;
-//   margin-left: 30px;
-// }
+.file-upload-title{
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 22px;
+  letter-spacing: 0.04em;
+  color: #262626;
+  margin-left: 30px;
+}
 
 .file-upload-box {
   flex: 1;
@@ -95,23 +95,23 @@ $gd_gideon_blue: #3F6DE1;
 .remove-uploaded-file {
   color: #3F6DE1;
 
-.file-upload-title{
-    background-color: $gd_gideon_blue;
-    font-size: 14px;
-    font-weight: bold;
-    max-width: 250px;
-    text-align: center;
-    color: #ffffff;
-    padding: 17px 5px 20px;
-    border-top-left-radius: 13px;
-}
+// .file-upload-title{
+//     background-color: $gd_gideon_blue;
+//     font-size: 14px;
+//     font-weight: bold;
+//     max-width: 250px;
+//     text-align: center;
+//     color: #ffffff;
+//     padding: 17px 5px 20px;
+//     border-top-left-radius: 13px;
+// }
 
-.file-upload-title + div{
-    border: 1px dashed $gd_gideon_blue !important;
-    margin: 14px;
-    display: flex;    
-    align-items: center;    
-    justify-content: center;
+// .file-upload-title + div{
+//     border: 1px dashed $gd_gideon_blue !important;
+//     margin: 14px;
+//     display: flex;    
+//     align-items: center;    
+//     justify-content: center;
     
 }
 
@@ -125,7 +125,7 @@ $gd_gideon_blue: #3F6DE1;
            background: #FEFEFE;
           /* Gideon / Box shadow */
 
-          box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);
+          box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.2);
           border-radius: 3px 3px 0px 3px;
           background-color: transparent;
           border: 1px solid $gd_gideon_blue;
@@ -418,7 +418,7 @@ div.no-border{
     top: 50%;
     left: 50%;
   }
-}
+
   
   /* Animation */
   
