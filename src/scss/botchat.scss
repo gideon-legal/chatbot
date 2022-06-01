@@ -1064,7 +1064,11 @@
     .wc-message-from-me {
       background-color:white;
     //   border-top: 5px solid #3f6de1;
-  }
+    }
+
+    .wc-message-from-me.wc-message-file {
+        margin-left: auto;
+    }
 
     .wc-message-from-me.wc-message-file .wc-message-content {
         background-color: transparent;

@@ -37,6 +37,9 @@ $gd_gideon_blue: #3F6DE1;
 
 .file-upload-icon {
   margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .file-upload-choose-file {
