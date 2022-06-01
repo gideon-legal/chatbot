@@ -306,7 +306,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
           />
           {this.state.phoneError && <span className="contact__form__card__container__error">{this.state.phoneError}</span>}
         </div>)}
-        <button type="button" className="contact__form__card__submit" onClick={e => this.clickToSubmitContactInformation(e) } title="Submit" style={{padding: '0% 32%'}}>
+        <button type="button" className="contact__form__card__submit" onClick={e => this.clickToSubmitContactInformation(e) } title="Submit" style={{padding: '0px 90px'}}>
           <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
             <div>Submit</div>
 

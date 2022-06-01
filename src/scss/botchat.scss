@@ -681,6 +681,7 @@
 
         .prefix__radio label {
             color: black;
+            margin-right: 10px;
         }
 
         .prefix__radio input {
@@ -715,27 +716,31 @@
             margin-left: 3px;
         }
 
+        .contact_label {
+            margin-bottom: 15px;
+        }
+
         .contact__form__card {
           $contact_padding_v: 8px;
-          $contact_width: 260px;
+          $contact_width: 300px;
           width: $contact_width;
           background-color: white;
           color: black;
-          padding: 8px 16px;
+          padding: 8px 20px 20px 20px;
 
           &__container {
             display: flex;
             flex-direction: column;
-            padding-bottom: $contact_padding_v + 2px;
+            padding-bottom: $contact_padding_v + 6px;
 
             &__input {
               width: 100%;
-              padding-left: $contact_padding_v;
+              padding-left: $contact_padding_v + 2px;
               border-radius: 2px;
               border-width: 1px;
               border-color: #EBEBEB;
               border-style: solid;
-              height: 2em;
+              height: 3em;
               outline-style: none;
               color: black;
               background: #F7F7F7
@@ -759,8 +764,8 @@
             width: 100%;
             margin-top: $contact_padding_v;
             // margin-left:15%;
-            height: 2em;
-            border-radius: 6px; 
+            height: 3em;
+            border-radius: 2px; 
             border-width: 1px;
             border-color: #3F6DE1;
             color: white;
@@ -773,6 +778,10 @@
           }
         }
       }
+
+    .required {
+        color: red
+    }
 
     .wc-message-content.clickable {
         cursor: pointer;
