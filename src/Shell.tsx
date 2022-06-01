@@ -147,17 +147,17 @@ class ShellContainer extends React.Component<Props> implements ShellFunctions {
                         </label>
                 }
                 {
-                    showUploadButton &&
-                        <input
-                            id="wc-upload-input"
-                            tabIndex={ -1 }
-                            type="file"
-                            ref={ input => this.fileInput = input }
-                            multiple
-                            onChange={ () => this.onChangeFile() }
-                            aria-label={ this.props.strings.uploadFile }
-                            role="button"
-                        />
+                     showUploadButton &&
+                     <input
+                         id="wc-upload-input"
+                         tabIndex={ -1 }
+                         type="file"
+                         ref={ input => this.fileInput = input }
+                         multiple
+                         onChange={ () => this.onChangeFile() }
+                         aria-label={ this.props.strings.uploadFile }
+                         role="button"
+                     />
                 }
                 <div className="wc-textbox">
                     <input
