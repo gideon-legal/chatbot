@@ -445,7 +445,7 @@
             display:flex;
             flex-direction: column;
             overflow-y: scroll;
-            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);
+            box-shadow: 0px 1px 20px rgba(0, 0, 0, 0.2);
             border-radius: 3px 0px 3px 3px;
             border-top: 5px solid #3F6DE1;
             border-radius: 3px 3px 0px 0px;
@@ -453,7 +453,7 @@
 
             &__title {
                 font-weight: 700;
-                font-size: 16px;
+                font-size: 18px;
                 line-height: 19px;
                 letter-spacing: 0.04em;
                 padding: 10px 30px 0px;
@@ -1184,6 +1184,7 @@
 
     .wc-message-disclaimer {
         width: 100%;
+        margin-left: auto;
     }
 
     // Stuff for full screen that isn't working yet -TO 5/13
