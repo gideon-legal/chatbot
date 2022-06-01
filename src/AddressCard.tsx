@@ -121,7 +121,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
         return (
             <div className="contact__form__card">
                 <div className="contact__form__card__container">
-                    <span className={'contact__form__card__container__title'}>Address</span>
+                    <span className={'contact_label'}><b>Address</b></span>
                     <PlacesAutocomplete
                         value={this.state.address}
                         onChange={this.handleChange}
@@ -132,7 +132,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
                                 <input
                                     {...getInputProps({
                                         placeholder: 'Search Places ...',
-                                        className: 'location-search-input'
+                                        className: 'contact__form__card__container__input'
                                     })}
                                 />
                                 <div className="autocomplete-dropdown-container">
