@@ -674,8 +674,46 @@
             padding:0 !important;
         }
 
+        .prefix__radio {
+            display: block;
+            position: relative;
+        }
+
         .prefix__radio label {
             color: black;
+        }
+
+        .prefix__radio input {
+            opacity: 0;
+            position: absolute;
+        }
+        
+        .prefix_label:hover input ~ .checkmark {
+            background-color: #ccc;
+        }
+
+        .prefix_label input:checked ~ .checkmark {
+            background-color: #2196F3;
+            border-color: #eee;
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .prefix_text {
+            margin-left: 20px;
+        }
+
+        .checkmark {
+            position: absolute;
+            height: 15px;
+            width: 15px;
+            background-color: #eee;
+            border-radius: 50%;
+            margin-left: 3px;
         }
 
         .contact__form__card {
@@ -694,13 +732,14 @@
             &__input {
               width: 100%;
               padding-left: $contact_padding_v;
-              border-radius: $contact_padding_v;
+              border-radius: 2px;
               border-width: 1px;
-              border-color: #3F6DE1;
+              border-color: #EBEBEB;
               border-style: solid;
               height: 2em;
               outline-style: none;
               color: black;
+              background: #F7F7F7
             }
 
             &__title {
