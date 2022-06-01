@@ -3,6 +3,7 @@ import * as React from 'react';
 import Dropzone from 'react-dropzone';
 import { connect } from 'react-redux';
 import { ChatActions, ChatState, sendFiles , sendMessage } from './Store';
+import { SubmitButton } from './SubmitButton';
 
 import { FileUploadIcon } from './assets/icons/FileUploadIcon';
 
@@ -73,6 +74,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         };
 
         this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.clickToSubmitFile = this.clickToSubmitFile.bind(this);
     }
 
     removeFile = (file: any) => {
@@ -259,7 +261,8 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                             </div>
                         ))};
 
-                        <div className="upload-submit send" onClick={e => this.clickToSubmitFile(e)}>Submit</div>
+                        <SubmitButton onClick={this.clickToSubmitFile} />
+                        {/* <div className="upload-submit send" onClick={e => this.clickToSubmitFile(e)}>Submit</div> */}
                     </div>
                 </div>
             );

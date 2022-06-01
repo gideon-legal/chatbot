@@ -1563,3 +1563,33 @@
         -o-object-fit: contain;
         object-fit: contain;
     }
+
+    .gideon-submit-button {
+        background-color: #3F6DE1;
+        border: 1px solid #3F6DE1;
+        border-radius: 3px !important;
+        color: #ffffff;
+        min-height: 32px;
+        height: auto;
+        width: 100%;
+        padding: 0 16px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        text-align: right;
+        padding: 10px;
+        text-align: center;
+        box-shadow: 2px 2px 4px 0px $c_shadow;
+    }
+
+    .gideon-submit-button:focus,
+    .gideon-submit-button:hover {
+        background-color: #fff;
+        border-color: #3F6DE1;
+        color: #3F6DE1;
+    }
+
+    .gideon-submit-button:active {
+        background-color: #3F6DE1;
+        border-color: #3F6DE1;
+        color: $c01;
+    }
