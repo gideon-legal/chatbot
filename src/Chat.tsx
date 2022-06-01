@@ -37,6 +37,7 @@ export interface ChatProps {
     formatOptions?: FormatOptions;
     themeColor?: string;
     logoUrl?: string;
+    fullscreenImageUrl?: string;
     resize?: 'none' | 'window' | 'detect';
 }
 
@@ -45,9 +46,11 @@ export interface State {
     opened: boolean;
     display: boolean;
     orginalBodyClass: string;
+    fullscreen: boolean;
 }
 
 import { FloatingIcon } from './FloatingIcon';
+import { FullscreenStaticContent } from './FullscreenStaticContent';
 import { History } from './History';
 import { Shell, ShellFunctions } from './Shell';
 
@@ -57,6 +60,7 @@ export class Chat extends React.Component<ChatProps, State> {
         open: false,
         opened: false,
         display: false,
+        fullscreen: false,
         orginalBodyClass: document.body.className
     };
 
@@ -150,6 +154,13 @@ export class Chat extends React.Component<ChatProps, State> {
         this.setState({
             open: !this.state.open,
             opened: true
+        });
+    }
+
+    // Gets initially called if open_fullscreen botParam is set to true
+    private toggleFullscreen = () => {
+        this.setState({
+            fullscreen: !this.state.fullscreen
         });
     }
 
@@ -333,7 +344,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         }
 
                         if (bot_display_options) {
-                            const { alignment, bottomOffset, topOffset, leftOffset, rightOffset, fullHeight, display_name, widget_url, widget_same_as_logo  } = bot_display_options;
+                            const { alignment, bottomOffset, topOffset, leftOffset, rightOffset, fullHeight, display_name, widget_url, widget_same_as_logo, open_fullscreen  } = bot_display_options;
 
                             this.store.dispatch({
                                 type: 'Set_Format_Options',
@@ -346,7 +357,8 @@ export class Chat extends React.Component<ChatProps, State> {
                                     fullHeight,
                                     display_name,
                                     widgetSameAsLogo: widget_same_as_logo,
-                                    widgetUrl: widget_url
+                                    widgetUrl: widget_url,
+                                    fullscreen: open_fullscreen || false
                                 }
                             });
                         }
@@ -360,6 +372,16 @@ export class Chat extends React.Component<ChatProps, State> {
 
                         if (!isMobile && bot_display_options && bot_display_options.open_on_load) {
                             this.toggle();
+                        }
+
+                        if (bot_display_options && bot_display_options.open_fullscreen) {
+                            if (bot_display_options.fullscreen_url) {
+                                this.store.dispatch<ChatActions>({
+                                    type: 'Set_Fullscreen_Img',
+                                    fullscreenImageUrl: bot_display_options.fullscreen_url
+                                });
+                            }
+                            this.toggleFullscreen();
                         }
 
                         this.store.dispatch<ChatActions>({
@@ -470,6 +492,21 @@ export class Chat extends React.Component<ChatProps, State> {
     private calculateChatviewPanelStyle = (format: FormatOptions) => {
         const alignment = format && format.alignment;
         const fullHeight = format && format.fullHeight;
+        const fullscreen = format && format.fullscreen;
+
+        if (fullscreen) {
+            return {
+                left: 0,
+                right: 0,
+                bottom: 0,
+                top: 0,
+                width: '100vw',
+                height: '100vh',
+                maxWidth: '100vw',
+                borderRadius: 0
+            };
+        }
+
         const bottomOffset = fullHeight ? 0 : (format && format.bottomOffset ? format.bottomOffset + 99 : 17);
         const topOffset = format && format.topOffset ? format.topOffset : 0;
         const rightOffset = fullHeight ? 0 : (alignment !== 'left' && format && format.rightOffset ? format.rightOffset : -1);
@@ -499,7 +536,8 @@ export class Chat extends React.Component<ChatProps, State> {
 
     render() {
         const state = this.store.getState();
-        const { open, opened, display } = this.state;
+
+        const { open, opened, display, fullscreen } = this.state;
 
         const chatviewPanelStyle = this.calculateChatviewPanelStyle(state.format);
 
@@ -523,7 +561,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     >
                         {
                             !!state.format.chatTitle &&
-                                <div className="wc-header">
+                                <div className={!fullscreen ? 'wc-header' : 'wc-header wc-header-fullscreen'}>
                                     <img
                                         className="wc-header--logo"
                                         src={state.format.logoUrl ?
@@ -550,32 +588,43 @@ export class Chat extends React.Component<ChatProps, State> {
                                         src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/back.svg" /> */}
                                 </div>
                         }
-                        <History
-                            onCardAction={ this._handleCardAction }
-                            ref={ this._saveHistoryRef }
-                            gid={ this.props.gid }
-                            directLine={ this.props.directLine }
-                        />
+                        <div className="wc-chatbot-content">
+                            {fullscreen && <div className="wc-chatbot-content-left">
+                                {/* TODO - Put content to display on left side of fullscreen */}
+                                <FullscreenStaticContent
+                                    imageUrl={state.format.fullscreenImageUrl ?
+                                                state.format.fullscreenImageUrl :
+                                                state.format.logoUrl}
+                                />
+                            </div>}
+                            <div className="wc-chatbot-content-right">
+                                <History
+                                    onCardAction={ this._handleCardAction }
+                                    ref={ this._saveHistoryRef }
+                                    gid={ this.props.gid }
+                                    directLine={ this.props.directLine }
+                                />
 
-                        <Shell ref={ this._saveShellRef } />
+                                <Shell ref={ this._saveShellRef } />
 
-                              <div className="wc-footer">
-                                {/* TODO - temporarily commented out for all users to accomodate a new client */}
-                                {/* <a href="https://gideon.legal">
-                                  <span>Powered by</span>
-                                  <img
-                                      className="wc-footer--logo"
-                                      src="https://s3.amazonaws.com/com.gideon.static.dev/logotype-v1.1.0.svg"
-                                    />
-                                </a> */}
+                                    <div className="wc-footer">
+                                        {/* TODO - temporarily commented out for all users to accomodate a new client */}
+                                        {/* <a href="https://gideon.legal">
+                                        <span>Powered by</span>
+                                        <img
+                                            className="wc-footer--logo"
+                                            src="https://s3.amazonaws.com/com.gideon.static.dev/logotype-v1.1.0.svg"
+                                            />
+                                        </a> */}
 
-                              </div>
+                                    </div>
 
-                        {
-                            this.props.resize === 'detect' &&
-                                <ResizeDetector onresize={ this.resizeListener } />
-                        }
-
+                                {
+                                    this.props.resize === 'detect' &&
+                                        <ResizeDetector onresize={ this.resizeListener } />
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
             </Provider >

@@ -192,8 +192,9 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
   render() {
     return (
       <div className="contact__form__card">
+        <label><b>Contact Information</b></label>
         {this.prefixActive() && (<div className="contact__form__card__container">
-          <span className={'contact__form__card__container__title'}>Prefix</span>
+          <span className={'contact__form__card__container__title'}>Title</span>
           <div className="prefix__radio">
             <input
               type="radio"

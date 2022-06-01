@@ -11,15 +11,15 @@ box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);
 border-radius: 3px 3px 0px 3px;
 }
 
-.file-upload-title{
-  font-style: normal;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 22px;
-  letter-spacing: 0.04em;
-  color: #262626;
-  margin-left: 30px;
-}
+// .file-upload-title{
+//   font-style: normal;
+//   font-weight: 700;
+//   font-size: 18px;
+//   line-height: 22px;
+//   letter-spacing: 0.04em;
+//   color: #262626;
+//   margin-left: 30px;
+// }
 
 .file-upload-box {
   flex: 1;
@@ -94,6 +94,25 @@ border-radius: 3px 3px 0px 3px;
 
 .remove-uploaded-file {
   color: #3F6DE1;
+
+.file-upload-title{
+    background-color: $gd_gideon_blue;
+    font-size: 14px;
+    font-weight: bold;
+    max-width: 250px;
+    text-align: center;
+    color: #ffffff;
+    padding: 17px 5px 20px;
+    border-top-left-radius: 13px;
+}
+
+.file-upload-title + div{
+    border: 1px dashed $gd_gideon_blue !important;
+    margin: 14px;
+    display: flex;    
+    align-items: center;    
+    justify-content: center;
+    
 }
 
 .wc-message-from-me{
@@ -108,6 +127,9 @@ border-radius: 3px 3px 0px 3px;
 
           box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);
           border-radius: 3px 3px 0px 3px;
+          background-color: transparent;
+          border: 1px solid $gd_gideon_blue;
+          padding: 0px;
         }
     }
 } 
@@ -137,6 +159,10 @@ border-radius: 3px 3px 0px 3px;
   
   border: 1.5px dashed #EBEBEB;
   border-radius: 5px;
+  color: $gd_gideon_blue;
+  text-align: center;
+  width: 200px;
+  word-wrap: break-word;
 }
 
 .bold-line{
@@ -192,9 +218,12 @@ border-radius: 3px 3px 0px 3px;
   text-align: center;
   
   /* Gideon / Primary color */
-  
-  color: #3F6DE1;
-    cursor: pointer;
+
+  color: $gd_gideon_blue;
+  text-align: center;
+  padding: 14px 0px;
+  border-top: 1px solid $gd_gideon_blue;
+  cursor: pointer;
     
 }
 

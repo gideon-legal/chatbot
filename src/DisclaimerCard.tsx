@@ -74,6 +74,7 @@ class Disclaimer extends React.Component<DisclaimerProps, {}> {
     return (
       <div>
       <div className="disclaimer__card">
+        <div className="disclaimer__card__title">Disclaimer</div>
         <div className="disclaimer__card__message">
           <FormattedText
             text={ this.props.text }
