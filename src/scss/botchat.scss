@@ -445,7 +445,7 @@
             display:flex;
             flex-direction: column;
             overflow-y: scroll;
-            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);
+            box-shadow: 0px 1px 20px rgba(0, 0, 0, 0.2);
             border-radius: 3px 0px 3px 3px;
             border-top: 5px solid #3F6DE1;
             border-radius: 3px 3px 0px 0px;
@@ -453,7 +453,7 @@
 
             &__title {
                 font-weight: 700;
-                font-size: 16px;
+                font-size: 18px;
                 line-height: 19px;
                 letter-spacing: 0.04em;
                 padding: 10px 30px 0px;
@@ -1192,6 +1192,7 @@
 
     .wc-message-disclaimer {
         width: 100%;
+        margin-left: auto;
     }
 
     // Stuff for full screen that isn't working yet -TO 5/13
@@ -1570,4 +1571,39 @@
         margin-top: 30px;
         -o-object-fit: contain;
         object-fit: contain;
+    }
+
+    .gideon-submit-button {
+        background-color: #3F6DE1;
+        border: 1px solid #3F6DE1;
+        border-radius: 3px !important;
+        color: #ffffff;
+        min-height: 32px;
+        height: auto;
+        width: 100%;
+        padding: 0 16px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        text-align: right;
+        padding: 10px;
+        text-align: center;
+        box-shadow: 2px 2px 4px 0px $c_shadow;
+    }
+
+    .gideon-submit-button:focus,
+    .gideon-submit-button:hover {
+        background-color: #fff;
+        border-color: #3F6DE1;
+        color: #3F6DE1;
+    }
+
+    .gideon-submit-button:active {
+        background-color: #3F6DE1;
+        border-color: #3F6DE1;
+        color: $c01;
+    }
+
+    .wc-message-content-address .gideon-submit-button {
+        // TODO: Discuss with JoeyD how to fix margin inconsistencies
+        margin-top: 0 !important;
     }

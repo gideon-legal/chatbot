@@ -23,8 +23,8 @@ export class FileUploadCardReadOnly extends React.Component<FileUploadCardReadOn
         <div>
             <div className="file-upload-title">Files Uploaded</div>
             {this.props.filenames.map((filename: any) => (
-                <div className="uploaded-file-name" style={{marginLeft: '30px'}}>{filename}</div>
-            ))};
+                <div className="uploaded-file-name-readonly">{filename}</div>
+            ))}
         </div>
     );
   }

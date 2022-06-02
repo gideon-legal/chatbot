@@ -155,7 +155,6 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
         const { activity, type, ...props } = this.props;
         const activityCopy: any = activity;
         const isDisclaimer = activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer';
-        console.log('activity here', activity);
         if (type === 'message' && activity.type === 'message') {
             return (
                 <div>

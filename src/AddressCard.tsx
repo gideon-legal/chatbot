@@ -15,6 +15,7 @@ import { filteredActivities } from './History';
 import { ChatState } from './Store';
 import { ChatActions, sendMessage } from './Store';
 import { defaultStrings } from './Strings';
+import {SubmitButton} from './SubmitButton';
 
 export interface Node {
     node_type: string;
@@ -57,6 +58,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
 
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.clickToSubmitContactInformation = this.clickToSubmitContactInformation.bind(this);
     }
 
     componentDidMount() {
@@ -96,7 +98,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
         }
     }
 
-    clickToSubmitContactInformation(e: React.MouseEvent<HTMLButtonElement>) {
+    clickToSubmitContactInformation(e?: React.MouseEvent<HTMLButtonElement>) {
       // if (!this.validateContactInformation()) { return; }
       this.resetShell();
       this.props.sendMessage(this.getFormattedAddress());
@@ -161,9 +163,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
                     </PlacesAutocomplete>
                     {this.state.addressError && <span className="contact__form__card__container__error">{this.state.addressError}</span>}
                 </div>
-                <button type="button" className="contact__form__card__submit" onClick={e => this.clickToSubmitContactInformation(e) } title="Submit">
-                  Submit
-                </button>
+                <SubmitButton onClick={ this.clickToSubmitContactInformation } />
             </div>
         );
     }
