@@ -1150,6 +1150,19 @@
         padding: 5px 0px 0px 0px;
     }
 
+    .wc-message-content-address .gideon-submit-button {
+        // TODO: Discuss with JoeyD how to fix margin inconsistencies
+        margin-top: 0 !important;
+    }
+
+    .address-suggestion-item {
+        padding: 4px 0px;
+    }
+
+    .address-suggestion-item-active {
+        padding: 4px 0px;
+    }
+
     .wc-message-from-me svg.wc-message-callout path {
         fill: #3F6DE1;
     }
@@ -1612,9 +1625,4 @@
         background-color: #3F6DE1;
         border-color: #3F6DE1;
         color: $c01;
-    }
-
-    .wc-message-content-address .gideon-submit-button {
-        // TODO: Discuss with JoeyD how to fix margin inconsistencies
-        margin-top: 0 !important;
     }
