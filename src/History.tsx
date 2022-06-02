@@ -6,6 +6,7 @@ import { activityWithSuggestedActions } from './activityWithSuggestedActions';
 import { classList, doCardAction, IDoCardAction } from './Chat';
 import { activityIsDisclaimer, DisclaimerCard } from './DisclaimerCard';
 import { DisclaimerCardReadOnly } from './DisclaimerCardReadOnly';
+import { FileUploadCardReadOnly } from './FileUploadCardReadOnly';
 import * as konsole from './Konsole';
 import { ChatState, FormatState, SizeState } from './Store';
 import { sendMessage } from './Store';
@@ -30,7 +31,11 @@ export interface HistoryProps {
     directLine: DirectLineOptions;
 }
 
-export class HistoryView extends React.Component<HistoryProps, {}> {
+export interface HistoryState {
+    filesList: { [index: number]: string[] };
+}
+
+export class HistoryView extends React.Component<HistoryProps, HistoryState> {
     private scrollMe: HTMLDivElement;
     private scrollContent: HTMLDivElement;
     private scrollToBottom = true;
@@ -40,6 +45,8 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
 
     constructor(props: HistoryProps) {
         super(props);
+        this.state = { filesList: {} };
+        this.addFilesToState = this.addFilesToState.bind(this);
     }
 
     componentWillUpdate(nextProps: HistoryProps) {
@@ -113,6 +120,9 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
             selected={ false }
             showTimestamp={ false }
             gid={null}
+            filenames={[]}
+            addFilesToState={ null }
+            index={ -1 }
         >
             <div style={ { width: this.largeWidth } }>&nbsp;</div>
         </WrappedActivity>
@@ -127,6 +137,10 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
         // tslint:disable-next-line:no-unused-expression
         this.props.onCardAction && this.props.onCardAction();
         return this.props.doCardAction(type, value);
+    }
+
+    private addFilesToState(index: number, files: string[]) {
+        this.setState(prevState => ({ filesList: { ...prevState.filesList, [index]: files } }));
     }
 
     render() {
@@ -167,6 +181,9 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
                             } }
                             gid={ this.props.gid }
                             directLine={ this.props.directLine }
+                            filenames={ index in this.state.filesList ? this.state.filesList[index] : [] }
+                            addFilesToState={this.addFilesToState}
+                            index={ index }
                         >
                             <ActivityView
                                 format={ this.props.format }
@@ -177,6 +194,8 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
                                 onImageLoad={ () => this.autoscroll() }
                                 gid={ this.props.gid}
                                 directLine={ this.props.directLine }
+                                addFilesToState={this.addFilesToState}
+                                index={ index }
                             />
                         </WrappedActivity>
                 );
@@ -296,6 +315,9 @@ export interface WrappedActivityProps {
     onClickRetry: React.MouseEventHandler<HTMLAnchorElement>;
     gid: string;
     directLine?: DirectLineOptions;
+    filenames: string[];
+    addFilesToState: (index: number, files: [string]) => void;
+    index: number;
 }
 
 export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
@@ -344,12 +366,24 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                                     onImageLoad={null}
                                     gid={this.props.gid}
                                     directLine={this.props.directLine}
+                                    addFilesToState={this.props.addFilesToState}
+                                    index={this.props.index}
                                 />
                             </div>
                         </div>
                     </div>
                 );
             }
+        } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'file') {
+            return (
+                <div data-activity-id={activity.id } className={wrapperClassName}>
+                    <div className={'wc-message wc-message-from-me wc-message-file'} ref={ div => this.messageDiv = div }>
+                        <div className={ contentClassName + contactClassName }>
+                            <FileUploadCardReadOnly filenames={this.props.filenames}/>
+                        </div>
+                    </div>
+                </div>
+            );
         } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer') {
             return (
                 <div data-activity-id={activity.id } className={wrapperClassName}>

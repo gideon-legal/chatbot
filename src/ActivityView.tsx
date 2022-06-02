@@ -53,6 +53,8 @@ export interface ActivityViewProps {
     onImageLoad: () => void;
     gid: string;
     directLine: DirectLineOptions;
+    index: number;
+    addFilesToState: (index: number, files: string[]) => void;
 }
 
 export class ActivityView extends React.Component<ActivityViewProps, {}> {
@@ -126,14 +128,15 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
         return date;
       }
 
-      try { // contact node
+      try { // contact node + address node formatted for chatbot message
         const o = JSON.parse(text);
         let formattedText = '';
         if (o && typeof o === 'object') {
-          if (('name' in o || 'email' in o || 'phone' in o)) {
+          if (('name' in o || 'email' in o || 'phone' in o || 'address' in o)) {
             formattedText = this.addFormattedKey(formattedText, 'name', o);
             formattedText = this.addFormattedKey(formattedText, 'email', o);
             formattedText = this.addFormattedKey(formattedText, 'phone', o);
+            formattedText = this.addFormattedKey(formattedText, 'address', o);
             return formattedText;
           } else if ('selected' in o) {
             return this.formatSelectedOptions(o);

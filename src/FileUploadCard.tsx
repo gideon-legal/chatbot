@@ -4,6 +4,8 @@ import Dropzone from 'react-dropzone';
 import { connect } from 'react-redux';
 import { ChatActions, ChatState, sendFiles , sendMessage } from './Store';
 
+import { FileUploadIcon } from './assets/icons/FileUploadIcon';
+
 export interface Node {
     node_type: string;
     upload_url: string;
@@ -19,6 +21,8 @@ interface FileUploadProps {
     inputDisabled: boolean;
     gid: string;
     updateInput: (disabled: boolean, placeholder: string) => void;
+    index: number;
+    addFilesToState: (index: number, files: string[]) => void;
  }
 
 export interface FileUploadState {
@@ -34,6 +38,22 @@ export const UPLOAD_PHASES = {
     ERROR: 'error',
     PREVIEW: 'preview',
     SUCCESS: 'success'
+};
+
+const focusedStyle = {
+    borderColor: '#2196f3'
+};
+
+const activeStyle = {
+    borderColor: 'blue'
+};
+
+const acceptStyle = {
+    borderColor: '#00e676'
+};
+
+const rejectStyle = {
+    borderColor: '#ff1744'
 };
 
 /**
@@ -148,13 +168,15 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                 if (result.status === 200) {
                     console.log('signed 2: ' + JSON.stringify(this.state.signedUrls));
                     this.props.fileSelected(false);
+                    const filenames = this.state.files.map((f: any) => f.name);
                     this.setState({ isUploading: false, files: [], uploadPhase: 'success' });
                     if ( files.indexOf(i) === 0) {
-                        this.props.sendMessage(JSON.stringify(this.state.signedUrls));
+                        this.props.sendMessage('File(s) Uploaded');
+                        this.props.addFilesToState(this.props.index, filenames);
                     }
-                     } else {
-                        throw Error('Something went wrong. Try again.');
-                    }
+                } else {
+                    throw Error('Something went wrong. Try again.');
+                }
             }).catch(err => {
                 this.props.fileSelected(false);
                 this.setState({ isUploading: false, files: [], uploadPhase: UPLOAD_PHASES.ERROR });
@@ -191,54 +213,55 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         }
     }
 
+    getFileDropzoneStyle(isFocused: boolean, isDragActive: boolean, isDragAccept: boolean, isDragReject: boolean) {
+        if (isFocused) {
+            return focusedStyle;
+        } else if (isDragActive) {
+            return activeStyle;
+        } else if (isDragAccept) {
+            return acceptStyle;
+        } else if (isDragReject) {
+            return rejectStyle;
+        } else {
+            return {};
+        }
+    }
+
     showDropzone = () => {
         let returnDropzone = (
-                <div>
-                    <div className="file-upload-title">Upload file(s)</div>
-                    <Dropzone onDrop={this.onDrop.bind(this)}>
-                        <div className="drop-text">
-                            <span className="bold-line">Drop files here to upload</span>
-                            <br />
-                            <span>or <br /> click here to select files </span>
+            <Dropzone onDrop={this.onDrop.bind(this)}>
+                {({getRootProps, getInputProps, isFocused, isDragActive, isDragAccept, isDragReject}: {getRootProps: any, getInputProps: any, isFocused: boolean, isDragActive: boolean, isDragAccept: boolean, isDragReject: boolean}) => (
+                    <section className="file-upload-box" style={this.getFileDropzoneStyle(isFocused, isDragActive, isDragAccept, isDragReject)}>
+                        <div {...getRootProps({className: 'dropzone'})}>
+                        <input {...getInputProps()} />
+                            <div className="file-upload-icon">
+                                <FileUploadIcon />
+                            </div>
+                            <div className="file-upload-choose-file">Choose file</div>
+                            <div className="file-upload-choose-file-subtext">or</div>
+                            <div className="file-upload-choose-file-subtext">drag and drop here</div>
+                            <div className="file-upload-supported-files">Supported files: PDF, JPG, Word</div>
                         </div>
-                    </Dropzone>;
-                    <div className="upload-skip" onClick={e => this.handleSkipFile(e)}>Skip</div>
-                </div>
+                    </section>
+                )}
+            </Dropzone>
         );
         if (this.state.uploadPhase === UPLOAD_PHASES.PREVIEW) {
             returnDropzone = (
-                <section>
-                    <div>
-                        <div className="file-upload-title">Upload file(s)</div>
-                        <Dropzone onDrop={this.onDrop.bind(this)}>
-                            <div className="drop-text">
-                                <span className="bold-line">Drop files here to upload</span>
-                                <br />
-                                <span>or <br /> click here to select files </span>
+                <div>
+                    {returnDropzone}
+                    <div className="uploaded-files-container">
+                        <div className="uploaded-files-text">Uploaded Files</div>
+                        {this.state.files.map((f: any) => (
+                            <div className="listed-file">
+                                <div className="uploaded-file-name">{f.name}</div>
+                                <div className="remove-uploaded-file" onClick={() => this.removeFile(f)}>X</div>
                             </div>
-                        </Dropzone>;
+                        ))};
+
+                        <div className="upload-submit send" onClick={e => this.clickToSubmitFile(e)}>Submit</div>
                     </div>
-                    <aside>
-                        <div>
-                            <h2> Dropped files </h2>
-                            <ul>
-                                {this.state.files.map((f: any) => (
-                                    <div className="file_chunk no-border">
-                                        <div className="drop-text add-padding">
-                                            <li className="bold-line" key={f.name}>
-                                                {f.name}
-                                                <br />
-                                                <br />
-                                                <a onClick={() => this.removeFile(f)} className="remove_link" href="#"> remove file</a>
-                                            </li>
-                                        </div>
-                                    </div>
-                                ))};
-                            </ul>
-                            <div className="upload-skip" onClick={e => this.clickToSubmitFile(e)}>Press Enter to Submit</div>
-                        </div>
-                    </aside>
-                </section>
+                </div>
             );
         }
         if (this.state.uploadPhase === UPLOAD_PHASES.ERROR) {
@@ -262,8 +285,9 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         const { node } = this.props;
 
         return (
-            <div className="fileUpload">
+            <div>
                 { (this.state.isUploading) ? <div className="loading"></div> : null}
+                <div className="file-upload-title">File Upload</div>
                 { this.showDropzone() }
             </div>
         );
@@ -301,6 +325,8 @@ export const FileUploadCard = connect(
       dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),
     sendFiles: (files: FileList) =>
       dispatchProps.sendFiles(files, stateProps.user, stateProps.locale),
-    gid: ownProps.gid
+    gid: ownProps.gid,
+    addFilesToState: ownProps.addFilesToState,
+    index: ownProps.index
   })
 )(FileUpload);
