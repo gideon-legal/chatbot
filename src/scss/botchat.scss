@@ -1613,3 +1613,8 @@
         border-color: #3F6DE1;
         color: $c01;
     }
+
+    .wc-message-content-address .gideon-submit-button {
+        // TODO: Discuss with JoeyD how to fix margin inconsistencies
+        margin-top: 0 !important;
+    }
