@@ -677,10 +677,12 @@
         .prefix__radio {
             display: block;
             position: relative;
+            margin-top: 5px;
         }
 
         .prefix__radio label {
             color: black;
+            margin-right: 10px;
         }
 
         .prefix__radio input {
@@ -692,15 +694,23 @@
             background-color: #ccc;
         }
 
-        .prefix_label input:checked ~ .checkmark {
-            background-color: #2196F3;
-            border-color: #eee;
-        }
-
-        .checkmark:after {
+        .checkmark::after {
             content: "";
             position: absolute;
             display: none;
+        }
+
+        .prefix_label input:checked ~ .checkmark::after {
+            display: block;
+        }
+
+        .prefix_label .checkmark::after {
+            border-radius: 50%;
+            background: #3F6DE1;
+            height: 9px;
+            width: 9px;
+            top: 2.5px;
+            left: 2px;
         }
 
         .prefix_text {
@@ -711,32 +721,37 @@
             position: absolute;
             height: 15px;
             width: 15px;
-            background-color: #eee;
+            background-color: #F7F7F7;
+            border: 1px solid #EBEBEB;
             border-radius: 50%;
             margin-left: 3px;
         }
 
+        .contact_label {
+            margin-bottom: 20px;
+        }
+
         .contact__form__card {
           $contact_padding_v: 8px;
-          $contact_width: 260px;
+          $contact_width: 300px;
           width: $contact_width;
           background-color: white;
           color: black;
-          padding: 8px 16px;
+          padding: 8px 20px 20px 20px;
 
           &__container {
             display: flex;
             flex-direction: column;
-            padding-bottom: $contact_padding_v + 2px;
+            padding-bottom: $contact_padding_v + 10px;
 
             &__input {
               width: 100%;
-              padding-left: $contact_padding_v;
+              padding-left: $contact_padding_v + 2px;
               border-radius: 2px;
               border-width: 1px;
               border-color: #EBEBEB;
               border-style: solid;
-              height: 2em;
+              height: 3em;
               outline-style: none;
               color: black;
               background: #F7F7F7
@@ -745,23 +760,23 @@
             &__title {
               margin: 0;
               padding-bottom: $contact_padding_v - 2px;
-              color: black
+              color: #262626;
+              font-weight: 500;
             //   color: #3F6DE1;
             }
 
             &__error {
               padding-top: 6px;
-              color: red;
+              color: #FF002E;
               font-size: 12px;
             }
           }
 
           &__submit {
             width: 100%;
-            margin-top: $contact_padding_v;
             // margin-left:15%;
-            height: 2em;
-            border-radius: 6px; 
+            height: 3em;
+            border-radius: 2px; 
             border-width: 1px;
             border-color: #3F6DE1;
             color: white;
@@ -774,6 +789,10 @@
           }
         }
       }
+
+    .required {
+        color: #FF002E
+    }
 
     .wc-message-content.clickable {
         cursor: pointer;
