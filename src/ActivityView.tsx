@@ -132,7 +132,8 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
         const o = JSON.parse(text);
         let formattedText = '';
         if (o && typeof o === 'object') {
-          if (('name' in o || 'email' in o || 'phone' in o || 'address' in o)) {
+          if (('prefix' in o || 'name' in o || 'email' in o || 'phone' in o || 'address' in o)) {
+            formattedText = this.addFormattedKey(formattedText, 'prefix', o);
             formattedText = this.addFormattedKey(formattedText, 'name', o);
             formattedText = this.addFormattedKey(formattedText, 'email', o);
             formattedText = this.addFormattedKey(formattedText, 'phone', o);
