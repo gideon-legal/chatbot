@@ -54,7 +54,7 @@ export interface ActivityViewProps {
     gid: string;
     directLine: DirectLineOptions;
     index: number;
-    addFilesToState: (index: number, files: string[]) => void;
+    addFilesToState: (index: number, files: Array<{ name: string, url: string }>) => void;
 }
 
 export class ActivityView extends React.Component<ActivityViewProps, {}> {

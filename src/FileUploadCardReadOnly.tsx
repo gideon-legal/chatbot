@@ -6,7 +6,7 @@ export interface Node {
 }
 
 export interface FileUploadCardReadOnlyProps {
-  filenames: string[];
+  files: Array<{ name: string, url: string }>;
 }
 
 export class FileUploadCardReadOnly extends React.Component<FileUploadCardReadOnlyProps, {}> {
@@ -22,8 +22,10 @@ export class FileUploadCardReadOnly extends React.Component<FileUploadCardReadOn
     return (
         <div>
             <div className="file-upload-title">Files Uploaded</div>
-            {this.props.filenames.map((filename: any) => (
-                <div className="uploaded-file-name-readonly">{filename}</div>
+            {this.props.files.map((file: any) => (
+                <div className="uploaded-file-name-readonly">
+                  <a target="_blank" href={file.url}>{file.name}</a>
+                </div>
             ))}
         </div>
     );
