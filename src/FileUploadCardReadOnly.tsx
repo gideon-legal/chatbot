@@ -21,12 +21,20 @@ export class FileUploadCardReadOnly extends React.Component<FileUploadCardReadOn
   render() {
     return (
         <div>
-            <div className="file-upload-title">Files Uploaded</div>
-            {this.props.files.map((file: any) => (
-                <div className="uploaded-file-name-readonly">
-                  <a target="_blank" href={file.url}>{file.name}</a>
-                </div>
-            ))}
+          {this.props.files.length > 0
+            ? <div>
+                <div className="file-upload-title">Files Uploaded</div>
+                {this.props.files.map((file: any) => (
+                    <div className="uploaded-file-name-readonly">
+                      <a target="_blank" href={file.url}>{file.name}</a>
+                    </div>
+                ))}
+              </div>
+            : <div>
+                <div className="file-upload-title">File Upload</div>
+                <div className="uploaded-file-name-readonly"><i>File Upload Skipped</i></div>
+              </div>
+          }
         </div>
     );
   }

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { ChatActions, ChatState, sendFiles , sendMessage } from './Store';
 import { SubmitButton } from './SubmitButton';
 
-import { FileUploadIcon } from './assets/icons/FileUploadIcon';
+import { FileUploadIcon, RemoveFileIcon } from './assets/icons/FileUploadIcons';
 
 export interface Node {
     node_type: string;
@@ -126,7 +126,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                     if (result.data.success) {
                         const signedUrl = result.data.url;
                         this.state.signedUrls.push(signedUrl.split('?')[0]);
-                        console.log('pushed ' + this.state.signedUrls);
+                        // console.log('pushed ' + this.state.signedUrls);
                         this.setState({signedUrl});
                         resolve({s3Url: this.state.signedUrl});
                     } else {
@@ -272,7 +272,9 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                         {this.state.files.map((f: any) => (
                             <div className="listed-file">
                                 <div className="uploaded-file-name">{f.name}</div>
-                                <div className="remove-uploaded-file" onClick={() => this.removeFile(f)}>X</div>
+                                <div className="remove-uploaded-file" onClick={() => this.removeFile(f)}>
+                                    <RemoveFileIcon />
+                                </div>
                             </div>
                         ))};
 
