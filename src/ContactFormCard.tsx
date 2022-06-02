@@ -194,7 +194,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
       <div className="contact__form__card">
         <div className="contact_label"><b>Contact Information</b></div>
         {this.prefixActive() && (<div className="contact__form__card__container">
-          <span className={'contact__form__card__container__title'}>Title</span>
+          <span className={'contact__form__card__container__title'}>Title <span className="required">*</span></span>
           <div className="prefix__radio">
             <label className="prefix_label">
               <input
