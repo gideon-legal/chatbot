@@ -683,7 +683,7 @@
 
         .prefix__radio label {
             color: black;
-            margin-right: 10px;
+            margin-right: 5%;
         }
 
         .prefix__radio input {
@@ -734,8 +734,6 @@
 
         .contact__form__card {
           $contact_padding_v: 8px;
-          $contact_width: 300px;
-          width: $contact_width;
           background-color: white;
           color: black;
           padding: 8px 20px 20px 20px;
@@ -1204,7 +1202,8 @@
 
     .wc-message-contact {
       margin-left: auto;
-      border: none
+      border: none;
+      width: 66%
     }
 
     .wc-message-imBack {
