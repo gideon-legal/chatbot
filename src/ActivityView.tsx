@@ -84,6 +84,17 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
       return currentText.concat(newLine);
     }
 
+    addFormattedValue = (currentText: string, key: string, json: { [key: string]: string }) => {
+      if (!(key in json)) {
+        return currentText;
+      }
+      const newLine = json[key];
+      if (currentText !== '') {
+        return currentText.concat('\n', newLine);
+      }
+      return currentText.concat(newLine);
+    }
+
     formatSelectedOptions = (json: { [key: string]: string[] }) => {
       const selected = json.selected;
       let frmt = '';
@@ -137,7 +148,7 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
             formattedText = this.addFormattedKey(formattedText, 'name', o);
             formattedText = this.addFormattedKey(formattedText, 'email', o);
             formattedText = this.addFormattedKey(formattedText, 'phone', o);
-            formattedText = this.addFormattedKey(formattedText, 'address', o);
+            formattedText = this.addFormattedValue(formattedText, 'address', o);
             return formattedText;
           } else if ('selected' in o) {
             return this.formatSelectedOptions(o);
