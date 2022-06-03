@@ -98,7 +98,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
         }
     }
 
-    clickToSubmitContactInformation(e?: React.MouseEvent<HTMLButtonElement>) {
+    clickToSubmitContactInformation(e: React.MouseEvent<HTMLButtonElement>) {
       // if (!this.validateContactInformation()) { return; }
       this.resetShell();
       this.props.sendMessage(this.getFormattedAddress());
