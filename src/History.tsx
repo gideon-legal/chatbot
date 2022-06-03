@@ -32,7 +32,7 @@ export interface HistoryProps {
 }
 
 export interface HistoryState {
-    filesList: { [index: number]: string[] };
+    filesList: { [index: number]: Array<{ name: string, url: string }> };
 }
 
 export class HistoryView extends React.Component<HistoryProps, HistoryState> {
@@ -120,7 +120,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
             selected={ false }
             showTimestamp={ false }
             gid={null}
-            filenames={[]}
+            files={[]}
             addFilesToState={ null }
             index={ -1 }
         >
@@ -139,7 +139,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         return this.props.doCardAction(type, value);
     }
 
-    private addFilesToState(index: number, files: string[]) {
+    private addFilesToState(index: number, files: Array<{ name: string, url: string }>) {
         this.setState(prevState => ({ filesList: { ...prevState.filesList, [index]: files } }));
     }
 
@@ -181,7 +181,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                             } }
                             gid={ this.props.gid }
                             directLine={ this.props.directLine }
-                            filenames={ index in this.state.filesList ? this.state.filesList[index] : [] }
+                            files={ index in this.state.filesList ? this.state.filesList[index] : [] }
                             addFilesToState={this.addFilesToState}
                             index={ index }
                         >
@@ -315,8 +315,8 @@ export interface WrappedActivityProps {
     onClickRetry: React.MouseEventHandler<HTMLAnchorElement>;
     gid: string;
     directLine?: DirectLineOptions;
-    filenames: string[];
-    addFilesToState: (index: number, files: [string]) => void;
+    files: Array<{ name: string, url: string }>;
+    addFilesToState: (index: number, files: [{ name: string, url: string }]) => void;
     index: number;
 }
 
@@ -379,7 +379,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                 <div data-activity-id={activity.id } className={wrapperClassName}>
                     <div className={'wc-message wc-message-from-me wc-message-file'} ref={ div => this.messageDiv = div }>
                         <div className={ contentClassName + contactClassName }>
-                            <FileUploadCardReadOnly filenames={this.props.filenames}/>
+                            <FileUploadCardReadOnly files={this.props.files}/>
                         </div>
                     </div>
                 </div>

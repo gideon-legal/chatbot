@@ -18,12 +18,11 @@ $gd_gideon_blue: #3F6DE1;
   line-height: 22px;
   letter-spacing: 0.04em;
   color: #262626;
-  margin-left: 30px;
 }
 
 .file-upload-box {
   flex: 1;
-  margin: 30px 30px 0px;
+  margin: 30px 0px 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -70,11 +69,10 @@ $gd_gideon_blue: #3F6DE1;
 }
 
 .uploaded-files-container {
-  padding: 20px 30px 0px;
+  padding: 20px 0px 0px;
 }
 
 .uploaded-file-name-readonly {
-  margin-left: 30px;
   margin-top: 20px;
   color: #262626;
 }
@@ -103,7 +101,12 @@ $gd_gideon_blue: #3F6DE1;
 
 .remove-uploaded-file {
   color: #3F6DE1;
+}
 
+.remove-uploaded-file:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
 // .file-upload-title{
 //     background-color: $gd_gideon_blue;
 //     font-size: 14px;
@@ -121,13 +124,11 @@ $gd_gideon_blue: #3F6DE1;
 //     display: flex;    
 //     align-items: center;    
 //     justify-content: center;
-    
-}
 
 .wc-message-from-me{
     &.wc-message-file{
         .wc-message-content {
-          width: 447px;
+          // width: 447px;
          
            /* Gideon / White */
         
@@ -208,15 +209,6 @@ $gd_gideon_blue: #3F6DE1;
 }
 
 .upload-skip {
-  position: center;
-  width: 385.72px;
-  height: 52px;
-  left: 994.28px;
-  top: 602px;
-
-  border: 1.5px solid #3F6DE1;
-  border-radius: 3px;
-
   font-family: 'Lato';
   font-style: normal;
   font-weight: 600;
@@ -224,23 +216,19 @@ $gd_gideon_blue: #3F6DE1;
   line-height: 22px;
   display: flex;
   align-items: center;
+  justify-content: center;
   text-align: center;
-  
-  /* Gideon / Primary color */
-
   color: $gd_gideon_blue;
-  text-align: center;
   padding: 14px 0px;
-  border-top: 1px solid $gd_gideon_blue;
+  border: 1.5px solid $gd_gideon_blue;
+  border-radius: 3px;
   cursor: pointer;
-    
+  margin-top: 20px;
 }
 
 .uploaded-files {
   width: 211px;
   height: 17px;
-  
-
   font-family: 'Lato';
   font-style: normal;
   font-weight: 400;

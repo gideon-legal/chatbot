@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { ChatActions, ChatState, sendFiles , sendMessage } from './Store';
 import { SubmitButton } from './SubmitButton';
 
-import { FileUploadIcon } from './assets/icons/FileUploadIcon';
+import { FileUploadIcon, RemoveFileIcon } from './assets/icons/FileUploadIcons';
 
 export interface Node {
     node_type: string;
@@ -23,7 +23,7 @@ interface FileUploadProps {
     gid: string;
     updateInput: (disabled: boolean, placeholder: string) => void;
     index: number;
-    addFilesToState: (index: number, files: string[]) => void;
+    addFilesToState: (index: number, files: Array<{ name: string, url: string }>) => void;
  }
 
 export interface FileUploadState {
@@ -126,7 +126,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                     if (result.data.success) {
                         const signedUrl = result.data.url;
                         this.state.signedUrls.push(signedUrl.split('?')[0]);
-                        console.log('pushed ' + this.state.signedUrls);
+                        // console.log('pushed ' + this.state.signedUrls);
                         this.setState({signedUrl});
                         resolve({s3Url: this.state.signedUrl});
                     } else {
@@ -149,6 +149,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         files.forEach((f: { type: any; }) => {
             contentTypeArr.push(f.type);
         });
+        const promises = [];
         for (const i of files) {
             const file = i;
             let currUrl = '';
@@ -158,7 +159,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                 content_type_arr: contentTypeArr,
                 msft_conversation_id: this.props.node.conversation_id
             };
-            this.getSignedUrl(dataToGetSignedUrl).then((resultUrl: any) => {
+            promises.push(this.getSignedUrl(dataToGetSignedUrl).then((resultUrl: any) => {
                 const options = {
                     headers: {
                         'Content-Type': file.type
@@ -168,22 +169,25 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                 return axios.put(resultUrl.s3Url, file, options);
             }).then((result: any) => {
                 if (result.status === 200) {
-                    console.log('signed 2: ' + JSON.stringify(this.state.signedUrls));
                     this.props.fileSelected(false);
-                    const filenames = this.state.files.map((f: any) => f.name);
-                    this.setState({ isUploading: false, files: [], uploadPhase: 'success' });
-                    if ( files.indexOf(i) === 0) {
-                        this.props.sendMessage('File(s) Uploaded');
-                        this.props.addFilesToState(this.props.index, filenames);
-                    }
                 } else {
                     throw Error('Something went wrong. Try again.');
                 }
             }).catch(err => {
                 this.props.fileSelected(false);
                 this.setState({ isUploading: false, files: [], uploadPhase: UPLOAD_PHASES.ERROR });
-            });
+            }));
         }
+        Promise.all(promises).then(() => {
+            if ((this.state.files.length > 0) && (this.state.files.length === this.state.signedUrls.length)) {
+                const files = [];
+                for (let i: number = 0; i < this.state.files.length; i++) {
+                    files.push( { name: this.state.files[i].name, url: this.state.signedUrls[i] });
+                }
+                this.props.addFilesToState(this.props.index, files);
+                this.props.sendMessage('File(s) Uploaded');
+            }
+        });
     }
     clickToSubmitFile(e?: React.MouseEvent<HTMLDivElement>) {
         if (this.state.uploadPhase !== UPLOAD_PHASES.PREVIEW) { return; }
@@ -231,24 +235,35 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
 
     showDropzone = () => {
         let returnDropzone = (
-            <Dropzone onDrop={this.onDrop.bind(this)}>
-                {({getRootProps, getInputProps, isFocused, isDragActive, isDragAccept, isDragReject}: {getRootProps: any, getInputProps: any, isFocused: boolean, isDragActive: boolean, isDragAccept: boolean, isDragReject: boolean}) => (
-                    <section className="file-upload-box" style={this.getFileDropzoneStyle(isFocused, isDragActive, isDragAccept, isDragReject)}>
-                        <div {...getRootProps({className: 'dropzone'})}>
-                        <input {...getInputProps()} />
-                            <div className="file-upload-icon">
-                                <FileUploadIcon />
+            <div>
+                <Dropzone onDrop={this.onDrop.bind(this)}>
+                    {({getRootProps, getInputProps, isFocused, isDragActive, isDragAccept, isDragReject}: {getRootProps: any, getInputProps: any, isFocused: boolean, isDragActive: boolean, isDragAccept: boolean, isDragReject: boolean}) => (
+                        <section className="file-upload-box" style={this.getFileDropzoneStyle(isFocused, isDragActive, isDragAccept, isDragReject)}>
+                            <div {...getRootProps({className: 'dropzone'})}>
+                            <input {...getInputProps()} />
+                                <div className="file-upload-icon">
+                                    <FileUploadIcon />
+                                </div>
+                                <div className="file-upload-choose-file">Choose file</div>
+                                <div className="file-upload-choose-file-subtext">or</div>
+                                <div className="file-upload-choose-file-subtext">drag and drop here</div>
+                                <div className="file-upload-supported-files">Supported files: PDF, JPG, Word</div>
                             </div>
-                            <div className="file-upload-choose-file">Choose file</div>
-                            <div className="file-upload-choose-file-subtext">or</div>
-                            <div className="file-upload-choose-file-subtext">drag and drop here</div>
-                            <div className="file-upload-supported-files">Supported files: PDF, JPG, Word</div>
-                        </div>
-                    </section>
-                )}
-            </Dropzone>
+                        </section>
+                    )}
+                </Dropzone>
+            </div>
         );
-        if (this.state.uploadPhase === UPLOAD_PHASES.PREVIEW) {
+
+        if ((this.state.uploadPhase !== UPLOAD_PHASES.PREVIEW) || (this.state.files.length === 0)) {
+            returnDropzone = (
+                <div>
+                    {returnDropzone}
+                    <div className="upload-skip" onClick={e => this.handleSkipFile(e)}>Skip</div>
+                </div>
+            );
+        }
+        if ((this.state.uploadPhase === UPLOAD_PHASES.PREVIEW) && (this.state.files.length !== 0)) {
             returnDropzone = (
                 <div>
                     {returnDropzone}
@@ -257,12 +272,13 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                         {this.state.files.map((f: any) => (
                             <div className="listed-file">
                                 <div className="uploaded-file-name">{f.name}</div>
-                                <div className="remove-uploaded-file" onClick={() => this.removeFile(f)}>X</div>
+                                <div className="remove-uploaded-file" onClick={() => this.removeFile(f)}>
+                                    <RemoveFileIcon />
+                                </div>
                             </div>
                         ))};
 
                         <SubmitButton onClick={this.clickToSubmitFile} />
-                        {/* <div className="upload-submit send" onClick={e => this.clickToSubmitFile(e)}>Submit</div> */}
                     </div>
                 </div>
             );
