@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 export interface SubmitButtonProps {
-  onClick: () => void;
+  onClick: (e?: any) => void;
 }
 export interface SubmitButtonState {
   isHovering: boolean;

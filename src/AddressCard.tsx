@@ -98,7 +98,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
         }
     }
 
-    clickToSubmitContactInformation(e?: React.MouseEvent<HTMLButtonElement>) {
+    clickToSubmitContactInformation(e: React.MouseEvent<HTMLButtonElement>) {
       // if (!this.validateContactInformation()) { return; }
       this.resetShell();
       this.props.sendMessage(this.getFormattedAddress());
@@ -141,8 +141,8 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
                                     {loading && <div>Loading...</div>}
                                     {suggestions.map(suggestion => {
                                         const className = suggestion.active
-                                            ? 'suggestion-item-active'
-                                            : 'suggestion-item';
+                                            ? 'address-suggestion-item-active'
+                                            : 'address-suggestion-item';
                                         const style = suggestion.active
                                             ? { backgroundColor: '#fafafa', cursor: 'pointer', color: 'black' }
                                             : { backgroundColor: '#ffffff', cursor: 'pointer', color: 'black' };
