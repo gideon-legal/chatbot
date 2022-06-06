@@ -1125,6 +1125,7 @@
 
     .wc-message-from-me.wc-message-file {
         margin-left: auto;
+        width: 66%;
     }
 
     .wc-message-from-me.wc-message-file .wc-message-content {
@@ -1141,6 +1142,7 @@
         color: $c01;
         border-radius: 3px 3px 0px 3px;
         margin-left: auto;
+        width: 66%;
     }
 
     .wc-message-content-address {
@@ -1215,7 +1217,7 @@
     }
 
     .wc-message-disclaimer {
-        width: 100%;
+        width: 66%;
         margin-left: auto;
     }
 
