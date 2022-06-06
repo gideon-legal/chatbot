@@ -683,7 +683,7 @@
 
         .prefix__radio label {
             color: black;
-            margin-right: 10px;
+            margin-right: 5%;
         }
 
         .prefix__radio input {
@@ -734,8 +734,6 @@
 
         .contact__form__card {
           $contact_padding_v: 8px;
-          $contact_width: 300px;
-          width: $contact_width;
           background-color: white;
           color: black;
           padding: 8px 20px 20px 20px;
@@ -1116,7 +1114,7 @@
     .wc-message-content-contact {
         background-color: white;
         color: black;
-        box-shadow: 0px 1px 10px $c_shadow;
+        box-shadow: $gideon-shadow;
         padding: 5px 0px 0px 0px;
     }
 
@@ -1127,6 +1125,7 @@
 
     .wc-message-from-me.wc-message-file {
         margin-left: auto;
+        width: $gideon-node-width;
     }
 
     .wc-message-from-me.wc-message-file .wc-message-content {
@@ -1143,6 +1142,7 @@
         color: $c01;
         border-radius: 3px 3px 0px 3px;
         margin-left: auto;
+        width: $gideon-node-width;
     }
 
     .wc-message-content-address {
@@ -1204,7 +1204,8 @@
 
     .wc-message-contact {
       margin-left: auto;
-      border: none
+      border: none;
+      width: $gideon-node-width
     }
 
     .wc-message-imBack {
@@ -1216,7 +1217,7 @@
     }
 
     .wc-message-disclaimer {
-        width: 100%;
+        width: $gideon-node-width;
         margin-left: auto;
     }
 
