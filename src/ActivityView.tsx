@@ -142,6 +142,10 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
       try { // contact node + address node formatted for chatbot message
         const o = JSON.parse(text);
         let formattedText = '';
+        if (text.includes('s3.amazonaws') || text.includes('Skip Upload')) {
+          const blank = '';
+          return blank;
+        }
         if (o && typeof o === 'object') {
           if (('prefix' in o || 'name' in o || 'email' in o || 'phone' in o || 'address' in o)) {
             formattedText = this.addFormattedKey(formattedText, 'prefix', o);
@@ -156,10 +160,6 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
             return text;
           }
         } else {
-          if (text.includes('s3.amazonaws') || text.includes('Skip Upload')) {
-            const blank = '';
-            return blank;
-          }
           return text;
         }
       } catch (e) {
