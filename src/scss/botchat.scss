@@ -1125,7 +1125,7 @@
 
     .wc-message-from-me.wc-message-file {
         margin-left: auto;
-        width: 66%;
+        width: $gideon-node-width;
     }
 
     .wc-message-from-me.wc-message-file .wc-message-content {
@@ -1142,7 +1142,7 @@
         color: $c01;
         border-radius: 3px 3px 0px 3px;
         margin-left: auto;
-        width: 66%;
+        width: $gideon-node-width;
     }
 
     .wc-message-content-address {
@@ -1205,7 +1205,7 @@
     .wc-message-contact {
       margin-left: auto;
       border: none;
-      width: 66%
+      width: $gideon-node-width
     }
 
     .wc-message-imBack {
@@ -1217,7 +1217,7 @@
     }
 
     .wc-message-disclaimer {
-        width: 66%;
+        width: $gideon-node-width;
         margin-left: auto;
     }
 
