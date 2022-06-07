@@ -58,6 +58,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
 
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
         this.clickToSubmitContactInformation = this.clickToSubmitContactInformation.bind(this);
     }
 
@@ -111,6 +112,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
     }
 
     handleSelect(address: string) {
+        this.setState({ address });
         geocodeByAddress(address)
             .then(results => getLatLng(results[0]))
             .then(latLang => {
