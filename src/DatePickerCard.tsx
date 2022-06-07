@@ -442,8 +442,8 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
               tabIndex={1}
               dateFormat={withTime ? dateFormatWithTime : dateFormat}
               showTimeSelect={withTime}
-              showMonthDropdown
-              showYearDropdown
+              // showMonthDropdown
+              // showYearDropdown
               dropdownMode="select"
             />
             <button
