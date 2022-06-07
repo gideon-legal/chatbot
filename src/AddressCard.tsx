@@ -34,12 +34,15 @@ interface AddressProps {
 
 export interface MessageWithAddress extends Message {
     address: string;
+    apartment: string;
 }
 
 export interface AddressState {
     address: string;
     addressError: string;
     formattedMessage: string;
+    apartment: string;
+    apartmentError: string;
 }
 
 class AddressForm extends React.Component<AddressProps, AddressState> {
@@ -51,7 +54,9 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
         this.state = {
             address: '',
             addressError: undefined,
-            formattedMessage: ''
+            formattedMessage: '',
+            apartment: '',
+            apartmentError: undefined
         };
 
         console.log(this.props);
@@ -69,10 +74,18 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
     }
 
     getFormattedAddress = () => {
+        console.log(this.state.address);
+        console.log(this.state.apartment);
+        // need: {address, state, city, street,apt, zipcode}
         return JSON.stringify({
             ...this.state.address && { address: this.state.address }
 
         });
+    }
+
+    apartmentActive = () => {
+        console.log(JSON.stringify(this.props.node));
+        return this.props.node.meta && this.props.node.meta.apartment;
     }
 
     private handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>): any {
@@ -161,6 +174,23 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
                             </div>
                         )}
                     </PlacesAutocomplete>
+                    {this.apartmentActive() && (<div className="contact__form__card__container">
+                    <span className={'contact__form__card__container__title'}></span>
+                    <input
+                       type="text"
+                       className={'contact__form__card__container__input'}
+                       // ref={ input => this.textInputName = input }
+                       autoFocus={true}
+                       value={ this.state.apartment }
+                       onChange={ e => this.setState({
+                       ...this.state,
+                       apartment: e.target.value
+                       }) }
+                      placeholder="Apt/Suite Number (Optional)"
+                       aria-label={null}
+                       aria-live="polite"
+                    />
+                    </div>)}
                     {this.state.addressError && <span className="contact__form__card__container__error">{this.state.addressError}</span>}
                 </div>
                 <SubmitButton onClick={ this.clickToSubmitContactInformation } />
