@@ -112,7 +112,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
     }
 
     handleSkipFile(e: React.MouseEvent<HTMLDivElement>) {
-        this.props.sendMessage('Skip Upload');
+        this.props.sendMessage('');
     }
 
     getSignedUrl = (data: any) => {
@@ -126,7 +126,6 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                     if (result.data.success) {
                         const signedUrl = result.data.url;
                         this.state.signedUrls.push(signedUrl.split('?')[0]);
-                        // console.log('pushed ' + this.state.signedUrls);
                         this.setState({signedUrl});
                         resolve({s3Url: this.state.signedUrl});
                     } else {
@@ -185,7 +184,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                     files.push( { name: this.state.files[i].name, url: this.state.signedUrls[i] });
                 }
                 this.props.addFilesToState(this.props.index, files);
-                this.props.sendMessage('File(s) Uploaded');
+                this.props.sendMessage(JSON.stringify(this.state.signedUrls));
             }
         });
     }

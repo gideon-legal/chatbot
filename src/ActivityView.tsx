@@ -142,6 +142,10 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
       try { // contact node + address node formatted for chatbot message
         const o = JSON.parse(text);
         let formattedText = '';
+        if (text.includes('s3.amazonaws') || text.includes('Skip Upload')) {
+          const blank = '';
+          return blank;
+        }
         if (o && typeof o === 'object') {
           if (('prefix' in o || 'name' in o || 'email' in o || 'phone' in o || 'address' in o)) {
             formattedText = this.addFormattedKey(formattedText, 'prefix', o);
@@ -168,23 +172,27 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
         const activityCopy: any = activity;
         const isDisclaimer = activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer';
         if (type === 'message' && activity.type === 'message') {
+          if (isDisclaimer === true || this.formatText(activity.text).length > 0) {
             return (
-                <div>
-                    <FormattedText
-                        text={ isDisclaimer ? 'Disclaimer' : this.formatText(activity.text) }
-                        format={activity.textFormat}
-                        onImageLoad={ props.onImageLoad }
-                    />
-                    <Attachments
-                        attachments={ activity.attachments }
-                        attachmentLayout={ activity.attachmentLayout }
-                        format={ props.format }
-                        onCardAction={ props.onCardAction }
-                        onImageLoad={ props.onImageLoad }
-                        size={ props.size }
-                    />
-                </div>
-            );
+              <div>
+                  <FormattedText
+                      text={ isDisclaimer ? 'Disclaimer' : this.formatText(activity.text) }
+                      format={activity.textFormat}
+                      onImageLoad={ props.onImageLoad }
+                  />
+                  <Attachments
+                      attachments={ activity.attachments }
+                      attachmentLayout={ activity.attachmentLayout }
+                      format={ props.format }
+                      onCardAction={ props.onCardAction }
+                      onImageLoad={ props.onImageLoad }
+                      size={ props.size }
+                  />
+              </div>
+          );
+          } else {
+            return null;
+          }
         } else if (activity.type === 'typing') {
             return <div className="wc-typing"/>;
         } else if (type === 'date' || type === 'handoff') {
@@ -204,7 +212,6 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
                   <ContactFormCard { ...props } node={activityCopy.entities[0]} />
             );
         } else if (type === 'address') {
-            console.log('uhhhhhhhhhhhhh');
             return (
                   <AddressCard { ...props } node={activityCopy.entities[0]} />
             );
