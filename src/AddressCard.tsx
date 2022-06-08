@@ -59,8 +59,6 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
             apartmentError: undefined
         };
 
-        console.log(this.props);
-
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.clickToSubmitContactInformation = this.clickToSubmitContactInformation.bind(this);
@@ -74,17 +72,36 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
     }
 
     getFormattedAddress = () => {
-        console.log(this.state.address);
-        console.log(this.state.apartment);
-        // need: {address, state, city, street,apt, zipcode}
-        return JSON.stringify({
-            ...this.state.address && { address: this.state.address }
-
-        });
+        const addressArr = this.state.address.split(',');
+        let addressWApt = this.state.address;
+        if (this.state.apartment !== '') {
+            addressWApt = addressArr[0] + ', ' + this.state.apartment + ',' + addressArr[1] + ',' + addressArr[2] + ',' + addressArr[3];
+        }
+        // has: street, city, state - zipcode, country
+        const stateZip = addressArr[2].split(' ');
+        if (stateZip.length === 3) {
+            // contains zip code
+            return(JSON.stringify({
+                address: addressWApt,
+                apartment: this.state.apartment,
+                street: addressArr[0],
+                city: addressArr[1],
+                state: stateZip[1],
+                zipcode: stateZip[2]
+            }));
+        } else {
+            return(JSON.stringify({
+                address: addressWApt,
+                apartment: this.state.apartment,
+                street: addressArr[0],
+                city: addressArr[1],
+                state: stateZip[1],
+                zipcode: ''
+            }));
+        }
     }
 
     apartmentActive = () => {
-        console.log(JSON.stringify(this.props.node));
         return this.props.node.meta && this.props.node.meta.apartment;
     }
 
