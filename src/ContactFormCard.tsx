@@ -1,6 +1,5 @@
-import { Activity, CardAction, DirectLineOptions, Message} from 'botframework-directlinejs';
+import { DirectLineOptions, Message} from 'botframework-directlinejs';
 import { parsePhoneNumberFromString } from 'libphonenumber-js/max';
-import * as moment from 'moment';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { ChatState } from './Store';
