@@ -13,11 +13,6 @@ $gd_gideon_blue: #3F6DE1;
 $width: 280px;
 
 .gd-date-picker {
-    // width: $width;
-    // max-width: $width;
-
-    padding:2px;
-
     &-inner-container {
       display: flex;
       flex-direction: column;
@@ -273,14 +268,12 @@ $width: 280px;
     .gd-submit-date-button {
         width: 100%;
         height: 42px;
-        background: white;
         border-top: 2px solid $gd_gideon_blue;
         border-bottom-left-radius: $messageBorderRadius - 2px;
         border-bottom-right-radius: $messageBorderRadius - 2px;
         border-bottom: 0;
         border-left: 0;
         border-right: 0;
-        color:$gd_gideon_blue;
         font-size: 14px;
         font-weight: bold;
     }
@@ -315,6 +308,7 @@ $width: 280px;
             font-weight: bold;
             position: absolute;
             display: block;
+            color: black;
         }
 
         .gd-header-schedule-meeting {
@@ -324,7 +318,6 @@ $width: 280px;
         }
 
         .gd-selected-date {
-            color: #ffffff;
             top: 38%;
             left: 0;
             right: 0;
@@ -351,13 +344,13 @@ $width: 280px;
 
     .gd-selected-date-container {
         height: 54px;
+        background-color: white;
     }
 
     .react-datepicker {
         width: 100%;
         border-radius: 0;
         border: 0;
-        border-bottom: 1px solid $gd_gideon_blue !important;
 
         &__navigation--previous {
             border-right-color: $gd_gideon_blue;
