@@ -45,6 +45,7 @@ export interface DatePickerState {
     loading: boolean;
     duration: number;
     previousStartDates: moment.Moment[]; // keep track of start dates in previous 3 day ranges
+    pickerOpen: boolean;
 }
 
 export const dateFormat = 'MMMM D, YYYY';
@@ -101,7 +102,8 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
             monthAvailabilities: null,
             loading: true,
             duration: 30,
-            previousStartDates: []
+            previousStartDates: [],
+            pickerOpen: false
         };
 
         this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -276,6 +278,17 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         return (startDate + endDate);
     }
 
+    safelyGetDateText = () => {
+      let endDate = '';
+      const startDate = this.state.startDate ? this.state.startDate.format(this.state.withTime ? dateFormatWithTime : dateFormat) : '____';
+      if (this.state.withRange) {
+           endDate = ' - ';
+           const dateAddition = this.state.endDate ? this.state.endDate.format(this.state.withTime ? dateFormatWithTime : dateFormat) : '____';
+           endDate += dateAddition;
+      }
+      return (startDate + endDate);
+  }
+
     validateSelection = () => {
         const { node } = this.props;
         const { dateSelected, timeSelected, withTime, withRange, startDate, endDate } = this.state;
@@ -429,31 +442,46 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
             <div className="gd-selected-date-container">
               <span className="gd-selected-date">{headerMessage}</span>
             </div>
+            <div className="date-picker-node-content">
+              <div className="date-picker-node-content-body">
+                {this.state.pickerOpen &&
+                  <div className="date-picker-popup-outer-container">
+                    <div className="date-picker-popup-container">
+                      <ReactDatePicker
+                        endDate={endDate}
+                        startDate={startDate}
+                        selected={startDate}
+                        onChange={(date, event) =>
+                          this.handleDateChange(event, date, withTime)
+                        }
+                        onMonthChange={e => this.handleMonthChange(e)}
+                        inline={true}
+                        tabIndex={1}
+                        dateFormat={withTime ? dateFormatWithTime : dateFormat}
+                        showTimeSelect={withTime}
+                        // showMonthDropdown
+                        // showYearDropdown
+                        dropdownMode="select"
+                      />
+                    </div>
+                  </div>
+                }
 
-            <ReactDatePicker
-              endDate={endDate}
-              startDate={startDate}
-              selected={startDate}
-              onChange={(date, event) =>
-                this.handleDateChange(event, date, withTime)
-              }
-              onMonthChange={e => this.handleMonthChange(e)}
-              inline={true}
-              tabIndex={1}
-              dateFormat={withTime ? dateFormatWithTime : dateFormat}
-              showTimeSelect={withTime}
-              // showMonthDropdown
-              // showYearDropdown
-              dropdownMode="select"
-            />
-            <button
-              type="button"
-              className="gd-submit-date-button"
-              onClick={e => this.clickToSubmitDate(e)}
-              title="Submit"
-            >
-              Submit
-            </button>
+                <div className="date-text-container" onClick={ () => this.setState({ pickerOpen: !this.state.pickerOpen })}>
+                  <div className="date-icon"></div>
+                  <div className="date-text">{this.safelyGetDateText()}</div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className="gd-submit-date-button"
+                onClick={e => this.clickToSubmitDate(e)}
+                title="Submit"
+              >
+                Submit
+              </button>
+            </div>
           </div>
         );
     }

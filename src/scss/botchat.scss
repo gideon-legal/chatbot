@@ -193,7 +193,8 @@
         box-sizing: border-box;
         bottom: $consoleHeight;
         left: 0;
-        transform: translateY(0);
+        // Commented out for datepicker node
+        // transform: translateY(0);
         outline: 0;
         background: white;
         overflow-x: hidden;

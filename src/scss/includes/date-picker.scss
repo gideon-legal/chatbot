@@ -531,3 +531,55 @@ $width: 280px;
     }
 
 }
+
+.date-text-container {
+    width: 100%;
+    border: 0.5px solid #B5B5B5;
+    border-radius: 3px;
+    padding: 9px;
+    color: #262626;
+}
+
+.date-text-container:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.date-icon {
+
+}
+
+.date-text {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.date-picker-node-content {
+    background-color: white;
+}
+
+.date-picker-node-content-body {
+    position: relative;
+}
+
+.date-picker-popup-outer-container {
+    position: absolute;
+    top: -256px;
+    left: -30px;
+    z-index: 1;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);
+    border-radius: 3px;
+}
+
+.date-picker-popup-container {
+    position: fixed;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);
+    border-radius: 3px;
+}
+
+.date-picker-node-content {
+    padding: 18px;
+}
