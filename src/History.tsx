@@ -154,7 +154,6 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                 content = <this.measurableCarousel/>;
             } else {
                 const activities = filteredActivities(this.props.activities, this.props.format.strings.pingMessage);
-
                 activityDisclaimer = activities.length > 0 ? activities[activities.length - 1] : undefined;
                 lastActivityIsDisclaimer = activityDisclaimer && activityDisclaimer.entities && activityDisclaimer.entities.length > 0 && activityDisclaimer.entities[0].node_type === 'disclaimer';
                 content = activities
@@ -443,7 +442,25 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
         const avatarColor = this.props.format && this.props.format.themeColor ? this.props.format.themeColor : '#c3ccd0';
         const avatarInitial = this.props.format && this.props.format.display_name && typeof(this.props.format.display_name) === 'string' ? findInitial(this.props.format.display_name) : 'B';
         const showAvatar = this.props.fromMe === false && (this.props.nextActivityFromMe || this.props.lastMessage);
-
+        if (this.props.activity.type === 'message' && who === 'me' && (this.props.activity.text.includes('Skip Upload') || this.props.activity.text.includes('s3.amazonaws') || this.props.activity.text.length <= 0)) {
+            return (
+                <div className={`wc-message-pane from-me-blank`}
+                  >
+                    {(this.props.displayName && <span className="wc-message-bot-name">{this.props.format && this.props.format.display_name ? this.props.format.display_name : 'Bot'}</span>)}
+                    <div data-activity-id={ this.props.activity.id } className={ wrapperClassName } onClick={ this.props.onClickActivity }>
+                        {!this.props.fromMe && (showAvatar ?
+                          <div className="wc-message-avatar" style={{ background: avatarColor }}>{avatarInitial}</div>
+                        :
+                          <div className="wc-message-avatar blank"/>
+                        )}
+                        <div className={ 'wc-message wc-message-from-me-blank' } ref={ div => this.messageDiv = div }>
+                        </div>
+                        {/* <div className={ 'wc-message-from wc-message-from-' + who }>{ timeLine }</div> */}
+                    </div>
+                    {this.renderAdditionalActivity(contentClassName, wrapperClassName)}
+                </div>
+            );
+        }
         return (
             <div className={`wc-message-pane from-${who}`}
               >

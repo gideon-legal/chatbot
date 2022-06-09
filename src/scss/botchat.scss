@@ -1175,7 +1175,79 @@
     .wc-message-from-me svg.wc-message-callout {
         right: -6px;
     }
+/* from me - blank */
+.wc-message-from-me-blank {
+    float: right;
+    margin-right: 6px;
+    // margin-left: auto;
+}
 
+.wc-message-from-me-blank.wc-message-from {
+    text-align: right;
+}
+
+.wc-message-from-me-blank .wc-message-content-blank {
+    background-color: white;
+    color: $c01;
+    border-radius: 3px 3px 0px 3px;
+}
+
+.wc-message-content-blank-contact {
+    background-color: white;
+    color: white;
+    box-shadow: $gideon-shadow;
+    padding: 5px 0px 0px 0px;
+}
+
+.wc-message-from-me-blank {
+  background-color:white;
+//   border-top: 5px solid #3f6de1;
+}
+
+.wc-message-from-me-blank.wc-message-file {
+    margin-left: auto;
+    width: $gideon-node-width;
+}
+
+.wc-message-from-me-blank.wc-message-file .wc-message-content {
+    background-color: transparent;
+    border: none;
+    border-top: 5px solid white;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+    padding: 10px 30px 30px; 
+}
+
+.wc-message-from-me-blank.wc-message-address {
+    background-color: $c_messageFromMe;
+    color: $c01;
+    border-radius: 3px 3px 0px 3px;
+    margin-left: auto;
+    width: $gideon-node-width;
+}
+
+.wc-message-content-address-blank {
+    background-color: white;
+    box-shadow: 0px 1px 10px $c_shadow;
+    padding: 5px 0px 0px 0px;
+}
+
+.wc-message-content-address-blank .gideon-submit-button {
+    // TODO: Discuss with JoeyD how to fix margin inconsistencies
+    margin-top: 0 !important;
+}
+
+.wc-message-from-me-blank svg.wc-message-callout path {
+    fill: white;
+}
+
+.wc-message-from-me-blank svg.wc-message-callout path.point-left {
+    display: none;
+}
+
+.wc-message-from-me-blank svg.wc-message-callout {
+    right: -6px;
+}
 /* from bot */
 
     .wc-message-from-bot {
