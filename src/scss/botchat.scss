@@ -1505,13 +1505,14 @@
             right: 0;
 
             &.hidden {
-                display: none;
+                visibility: hidden;
             }
         }
 
         .wc-send {
             svg {
                 width: 55px;
+                height: 55px;
             }
         }
 
