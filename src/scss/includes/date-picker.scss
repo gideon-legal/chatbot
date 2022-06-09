@@ -240,7 +240,7 @@ $width: 280px;
         // max-width: 421px;
 
         @include mobile {
-            max-width: $width;
+            // max-width: $width;
         }
 
         .gd-selected-date {
@@ -488,6 +488,10 @@ $width: 280px;
         height: 1.7rem;
         transform: translateX(-3.0rem);
         z-index: -1;
+        @include mobile {
+          width: 3rem;
+          transform: translateX(-1.7rem);
+        }
     }
 
     [aria-label="day-1"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end)::after {
@@ -500,6 +504,9 @@ $width: 280px;
 
     .react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sat::after {
         width: 3.3rem;
+        @include mobile {
+          width: 2.15rem;
+        }
     }
 
     [aria-label="day-1"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sun::after,
@@ -524,6 +531,9 @@ $width: 280px;
     [aria-label="day-8"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sat::after,
     [aria-label="day-9"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sat::after {
         width: 3.55rem;
+        @include mobile {
+          width: 2,4rem;
+        }
     }
         
     .react-datepicker__day--range-end::after {
@@ -541,6 +551,11 @@ $width: 280px;
     .react-datepicker__day-name, .react-datepicker__day, .react-datepicker__time-name{
         margin-left: 10px;
         margin-right: 10px;
+
+      @include mobile {
+        margin-left: 0px;
+        margin-right: 2px;
+      }
     }
 
     .react-datepicker__day:not(.react-datepicker__day--selected):hover {
