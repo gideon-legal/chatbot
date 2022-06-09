@@ -1398,7 +1398,6 @@
 
         svg {
             fill: #3f6de1;
-            margin-top: 19px;
             margin-right: 16px;
         }
 
@@ -1466,10 +1465,12 @@
 
         .wc-send {
             right: 0;
+            top: 20px;
+            height: 55px;
         }
 
         .wc-send.hidden {
-            visibility: hidden
+            visibility: hidden;
         }
 
         &.has-upload-button .wc-textbox {
