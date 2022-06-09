@@ -1467,10 +1467,11 @@
         .wc-send {
             right: 0;
             height: 55px;
+            z-index: 300000;
         }
 
         .wc-send.hidden {
-            visibility: hidden
+            display: none;
         }
 
         &.has-upload-button .wc-textbox {
@@ -1506,7 +1507,7 @@
             right: 0;
 
             &.hidden {
-                visibility: hidden;
+                display: none;
             }
         }
 
@@ -1523,7 +1524,7 @@
             }
 
             &.inactive path#micFilling {
-                visibility: hidden;
+                display: none;
             }
         }
     }
