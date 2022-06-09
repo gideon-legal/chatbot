@@ -367,7 +367,8 @@ $width: 280px;
             border-left-color: $gd_gideon_blue;
 
             &--with-time {
-                right: 126px !important;
+                // right: 126px !important;
+                right: 10px !important;
 
                 @include mobile {
                     right:10px !important;
@@ -376,13 +377,14 @@ $width: 280px;
         }
 
         .react-datepicker__month-container {
-            width: 100%;
+            width: 100% !important;
         }
 
 
         &__time-container {
             border-left: 1px solid $gd_gideon_blue;
-            width: 30% !important;
+            // width: 30% !important;
+            width: 100% !important;
 
             @include mobile {
                 border-left:0;
@@ -484,9 +486,9 @@ $width: 280px;
         content: ' ';
         background-color: #D8E2F9;
         position: absolute;
-        width: 5.6rem;
+        width: 4.9rem;
         height: 1.7rem;
-        transform: translateX(-3.0rem);
+        transform: translateX(-2.7rem);
         z-index: -1;
         @include mobile {
           width: 3rem;
@@ -503,7 +505,7 @@ $width: 280px;
     }
 
     .react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sat::after {
-        width: 3.3rem;
+        width: 3.1rem;
         @include mobile {
           width: 2.15rem;
         }
@@ -530,9 +532,9 @@ $width: 280px;
     [aria-label="day-7"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sat::after,
     [aria-label="day-8"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sat::after,
     [aria-label="day-9"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sat::after {
-        width: 3.55rem;
+        width: 3.35rem;
         @include mobile {
-          width: 2,4rem;
+          width: 2.4rem;
         }
     }
         
@@ -549,12 +551,12 @@ $width: 280px;
     }
 
     .react-datepicker__day-name, .react-datepicker__day, .react-datepicker__time-name{
-        margin-left: 10px;
-        margin-right: 10px;
+        margin-left: 8px;
+        margin-right: 8px;
 
       @include mobile {
         margin-left: 0px;
-        margin-right: 2px;
+        margin-right: 0px;
       }
     }
 
@@ -562,6 +564,10 @@ $width: 280px;
       border-radius: 50%;
     }
 
+    .react-datepicker__header {
+      // margin: 0.4rem;
+      width: 100% !important;
+    }
 }
 
 .date-text-container {
