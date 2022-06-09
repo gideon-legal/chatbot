@@ -1398,7 +1398,6 @@
 
         svg {
             fill: #3f6de1;
-            margin-top: 19px;
             margin-right: 16px;
         }
 
@@ -1466,12 +1465,11 @@
 
         .wc-send {
             right: 0;
-            height: 55px;
-            z-index: 300000;
+            top: 20px;
         }
 
         .wc-send.hidden {
-            display: none;
+            visibility: hidden;
         }
 
         &.has-upload-button .wc-textbox {
@@ -1507,14 +1505,13 @@
             right: 0;
 
             &.hidden {
-                display: none;
+                visibility: hidden;
             }
         }
 
         .wc-send {
             svg {
                 width: 55px;
-                height: 55px;
             }
         }
 
@@ -1524,7 +1521,7 @@
             }
 
             &.inactive path#micFilling {
-                display: none;
+                visibility: hidden;
             }
         }
     }
