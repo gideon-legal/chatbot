@@ -237,7 +237,7 @@ $width: 280px;
 
     &.withTime {
 
-        max-width: 421px;
+        // max-width: 421px;
 
         @include mobile {
             max-width: $width;
@@ -276,9 +276,18 @@ $width: 280px;
         border-radius: 3px;
     }
 
+    .gd-submit-date-button-disabled {
+      background-color: #B5B5B5;
+    }
+
     .gd-submit-date-button:hover {
-      background: $gd_gideon_blue;
+      background-color: $gd_gideon_blue;
       color: white;
+    }
+
+    .gd-submit-date-button-disabled:hover {
+      background-color: #B5B5B5;
+      cursor: not-allowed;
     }
 
     .gd-no-workable-appointment {
@@ -346,7 +355,7 @@ $width: 280px;
     }
 
     .react-datepicker {
-        width: 100%;
+        // width: 100%;
         border-radius: 0;
         border: 0;
 
@@ -421,6 +430,11 @@ $width: 280px;
             background-color: $gd_gideon_blue;
         }
 
+        &__day--selected {
+          border-radius: 50%;
+          color: white;
+        }
+
         &__day--disabled {
             color:#CCC;
         }
@@ -444,6 +458,7 @@ $width: 280px;
     .react-datepicker__day--range-end {
         border-radius: 4em;
         color: white;
+        background-color: #3F6DE1;
     }
 
     .react-datepicker__navigation--next--with-time {
@@ -528,6 +543,10 @@ $width: 280px;
         margin-right: 10px;
     }
 
+    .react-datepicker__day:not(.react-datepicker__day--selected):hover {
+      border-radius: 50%;
+    }
+
 }
 
 .date-text-container {
@@ -536,6 +555,8 @@ $width: 280px;
     border-radius: 3px;
     padding: 9px;
     color: #262626;
+    display: flex;
+    align-items: center;
 }
 
 .date-text-container:hover {
@@ -544,7 +565,8 @@ $width: 280px;
 }
 
 .date-icon {
-
+  margin-right: 11px;
+  display: flex;
 }
 
 .date-text {
