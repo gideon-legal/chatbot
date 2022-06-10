@@ -451,6 +451,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
         const avatarColor = this.props.format && this.props.format.themeColor ? this.props.format.themeColor : '#c3ccd0';
         const avatarInitial = this.props.format && this.props.format.display_name && typeof(this.props.format.display_name) === 'string' ? findInitial(this.props.format.display_name) : 'B';
         const showAvatar = this.props.fromMe === false && (this.props.nextActivityFromMe || this.props.lastMessage);
+
         if (this.props.activity.type === 'message' && who === 'me' && (this.props.activity.text.includes('Skip Upload') || this.props.activity.text.includes('s3.amazonaws') || this.props.activity.text.length <= 0)) {
             return (
                 <div className={`wc-message-pane from-me-blank`}
@@ -470,6 +471,11 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                 </div>
             );
         }
+
+        if (who !== 'me' && nodeType === 'disclaimer') {
+            return this.renderAdditionalActivity(contentClassName, wrapperClassName);
+        }
+
         return (
             <div className={`wc-message-pane from-${who}`}
               >
