@@ -193,7 +193,8 @@
         box-sizing: border-box;
         bottom: $consoleHeight;
         left: 0;
-        transform: translateY(0);
+        // Commented out for datepicker node
+        // transform: translateY(0);
         outline: 0;
         background: white;
         overflow-x: hidden;
@@ -592,6 +593,10 @@
         /*transition: max-height 2s ease-in-out;*/
     }
 
+    .wc-message-wrapper-overflow-visible {
+        overflow: visible;
+    }
+
     .wc-message-wrapper.bot {
       display:flex;
       flex-direction: row;
@@ -671,9 +676,9 @@
         font-size: $message_font_size;
         // background-color: #3F6DE1;
 
-        .wc-message-date &, .wc-message-handoff & {
-            padding:0 !important;
-        }
+        // .wc-message-date &, .wc-message-handoff & {
+        //     padding:0 !important;
+        // }
 
         .prefix__radio {
             display: block;
@@ -1118,6 +1123,11 @@
         padding: 5px 0px 0px 0px;
     }
 
+    .wc-message-content-date {
+        box-shadow: $gideon-shadow;
+        padding: 5px 0px 0px 0px;
+    }
+
     .wc-message-from-me {
       background-color:white;
     //   border-top: 5px solid #3f6de1;
@@ -1279,6 +1289,12 @@
       border: none;
       width: $gideon-node-width
     }
+
+    .wc-message-date {
+        margin-left: auto;
+        border: none;
+        width: $gideon-node-width
+      }
 
     .wc-message-imBack {
       margin-left: auto;

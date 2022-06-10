@@ -401,6 +401,14 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
 
         const { activity, format } = this.props;
 
+        // These lines determine the type of node. If it is a date node, we need to set overflow to visible to wrapper class
+        const activityCopy: any = activity;
+        const activityEntities = activityCopy.entities;
+        let nodeType = '';
+        if (activityEntities && activityEntities.length > 0) {
+            nodeType = activityEntities[0].node_type;
+        }
+
         switch (activity.id) {
             case undefined:
                 timeLine = <span>{ format.strings.messageSending }</span>;
@@ -429,6 +437,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
 
         const wrapperClassName = classList(
             'wc-message-wrapper',
+            (nodeType === 'date') && 'wc-message-wrapper-overflow-visible',
             (this.props.activity as Message).attachmentLayout || 'list',
             this.props.onClickActivity && 'clickable',
             who
