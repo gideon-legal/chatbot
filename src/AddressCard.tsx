@@ -176,6 +176,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
                                         placeholder: 'Search Places ...',
                                         className: 'contact__form__card__container__input'
                                     })}
+                                    autoFocus={true}
                                     onKeyPress={ e => this.onKeyPress(e) }
                                 />
                                 <div className="autocomplete-dropdown-container">
