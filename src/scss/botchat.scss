@@ -593,6 +593,10 @@
         /*transition: max-height 2s ease-in-out;*/
     }
 
+    .wc-message-wrapper-overflow-visible {
+        overflow: visible;
+    }
+
     .wc-message-wrapper.bot {
       display:flex;
       flex-direction: row;

@@ -453,28 +453,28 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
             <div className="date-picker-node-content">
               <div className="date-picker-node-content-body">
                 {this.state.pickerOpen &&
-                  // <div className="date-picker-popup-outer-container">
-                    // <div className="date-picker-popup-container">
-                    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                      <ReactDatePicker
-                        endDate={endDate}
-                        startDate={startDate}
-                        selected={startDate}
-                        onChange={(date, event) =>
-                          this.handleDateChange(event, date, withTime)
-                        }
-                        onMonthChange={e => this.handleMonthChange(e)}
-                        inline={true}
-                        tabIndex={1}
-                        dateFormat={withTime ? dateFormatWithTime : dateFormat}
-                        showTimeSelect={withTime}
-                        // showMonthDropdown
-                        // showYearDropdown
-                        dropdownMode="select"
-                      />
-                    </div>
-                  //   </div>
-                  // </div>
+                  <div className="date-picker-popup-outer-container">
+                    {/* <div className="date-picker-popup-container"> */}
+                      <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                        <ReactDatePicker
+                          endDate={endDate}
+                          startDate={startDate}
+                          selected={startDate}
+                          onChange={(date, event) =>
+                            this.handleDateChange(event, date, withTime)
+                          }
+                          onMonthChange={e => this.handleMonthChange(e)}
+                          inline={true}
+                          tabIndex={1}
+                          dateFormat={withTime ? dateFormatWithTime : dateFormat}
+                          showTimeSelect={withTime}
+                          // showMonthDropdown
+                          // showYearDropdown
+                          dropdownMode="select"
+                        />
+                      </div>
+                    {/* </div> */}
+                  </div>
                 }
 
                 <div className="date-text-container" onClick={ () => this.setState({ pickerOpen: !this.state.pickerOpen })}>

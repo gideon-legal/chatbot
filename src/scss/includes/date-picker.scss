@@ -603,13 +603,13 @@ $width: 280px;
 }
 
 .date-picker-node-content-body {
-    position: relative;
+    // position: relative;
 }
 
 .date-picker-popup-outer-container {
     position: absolute;
-    top: -256px;
-    left: -30px;
+    top: -170px;
+    left: 5px;
     z-index: 1;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);
     border-radius: 3px;
