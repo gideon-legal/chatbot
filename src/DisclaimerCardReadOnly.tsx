@@ -32,11 +32,13 @@ export class DisclaimerCardReadOnly extends React.Component<DisclaimerCardReadOn
           <div className="disclaimer__card__title">Disclaimer</div>
           {this.state.showDisclaimer &&
             <div className="disclaimer__card__message">
-              <FormattedText
-                text={ this.props.text }
-                format={ 'markdown' }
-                onImageLoad={null}
-              />
+                <div className="disclaimer__card__inner__message">
+                  <FormattedText
+                    text={ this.props.text }
+                    format={ 'markdown' }
+                    onImageLoad={null}
+                  />
+                </div>
             </div>
           }
           <div className="disclaimer__card__buttons">

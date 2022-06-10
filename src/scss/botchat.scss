@@ -465,13 +465,22 @@
             &__message {
                 font-size: 14px;
                 font-weight: 450;
-                padding: 30px;
+                padding: 0 20px;
+                margin: 20px 0;
                 line-height: 1.3em;
                 // margin: 10px 10px 20px;
             }
 
+            &__inner__message {
+                width: 100%;
+                background-color: #F7F7F7;
+                padding: 20px;
+                max-height: 293px;
+                overflow: auto;
+            }
+
             &__buttons {
-                margin-bottom:auto;
+                margin-bottom: 20px;
                 margin-top:0;
 
                 ul {
@@ -492,11 +501,13 @@
                         overflow-wrap: break-word;
                         text-align: right;
                         padding: 10px;
-                        margin-left: 6.4%;
-                        margin-right: 6.4%;
-                        margin-bottom: 30px;
+                        margin-left: 20px;
+                        margin-right: 20px;
+                        margin-bottom: 10px;
                         text-align: center;
                         box-shadow: 2px 2px 4px 0px $c_shadow;
+                        font-size: 16px;
+                        height: 52px;
                     }
 
                     button:focus,
@@ -1305,7 +1316,11 @@
     }
 
     .wc-message-disclaimer {
-        width: $gideon-node-width;
+        // If we want it to match other nodes
+        // width: $gideon-node-width;
+
+        // We want it to be bigger than the rest
+        width: 100%;
         margin-left: auto;
     }
 
