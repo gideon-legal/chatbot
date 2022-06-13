@@ -22,7 +22,7 @@ export class SubmitButton extends React.Component<SubmitButtonProps, SubmitButto
 
   render() {
     return (
-        <button className="gideon-submit-button" onClick={this.props.onClick} style={{marginTop: '20px', padding: '18px'}} onMouseEnter={() => this.setHover(true)} onMouseLeave={() => this.setHover(false)}>
+        <button className="gideon-submit-button" onClick={this.props.onClick} style={{padding: '18px'}} onMouseEnter={() => this.setHover(true)} onMouseLeave={() => this.setHover(false)}>
           <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             <div style={{position: 'relative'}}>
               Submit
