@@ -11,7 +11,6 @@ import { DisclaimerCard } from './DisclaimerCard';
 import { FileUploadCard } from './FileUploadCard';
 import { FormattedText } from './FormattedText';
 import { MultipleChoiceCard } from './MultipleChoiceCard';
-import { NodeCard } from './nodes/NodeCard';
 import { FormatState, SizeState } from './Store';
 
 const Attachments = (props: {
