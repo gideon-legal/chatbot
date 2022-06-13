@@ -354,8 +354,8 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
             if (nodeType === 'date' || nodeType === 'handoff' || nodeType === 'file' || nodeType === 'imBack' || nodeType === 'contact' || nodeType === 'address' || nodeType === 'disclaimer') {
                 return (
                     <div data-activity-id={activity.id } className={wrapperClassName}>
-                        <div className={'wc-message wc-message-from-me wc-message-' + nodeType} ref={ div => this.messageDiv = div }>
-                            <div className={ contentClassName + contactClassName }>
+                        <div className={'wc-message wc-message-from-me wc-message-node wc-message-' + nodeType} ref={ div => this.messageDiv = div }>
+                            <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
                                 <ActivityView
                                     format={this.props.format}
                                     size={null}

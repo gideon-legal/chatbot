@@ -2,6 +2,10 @@ import { DirectLineOptions, Message} from 'botframework-directlinejs';
 import { parsePhoneNumberFromString } from 'libphonenumber-js/max';
 import * as React from 'react';
 import { connect } from 'react-redux';
+import {NodeContainer} from './nodes/components/NodeContainer';
+import {NodeError} from './nodes/components/NodeError';
+import {NodeInput} from './nodes/components/NodeInput';
+import {NodeTitle} from './nodes/components/NodeTitle';
 import { ChatState } from './Store';
 import { ChatActions, sendMessage } from './Store';
 import { defaultStrings } from './Strings';
@@ -192,7 +196,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
 
   render() {
     return (
-      <div className="contact__form__card">
+      <div className="contact__form__card node">
         <div className="contact_label"><b>Contact Information</b></div>
         {this.prefixActive() && (<div className="contact__form__card__container">
           <span className={'contact__form__card__container__title'}>Title <span className="required">*</span></span>
@@ -250,63 +254,92 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
           </div>
           {this.state.prefixError && <span className="contact__form__card__container__error">{this.state.prefixError}</span>}
         </div>)}
-        {this.nameActive() && (<div className="contact__form__card__container">
-          <span className={'contact__form__card__container__title'}>Name <span className="required">*</span></span>
-          <input
-              type="text"
-              className={'contact__form__card__container__input'}
-              ref={ input => this.textInputName = input }
-              autoFocus={true}
-              value={ this.state.name }
-              onChange={ e => this.setState({
-                ...this.state,
-                name: e.target.value
-              }) }
-              onKeyPress={ e => this.onKeyPress(e) }
-              // onFocus={ () => this.onTextInputFocus() }
-              placeholder="First and Last Name"
-              aria-label={null}
-              aria-live="polite"
-          />
-          {this.state.nameError && <span className="contact__form__card__container__error">{this.state.nameError}</span>}
-        </div>)}
-        {this.emailActive() && (<div className="contact__form__card__container">
-          <span className={'contact__form__card__container__title'}>Email <span className="required">*</span></span>
-          <input
-              type="text"
-              className={'contact__form__card__container__input'}
-              ref={ input => this.textInputEmail = input }
-              autoFocus={!this.nameActive()}
-              value={ this.state.email }
-              onChange={ e => this.setState({
-                ...this.state,
-                email: e.target.value
-              }) }
-              onKeyPress={ e => this.onKeyPress(e) }
-              // onFocus={ () => this.onTextInputFocus() }
-              placeholder="sample@email.com"
-              aria-label={null}
-              aria-live="polite"
-          />
-          {this.state.emailError && <span className="contact__form__card__container__error">{this.state.emailError}</span>}
-        </div>)}
-        {this.phoneActive() && (<div className="contact__form__card__container">
-          <span className={'contact__form__card__container__title'}>Phone number <span className="required">*</span></span>
-          <input
-              type="text"
-              className={'contact__form__card__container__input'}
-              autoFocus={!this.nameActive() && !this.phoneActive()}
-              value={ this.state.phone }
-              onChange={ e => this.setState({
-                ...this.state,
-                phone: e.target.value
-              }) }
-              onKeyPress={ e => this.onKeyPress(e) }
-              // onFocus={ () => this.onTextInputFocus() }
-              placeholder="123-456-7890"
-          />
-          {this.state.phoneError && <span className="contact__form__card__container__error">{this.state.phoneError}</span>}
-        </div>)}
+        {this.nameActive && (<NodeContainer
+          nodeType="contact__form__card"
+
+          title={{
+            title: 'Name ',
+            required: true
+          }}
+
+          input={{
+            type: 'text',
+            ref: input => this.textInputName = input,
+            autoFocus: true,
+            value: this.state.name,
+            onChange: e => this.setState({
+              ...this.state,
+              name: e.target.value
+            }),
+            onKeyPress: e => this.onKeyPress(e),
+            placeholder: 'First and Last Name',
+            ariaLabel: null,
+            ariaLive: 'polite'
+          }}
+
+          error={{
+            message: this.state.nameError
+          }}
+
+          errorOn={
+            this.state.nameError
+          }
+        />)}
+        {this.emailActive() && (<NodeContainer
+          nodeType="contact__form__card"
+
+          title={{
+            title: 'Email ',
+            required: true
+          }}
+
+          input={{
+            type: 'text',
+            ref: input => this.textInputEmail = input,
+            autoFocus: !this.nameActive(),
+            value: this.state.email,
+            onChange: e => this.setState({
+              ...this.state,
+              email: e.target.value
+            }),
+            onKeyPress: e => this.onKeyPress(e),
+            placeholder: 'sample@email.com',
+            ariaLabel: null,
+            ariaLive: 'polite'
+          }}
+
+          error={{
+            message: this.state.emailError
+          }}
+
+          errorOn={this.state.emailError}
+        />)}
+        {this.phoneActive() && (<NodeContainer
+          nodeType="contact__form__card"
+
+          title={{
+            title: 'Phone number ',
+            required: true
+          }}
+
+          input={{
+            type: 'text',
+            autoFocus: !this.nameActive() && !this.phoneActive(),
+            value: this.state.phone,
+            onChange: e => this.setState({
+              ...this.state,
+              phone: e.target.value
+            }),
+            onKeyPress: e => this.onKeyPress(e),
+            placeholder: '123-456-7890'
+          }}
+
+          error={{
+            message: this.state.phoneError
+          }}
+
+          errorOn={this.state.phoneError}
+        />)}
         <SubmitButton onClick={this.clickToSubmitContactInformation} />
       </div>
     );

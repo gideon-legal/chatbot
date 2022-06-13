@@ -748,61 +748,124 @@
             margin-bottom: 20px;
         }
 
-        .contact__form__card {
-          $contact_padding_v: 8px;
-          background-color: white;
-          color: black;
-          padding: 8px 20px 20px 20px;
 
-          &__container {
-            display: flex;
-            flex-direction: column;
-            padding-bottom: $contact_padding_v + 10px;
+        //
+        // GENERAL NODE STYLING
+        //
 
-            &__input {
+        .node {
+            background-color: white;
+            color: black;
+            padding: 8px 20px 20px 20px;
+  
+            &__container {
+              display: flex;
+              flex-direction: column;
+              padding-bottom: 18px;
+  
+              &__input {
+                width: 100%;
+                padding-left: 10px;
+                border-radius: 2px;
+                border-width: 1px;
+                border-color: #EBEBEB;
+                border-style: solid;
+                height: 3em;
+                outline-style: none;
+                color: black;
+                background: #F7F7F7
+              }
+  
+              &__title {
+                margin: 0;
+                padding-bottom: 6px;
+                color: #262626;
+                font-weight: 500;
+              }
+  
+              &__error {
+                padding-top: 6px;
+                color: #FF002E;
+                font-size: 12px;
+              }
+            }
+  
+            &__submit {
               width: 100%;
-              padding-left: $contact_padding_v + 2px;
-              border-radius: 2px;
-              border-width: 1px;
-              border-color: #EBEBEB;
-              border-style: solid;
               height: 3em;
-              outline-style: none;
-              color: black;
-              background: #F7F7F7
+              border-radius: 2px; 
+              border-width: 1px;
+              border-color: #3F6DE1;
+              color: white;
+              background-color:#3F6DE1;
             }
-
-            &__title {
-              margin: 0;
-              padding-bottom: $contact_padding_v - 2px;
-              color: #262626;
-              font-weight: 500;
-            //   color: #3F6DE1;
-            }
-
-            &__error {
-              padding-top: 6px;
-              color: #FF002E;
-              font-size: 12px;
+  
+            &__submit:hover {
+              background-color: #3F6DE1;
+              color: white;
             }
           }
 
-          &__submit {
-            width: 100%;
-            // margin-left:15%;
-            height: 3em;
-            border-radius: 2px; 
-            border-width: 1px;
-            border-color: #3F6DE1;
-            color: white;
-            background-color:#3F6DE1;
-          }
 
-          &__submit:hover {
-            background-color: #3F6DE1;
-            color: white;
-          }
-        }
+        //
+        // NODE-SPECIFIC STYLING
+        //
+
+        // .contact__form__card {
+        //   $contact_padding_v: 8px;
+        //   background-color: white;
+        //   color: black;
+        //   padding: 8px 20px 20px 20px;
+
+        //   &__container {
+        //     display: flex;
+        //     flex-direction: column;
+        //     padding-bottom: $contact_padding_v + 10px;
+
+        //     &__input {
+        //       width: 100%;
+        //       padding-left: $contact_padding_v + 2px;
+        //       border-radius: 2px;
+        //       border-width: 1px;
+        //       border-color: #EBEBEB;
+        //       border-style: solid;
+        //       height: 3em;
+        //       outline-style: none;
+        //       color: black;
+        //       background: #F7F7F7
+        //     }
+
+        //     &__title {
+        //       margin: 0;
+        //       padding-bottom: $contact_padding_v - 2px;
+        //       color: #262626;
+        //       font-weight: 500;
+        //     //   color: #3F6DE1;
+        //     }
+
+        //     &__error {
+        //       padding-top: 6px;
+        //       color: #FF002E;
+        //       font-size: 12px;
+        //     }
+        //   }
+
+        //   &__submit {
+        //     width: 100%;
+        //     // margin-left:15%;
+        //     height: 3em;
+        //     border-radius: 2px; 
+        //     border-width: 1px;
+        //     border-color: #3F6DE1;
+        //     color: white;
+        //     background-color:#3F6DE1;
+        //   }
+
+        //   &__submit:hover {
+        //     background-color: #3F6DE1;
+        //     color: white;
+        //   }
+        // }
 
         .address-apartment-container {
             margin-top: 18px;
@@ -1131,7 +1194,7 @@
         border-radius: 3px 3px 0px 3px;
     }
 
-    .wc-message-content-contact {
+    .wc-message-content-node {
         background-color: white;
         color: black;
         box-shadow: $gideon-shadow;
@@ -1299,7 +1362,7 @@
         left: -6px;
     }
 
-    .wc-message-contact {
+    .wc-message-node {
       margin-left: auto;
       border: none;
       width: $gideon-node-width
