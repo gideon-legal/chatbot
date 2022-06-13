@@ -76,11 +76,13 @@ class Disclaimer extends React.Component<DisclaimerProps, {}> {
       <div className="disclaimer__card">
         <div className="disclaimer__card__title">Disclaimer</div>
         <div className="disclaimer__card__message">
-          <FormattedText
-            text={ this.props.text }
-            format={ 'markdown' }
-            onImageLoad={ this.props.onImageLoad }
-          />
+          <div className="disclaimer__card__inner__message">
+            <FormattedText
+              text={ this.props.text }
+              format={ 'markdown' }
+              onImageLoad={ this.props.onImageLoad }
+            />
+          </div>
         </div>
         <div className="disclaimer__card__buttons">
           <ul>{ this.props.activityWithSuggestedActions.suggestedActions.actions.map((action, index) =>

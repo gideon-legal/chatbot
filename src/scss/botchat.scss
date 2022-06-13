@@ -193,7 +193,8 @@
         box-sizing: border-box;
         bottom: $consoleHeight;
         left: 0;
-        transform: translateY(0);
+        // Commented out for datepicker node
+        // transform: translateY(0);
         outline: 0;
         background: white;
         overflow-x: hidden;
@@ -464,13 +465,22 @@
             &__message {
                 font-size: 14px;
                 font-weight: 450;
-                padding: 30px;
+                padding: 0 20px;
+                margin: 20px 0;
                 line-height: 1.3em;
                 // margin: 10px 10px 20px;
             }
 
+            &__inner__message {
+                width: 100%;
+                background-color: #F7F7F7;
+                padding: 20px;
+                max-height: 293px;
+                overflow: auto;
+            }
+
             &__buttons {
-                margin-bottom:auto;
+                margin-bottom: 20px;
                 margin-top:0;
 
                 ul {
@@ -491,11 +501,13 @@
                         overflow-wrap: break-word;
                         text-align: right;
                         padding: 10px;
-                        margin-left: 6.4%;
-                        margin-right: 6.4%;
-                        margin-bottom: 30px;
+                        margin-left: 20px;
+                        margin-right: 20px;
+                        margin-bottom: 10px;
                         text-align: center;
                         box-shadow: 2px 2px 4px 0px $c_shadow;
+                        font-size: 16px;
+                        height: 52px;
                     }
 
                     button:focus,
@@ -592,6 +604,10 @@
         /*transition: max-height 2s ease-in-out;*/
     }
 
+    .wc-message-wrapper-overflow-visible {
+        overflow: visible;
+    }
+
     .wc-message-wrapper.bot {
       display:flex;
       flex-direction: row;
@@ -671,9 +687,9 @@
         font-size: $message_font_size;
         // background-color: #3F6DE1;
 
-        .wc-message-date &, .wc-message-handoff & {
-            padding:0 !important;
-        }
+        // .wc-message-date &, .wc-message-handoff & {
+        //     padding:0 !important;
+        // }
 
         .prefix__radio {
             display: block;
@@ -786,6 +802,10 @@
             background-color: #3F6DE1;
             color: white;
           }
+        }
+
+        .address-apartment-container {
+            margin-top: 18px;
         }
       }
 
@@ -1118,6 +1138,11 @@
         padding: 5px 0px 0px 0px;
     }
 
+    .wc-message-content-date {
+        box-shadow: $gideon-shadow;
+        padding: 5px 0px 0px 0px;
+    }
+
     .wc-message-from-me {
       background-color:white;
     //   border-top: 5px solid #3f6de1;
@@ -1175,7 +1200,79 @@
     .wc-message-from-me svg.wc-message-callout {
         right: -6px;
     }
+/* from me - blank */
+.wc-message-from-me-blank {
+    float: right;
+    margin-right: 6px;
+    // margin-left: auto;
+}
 
+.wc-message-from-me-blank.wc-message-from {
+    text-align: right;
+}
+
+.wc-message-from-me-blank .wc-message-content-blank {
+    background-color: white;
+    color: $c01;
+    border-radius: 3px 3px 0px 3px;
+}
+
+.wc-message-content-blank-contact {
+    background-color: white;
+    color: white;
+    box-shadow: $gideon-shadow;
+    padding: 5px 0px 0px 0px;
+}
+
+.wc-message-from-me-blank {
+  background-color:white;
+//   border-top: 5px solid #3f6de1;
+}
+
+.wc-message-from-me-blank.wc-message-file {
+    margin-left: auto;
+    width: $gideon-node-width;
+}
+
+.wc-message-from-me-blank.wc-message-file .wc-message-content {
+    background-color: transparent;
+    border: none;
+    border-top: 5px solid white;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+    padding: 10px 30px 30px; 
+}
+
+.wc-message-from-me-blank.wc-message-address {
+    background-color: $c_messageFromMe;
+    color: $c01;
+    border-radius: 3px 3px 0px 3px;
+    margin-left: auto;
+    width: $gideon-node-width;
+}
+
+.wc-message-content-address-blank {
+    background-color: white;
+    box-shadow: 0px 1px 10px $c_shadow;
+    padding: 5px 0px 0px 0px;
+}
+
+.wc-message-content-address-blank .gideon-submit-button {
+    // TODO: Discuss with JoeyD how to fix margin inconsistencies
+    margin-top: 0 !important;
+}
+
+.wc-message-from-me-blank svg.wc-message-callout path {
+    fill: white;
+}
+
+.wc-message-from-me-blank svg.wc-message-callout path.point-left {
+    display: none;
+}
+
+.wc-message-from-me-blank svg.wc-message-callout {
+    right: -6px;
+}
 /* from bot */
 
     .wc-message-from-bot {
@@ -1208,6 +1305,12 @@
       width: $gideon-node-width
     }
 
+    .wc-message-date {
+        margin-left: auto;
+        border: none;
+        width: $gideon-node-width
+      }
+
     .wc-message-imBack {
       margin-left: auto;
     }
@@ -1217,7 +1320,11 @@
     }
 
     .wc-message-disclaimer {
-        width: $gideon-node-width;
+        // If we want it to match other nodes
+        // width: $gideon-node-width;
+
+        // We want it to be bigger than the rest
+        width: 100%;
         margin-left: auto;
     }
 
@@ -1326,7 +1433,6 @@
 
         svg {
             fill: #3f6de1;
-            margin-top: 19px;
             margin-right: 16px;
         }
 
@@ -1394,10 +1500,12 @@
 
         .wc-send {
             right: 0;
+            top: 20px;
+            height: 55px;
         }
 
         .wc-send.hidden {
-            visibility: hidden
+            visibility: hidden;
         }
 
         &.has-upload-button .wc-textbox {

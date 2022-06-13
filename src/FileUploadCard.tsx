@@ -112,7 +112,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
     }
 
     handleSkipFile(e: React.MouseEvent<HTMLDivElement>) {
-        this.props.sendMessage('');
+        this.props.sendMessage('Skip Upload');
     }
 
     getSignedUrl = (data: any) => {
@@ -276,9 +276,8 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                                 </div>
                             </div>
                         ))};
-
-                        <SubmitButton onClick={this.clickToSubmitFile} />
                     </div>
+                    <SubmitButton onClick={this.clickToSubmitFile} />
                 </div>
             );
         }

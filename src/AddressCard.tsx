@@ -34,12 +34,16 @@ interface AddressProps {
 
 export interface MessageWithAddress extends Message {
     address: string;
+    apartment: string;
 }
 
 export interface AddressState {
     address: string;
+    addressSelected: boolean;
     addressError: string;
     formattedMessage: string;
+    apartment: string;
+    apartmentError: string;
 }
 
 class AddressForm extends React.Component<AddressProps, AddressState> {
@@ -51,13 +55,15 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
         this.state = {
             address: '',
             addressError: undefined,
-            formattedMessage: ''
+            addressSelected: false,
+            formattedMessage: '',
+            apartment: '',
+            apartmentError: undefined
         };
-
-        console.log(this.props);
 
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
         this.clickToSubmitContactInformation = this.clickToSubmitContactInformation.bind(this);
     }
 
@@ -69,10 +75,37 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
     }
 
     getFormattedAddress = () => {
-        return JSON.stringify({
-            ...this.state.address && { address: this.state.address }
+        const addressArr = this.state.address.split(',');
+        let addressWApt = this.state.address;
+        if (this.state.apartment !== '') {
+            addressWApt = addressArr[0] + ', ' + this.state.apartment + ',' + addressArr[1] + ',' + addressArr[2] + ',' + addressArr[3];
+        }
+        // has: street, city, state - zipcode, country
+        const stateZip = addressArr[2].split(' ');
+        if (stateZip.length === 3) {
+            // contains zip code
+            return(JSON.stringify({
+                address: addressWApt,
+                apartment: this.state.apartment,
+                street: addressArr[0],
+                city: addressArr[1],
+                state: stateZip[1],
+                zipcode: stateZip[2]
+            }));
+        } else {
+            return(JSON.stringify({
+                address: addressWApt,
+                apartment: this.state.apartment,
+                street: addressArr[0],
+                city: addressArr[1],
+                state: stateZip[1],
+                zipcode: ''
+            }));
+        }
+    }
 
-        });
+    apartmentActive = () => {
+        return this.props.node.meta && this.props.node.meta.apartment;
     }
 
     private handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>): any {
@@ -107,10 +140,17 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
     }
 
     handleChange(address: string) {
-        this.setState({ address });
+        this.setState({ address, addressSelected: false });
     }
 
     handleSelect(address: string) {
+        if (this.state.addressSelected) { // send message
+            this.resetShell();
+            this.props.sendMessage(this.getFormattedAddress());
+            document.removeEventListener('keypress', this.handleKeyDown.bind(this));
+            return;
+        }
+        this.setState({ address, addressSelected: true });
         geocodeByAddress(address)
             .then(results => getLatLng(results[0]))
             .then(latLang => {
@@ -136,6 +176,8 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
                                         placeholder: 'Search Places ...',
                                         className: 'contact__form__card__container__input'
                                     })}
+                                    autoFocus={true}
+                                    onKeyPress={ e => this.onKeyPress(e) }
                                 />
                                 <div className="autocomplete-dropdown-container">
                                     {loading && <div>Loading...</div>}
@@ -161,6 +203,22 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
                             </div>
                         )}
                     </PlacesAutocomplete>
+                    {this.apartmentActive() && (<div className="address-apartment-container">
+                    <input
+                       type="text"
+                       className={'contact__form__card__container__input'}
+                       // ref={ input => this.textInputName = input }
+                       value={ this.state.apartment }
+                       onChange={ e => this.setState({
+                       ...this.state,
+                       apartment: e.target.value
+                       }) }
+                      placeholder="Apt/Suite Number (Optional)"
+                       aria-label={null}
+                       aria-live="polite"
+                       onKeyPress={ e => this.onKeyPress(e) }
+                    />
+                    </div>)}
                     {this.state.addressError && <span className="contact__form__card__container__error">{this.state.addressError}</span>}
                 </div>
                 <SubmitButton onClick={ this.clickToSubmitContactInformation } />
