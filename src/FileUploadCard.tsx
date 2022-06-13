@@ -276,9 +276,8 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                                 </div>
                             </div>
                         ))};
-
-                        <SubmitButton onClick={this.clickToSubmitFile} />
                     </div>
+                    <SubmitButton onClick={this.clickToSubmitFile} />
                 </div>
             );
         }

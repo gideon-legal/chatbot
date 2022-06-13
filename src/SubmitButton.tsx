@@ -31,7 +31,7 @@ export class SubmitButton extends React.Component<SubmitButtonProps, SubmitButto
     const buttonClass = 'gideon-submit-button ' + (this.props.disabled ? 'gideon-submit-button-disabled' : '' );
 
     return (
-        <button className={buttonClass} onClick={this.props.onClick} style={{marginTop: '20px', padding: '18px'}} onMouseOver={() => this.setHover(true)} onMouseLeave={() => this.setHover(false)} onFocus={() => this.setFocus(true)} onBlur={() => this.setFocus(false)}>
+        <button className={ buttonClass } onClick={this.props.onClick} style={{padding: '18px'}} onMouseEnter={() => this.setHover(true)} onMouseLeave={() => this.setHover(false)} onFocus={() => this.setFocus(true)} onBlur={() => this.setFocus(false)}>
           <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             <div style={{position: 'relative'}}>
               Submit

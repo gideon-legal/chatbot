@@ -39,6 +39,7 @@ export interface MessageWithAddress extends Message {
 
 export interface AddressState {
     address: string;
+    addressSelected: boolean;
     addressError: string;
     formattedMessage: string;
     apartment: string;
@@ -54,6 +55,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
         this.state = {
             address: '',
             addressError: undefined,
+            addressSelected: false,
             formattedMessage: '',
             apartment: '',
             apartmentError: undefined
@@ -138,11 +140,17 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
     }
 
     handleChange(address: string) {
-        this.setState({ address });
+        this.setState({ address, addressSelected: false });
     }
 
     handleSelect(address: string) {
-        this.setState({ address });
+        if (this.state.addressSelected) { // send message
+            this.resetShell();
+            this.props.sendMessage(this.getFormattedAddress());
+            document.removeEventListener('keypress', this.handleKeyDown.bind(this));
+            return;
+        }
+        this.setState({ address, addressSelected: true });
         geocodeByAddress(address)
             .then(results => getLatLng(results[0]))
             .then(latLang => {
@@ -168,6 +176,8 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
                                         placeholder: 'Search Places ...',
                                         className: 'contact__form__card__container__input'
                                     })}
+                                    autoFocus={true}
+                                    onKeyPress={ e => this.onKeyPress(e) }
                                 />
                                 <div className="autocomplete-dropdown-container">
                                     {loading && <div>Loading...</div>}
@@ -193,13 +203,11 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
                             </div>
                         )}
                     </PlacesAutocomplete>
-                    {this.apartmentActive() && (<div className="contact__form__card__container">
-                    <span className={'contact__form__card__container__title'}></span>
+                    {this.apartmentActive() && (<div className="address-apartment-container">
                     <input
                        type="text"
                        className={'contact__form__card__container__input'}
                        // ref={ input => this.textInputName = input }
-                       autoFocus={true}
                        value={ this.state.apartment }
                        onChange={ e => this.setState({
                        ...this.state,
@@ -208,6 +216,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
                       placeholder="Apt/Suite Number (Optional)"
                        aria-label={null}
                        aria-live="polite"
+                       onKeyPress={ e => this.onKeyPress(e) }
                     />
                     </div>)}
                     {this.state.addressError && <span className="contact__form__card__container__error">{this.state.addressError}</span>}

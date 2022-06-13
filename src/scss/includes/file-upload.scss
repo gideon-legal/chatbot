@@ -70,11 +70,16 @@ $gd_gideon_blue: #3F6DE1;
 
 .uploaded-files-container {
   padding: 20px 0px 0px;
+  margin-bottom: 18px;
 }
 
 .uploaded-file-name-readonly {
   margin-top: 20px;
   color: #262626;
+}
+
+.uploaded-file-name-readonly-link {
+  margin-top: 20px;
 }
 
 .uploaded-files-text {
