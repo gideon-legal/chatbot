@@ -1322,6 +1322,7 @@
         // We want it to be bigger than the rest
         width: 100%;
         margin-left: auto;
+        max-width: 100%;
     }
 
     // Stuff for full screen that isn't working yet -TO 5/13
@@ -1730,4 +1731,16 @@
         background-color: #3F6DE1;
         border-color: #3F6DE1;
         color: $c01;
+    }
+
+    .gideon-submit-button-disabled {
+        background-color: #B5B5B5 !important;
+        color: white !important;
+    }
+
+  
+    .gideon-submit-button-disabled:hover {
+        background-color: #B5B5B5 !important;
+        cursor: not-allowed !important;
+        color: white !important;
     }
