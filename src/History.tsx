@@ -1,4 +1,5 @@
 import { Activity, CardActionTypes, DirectLineOptions, Message, User } from 'botframework-directlinejs';
+import * as moment from 'moment';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { ActivityView } from './ActivityView';
@@ -212,6 +213,11 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                 tabIndex={ 0 }
             >
                 <div className="wc-message-group-content" ref={ div => { if (div) { this.scrollContent = div; } }}>
+                    <div className="wc-date-header">
+                        <div className="wc-date-header-line"></div>
+                        <div className="wc-date-header-text">{ moment().format('MM/DD/YYYY') }</div>
+                        <div className="wc-date-header-line"></div>
+                    </div>
                     { content }
                 </div>
             </div>
