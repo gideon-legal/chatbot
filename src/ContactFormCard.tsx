@@ -2,8 +2,8 @@ import { DirectLineOptions, Message} from 'botframework-directlinejs';
 import { parsePhoneNumberFromString } from 'libphonenumber-js/max';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import {NodeContainer} from './nodes/components/NodeContainer';
-import {NodeHeader} from './nodes/components/NodeHeader';
+import {NodeHeader} from './nodes/containers/NodeHeader';
+import {NodeInputContainer} from './nodes/containers/NodeInputContainer';
 import { ChatState } from './Store';
 import { ChatActions, sendMessage } from './Store';
 import { defaultStrings } from './Strings';
@@ -255,7 +255,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
           </div>
           {this.state.prefixError && <span className="contact__form__card__container__error">{this.state.prefixError}</span>}
         </div>)}
-        {this.nameActive && (<NodeContainer
+        {this.nameActive && (<NodeInputContainer
           nodeType="contact__form__card"
 
           title={{
@@ -286,7 +286,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
             this.state.nameError
           }
         />)}
-        {this.emailActive() && (<NodeContainer
+        {this.emailActive() && (<NodeInputContainer
           nodeType="contact__form__card"
 
           title={{
@@ -315,7 +315,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
 
           errorOn={this.state.emailError}
         />)}
-        {this.phoneActive() && (<NodeContainer
+        {this.phoneActive() && (<NodeInputContainer
           nodeType="contact__form__card"
 
           title={{

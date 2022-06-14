@@ -6,7 +6,7 @@ import { FaCaretLeft } from 'react-icons/fa';
 import { connect } from 'react-redux';
 import { availableTimes } from './api/bot';
 import { OpenCalendarIcon } from './assets/icons/DatePickerIcons';
-import { NodeHeader } from './nodes/components/NodeHeader';
+import { NodeHeader } from './nodes/containers/NodeHeader';
 import { ChatState } from './Store';
 import { ChatActions, sendMessage } from './Store';
 import {SubmitButton} from './SubmitButton';

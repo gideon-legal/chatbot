@@ -12,8 +12,9 @@ import { activityWithSuggestedActions } from './activityWithSuggestedActions';
 import { doCardAction, IDoCardAction } from './Chat';
 import { FormattedText } from './FormattedText';
 import { filteredActivities } from './History';
-import { NodeContainer } from './nodes/components/NodeContainer';
-import { NodeHeader } from './nodes/components/NodeHeader';
+import { NodeCustomContainer } from './nodes/containers/NodeCustomContainer';
+import { NodeHeader } from './nodes/containers/NodeHeader';
+import { NodeInputContainer } from './nodes/containers/NodeInputContainer';
 import { ChatState } from './Store';
 import { ChatActions, sendMessage } from './Store';
 import { defaultStrings } from './Strings';
@@ -168,50 +169,51 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
                     nodeType="address__card"
                     header="Address"
                 />
-                <NodeContainer
+                <NodeCustomContainer
                     nodeType="address__card"
-                >
-                    <PlacesAutocomplete
-                        value={this.state.address}
-                        onChange={this.handleChange}
-                        onSelect={this.handleSelect}
-                    >
-                        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                            <div>
-                                <input
-                                    {...getInputProps({
-                                        placeholder: 'Search Places ...',
-                                        className: 'contact__form__card__container__input'
-                                    })}
-                                    autoFocus={true}
-                                    onKeyPress={ e => this.onKeyPress(e) }
-                                />
-                                <div className="autocomplete-dropdown-container">
-                                    {loading && <div>Loading...</div>}
-                                    {suggestions.map(suggestion => {
-                                        const className = suggestion.active
-                                            ? 'address-suggestion-item-active'
-                                            : 'address-suggestion-item';
-                                        const style = suggestion.active
-                                            ? { backgroundColor: '#fafafa', cursor: 'pointer', color: 'black' }
-                                            : { backgroundColor: '#ffffff', cursor: 'pointer', color: 'black' };
-                                        return (
-                                            <div
-                                                {...getSuggestionItemProps(suggestion, {
-                                                    className,
-                                                    style
-                                                })}
-                                            >
-                                                <span>{suggestion.description}</span>
-                                            </div>
-                                        );
-                                    })}
+                    content={
+                        <PlacesAutocomplete
+                            value={this.state.address}
+                            onChange={this.handleChange}
+                            onSelect={this.handleSelect}
+                        >
+                            {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                                <div>
+                                    <input
+                                        {...getInputProps({
+                                            placeholder: 'Search Places ...',
+                                            className: 'node__container__input'
+                                        })}
+                                        autoFocus={true}
+                                        onKeyPress={ e => this.onKeyPress(e) }
+                                    />
+                                    <div className="autocomplete-dropdown-container">
+                                        {loading && <div>Loading...</div>}
+                                        {suggestions.map(suggestion => {
+                                            const className = suggestion.active
+                                                ? 'address-suggestion-item-active'
+                                                : 'address-suggestion-item';
+                                            const style = suggestion.active
+                                                ? { backgroundColor: '#fafafa', cursor: 'pointer', color: 'black' }
+                                                : { backgroundColor: '#ffffff', cursor: 'pointer', color: 'black' };
+                                            return (
+                                                <div
+                                                    {...getSuggestionItemProps(suggestion, {
+                                                        className,
+                                                        style
+                                                    })}
+                                                >
+                                                    <span>{suggestion.description}</span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-                    </PlacesAutocomplete>
-                </NodeContainer>
-                {this.apartmentActive() && (<NodeContainer
+                            )}
+                        </PlacesAutocomplete>
+                    }
+                />
+                {this.apartmentActive() && (<NodeInputContainer
                     nodeType="address__card"
 
                     input={{
