@@ -3,9 +3,7 @@ import { parsePhoneNumberFromString } from 'libphonenumber-js/max';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import {NodeContainer} from './nodes/components/NodeContainer';
-import {NodeError} from './nodes/components/NodeError';
-import {NodeInput} from './nodes/components/NodeInput';
-import {NodeTitle} from './nodes/components/NodeTitle';
+import {NodeHeader} from './nodes/components/NodeHeader';
 import { ChatState } from './Store';
 import { ChatActions, sendMessage } from './Store';
 import { defaultStrings } from './Strings';
@@ -197,7 +195,10 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
   render() {
     return (
       <div className="contact__form__card node">
-        <div className="contact_label"><b>Contact Information</b></div>
+        <NodeHeader
+          nodeType="contact__form__card"
+          header="Contact Information"
+        />
         {this.prefixActive() && (<div className="contact__form__card__container">
           <span className={'contact__form__card__container__title'}>Title <span className="required">*</span></span>
           <div className="prefix__radio">

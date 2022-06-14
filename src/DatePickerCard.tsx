@@ -6,6 +6,7 @@ import { FaCaretLeft } from 'react-icons/fa';
 import { connect } from 'react-redux';
 import { availableTimes } from './api/bot';
 import { OpenCalendarIcon } from './assets/icons/DatePickerIcons';
+import { NodeHeader } from './nodes/components/NodeHeader';
 import { ChatState } from './Store';
 import { ChatActions, sendMessage } from './Store';
 
@@ -356,6 +357,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
             <span>{this.getUsersTimeZone()}</span>
           </div>
           <div className="gd-date-picker-days-container">
+            {console.log(this.state)}
           {this.state.monthAvailabilities && !this.state.loading &&
             keys.map(date =>
               this.availabilitiesExistOnDay(date) && <button
@@ -445,9 +447,12 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         }
 
         return (
-          <div className={`gd-date-picker ${withTime && 'withTime'} date-node`}>
+          <div className={`gd-date-picker ${withTime && 'withTime'} date-node node`}>
+            <NodeHeader
+              header="Select a Date"
+            />
             <div className="gd-selected-date-container">
-              <span className="gd-selected-date">Date Picker</span>
+              <span className="gd-selected-date"></span>
               {/* <span className="gd-selected-date">Date Picker{headerMessage}</span> */}
             </div>
             <div className="date-picker-node-content">
@@ -501,11 +506,10 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
       const { withTime, dateSelected, duration } = this.state;
 
       return (
-        <div className={`gd-date-picker ${withTime && 'withTime'}`}>
-            <div className="gd-date-picker-header">
-                <span className="gd-header-schedule-meeting">Schedule a Meeting</span>
-                <span className="gd-header-duration">{`${duration} Minutes`}</span>
-            </div>
+        <div className={`gd-date-picker ${withTime && 'withTime'} node`}>
+            <NodeHeader
+              header="Schedule Appointment"
+            />
             {!dateSelected && this.renderDayPicker()}
             {dateSelected && this.renderHourPicker()}
             <button type="button" className="gd-submit-date-button" onClick={e => this.clickToSubmitDate(e) } title="Submit">
