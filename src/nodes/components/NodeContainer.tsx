@@ -4,10 +4,10 @@ import { InputProps, NodeInput } from './NodeInput';
 import { NodeTitle, TitleProps } from './NodeTitle';
 
 export interface ContainerProps {
-    input: InputProps;
-    title: TitleProps;
-    error: ErrorProps;
-    errorOn: any;
+    input?: InputProps;
+    title?: TitleProps;
+    error?: ErrorProps;
+    errorOn?: any;
     nodeType?: string;
 }
 
