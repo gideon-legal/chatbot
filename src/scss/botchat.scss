@@ -711,7 +711,7 @@
         }
 
         .prefix__radio label {
-            color: black;
+            color: $gideon-black;
             margin-right: 5%;
             @include prefixSmallThreshold {
                 margin-right: 4px;
@@ -794,18 +794,18 @@
 
         .wc-message-content-node {
             background-color: white;
-            color: black;
+            color: $gideon-black;
             box-shadow: $gideon-shadow;
             padding: 5px 0px 0px 0px;
         }
 
         .node {
             background-color: white;
-            color: black;
+            color: $gideon-black;
             padding: 8px 20px 20px 20px;
 
             &__header {
-                color: black;
+                color: $gideon-black;
                 margin-bottom: 20px;
                 font-size: 16px;
             }
@@ -824,7 +824,7 @@
                 border-style: solid;
                 height: 3em;
                 outline-style: none;
-                color: black;
+                color: $gideon-black;
                 background: #F7F7F7
               }
   
@@ -1192,7 +1192,7 @@
 
     .wc-message-content-node {
         background-color: white;
-        color: black;
+        color: $gideon-black;
         box-shadow: $gideon-shadow;
         padding: 5px 0px 0px 0px;
     }

@@ -94,12 +94,14 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
     constructor(props: DatePickerProps) {
         super(props);
 
+        const isHandoff = this.props.node.node_type === 'handoff';
+
         this.state = {
-            startDate: moment(),
+            startDate: (isHandoff ? null : moment()),
             endDate: null,
-            dateSelected: true,
+            dateSelected: !isHandoff,
             timeSelected: false,
-            selectChoice: 'endDate',
+            selectChoice: (isHandoff ? 'startDate' : 'endDate'),
             withRange: props.node.custom_attributes.includes('range'),
             withTime: props.withTime || props.node.custom_attributes.includes('time') || props.node.node_type === 'handoff',
             showTimeSelectClass: 'hide-time-select',
@@ -512,7 +514,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
             {!dateSelected && this.renderDayPicker()}
             {dateSelected && this.renderHourPicker()}
             <button type="button" className="gd-submit-date-button" onClick={e => this.clickToSubmitDate(e) } title="Submit">
-                Schedule Meeting
+                Schedule
             </button>
         </div>
     );
