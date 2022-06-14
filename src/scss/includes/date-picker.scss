@@ -350,8 +350,15 @@ $width: 280px;
     }
 
     .gd-selected-date-container {
-        height: 54px;
+        // height: 54px;
         background-color: white;
+        padding: 10px 30px 0;
+        font-size: 18px;
+        color: #262626;
+        text-align: left;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 19px;
     }
 
     .react-datepicker {
@@ -604,11 +611,12 @@ $width: 280px;
 
 .date-picker-node-content-body {
     // position: relative;
+    margin-bottom: 20px;
 }
 
 .date-picker-popup-outer-container {
     position: absolute;
-    top: -170px;
+    top: -200px;
     left: 5px;
     z-index: 1;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);

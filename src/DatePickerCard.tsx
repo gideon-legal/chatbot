@@ -9,6 +9,7 @@ import { OpenCalendarIcon } from './assets/icons/DatePickerIcons';
 import { NodeHeader } from './nodes/components/NodeHeader';
 import { ChatState } from './Store';
 import { ChatActions, sendMessage } from './Store';
+import {SubmitButton} from './SubmitButton';
 
 export interface Node {
     node_type: string;
@@ -111,6 +112,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         };
 
         this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.clickToSubmitDate = this.clickToSubmitDate.bind(this);
     }
 
     componentDidMount() {
@@ -452,7 +454,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
               header="Select a Date"
             />
             <div className="gd-selected-date-container">
-              <span className="gd-selected-date"></span>
+              Select Date
               {/* <span className="gd-selected-date">Date Picker{headerMessage}</span> */}
             </div>
             <div className="date-picker-node-content">
@@ -488,7 +490,8 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
                 </div>
               </div>
 
-              <button
+              <SubmitButton onClick={e => this.clickToSubmitDate(e) } disabled={ !this.validateSelection() } />
+              {/* <button
                 type="button"
                 className={this.validateSelection() ? 'gd-submit-date-button' : 'gd-submit-date-button gd-submit-date-button-disabled'}
                 onClick={e => this.clickToSubmitDate(e)}
@@ -496,7 +499,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
                 disabled={!this.validateSelection()}
               >
                 Submit
-              </button>
+              </button> */}
             </div>
           </div>
         );

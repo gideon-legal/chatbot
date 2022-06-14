@@ -691,6 +691,14 @@
         //     padding:0 !important;
         // }
 
+        // The prefix bubbles overflow at a width slightly less than this, so this threshold is used to adjust styling
+        // which is only used for the prefix bubble styling
+        @mixin prefixSmallThreshold {
+            @media (max-width: 530px) {
+                @content;
+            }
+        }
+
         .prefix__radio {
             display: block;
             position: relative;
@@ -700,6 +708,9 @@
         .prefix__radio label {
             color: black;
             margin-right: 5%;
+            @include prefixSmallThreshold {
+                margin-right: 4px;
+            }
         }
 
         .prefix__radio input {
@@ -717,6 +728,12 @@
             display: none;
         }
 
+        .prefix_label {
+            @include prefixSmallThreshold {
+                font-size: 12px;
+            }
+        }
+
         .prefix_label input:checked ~ .checkmark::after {
             display: block;
         }
@@ -728,10 +745,20 @@
             width: 9px;
             top: 2.5px;
             left: 2px;
+            @include prefixSmallThreshold {
+                height: 4.5px;
+                width: 4.5px;
+                top: 0.5px;
+                left: 0.5px;
+            }
         }
 
         .prefix_text {
             margin-left: 20px;
+            @include prefixSmallThreshold {
+                vertical-align: top;
+                margin-left: 12px;
+            }
         }
 
         .checkmark {
@@ -742,6 +769,11 @@
             border: 1px solid #EBEBEB;
             border-radius: 50%;
             margin-left: 3px;
+            @include prefixSmallThreshold {
+                height: 7.5px;
+                width: 7.5px;
+                margin-top: 3px;
+            }
         }
 
 
@@ -1345,8 +1377,9 @@
         // width: $gideon-node-width;
 
         // We want it to be bigger than the rest
-        width: 100%;
+        width: 98%;
         margin-left: auto;
+        max-width: 100%;
     }
 
     // Stuff for full screen that isn't working yet -TO 5/13
@@ -1755,4 +1788,16 @@
         background-color: #3F6DE1;
         border-color: #3F6DE1;
         color: $c01;
+    }
+
+    .gideon-submit-button-disabled {
+        background-color: #B5B5B5 !important;
+        color: white !important;
+    }
+
+  
+    .gideon-submit-button-disabled:hover {
+        background-color: #B5B5B5 !important;
+        cursor: not-allowed !important;
+        color: white !important;
     }
