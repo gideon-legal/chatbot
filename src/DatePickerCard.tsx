@@ -450,9 +450,6 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
 
         return (
           <div className={`gd-date-picker ${withTime && 'withTime'} date-node node`}>
-            <NodeHeader
-              header="Select a Date"
-            />
             <div className="gd-selected-date-container">
               Select Date
               {/* <span className="gd-selected-date">Date Picker{headerMessage}</span> */}

@@ -441,26 +441,12 @@
             // animation: disclaimerAnimation 1s;
             animation: animationFrames 2s;
             animation-iteration-count: 1;
-            background-color: white;
             // bottom: $consoleHeight;
             top: $headerTotalHeight;
             display:flex;
             flex-direction: column;
             overflow-y: scroll;
-            box-shadow: 0px 1px 20px rgba(0, 0, 0, 0.2);
-            border-radius: 3px 0px 3px 3px;
-            border-top: 5px solid #3F6DE1;
-            border-radius: 3px 3px 0px 0px;
             width: 100%;
-
-            &__title {
-                font-weight: 700;
-                font-size: 18px;
-                line-height: 19px;
-                letter-spacing: 0.04em;
-                padding: 10px 30px 0px;
-                color: #262626;
-            }
             
             &__message {
                 font-size: 14px;
@@ -802,6 +788,7 @@
             &__header {
                 color: black;
                 margin-bottom: 20px;
+                font-size: 16px;
             }
   
             &__container {
@@ -1221,12 +1208,6 @@
         border-radius: 3px 3px 0px 3px;
         margin-left: auto;
         width: $gideon-node-width;
-    }
-
-    .wc-message-content-address {
-        background-color: white;
-        box-shadow: 0px 1px 10px $c_shadow;
-        padding: 5px 0px 0px 0px;
     }
 
     .wc-message-content-address .gideon-submit-button {

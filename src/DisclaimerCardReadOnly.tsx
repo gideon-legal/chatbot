@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { FormattedText } from './FormattedText';
+import { NodeHeader } from './nodes/containers/NodeHeader';
 
 export interface Node {
   node_type: string;
@@ -28,8 +29,11 @@ export class DisclaimerCardReadOnly extends React.Component<DisclaimerCardReadOn
 
     return (
       <div>
-        <div className="disclaimer__card">
-          <div className="disclaimer__card__title">Disclaimer</div>
+        <div className="disclaimer__card node">
+          <NodeHeader
+            header="Disclaimer"
+            nodeType="disclaimer__card"
+          />
           {this.state.showDisclaimer &&
             <div className="disclaimer__card__message">
                 <div className="disclaimer__card__inner__message">

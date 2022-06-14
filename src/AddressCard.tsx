@@ -235,65 +235,6 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
 
                     errorOn={this.state.addressError}
                 />)}
-
-                {/* <div className="node__container address__card__container">
-                    <PlacesAutocomplete
-                        value={this.state.address}
-                        onChange={this.handleChange}
-                        onSelect={this.handleSelect}
-                    >
-                        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                            <div>
-                                <input
-                                    {...getInputProps({
-                                        placeholder: 'Search Places ...',
-                                        className: 'contact__form__card__container__input'
-                                    })}
-                                    autoFocus={true}
-                                    onKeyPress={ e => this.onKeyPress(e) }
-                                />
-                                <div className="autocomplete-dropdown-container">
-                                    {loading && <div>Loading...</div>}
-                                    {suggestions.map(suggestion => {
-                                        const className = suggestion.active
-                                            ? 'address-suggestion-item-active'
-                                            : 'address-suggestion-item';
-                                        const style = suggestion.active
-                                            ? { backgroundColor: '#fafafa', cursor: 'pointer', color: 'black' }
-                                            : { backgroundColor: '#ffffff', cursor: 'pointer', color: 'black' };
-                                        return (
-                                            <div
-                                                {...getSuggestionItemProps(suggestion, {
-                                                    className,
-                                                    style
-                                                })}
-                                            >
-                                                <span>{suggestion.description}</span>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-                        )}
-                    </PlacesAutocomplete>
-                    {this.apartmentActive() && (<div className="address-apartment-container">
-                    <input
-                       type="text"
-                       className={'node__container__input address__card__container__input'}
-                       // ref={ input => this.textInputName = input }
-                       value={ this.state.apartment }
-                       onChange={ e => this.setState({
-                       ...this.state,
-                       apartment: e.target.value
-                       }) }
-                      placeholder="Apt/Suite Number (Optional)"
-                       aria-label={null}
-                       aria-live="polite"
-                       onKeyPress={ e => this.onKeyPress(e) }
-                    />
-                    </div>)}
-                    {this.state.addressError && <span className="node__container__error address__card__container__error">{this.state.addressError}</span>}
-                </div> */}
                 <SubmitButton onClick={ this.clickToSubmitContactInformation } />
             </div>
         );
