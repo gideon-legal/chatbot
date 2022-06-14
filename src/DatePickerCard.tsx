@@ -94,11 +94,11 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         super(props);
 
         this.state = {
-            startDate: null,
+            startDate: moment(),
             endDate: null,
-            dateSelected: false,
+            dateSelected: true,
             timeSelected: false,
-            selectChoice: 'startDate',
+            selectChoice: 'endDate',
             withRange: props.node.custom_attributes.includes('range'),
             withTime: props.withTime || props.node.custom_attributes.includes('time') || props.node.node_type === 'handoff',
             showTimeSelectClass: 'hide-time-select',
