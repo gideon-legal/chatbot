@@ -744,10 +744,6 @@
             margin-left: 3px;
         }
 
-        .contact_label {
-            margin-bottom: 20px;
-        }
-
 
         //
         // GENERAL NODE STYLING
@@ -770,6 +766,11 @@
             background-color: white;
             color: black;
             padding: 8px 20px 20px 20px;
+
+            &__header {
+                color: black;
+                margin-bottom: 20px;
+            }
   
             &__container {
               display: flex;
