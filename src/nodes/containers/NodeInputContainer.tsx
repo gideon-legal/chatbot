@@ -7,10 +7,14 @@ export interface ContainerProps {
     input: InputProps;
     title?: TitleProps;
     error: ErrorProps;
-    errorOn: any;
-    nodeType?: string;
+    errorOn: any;       // condition on which the error message is displayed
+    nodeType?: string;  // node-specific class to apply (optional)
 }
 
+/**
+ * A component for adding a standard input section to a node
+ * This container will have the same styling (and classes) wherever it is used
+ */
 export class NodeInputContainer extends React.Component<ContainerProps, {}> {
     constructor(props: ContainerProps) {
         super(props);

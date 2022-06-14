@@ -2,10 +2,13 @@ import * as React from 'react';
 
 export interface TitleProps {
     title: string;
-    required: boolean;
-    nodeType?: string;
+    required: boolean;  // if true, will display a red asterisk
+    nodeType?: string;  // node-specific class to apply (optional)
 }
 
+/**
+ * Title component to be used in Node Containers
+ */
 export class NodeTitle extends React.Component<TitleProps, {}> {
     constructor(props: TitleProps) {
         super(props);

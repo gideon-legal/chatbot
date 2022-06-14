@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export interface InputProps {
+export interface InputProps {   // TODO: find a way to make this more abstract
     type: string;
     placeholder?: string;
     ref?: (input: any) => any;
@@ -10,9 +10,12 @@ export interface InputProps {
     onKeyPress?: (e: any) => any;
     ariaLabel?: any;
     ariaLive?: any;
-    nodeType?: string;
+    nodeType?: string;  // node-specific class to apply (optional)
 }
 
+/**
+ * Input component to be used in Node Containers
+ */
 export class NodeInput extends React.Component<InputProps, {}> {
     constructor(props: InputProps) {
         super(props);

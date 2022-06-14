@@ -5,11 +5,15 @@ import { NodeTitle, TitleProps } from './NodeTitle';
 export interface ContainerProps {
     title?: TitleProps;
     error?: ErrorProps;
-    errorOn?: any;
+    errorOn?: any;      // condition on which the error message is displayed
     content: any;
-    nodeType?: string;
+    nodeType?: string;  // node-specific class to apply (optional)
 }
 
+/**
+ * A component for adding a standard container to a node
+ * This container and its content will have the same styling wherever it is used
+ */
 export class NodeCustomContainer extends React.Component<ContainerProps, {}> {
     constructor(props: ContainerProps) {
         super(props);
