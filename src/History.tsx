@@ -360,8 +360,8 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
             if (nodeType === 'date' || nodeType === 'handoff' || nodeType === 'file' || nodeType === 'imBack' || nodeType === 'contact' || nodeType === 'address' || nodeType === 'disclaimer') {
                 return (
                     <div data-activity-id={activity.id } className={wrapperClassName}>
-                        <div className={'wc-message wc-message-from-me wc-message-' + nodeType} ref={ div => this.messageDiv = div }>
-                            <div className={ contentClassName + contactClassName }>
+                        <div className={'wc-message wc-message-from-me wc-message-node wc-message-' + nodeType} ref={ div => this.messageDiv = div }>
+                            <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
                                 <ActivityView
                                     format={this.props.format}
                                     size={null}
@@ -383,7 +383,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
             return (
                 <div data-activity-id={activity.id } className={wrapperClassName}>
                     <div className={'wc-message wc-message-from-me wc-message-file'} ref={ div => this.messageDiv = div }>
-                        <div className={ contentClassName + contactClassName }>
+                        <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
                             <FileUploadCardReadOnly files={this.props.files}/>
                         </div>
                     </div>
@@ -392,8 +392,8 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
         } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer') {
             return (
                 <div data-activity-id={activity.id } className={wrapperClassName}>
-                    <div className={'wc-message wc-message-from-me wc-message-disclaimer'} ref={ div => this.messageDiv = div }>
-                        <div className={ contentClassName + contactClassName }>
+                    <div className={'wc-message wc-message-from-me wc-message-node wc-message-disclaimer'} ref={ div => this.messageDiv = div }>
+                        <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
                             <DisclaimerCardReadOnly text={activityCopy.text}/>
                         </div>
                     </div>
