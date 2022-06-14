@@ -5,6 +5,7 @@
 @import "gideon";
 @import "github-markdown.scss";
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap'); // Lato font
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap'); // Poppins font
 
 /* reset */
 
@@ -187,6 +188,27 @@
     .wc-time {
         color: $c_textLight;
         margin-bottom: 10px;
+    }
+
+    .wc-date-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .wc-date-header-line {
+        border-top: 1px solid #B5B5B5;
+        width: 100%;
+    }
+
+    .wc-date-header-text {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 21px;        
+        color: #B5B5B5;
+        margin: 0 11px;
     }
 
     .wc-message-groups {
@@ -441,32 +463,18 @@
             // animation: disclaimerAnimation 1s;
             animation: animationFrames 2s;
             animation-iteration-count: 1;
-            background-color: white;
             // bottom: $consoleHeight;
             top: $headerTotalHeight;
             display:flex;
             flex-direction: column;
             overflow-y: scroll;
-            box-shadow: 0px 1px 20px rgba(0, 0, 0, 0.2);
-            border-radius: 3px 0px 3px 3px;
-            border-top: 5px solid #3F6DE1;
-            border-radius: 3px 3px 0px 0px;
             width: 100%;
-
-            &__title {
-                font-weight: 700;
-                font-size: 18px;
-                line-height: 19px;
-                letter-spacing: 0.04em;
-                padding: 10px 30px 0px;
-                color: #262626;
-            }
             
             &__message {
                 font-size: 14px;
                 font-weight: 450;
-                padding: 0 20px;
-                margin: 20px 0;
+                padding: 0;
+                margin-bottom: 20px;
                 line-height: 1.3em;
                 // margin: 10px 10px 20px;
             }
@@ -480,7 +488,6 @@
             }
 
             &__buttons {
-                margin-bottom: 20px;
                 margin-top:0;
 
                 ul {
@@ -501,8 +508,6 @@
                         overflow-wrap: break-word;
                         text-align: right;
                         padding: 10px;
-                        margin-left: 20px;
-                        margin-right: 20px;
                         margin-bottom: 10px;
                         text-align: center;
                         box-shadow: 2px 2px 4px 0px $c_shadow;
@@ -616,7 +621,7 @@
     .wc-message-bot-name {
       color: $c05;
       float: left;
-      margin-left: 33px;
+      margin-left: 47px;
       margin-bottom: 4px;
       font-weight: normal;
       font-style: normal;
@@ -627,8 +632,8 @@
     }
 
     .wc-message-avatar{
-        width: 25px;
-        height: 25px;
+        width: 38px;
+        height: 38px;
         min-width: 25px;
         border-radius: 22px;
         display: flex;
@@ -706,7 +711,7 @@
         }
 
         .prefix__radio label {
-            color: black;
+            color: $gideon-black;
             margin-right: 5%;
             @include prefixSmallThreshold {
                 margin-right: 4px;
@@ -776,65 +781,87 @@
             }
         }
 
-        .contact_label {
-            margin-bottom: 20px;
+
+        //
+        // GENERAL NODE STYLING
+        //
+
+        .wc-message-node {
+            margin-left: auto;
+            border: none;
+            width: $gideon-node-width
         }
 
-        .contact__form__card {
-          $contact_padding_v: 8px;
-          background-color: white;
-          color: black;
-          padding: 8px 20px 20px 20px;
+        .wc-message-content-node {
+            background-color: white;
+            color: $gideon-black;
+            box-shadow: $gideon-shadow;
+            padding: 5px 0px 0px 0px;
+        }
 
-          &__container {
-            display: flex;
-            flex-direction: column;
-            padding-bottom: $contact_padding_v + 10px;
+        .node {
+            background-color: white;
+            color: $gideon-black;
+            padding: 8px 20px 20px 20px;
 
-            &__input {
+            &__header {
+                color: $gideon-black;
+                margin-bottom: 20px;
+                font-size: 16px;
+            }
+  
+            &__container {
+              display: flex;
+              flex-direction: column;
+              padding-bottom: 18px;
+  
+              &__input {
+                width: 100%;
+                padding-left: 10px;
+                border-radius: 2px;
+                border-width: 1px;
+                border-color: #EBEBEB;
+                border-style: solid;
+                height: 3em;
+                outline-style: none;
+                color: $gideon-black;
+                background: #F7F7F7
+              }
+  
+              &__title {
+                margin: 0;
+                padding-bottom: 6px;
+                color: #262626;
+                font-weight: 500;
+              }
+  
+              &__error {
+                padding-top: 6px;
+                color: #FF002E;
+                font-size: 12px;
+              }
+            }
+  
+            &__submit {
               width: 100%;
-              padding-left: $contact_padding_v + 2px;
-              border-radius: 2px;
-              border-width: 1px;
-              border-color: #EBEBEB;
-              border-style: solid;
               height: 3em;
-              outline-style: none;
-              color: black;
-              background: #F7F7F7
+              border-radius: 2px; 
+              border-width: 1px;
+              border-color: #3F6DE1;
+              color: white;
+              background-color:#3F6DE1;
             }
-
-            &__title {
-              margin: 0;
-              padding-bottom: $contact_padding_v - 2px;
-              color: #262626;
-              font-weight: 500;
-            //   color: #3F6DE1;
-            }
-
-            &__error {
-              padding-top: 6px;
-              color: #FF002E;
-              font-size: 12px;
+  
+            &__submit:hover {
+              background-color: #3F6DE1;
+              color: white;
             }
           }
 
-          &__submit {
-            width: 100%;
-            // margin-left:15%;
-            height: 3em;
-            border-radius: 2px; 
-            border-width: 1px;
-            border-color: #3F6DE1;
-            color: white;
-            background-color:#3F6DE1;
-          }
 
-          &__submit:hover {
-            background-color: #3F6DE1;
-            color: white;
-          }
-        }
+        //
+        // NODE-SPECIFIC STYLING
+        //
 
         .address-apartment-container {
             margin-top: 18px;
@@ -1163,14 +1190,9 @@
         border-radius: 3px 3px 0px 3px;
     }
 
-    .wc-message-content-contact {
+    .wc-message-content-node {
         background-color: white;
-        color: black;
-        box-shadow: $gideon-shadow;
-        padding: 5px 0px 0px 0px;
-    }
-
-    .wc-message-content-date {
+        color: $gideon-black;
         box-shadow: $gideon-shadow;
         padding: 5px 0px 0px 0px;
     }
@@ -1180,18 +1202,12 @@
     //   border-top: 5px solid #3f6de1;
     }
 
-    .wc-message-from-me.wc-message-file {
-        margin-left: auto;
-        width: $gideon-node-width;
-    }
-
     .wc-message-from-me.wc-message-file .wc-message-content {
         background-color: transparent;
         border: none;
         border-top: 5px solid #3F6DE1;
         border-top-right-radius: 3px;
         border-top-left-radius: 3px;
-        padding: 10px 30px 30px; 
     }
 
     .wc-message-from-me.wc-message-address {
@@ -1200,12 +1216,6 @@
         border-radius: 3px 3px 0px 3px;
         margin-left: auto;
         width: $gideon-node-width;
-    }
-
-    .wc-message-content-address {
-        background-color: white;
-        box-shadow: 0px 1px 10px $c_shadow;
-        padding: 5px 0px 0px 0px;
     }
 
     .wc-message-content-address .gideon-submit-button {
@@ -1272,7 +1282,6 @@
     border-top: 5px solid white;
     border-top-right-radius: 3px;
     border-top-left-radius: 3px;
-    padding: 10px 30px 30px; 
 }
 
 .wc-message-from-me-blank.wc-message-address {
@@ -1331,7 +1340,7 @@
         left: -6px;
     }
 
-    .wc-message-contact {
+    .wc-message-node {
       margin-left: auto;
       border: none;
       width: $gideon-node-width
@@ -1342,10 +1351,6 @@
         border: none;
         width: $gideon-node-width
       }
-
-    .wc-message-imBack {
-      margin-left: auto;
-    }
 
     .wc-message-handoff {
       margin-left: auto;

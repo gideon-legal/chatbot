@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { NodeHeader } from './nodes/containers/NodeHeader';
 
 export interface Node {
   node_type: string;
@@ -20,10 +21,13 @@ export class FileUploadCardReadOnly extends React.Component<FileUploadCardReadOn
 
   render() {
     return (
-        <div>
+        <div className="file__upload__card node">
           {this.props.files.length > 0
             ? <div>
-                <div className="file-upload-title">Files Uploaded</div>
+                <NodeHeader
+                  header="Files Uploaded"
+                  nodeType="file__upload__card"
+                />
                 {this.props.files.map((file: any) => (
                     <div className="uploaded-file-name-readonly-link">
                       <a target="_blank" href={file.url}>{file.name}</a>
