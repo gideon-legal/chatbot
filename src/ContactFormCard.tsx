@@ -2,6 +2,7 @@ import { DirectLineOptions, Message} from 'botframework-directlinejs';
 import { parsePhoneNumberFromString } from 'libphonenumber-js/max';
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { NodeCustomContainer } from './nodes/containers/NodeCustomContainer';
 import {NodeHeader} from './nodes/containers/NodeHeader';
 import {NodeInputContainer} from './nodes/containers/NodeInputContainer';
 import { ChatState } from './Store';
@@ -199,62 +200,76 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
           nodeType="contact__form__card"
           header="Contact Information"
         />
-        {this.prefixActive() && (<div className="contact__form__card__container">
-          <span className={'contact__form__card__container__title'}>Title <span className="required">*</span></span>
-          <div className="prefix__radio">
-            <label className="prefix_label">
-              <input
-                type="radio"
-                name="prefix"
-                value="Mr."
-                id="mr"
-                onChange={this.onChangeValue}/>
+        {this.prefixActive() && (<NodeCustomContainer
+          nodeType="contact__form__card"
+
+          title={{
+            title: 'Title ',
+            required: true
+          }}
+
+          content={
+            <div className="prefix__radio">
+              <label className="prefix_label">
+                <input
+                  type="radio"
+                  name="prefix"
+                  value="Mr."
+                  id="mr"
+                  onChange={this.onChangeValue}/>
+                  <span className="checkmark"></span>
+                  <span className="prefix_text">Mr.</span>
+              </label>
+              <label className="prefix_label">
+                <input
+                  type="radio"
+                  name="prefix"
+                  value="Mrs."
+                  id="mrs"
+                  onChange={this.onChangeValue}/>
                 <span className="checkmark"></span>
-                <span className="prefix_text">Mr.</span>
-            </label>
-            <label className="prefix_label">
-              <input
-                type="radio"
-                name="prefix"
-                value="Mrs."
-                id="mrs"
-                onChange={this.onChangeValue}/>
-              <span className="checkmark"></span>
-              <span className="prefix_text">Mrs.</span>
-            </label>
-            <label className="prefix_label">
-              <input
-                type="radio"
-                name="prefix"
-                value="Ms."
-                id="ms"
-                onChange={this.onChangeValue}/>
-              <span className="checkmark"></span>
-              <span className="prefix_text">Ms.</span>
-            </label>
-            <label className="prefix_label">
-              <input
-                type="radio"
-                name="prefix"
-                value="Mx."
-                id="mx"
-                onChange={this.onChangeValue}/>
-              <span className="checkmark"></span>
-              <span className="prefix_text">Mx.</span>
-            </label>
-            <label className="prefix_label">
-              <input
-                type="radio"
-                name="prefix"
-                value="Dr."
-                id="dr"
-                onChange={this.onChangeValue}/>
-              <span className="checkmark"></span>
-              <span className="prefix_text">Dr.</span>
-            </label>
-          </div>
-          {this.state.prefixError && <span className="contact__form__card__container__error">{this.state.prefixError}</span>}
-        </div>)}
+                <span className="prefix_text">Mrs.</span>
+              </label>
+              <label className="prefix_label">
+                <input
+                  type="radio"
+                  name="prefix"
+                  value="Ms."
+                  id="ms"
+                  onChange={this.onChangeValue}/>
+                <span className="checkmark"></span>
+                <span className="prefix_text">Ms.</span>
+              </label>
+              <label className="prefix_label">
+                <input
+                  type="radio"
+                  name="prefix"
+                  value="Mx."
+                  id="mx"
+                  onChange={this.onChangeValue}/>
+                <span className="checkmark"></span>
+                <span className="prefix_text">Mx.</span>
+              </label>
+              <label className="prefix_label">
+                <input
+                  type="radio"
+                  name="prefix"
+                  value="Dr."
+                  id="dr"
+                  onChange={this.onChangeValue}/>
+                <span className="checkmark"></span>
+                <span className="prefix_text">Dr.</span>
+              </label>
+            </div>
+          }
+
+          error={{
+            message: this.state.prefixError
+          }}
+
+          errorOn={this.state.prefixError}
+        />)}
+
         {this.nameActive && (<NodeInputContainer
           nodeType="contact__form__card"
 
