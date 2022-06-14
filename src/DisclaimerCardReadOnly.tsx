@@ -25,8 +25,6 @@ export class DisclaimerCardReadOnly extends React.Component<DisclaimerCardReadOn
   }
 
   render() {
-    const buttonStyle = { ...(!this.state.showDisclaimer && { marginTop: '30px' })};
-
     return (
       <div>
         <div className="disclaimer__card node">
@@ -47,7 +45,7 @@ export class DisclaimerCardReadOnly extends React.Component<DisclaimerCardReadOn
           }
           <div className="disclaimer__card__buttons">
             <ul>
-              <button style={ buttonStyle } type="button" onClick={ e => this.setState({ showDisclaimer: !this.state.showDisclaimer }) }> { !this.state.showDisclaimer ? 'Review Disclaimer' : 'Close Disclaimer' }</button>
+              <button type="button" onClick={ e => this.setState({ showDisclaimer: !this.state.showDisclaimer }) }> { !this.state.showDisclaimer ? 'Review Disclaimer' : 'Close Disclaimer' }</button>
             </ul>
           </div>
         </div>

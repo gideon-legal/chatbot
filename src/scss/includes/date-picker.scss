@@ -352,7 +352,6 @@ $width: 280px;
     .gd-selected-date-container {
         // height: 54px;
         background-color: white;
-        padding: 10px 30px 0;
         font-size: 18px;
         color: #262626;
         text-align: left;
@@ -627,8 +626,4 @@ $width: 280px;
     position: fixed;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);
     border-radius: 3px;
-}
-
-.date-picker-node-content {
-    padding: 18px;
 }

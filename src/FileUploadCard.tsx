@@ -276,7 +276,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                                     <RemoveFileIcon />
                                 </div>
                             </div>
-                        ))};
+                        ))}
                     </div>
                     <SubmitButton onClick={this.clickToSubmitFile} />
                 </div>
