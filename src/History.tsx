@@ -382,7 +382,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
         } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'file') {
             return (
                 <div data-activity-id={activity.id } className={wrapperClassName}>
-                    <div className={'wc-message wc-message-from-me wc-message-file'} ref={ div => this.messageDiv = div }>
+                    <div className={'wc-message wc-message-from-me wc-message-node wc-message-file'} ref={ div => this.messageDiv = div }>
                         <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
                             <FileUploadCardReadOnly files={this.props.files}/>
                         </div>
