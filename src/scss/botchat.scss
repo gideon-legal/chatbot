@@ -216,6 +216,10 @@
         &.no-header {
             top: 0;
         }
+
+        &.no-console {
+            bottom: 0px;
+        }
     }
 
     .wc-message-groups-fullscreen {
@@ -1440,10 +1444,7 @@
         }
 
         &__disabled {
-            background-color: #eff0f1;
-            @include mobileAndTablet {
-                display: none;
-            }
+            display: none;
         }  
 
         &__disabled::before {

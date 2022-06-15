@@ -21,7 +21,6 @@ interface ContactFormProps {
   gid: string;
   conversationId: string;
   withTime: boolean;
-  updateInput: (disable: boolean, placeholder: string) => void;
 }
 
 export interface MessageWithContact extends Message {
@@ -68,26 +67,11 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
     this.clickToSubmitContactInformation = this.clickToSubmitContactInformation.bind(this);
   }
 
-  componentDidMount() {
-    this.props.updateInput(
-        true,
-        'Please enter your contact information.'
-    );
-}
-
   private handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>): any {
     if (e.key === 'Enter' && this.validateContactInformation()) {
-        this.resetShell();
         this.props.sendMessage(this.getFormattedContact());
         document.removeEventListener('keypress', this.handleKeyDown.bind(this));
     }
-  }
-
-  resetShell = () => {
-    this.props.updateInput(
-      false,
-      defaultStrings.consolePlaceholder
-    );
   }
 
   validateEmail = (email: string) => {
@@ -167,7 +151,6 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
   clickToSubmitContactInformation(e: React.MouseEvent<HTMLButtonElement>) {
     if (!this.validateContactInformation()) { return; }
 
-    this.resetShell();
     this.props.sendMessage(this.getFormattedContact());
 
     document.removeEventListener('keypress', this.handleKeyDown.bind(this));
@@ -177,7 +160,6 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
 
   private onKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === 'Enter' && this.validateContactInformation()) {
-        this.resetShell();
         this.props.sendMessage(this.getFormattedContact());
         document.removeEventListener('keypress', this.handleKeyDown.bind(this));
     }
@@ -323,13 +305,6 @@ export const ContactFormCard = connect(
       conversationId: state.connection.botConnection.conversationId
     };
   }, {
-    updateInput: (disable: boolean, placeholder: string) =>
-          ({
-              type: 'Update_Input',
-              placeholder,
-              disable,
-              source: 'text'
-          } as ChatActions),
     sendMessage
   }, (stateProps: any, dispatchProps: any, ownProps: any): ContactFormProps => {
     return {
@@ -340,8 +315,7 @@ export const ContactFormCard = connect(
       sendMessage: (text: string) => dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),
       gid: ownProps.gid,
       directLine: ownProps.directLine,
-      conversationId: stateProps.conversationId,
-      updateInput: dispatchProps.updateInput
+      conversationId: stateProps.conversationId
     };
   }
 )(ContactForm);

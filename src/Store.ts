@@ -56,13 +56,11 @@ export interface ShellState {
     placeholder: string;
     listeningState: ListeningState;
     lastInputViaSpeech: boolean;
-    inputDisabled: boolean;
 }
 
 export type ShellAction = {
     type: 'Update_Input',
     input?: string
-    disable?: boolean
     placeholder?: string;
     source: 'text' | 'speech'
 } | {
@@ -108,7 +106,6 @@ export const shell: Reducer<ShellState> = (
         sendTyping: false,
         listeningState: ListeningState.STOPPED,
         lastInputViaSpeech : false,
-        inputDisabled: false,
         placeholder: defaultStrings.consolePlaceholder
     },
     action: ShellAction
@@ -120,8 +117,7 @@ export const shell: Reducer<ShellState> = (
                 ...state,
                 input: action.input != null ? action.input : state.input,
                 lastInputViaSpeech : action.source === 'speech',
-                placeholder: action.placeholder !== null ? action.placeholder : defaultStrings.consolePlaceholder,
-                inputDisabled: action.disable !== null ?  action.disable : state.inputDisabled
+                placeholder: action.placeholder !== null ? action.placeholder : defaultStrings.consolePlaceholder
             };
 
         case 'Listening_Start':
@@ -169,30 +165,20 @@ export const shell: Reducer<ShellState> = (
         case 'Select_Date':
             return {
                 ...state,
-                inputDisabled: true,
                 lastInputViaSpeech: false,
-                input: '',
-                placeholder: 'Press enter to submit selected date'
+                input: ''
             };
 
         case 'Submit_Date':
-            return {
-                ...state,
-                inputDisabled: false,
-                placeholder: defaultStrings.consolePlaceholder
-            };
+            return state;
 
         case 'Select_File':
-            return {
-                ...state,
-                inputDisabled: action.payload
-            };
+            return state;
 
         case 'Choose_Option':
             return {
                 ...state,
-                inputDisabled: true,
-                placeholder: action.placeholder
+                placeholder: action.placeholder !== null ? action.placeholder : defaultStrings.consolePlaceholder
             };
 
         default:
@@ -415,6 +401,7 @@ export interface HistoryState {
     clientActivityCounter: number;
     selectedActivity: Activity;
     selectedDisclaimerActivity: Activity;
+    inputEnabled: boolean;
 }
 
 export type HistoryAction = {
@@ -453,7 +440,8 @@ export const history: Reducer<HistoryState> = (
         clientActivityBase: Date.now().toString() + Math.random().toString().substr(1) + '.',
         clientActivityCounter: 0,
         selectedActivity: null,
-        selectedDisclaimerActivity: null
+        selectedDisclaimerActivity: null,
+        inputEnabled: false
     },
     action: HistoryAction
 ) => {
@@ -490,9 +478,11 @@ export const history: Reducer<HistoryState> = (
 
             const copy: any = action.activity;
             const isDisclaimer = copy && copy.entities && copy.entities.length > 0 && copy.entities[0].node_type === 'disclaimer';
+            const inputEnabled = !copy.entities;
 
             return {
                 ...state,
+                inputEnabled,
                 activities: [
                     ...state.activities.filter(activity => activity.type !== 'typing'),
                     action.activity,
@@ -504,6 +494,7 @@ export const history: Reducer<HistoryState> = (
         case 'Send_Message':
             return {
                 ...state,
+                inputEnabled: false,
                 activities: [
                     ...state.activities.filter(activity => activity.type !== 'typing'),
                     {
