@@ -19,9 +19,7 @@ interface FileUploadProps {
     fileSelected: (inputStatus: boolean) => void;
     sendMessage: (inputText: any) => void;
     sendFiles: (files: FileList) => void;
-    inputDisabled: boolean;
     gid: string;
-    updateInput: (disabled: boolean, placeholder: string) => void;
     index: number;
     addFilesToState: (index: number, files: Array<{ name: string, url: string }>) => void;
  }
@@ -100,15 +98,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
     }
 
     componentDidMount() {
-        if (!this.props.inputDisabled) {
-            this.props.updateInput(true, 'Please upload a file or skip above.');
-        }
-
         document.addEventListener('keydown', this.handleKeyDown.bind(this));
-    }
-
-    componentWillUnmount() {
-        this.props.updateInput(false, null);
     }
 
     handleSkipFile(e: React.MouseEvent<HTMLDivElement>) {
@@ -315,7 +305,6 @@ export const FileUploadCard = connect(
   (state: ChatState) => ({
     // passed down to MessagePaneView
     locale: state.format.locale,
-    inputDisabled: state.shell.inputDisabled,
     user: state.connection.user
   }),
   {
@@ -324,19 +313,10 @@ export const FileUploadCard = connect(
       payload: inputStatus
     }),
     sendMessage,
-    updateInput: (disable: boolean, placeholder: string) =>
-      ({
-        type: 'Update_Input',
-        placeholder,
-        disable,
-        source: 'text'
-      } as ChatActions),
     sendFiles
   },
   (stateProps: any, dispatchProps: any, ownProps: any): FileUploadProps => ({
     node: ownProps.node,
-    inputDisabled: stateProps.inputDisabled,
-    updateInput: dispatchProps.updateInput,
     fileSelected: dispatchProps.fileSelected,
     sendMessage: (text: any) =>
       dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),

@@ -20,7 +20,6 @@ interface DisclaimerProps {
   text: string;
 
   takeSuggestedAction: (message: Message) => any;
-  chooseOption: (placeholder: string) => any;
   resetShellInput: () => any;
   sendMessage: (inputText: string) => void;
 
@@ -43,7 +42,6 @@ class Disclaimer extends React.Component<DisclaimerProps, {}> {
   }
 
   componentDidMount() {
-    this.props.chooseOption('Choose an option above...');
     this.scrollToBottom();
   }
 
@@ -111,7 +109,6 @@ export const DisclaimerCard = connect(
     };
   }, {
     takeSuggestedAction: (message: Message) => ({ type: 'Take_SuggestedAction', message } as ChatActions),
-    chooseOption: (placeholder: string) => ({ type: 'Choose_Option', placeholder} as ChatActions),
     resetShellInput: () => ({ type: 'Submit_Date' } as ChatActions),
     // only used to create helper functions below
     sendMessage
@@ -124,7 +121,6 @@ export const DisclaimerCard = connect(
 
       // from dispatchProps
       takeSuggestedAction: dispatchProps.takeSuggestedAction,
-      chooseOption: dispatchProps.chooseOption,
       resetShellInput: dispatchProps.resetShellInput,
       sendMessage: (text: string) => dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),
       // from ownProps

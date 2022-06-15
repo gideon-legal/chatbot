@@ -14,7 +14,7 @@ interface Props {
     strings: Strings;
     listeningState: ListeningState;
     showUploadButton: boolean;
-    inputDisabled: boolean;
+    inputEnabled: boolean;
     fullscreen: boolean;
     themeColor: string;
     onChangeText: (inputText: string) => void;
@@ -22,7 +22,6 @@ interface Props {
     sendFiles: (files: FileList) => void;
     stopListening: () => void;
     startListening: () => void;
-
 }
 
 export interface ShellFunctions {
@@ -108,7 +107,7 @@ class ShellContainer extends React.Component<Props> implements ShellFunctions {
         }
         const className = classList(
             'wc-console',
-            this.props.inputDisabled && 'wc-console__disabled',
+            !this.props.inputEnabled && 'wc-console__disabled',
             this.props.inputText.length > 0 && 'has-text',
             showUploadButton && 'has-upload-button',
             this.props.fullscreen && 'wc-console-fullscreen'
@@ -172,7 +171,7 @@ class ShellContainer extends React.Component<Props> implements ShellFunctions {
                         placeholder={ placeholder }
                         aria-label={ this.props.inputText ? null : placeholder }
                         aria-live="polite"
-                        disabled={ this.props.inputDisabled }
+                        disabled={ !this.props.inputEnabled }
                     />
                 </div>
 
@@ -219,7 +218,7 @@ export const Shell = connect(
         // passed down to ShellContainer
         inputText: state.shell.input,
         showUploadButton: state.format.showUploadButton,
-        inputDisabled: state.shell.inputDisabled,
+        inputEnabled: state.history.inputEnabled,
         placeholder: state.shell.placeholder || defaultStrings.consolePlaceholder,
         strings: state.format.strings,
         // only used to create helper functions below
@@ -241,7 +240,7 @@ export const Shell = connect(
         inputText: stateProps.inputText,
         placeholder: stateProps.placeholder,
         showUploadButton: stateProps.showUploadButton,
-        inputDisabled: stateProps.inputDisabled,
+        inputEnabled: stateProps.inputEnabled,
         strings: stateProps.strings,
         listeningState: stateProps.listeningState,
         fullscreen: stateProps.fullscreen,

@@ -29,6 +29,7 @@ export interface HistoryProps {
     doCardAction: IDoCardAction;
     gid: string;
     directLine: DirectLineOptions;
+    inputEnabled: boolean;
 }
 
 export interface HistoryState {
@@ -201,7 +202,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
             }
         }
 
-        const groupsClassName = classList('wc-message-groups', !this.props.format.chatTitle && 'no-header',  this.props.format.fullscreen && 'wc-message-groups-fullscreen');
+        const groupsClassName = classList('wc-message-groups', !this.props.format.chatTitle && 'no-header',  this.props.format.fullscreen && 'wc-message-groups-fullscreen', !this.props.inputEnabled && 'no-console');
 
         return (
             <div>
@@ -228,6 +229,7 @@ export const History = connect(
         size: state.size,
         activities: state.history.activities,
         hasActivityWithSuggestedActions: !!activityWithSuggestedActions(filteredActivities(state.history.activities, state.format.strings.pingMessage)),
+        inputEnabled: state.history.inputEnabled,
         // only used to create helper functions below
         connectionSelectedActivity: state.connection.selectedActivity,
         selectedActivity: state.history.selectedActivity,
@@ -245,6 +247,7 @@ export const History = connect(
         size: stateProps.size,
         activities: stateProps.activities,
         hasActivityWithSuggestedActions: stateProps.hasActivityWithSuggestedActions,
+        inputEnabled: stateProps.inputEnabled,
         // from dispatchProps
         setMeasurements: dispatchProps.setMeasurements,
         onClickRetry: dispatchProps.onClickRetry,

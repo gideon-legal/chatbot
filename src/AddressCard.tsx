@@ -29,7 +29,6 @@ interface AddressProps {
     gid: string;
     conversationId: string;
     withTime: boolean;
-    updateInput: (disable: boolean, placeholder: string) => void;
 }
 
 export interface MessageWithAddress extends Message {
@@ -65,13 +64,6 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
         this.handleChange = this.handleChange.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.clickToSubmitContactInformation = this.clickToSubmitContactInformation.bind(this);
-    }
-
-    componentDidMount() {
-        this.props.updateInput(
-            true,
-            'Please enter your address.'
-        );
     }
 
     getFormattedAddress = () => {
@@ -110,22 +102,13 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
 
     private handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>): any {
         if (e.key === 'Enter') {
-            this.resetShell();
             this.props.sendMessage(this.getFormattedAddress());
             document.removeEventListener('keypress', this.handleKeyDown.bind(this));
         }
     }
 
-    resetShell = () => {
-        this.props.updateInput(
-            false,
-            defaultStrings.consolePlaceholder
-        );
-    }
-
     private onKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
         if (e.key === 'Enter') {
-            this.resetShell();
             this.props.sendMessage(this.getFormattedAddress());
             document.removeEventListener('keypress', this.handleKeyDown.bind(this));
         }
@@ -133,7 +116,6 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
 
     clickToSubmitContactInformation(e: React.MouseEvent<HTMLButtonElement>) {
       // if (!this.validateContactInformation()) { return; }
-      this.resetShell();
       this.props.sendMessage(this.getFormattedAddress());
       document.removeEventListener('keypress', this.handleKeyDown.bind(this));
       e.stopPropagation();
@@ -145,7 +127,6 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
 
     handleSelect(address: string) {
         if (this.state.addressSelected) { // send message
-            this.resetShell();
             this.props.sendMessage(this.getFormattedAddress());
             document.removeEventListener('keypress', this.handleKeyDown.bind(this));
             return;
@@ -236,13 +217,6 @@ export const AddressCard = connect(
             conversationId: state.connection.botConnection.conversationId
         };
     }, {
-    updateInput: (disable: boolean, placeholder: string) =>
-    ({
-        type: 'Update_Input',
-        placeholder,
-        disable,
-        source: 'text'
-    } as ChatActions),
     sendMessage
 }, (stateProps: any, dispatchProps: any, ownProps: any): AddressProps => {
     return {
@@ -253,8 +227,7 @@ export const AddressCard = connect(
         sendMessage: (text: string) => dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),
         gid: ownProps.gid,
         directLine: ownProps.directLine,
-        conversationId: stateProps.conversationId,
-        updateInput: dispatchProps.updateInput
+        conversationId: stateProps.conversationId
     };
 }
 )(AddressForm);
