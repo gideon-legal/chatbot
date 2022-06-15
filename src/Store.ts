@@ -61,7 +61,6 @@ export interface ShellState {
 export type ShellAction = {
     type: 'Update_Input',
     input?: string
-    placeholder?: string;
     source: 'text' | 'speech'
 } | {
     type: 'Listening_Starting'
@@ -96,8 +95,7 @@ export type ShellAction = {
     type: 'Select_File',
     payload: boolean
 } | {
-    type: 'Choose_Option',
-    placeholder: string
+    type: 'Choose_Option'
 };
 
 export const shell: Reducer<ShellState> = (
@@ -116,8 +114,7 @@ export const shell: Reducer<ShellState> = (
             return {
                 ...state,
                 input: action.input != null ? action.input : state.input,
-                lastInputViaSpeech : action.source === 'speech',
-                placeholder: action.placeholder !== null ? action.placeholder : defaultStrings.consolePlaceholder
+                lastInputViaSpeech : action.source === 'speech'
             };
 
         case 'Listening_Start':
@@ -176,10 +173,7 @@ export const shell: Reducer<ShellState> = (
             return state;
 
         case 'Choose_Option':
-            return {
-                ...state,
-                placeholder: action.placeholder !== null ? action.placeholder : defaultStrings.consolePlaceholder
-            };
+            return state;
 
         default:
             return state;
