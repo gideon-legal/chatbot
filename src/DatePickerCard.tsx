@@ -6,7 +6,6 @@ import { FaCaretLeft } from 'react-icons/fa';
 import { connect } from 'react-redux';
 import { availableTimes } from './api/bot';
 import { OpenCalendarIcon } from './assets/icons/DatePickerIcons';
-import { NodeHeader } from './nodes/containers/NodeHeader';
 import { ChatState } from './Store';
 import { ChatActions, sendMessage } from './Store';
 import {SubmitButton} from './SubmitButton';
@@ -94,14 +93,12 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
     constructor(props: DatePickerProps) {
         super(props);
 
-        const isHandoff = this.props.node.node_type === 'handoff';
-
         this.state = {
-            startDate: (isHandoff ? null : moment()),
+            startDate: null,
             endDate: null,
-            dateSelected: !isHandoff,
+            dateSelected: false,
             timeSelected: false,
-            selectChoice: (isHandoff ? 'startDate' : 'endDate'),
+            selectChoice: 'startDate',
             withRange: props.node.custom_attributes.includes('range'),
             withTime: props.withTime || props.node.custom_attributes.includes('time') || props.node.node_type === 'handoff',
             showTimeSelectClass: 'hide-time-select',
@@ -361,7 +358,6 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
             <span>{this.getUsersTimeZone()}</span>
           </div>
           <div className="gd-date-picker-days-container">
-            {console.log(this.state)}
           {this.state.monthAvailabilities && !this.state.loading &&
             keys.map(date =>
               this.availabilitiesExistOnDay(date) && <button
@@ -451,10 +447,11 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         }
 
         return (
-          <div className={`gd-date-picker ${withTime && 'withTime'} date-node node`}>
-            <NodeHeader
-              header="Select Date"
-            />
+          <div className={`gd-date-picker ${withTime && 'withTime'} date-node`}>
+            <div className="gd-selected-date-container">
+              Select Date
+              {/* <span className="gd-selected-date">Date Picker{headerMessage}</span> */}
+            </div>
             <div className="date-picker-node-content">
               <div className="date-picker-node-content-body">
                 {this.state.pickerOpen &&
@@ -507,14 +504,15 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
       const { withTime, dateSelected, duration } = this.state;
 
       return (
-        <div className={`gd-date-picker ${withTime && 'withTime'} node`}>
-            <NodeHeader
-              header="Schedule Appointment"
-            />
+        <div className={`gd-date-picker ${withTime && 'withTime'}`}>
+            <div className="gd-date-picker-header">
+                <span className="gd-header-schedule-meeting">Schedule a Meeting</span>
+                <span className="gd-header-duration">{`${duration} Minutes`}</span>
+            </div>
             {!dateSelected && this.renderDayPicker()}
             {dateSelected && this.renderHourPicker()}
             <button type="button" className="gd-submit-date-button" onClick={e => this.clickToSubmitDate(e) } title="Submit">
-                Schedule
+                Schedule Meeting
             </button>
         </div>
     );
