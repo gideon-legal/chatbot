@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { FormattedText } from './FormattedText';
-import { NodeHeader } from './nodes/containers/NodeHeader';
 
 export interface Node {
   node_type: string;
@@ -25,13 +24,12 @@ export class DisclaimerCardReadOnly extends React.Component<DisclaimerCardReadOn
   }
 
   render() {
+    const buttonStyle = { ...(!this.state.showDisclaimer && { marginTop: '30px' })};
+
     return (
       <div>
-        <div className="disclaimer__card node">
-          <NodeHeader
-            header="Disclaimer"
-            nodeType="disclaimer__card"
-          />
+        <div className="disclaimer__card">
+          <div className="disclaimer__card__title">Disclaimer</div>
           {this.state.showDisclaimer &&
             <div className="disclaimer__card__message">
                 <div className="disclaimer__card__inner__message">
@@ -45,7 +43,7 @@ export class DisclaimerCardReadOnly extends React.Component<DisclaimerCardReadOn
           }
           <div className="disclaimer__card__buttons">
             <ul>
-              <button type="button" onClick={ e => this.setState({ showDisclaimer: !this.state.showDisclaimer }) }> { !this.state.showDisclaimer ? 'Review Disclaimer' : 'Close Disclaimer' }</button>
+              <button style={ buttonStyle } type="button" onClick={ e => this.setState({ showDisclaimer: !this.state.showDisclaimer }) }> { !this.state.showDisclaimer ? 'Review Disclaimer' : 'Close Disclaimer' }</button>
             </ul>
           </div>
         </div>

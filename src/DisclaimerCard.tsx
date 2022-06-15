@@ -6,7 +6,6 @@ import { activityWithSuggestedActions } from './activityWithSuggestedActions';
 import { doCardAction, IDoCardAction } from './Chat';
 import { FormattedText } from './FormattedText';
 import { filteredActivities } from './History';
-import { NodeHeader } from './nodes/containers/NodeHeader';
 import { ChatState } from './Store';
 import { ChatActions, sendMessage } from './Store';
 
@@ -74,11 +73,8 @@ class Disclaimer extends React.Component<DisclaimerProps, {}> {
   render() {
     return (
       <div>
-      <div className="disclaimer__card node">
-        <NodeHeader
-          header="Disclaimer"
-          nodeType="disclaimer__card"
-        />
+      <div className="disclaimer__card">
+        <div className="disclaimer__card__title">Disclaimer</div>
         <div className="disclaimer__card__message">
           <div className="disclaimer__card__inner__message">
             <FormattedText

@@ -6,7 +6,6 @@ import { ChatActions, ChatState, sendFiles , sendMessage } from './Store';
 import { SubmitButton } from './SubmitButton';
 
 import { FileUploadIcon, RemoveFileIcon } from './assets/icons/FileUploadIcons';
-import { NodeHeader } from './nodes/containers/NodeHeader';
 
 export interface Node {
     node_type: string;
@@ -276,7 +275,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                                     <RemoveFileIcon />
                                 </div>
                             </div>
-                        ))}
+                        ))};
                     </div>
                     <SubmitButton onClick={this.clickToSubmitFile} />
                 </div>
@@ -303,12 +302,9 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         const { node } = this.props;
 
         return (
-            <div className="file__upload__card node">
+            <div>
                 { (this.state.isUploading) ? <div className="loading"></div> : null}
-                <NodeHeader
-                    header="File Upload"
-                    nodeType="file__upload"
-                />
+                <div className="file-upload-title">File Upload</div>
                 { this.showDropzone() }
             </div>
         );
