@@ -177,6 +177,7 @@
     .wc-chatbot-content-left {
         flex: 1;
         margin-top: $headerTotalHeight;
+        background-color: #F9F9F9;
     }
 
     .wc-chatbot-content-right {
@@ -639,7 +640,7 @@
         align-items: center;
         justify-content: center;
         color: #f6f7f8;
-        margin: auto 0 10px 0;
+        margin: auto 0 16px 0;
         background: #3F6DE1 !important;
     }
 
