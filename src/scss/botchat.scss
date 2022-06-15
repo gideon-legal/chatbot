@@ -1605,6 +1605,10 @@
         fill: white;
     }
 
+    .wc-node-fullscreen {
+        width: $gideon-node-width-fullscreen !important;
+    }
+
 /* animation */
 
     .wc-typing {
