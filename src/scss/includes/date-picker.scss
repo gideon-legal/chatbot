@@ -3,6 +3,7 @@
 @import "media-queries";
 
 $gd_gideon_blue: #3F6DE1;
+$gd_gideon_black: #262626;
 
 .react-datepicker__header--time {
     padding-bottom: 8px;
@@ -40,7 +41,7 @@ $width: 280px;
       margin-bottom: 10px;
       height: 20px;
       span {
-        color: $gd_gideon_blue;
+        color: $gd_gideon_black;
         height: 1.2em;
         line-height: 20px;
       }
@@ -93,7 +94,7 @@ $width: 280px;
       margin-bottom: 10px;
 
       span {
-        color: $gd_gideon_blue;
+        color: $gd_gideon_black;
         margin-left: 10px;
         margin-right: 10px;
       }
@@ -318,7 +319,7 @@ $width: 280px;
             font-weight: bold;
             position: absolute;
             display: block;
-            color: black;
+            color: $gd_gideon_black;
         }
 
         .gd-header-schedule-meeting {
@@ -355,7 +356,6 @@ $width: 280px;
     .gd-selected-date-container {
         // height: 54px;
         background-color: white;
-        padding: 10px 30px 0;
         font-size: 18px;
         color: #262626;
         text-align: left;
@@ -630,8 +630,4 @@ $width: 280px;
     position: fixed;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);
     border-radius: 3px;
-}
-
-.date-picker-node-content {
-    padding: 18px;
 }

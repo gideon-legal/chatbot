@@ -209,7 +209,7 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
             );
         } else if (type === 'contact') {
             return (
-                  <ContactFormCard { ...props } node={activityCopy.entities[0]} />
+                <ContactFormCard { ...props } node={activityCopy.entities[0]} />
             );
         } else if (type === 'address') {
             return (
