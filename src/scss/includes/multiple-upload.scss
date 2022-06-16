@@ -1,7 +1,19 @@
 @import "colors";
 @import "media-queries";
 
-  .wc-suggested-options{
+.wc-message-from-me{
+  &.wc-message-imBack{
+      .wc-message-content {
+        background-color: transparent;
+        border: 1px solid $c_brand;
+        border: none;
+        padding: 10px 5px;
+        box-shadow: none;
+      }
+  }
+} 
+
+.wc-suggested-options{
     display: flex;
     flex-direction: column;
 
