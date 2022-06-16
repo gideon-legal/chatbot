@@ -145,7 +145,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
 
     render() {
         return (
-            <div className="address__card node">
+            <div className="address__card gideon__node">
                 <NodeHeader
                     nodeType="address__card"
                     header="Address"
@@ -163,7 +163,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
                                     <input
                                         {...getInputProps({
                                             placeholder: 'Search Places ...',
-                                            className: 'node__container__input'
+                                            className: 'gideon__node__container__input'
                                         })}
                                         autoFocus={true}
                                         onKeyPress={ e => this.onKeyPress(e) }

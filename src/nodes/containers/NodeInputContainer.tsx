@@ -22,7 +22,7 @@ export class NodeInputContainer extends React.Component<ContainerProps, {}> {
 
     render() {
         return (
-            <div className={'node__container ' + (this.props.nodeType ? this.props.nodeType + '__container' : '')}>
+            <div className={'gideon__node__container ' + (this.props.nodeType ? this.props.nodeType + '__container' : '')}>
                 {this.props.title && (<NodeTitle
                     {...this.props.title}
                     nodeType={this.props.nodeType}

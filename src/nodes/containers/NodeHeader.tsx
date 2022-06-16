@@ -16,7 +16,7 @@ export class NodeHeader extends React.Component<HeaderProps, {}> {
 
     render() {
         return (
-            <div className={'node__header ' + (this.props.nodeType ? this.props.nodeType + '__header' : '')}>
+            <div className={'gideon__node__header ' + (this.props.nodeType ? this.props.nodeType + '__header' : '')}>
                 <b>{this.props.header}</b>
             </div>
         );

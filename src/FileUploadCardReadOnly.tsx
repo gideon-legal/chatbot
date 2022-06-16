@@ -21,7 +21,7 @@ export class FileUploadCardReadOnly extends React.Component<FileUploadCardReadOn
 
   render() {
     return (
-        <div className="file__upload__card node">
+        <div className="file__upload__card gideon__node">
           {this.props.files.length > 0
             ? <div>
                 <NodeHeader
