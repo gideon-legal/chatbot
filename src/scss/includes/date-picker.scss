@@ -164,18 +164,21 @@ $width: 280px;
     }
 
     .gd-date-picker-next, .gd-date-picker-prev {
-      background-color: white;
-      color: $gd_gideon_black;
+      background-color: $gd_gideon_blue;
+      color: white;
       border-style: none;
       margin-right: auto;
       margin-left: auto;
       outline: 0;
       border-radius: 4px;
+      border: 1px solid #3F6DE1;
+      padding: 4px;
     }
 
     .gd-date-picker-next:hover:enabled, .gd-date-picker-prev:hover:enabled {
-      color: white;
-      background-color: $gd_gideon_blue;
+      color: $gd_gideon_blue;
+      background-color: white;
+      border-color: #3F6DE1;
     }
 
     .gd-date-picker-next {
