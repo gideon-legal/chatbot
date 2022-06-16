@@ -12,9 +12,6 @@ import { activityWithSuggestedActions } from './activityWithSuggestedActions';
 import { doCardAction, IDoCardAction } from './Chat';
 import { FormattedText } from './FormattedText';
 import { filteredActivities } from './History';
-import { NodeCustomContainer } from './nodes/containers/NodeCustomContainer';
-import { NodeHeader } from './nodes/containers/NodeHeader';
-import { NodeInputContainer } from './nodes/containers/NodeInputContainer';
 import { ChatState } from './Store';
 import { ChatActions, sendMessage } from './Store';
 import { defaultStrings } from './Strings';
@@ -32,7 +29,6 @@ interface AddressProps {
     gid: string;
     conversationId: string;
     withTime: boolean;
-    updateInput: (disable: boolean, placeholder: string) => void;
 }
 
 export interface MessageWithAddress extends Message {
@@ -68,13 +64,6 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
         this.handleChange = this.handleChange.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.clickToSubmitContactInformation = this.clickToSubmitContactInformation.bind(this);
-    }
-
-    componentDidMount() {
-        this.props.updateInput(
-            true,
-            'Please enter your address.'
-        );
     }
 
     getFormattedAddress = () => {
@@ -113,22 +102,13 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
 
     private handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>): any {
         if (e.key === 'Enter') {
-            this.resetShell();
             this.props.sendMessage(this.getFormattedAddress());
             document.removeEventListener('keypress', this.handleKeyDown.bind(this));
         }
     }
 
-    resetShell = () => {
-        this.props.updateInput(
-            false,
-            defaultStrings.consolePlaceholder
-        );
-    }
-
     private onKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
         if (e.key === 'Enter') {
-            this.resetShell();
             this.props.sendMessage(this.getFormattedAddress());
             document.removeEventListener('keypress', this.handleKeyDown.bind(this));
         }
@@ -136,7 +116,6 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
 
     clickToSubmitContactInformation(e: React.MouseEvent<HTMLButtonElement>) {
       // if (!this.validateContactInformation()) { return; }
-      this.resetShell();
       this.props.sendMessage(this.getFormattedAddress());
       document.removeEventListener('keypress', this.handleKeyDown.bind(this));
       e.stopPropagation();
@@ -148,7 +127,6 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
 
     handleSelect(address: string) {
         if (this.state.addressSelected) { // send message
-            this.resetShell();
             this.props.sendMessage(this.getFormattedAddress());
             document.removeEventListener('keypress', this.handleKeyDown.bind(this));
             return;
@@ -164,77 +142,66 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
 
     render() {
         return (
-            <div className="address__card node">
-                <NodeHeader
-                    nodeType="address__card"
-                    header="Address"
-                />
-                <NodeCustomContainer
-                    nodeType="address__card"
-                    content={
-                        <PlacesAutocomplete
-                            value={this.state.address}
-                            onChange={this.handleChange}
-                            onSelect={this.handleSelect}
-                        >
-                            {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                                <div>
-                                    <input
-                                        {...getInputProps({
-                                            placeholder: 'Search Places ...',
-                                            className: 'node__container__input'
-                                        })}
-                                        autoFocus={true}
-                                        onKeyPress={ e => this.onKeyPress(e) }
-                                    />
-                                    <div className="autocomplete-dropdown-container">
-                                        {loading && <div>Loading...</div>}
-                                        {suggestions.map(suggestion => {
-                                            const className = suggestion.active
-                                                ? 'address-suggestion-item-active'
-                                                : 'address-suggestion-item';
-                                            const style = suggestion.active
-                                                ? { backgroundColor: '#fafafa', cursor: 'pointer', color: 'black' }
-                                                : { backgroundColor: '#ffffff', cursor: 'pointer', color: 'black' };
-                                            return (
-                                                <div
-                                                    {...getSuggestionItemProps(suggestion, {
-                                                        className,
-                                                        style
-                                                    })}
-                                                >
-                                                    <span>{suggestion.description}</span>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
+            <div className="contact__form__card">
+                <div className="contact__form__card__container">
+                    <span className={'contact_label'}><b>Address</b></span>
+                    <PlacesAutocomplete
+                        value={this.state.address}
+                        onChange={this.handleChange}
+                        onSelect={this.handleSelect}
+                    >
+                        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                            <div>
+                                <input
+                                    {...getInputProps({
+                                        placeholder: 'Search Places ...',
+                                        className: 'contact__form__card__container__input'
+                                    })}
+                                    autoFocus={true}
+                                    onKeyPress={ e => this.onKeyPress(e) }
+                                />
+                                <div className="autocomplete-dropdown-container">
+                                    {loading && <div>Loading...</div>}
+                                    {suggestions.map(suggestion => {
+                                        const className = suggestion.active
+                                            ? 'address-suggestion-item-active'
+                                            : 'address-suggestion-item';
+                                        const style = suggestion.active
+                                            ? { backgroundColor: '#fafafa', cursor: 'pointer', color: 'black' }
+                                            : { backgroundColor: '#ffffff', cursor: 'pointer', color: 'black' };
+                                        return (
+                                            <div
+                                                {...getSuggestionItemProps(suggestion, {
+                                                    className,
+                                                    style
+                                                })}
+                                            >
+                                                <span>{suggestion.description}</span>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
-                            )}
-                        </PlacesAutocomplete>
-                    }
-                />
-                {this.apartmentActive() && (<NodeInputContainer
-                    nodeType="address__card"
-
-                    input={{
-                        type: 'text',
-                        value: this.state.apartment,
-                        onChange: e => this.setState({
-                            ...this.state,
-                            apartment: e.target.value
-                        }),
-                        placeholder: 'Apt/Suite Number (Optional)',
-                        ariaLabel: null,
-                        ariaLive: 'polite',
-                        onKeyPress: e => this.onKeyPress(e)
-                    }}
-
-                    error={{
-                        message: this.state.addressError
-                    }}
-
-                    errorOn={this.state.addressError}
-                />)}
+                            </div>
+                        )}
+                    </PlacesAutocomplete>
+                    {this.apartmentActive() && (<div className="address-apartment-container">
+                    <input
+                       type="text"
+                       className={'contact__form__card__container__input'}
+                       // ref={ input => this.textInputName = input }
+                       value={ this.state.apartment }
+                       onChange={ e => this.setState({
+                       ...this.state,
+                       apartment: e.target.value
+                       }) }
+                      placeholder="Apt/Suite Number (Optional)"
+                       aria-label={null}
+                       aria-live="polite"
+                       onKeyPress={ e => this.onKeyPress(e) }
+                    />
+                    </div>)}
+                    {this.state.addressError && <span className="contact__form__card__container__error">{this.state.addressError}</span>}
+                </div>
                 <SubmitButton onClick={ this.clickToSubmitContactInformation } />
             </div>
         );
@@ -250,13 +217,6 @@ export const AddressCard = connect(
             conversationId: state.connection.botConnection.conversationId
         };
     }, {
-    updateInput: (disable: boolean, placeholder: string) =>
-    ({
-        type: 'Update_Input',
-        placeholder,
-        disable,
-        source: 'text'
-    } as ChatActions),
     sendMessage
 }, (stateProps: any, dispatchProps: any, ownProps: any): AddressProps => {
     return {
@@ -267,8 +227,7 @@ export const AddressCard = connect(
         sendMessage: (text: string) => dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),
         gid: ownProps.gid,
         directLine: ownProps.directLine,
-        conversationId: stateProps.conversationId,
-        updateInput: dispatchProps.updateInput
+        conversationId: stateProps.conversationId
     };
 }
 )(AddressForm);

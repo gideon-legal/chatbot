@@ -6,7 +6,6 @@ import { activityWithSuggestedActions } from './activityWithSuggestedActions';
 import { doCardAction, IDoCardAction } from './Chat';
 import { FormattedText } from './FormattedText';
 import { filteredActivities } from './History';
-import { NodeHeader } from './nodes/containers/NodeHeader';
 import { ChatState } from './Store';
 import { ChatActions, sendMessage } from './Store';
 
@@ -21,7 +20,6 @@ interface DisclaimerProps {
   text: string;
 
   takeSuggestedAction: (message: Message) => any;
-  chooseOption: (placeholder: string) => any;
   resetShellInput: () => any;
   sendMessage: (inputText: string) => void;
 
@@ -44,7 +42,6 @@ class Disclaimer extends React.Component<DisclaimerProps, {}> {
   }
 
   componentDidMount() {
-    this.props.chooseOption('Choose an option above...');
     this.scrollToBottom();
   }
 
@@ -74,11 +71,8 @@ class Disclaimer extends React.Component<DisclaimerProps, {}> {
   render() {
     return (
       <div>
-      <div className="disclaimer__card node">
-        <NodeHeader
-          header="Disclaimer"
-          nodeType="disclaimer__card"
-        />
+      <div className="disclaimer__card">
+        <div className="disclaimer__card__title">Disclaimer</div>
         <div className="disclaimer__card__message">
           <div className="disclaimer__card__inner__message">
             <FormattedText
@@ -115,7 +109,6 @@ export const DisclaimerCard = connect(
     };
   }, {
     takeSuggestedAction: (message: Message) => ({ type: 'Take_SuggestedAction', message } as ChatActions),
-    chooseOption: (placeholder: string) => ({ type: 'Choose_Option', placeholder} as ChatActions),
     resetShellInput: () => ({ type: 'Submit_Date' } as ChatActions),
     // only used to create helper functions below
     sendMessage
@@ -128,7 +121,6 @@ export const DisclaimerCard = connect(
 
       // from dispatchProps
       takeSuggestedAction: dispatchProps.takeSuggestedAction,
-      chooseOption: dispatchProps.chooseOption,
       resetShellInput: dispatchProps.resetShellInput,
       sendMessage: (text: string) => dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),
       // from ownProps

@@ -1,5 +1,4 @@
 import { Activity, CardActionTypes, DirectLineOptions, Message, User } from 'botframework-directlinejs';
-import * as moment from 'moment';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { ActivityView } from './ActivityView';
@@ -30,6 +29,7 @@ export interface HistoryProps {
     doCardAction: IDoCardAction;
     gid: string;
     directLine: DirectLineOptions;
+    inputEnabled: boolean;
 }
 
 export interface HistoryState {
@@ -202,7 +202,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
             }
         }
 
-        const groupsClassName = classList('wc-message-groups', !this.props.format.chatTitle && 'no-header',  this.props.format.fullscreen && 'wc-message-groups-fullscreen');
+        const groupsClassName = classList('wc-message-groups', !this.props.format.chatTitle && 'no-header',  this.props.format.fullscreen && 'wc-message-groups-fullscreen', !this.props.inputEnabled && 'no-console');
 
         return (
             <div>
@@ -213,11 +213,6 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                 tabIndex={ 0 }
             >
                 <div className="wc-message-group-content" ref={ div => { if (div) { this.scrollContent = div; } }}>
-                    <div className="wc-date-header">
-                        <div className="wc-date-header-line"></div>
-                        <div className="wc-date-header-text">{ moment().format('MM/DD/YYYY') }</div>
-                        <div className="wc-date-header-line"></div>
-                    </div>
                     { content }
                 </div>
             </div>
@@ -234,6 +229,7 @@ export const History = connect(
         size: state.size,
         activities: state.history.activities,
         hasActivityWithSuggestedActions: !!activityWithSuggestedActions(filteredActivities(state.history.activities, state.format.strings.pingMessage)),
+        inputEnabled: state.history.inputEnabled,
         // only used to create helper functions below
         connectionSelectedActivity: state.connection.selectedActivity,
         selectedActivity: state.history.selectedActivity,
@@ -251,6 +247,7 @@ export const History = connect(
         size: stateProps.size,
         activities: stateProps.activities,
         hasActivityWithSuggestedActions: stateProps.hasActivityWithSuggestedActions,
+        inputEnabled: stateProps.inputEnabled,
         // from dispatchProps
         setMeasurements: dispatchProps.setMeasurements,
         onClickRetry: dispatchProps.onClickRetry,
@@ -360,8 +357,8 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
             if (nodeType === 'date' || nodeType === 'handoff' || nodeType === 'file' || nodeType === 'imBack' || nodeType === 'contact' || nodeType === 'address' || nodeType === 'disclaimer') {
                 return (
                     <div data-activity-id={activity.id } className={wrapperClassName}>
-                        <div className={'wc-message wc-message-from-me wc-message-node wc-message-' + nodeType} ref={ div => this.messageDiv = div }>
-                            <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
+                        <div className={'wc-message wc-message-from-me wc-message-' + nodeType + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
+                            <div className={ contentClassName + contactClassName }>
                                 <ActivityView
                                     format={this.props.format}
                                     size={null}
@@ -382,8 +379,8 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
         } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'file') {
             return (
                 <div data-activity-id={activity.id } className={wrapperClassName}>
-                    <div className={'wc-message wc-message-from-me wc-message-node wc-message-file'} ref={ div => this.messageDiv = div }>
-                        <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
+                    <div className={'wc-message wc-message-from-me wc-message-file' + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
+                        <div className={ contentClassName + contactClassName }>
                             <FileUploadCardReadOnly files={this.props.files}/>
                         </div>
                     </div>
@@ -392,8 +389,8 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
         } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer') {
             return (
                 <div data-activity-id={activity.id } className={wrapperClassName}>
-                    <div className={'wc-message wc-message-from-me wc-message-node wc-message-disclaimer'} ref={ div => this.messageDiv = div }>
-                        <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
+                    <div className={'wc-message wc-message-from-me wc-message-disclaimer' + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
+                        <div className={ contentClassName + contactClassName }>
                             <DisclaimerCardReadOnly text={activityCopy.text}/>
                         </div>
                     </div>

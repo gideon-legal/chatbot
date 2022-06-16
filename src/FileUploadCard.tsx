@@ -6,7 +6,6 @@ import { ChatActions, ChatState, sendFiles , sendMessage } from './Store';
 import { SubmitButton } from './SubmitButton';
 
 import { FileUploadIcon, RemoveFileIcon } from './assets/icons/FileUploadIcons';
-import { NodeHeader } from './nodes/containers/NodeHeader';
 
 export interface Node {
     node_type: string;
@@ -20,9 +19,7 @@ interface FileUploadProps {
     fileSelected: (inputStatus: boolean) => void;
     sendMessage: (inputText: any) => void;
     sendFiles: (files: FileList) => void;
-    inputDisabled: boolean;
     gid: string;
-    updateInput: (disabled: boolean, placeholder: string) => void;
     index: number;
     addFilesToState: (index: number, files: Array<{ name: string, url: string }>) => void;
  }
@@ -101,15 +98,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
     }
 
     componentDidMount() {
-        if (!this.props.inputDisabled) {
-            this.props.updateInput(true, 'Please upload a file or skip above.');
-        }
-
         document.addEventListener('keydown', this.handleKeyDown.bind(this));
-    }
-
-    componentWillUnmount() {
-        this.props.updateInput(false, null);
     }
 
     handleSkipFile(e: React.MouseEvent<HTMLDivElement>) {
@@ -276,7 +265,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                                     <RemoveFileIcon />
                                 </div>
                             </div>
-                        ))}
+                        ))};
                     </div>
                     <SubmitButton onClick={this.clickToSubmitFile} />
                 </div>
@@ -303,12 +292,9 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         const { node } = this.props;
 
         return (
-            <div className="file__upload__card node">
+            <div>
                 { (this.state.isUploading) ? <div className="loading"></div> : null}
-                <NodeHeader
-                    header="File Upload"
-                    nodeType="file__upload"
-                />
+                <div className="file-upload-title">File Upload</div>
                 { this.showDropzone() }
             </div>
         );
@@ -319,7 +305,6 @@ export const FileUploadCard = connect(
   (state: ChatState) => ({
     // passed down to MessagePaneView
     locale: state.format.locale,
-    inputDisabled: state.shell.inputDisabled,
     user: state.connection.user
   }),
   {
@@ -328,19 +313,10 @@ export const FileUploadCard = connect(
       payload: inputStatus
     }),
     sendMessage,
-    updateInput: (disable: boolean, placeholder: string) =>
-      ({
-        type: 'Update_Input',
-        placeholder,
-        disable,
-        source: 'text'
-      } as ChatActions),
     sendFiles
   },
   (stateProps: any, dispatchProps: any, ownProps: any): FileUploadProps => ({
     node: ownProps.node,
-    inputDisabled: stateProps.inputDisabled,
-    updateInput: dispatchProps.updateInput,
     fileSelected: dispatchProps.fileSelected,
     sendMessage: (text: any) =>
       dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),
