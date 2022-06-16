@@ -35,7 +35,10 @@ export class FileUploadCardReadOnly extends React.Component<FileUploadCardReadOn
                 ))}
               </div>
             : <div>
-                <div className="file-upload-title">File Upload</div>
+                <NodeHeader
+                  header="File Upload"
+                  nodeType="file__upload__card"
+                />
                 <div className="uploaded-file-name-readonly"><i>File Upload Skipped</i></div>
               </div>
           }
