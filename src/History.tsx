@@ -1,4 +1,5 @@
 import { Activity, CardActionTypes, DirectLineOptions, Message, User } from 'botframework-directlinejs';
+import * as moment from 'moment';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { ActivityView } from './ActivityView';
@@ -213,6 +214,11 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                 tabIndex={ 0 }
             >
                 <div className="wc-message-group-content" ref={ div => { if (div) { this.scrollContent = div; } }}>
+                    <div className="wc-date-header">
+                        <div className="wc-date-header-line"></div>
+                        <div className="wc-date-header-text">{ moment().format('MM/DD/YYYY') }</div>
+                        <div className="wc-date-header-line"></div>
+                    </div>
                     { content }
                 </div>
             </div>
@@ -357,8 +363,8 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
             if (nodeType === 'date' || nodeType === 'handoff' || nodeType === 'file' || nodeType === 'imBack' || nodeType === 'contact' || nodeType === 'address' || nodeType === 'disclaimer') {
                 return (
                     <div data-activity-id={activity.id } className={wrapperClassName}>
-                        <div className={'wc-message wc-message-from-me wc-message-' + nodeType + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
-                            <div className={ contentClassName + contactClassName }>
+                        <div className={'wc-message wc-message-from-me wc-message-node wc-message-' + nodeType} ref={ div => this.messageDiv = div }>
+                            <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
                                 <ActivityView
                                     format={this.props.format}
                                     size={null}
@@ -379,8 +385,8 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
         } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'file') {
             return (
                 <div data-activity-id={activity.id } className={wrapperClassName}>
-                    <div className={'wc-message wc-message-from-me wc-message-file' + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
-                        <div className={ contentClassName + contactClassName }>
+                    <div className={'wc-message wc-message-from-me wc-message-node wc-message-file'} ref={ div => this.messageDiv = div }>
+                        <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
                             <FileUploadCardReadOnly files={this.props.files}/>
                         </div>
                     </div>
@@ -389,8 +395,8 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
         } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer') {
             return (
                 <div data-activity-id={activity.id } className={wrapperClassName}>
-                    <div className={'wc-message wc-message-from-me wc-message-disclaimer' + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
-                        <div className={ contentClassName + contactClassName }>
+                    <div className={'wc-message wc-message-from-me wc-message-node wc-message-disclaimer'} ref={ div => this.messageDiv = div }>
+                        <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
                             <DisclaimerCardReadOnly text={activityCopy.text}/>
                         </div>
                     </div>
