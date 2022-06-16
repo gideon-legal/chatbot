@@ -594,7 +594,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                 <FullscreenStaticContent
                                     imageUrl={state.format.fullscreenImageUrl ?
                                                 state.format.fullscreenImageUrl :
-                                                state.format.logoUrl}
+                                                null}
                                 />
                             </div>}
                             <div className="wc-chatbot-content-right">
