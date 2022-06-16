@@ -25,7 +25,7 @@ export class NodeInput extends React.Component<InputProps, {}> {
         return (
             <input
                 type={this.props.type}
-                className={'node__container__input ' + (this.props.nodeType ? this.props.nodeType + '__container__input' : '')}
+                className={'gideon__node__container__input ' + (this.props.nodeType ? this.props.nodeType + '__container__input' : '')}
                 ref={this.props.ref}
                 autoFocus={this.props.autoFocus}
                 value={this.props.value}

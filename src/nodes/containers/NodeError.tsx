@@ -15,7 +15,7 @@ export class NodeError extends React.Component<ErrorProps, {}> {
 
     render() {
         return (
-            <span className={'node__container__error ' + (this.props.nodeType ? this.props.nodeType + '__container__error' : '')}>
+            <span className={'gideon__node__container__error ' + (this.props.nodeType ? this.props.nodeType + '__container__error' : '')}>
                 {this.props.message}
             </span>
         );

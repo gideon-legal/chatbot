@@ -442,7 +442,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         }
 
         return (
-          <div className={`gd-date-picker ${withTime && 'withTime'} date-node node`}>
+          <div className={`gd-date-picker ${withTime && 'withTime'} date-node gideon__node`}>
             <NodeHeader
               header="Select Date"
             />
@@ -498,7 +498,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
       const { withTime, dateSelected, duration } = this.state;
 
       return (
-        <div className={`gd-date-picker ${withTime && 'withTime'} node`}>
+        <div className={`gd-date-picker ${withTime && 'withTime'} gideon__node`}>
             <NodeHeader
               header="Schedule Appointment"
             />

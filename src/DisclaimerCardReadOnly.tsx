@@ -27,7 +27,7 @@ export class DisclaimerCardReadOnly extends React.Component<DisclaimerCardReadOn
   render() {
     return (
       <div>
-        <div className="disclaimer__card node">
+        <div className="disclaimer__card gideon__node">
           <NodeHeader
             header="Disclaimer"
             nodeType="disclaimer__card"

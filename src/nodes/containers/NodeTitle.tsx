@@ -16,7 +16,7 @@ export class NodeTitle extends React.Component<TitleProps, {}> {
 
     render() {
         return (
-            <span className={'node__container__title ' + (this.props.nodeType ? this.props.nodeType + '__container__title' : '')}>
+            <span className={'gideon__node__container__title ' + (this.props.nodeType ? this.props.nodeType + '__container__title' : '')}>
                 {this.props.title}
 
                 {this.props.required && (<span className="required">*</span>)}

@@ -177,7 +177,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
 
   render() {
     return (
-      <div className="contact__form__card node">
+      <div className="contact__form__card gideon__node">
         <NodeHeader
           nodeType="contact__form__card"
           header="Contact Information"

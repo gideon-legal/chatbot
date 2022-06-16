@@ -293,7 +293,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
         const { node } = this.props;
 
         return (
-            <div className="file__upload__card node">
+            <div className="file__upload__card gideon__node">
                 { (this.state.isUploading) ? <div className="loading"></div> : null}
                 <NodeHeader
                     header="File Upload"
