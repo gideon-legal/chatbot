@@ -83,11 +83,11 @@ class SuggestedActions extends React.Component<MessagePaneProps, MultipleChoiceS
 
         return (
             <div className="wc-suggested-options">
-                <ul>{ this.props.activityWithSuggestedActions.suggestedActions.actions.map((action, index) =>
-                    <li className={this.props.multipleSelect && this.state.selected[index] ? 'wc-suggested-options-option-selected' : 'wc-suggested-options-option'} key={ index } onClick={e => this.props.multipleSelect ? this.handleSelect(index) : this.actionClick(e, action) } title={ action.title }>
+                { this.props.activityWithSuggestedActions.suggestedActions.actions.map((action, index) =>
+                    <div className={this.props.multipleSelect && this.state.selected[index] ? 'wc-suggested-options-option-selected' : 'wc-suggested-options-option'} key={ index } onClick={e => this.props.multipleSelect ? this.handleSelect(index) : this.actionClick(e, action) } title={ action.title }>
                         { action.title }
-                    </li>
-                ) }</ul>
+                    </div>
+                ) }
                 {this.props.multipleSelect && <button className="wc-suggested-options-submit" onClick={e => this.submitMultipleSelect(e)}>Submit</button>}
             </div>
         );
