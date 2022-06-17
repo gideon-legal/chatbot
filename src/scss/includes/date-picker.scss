@@ -73,6 +73,10 @@ $width: 280px;
       max-height: 280px;
       padding-bottom: 20px;
       align-content: flex-start;
+
+      .gd-submit-date-button {
+        padding: 13px;
+      }
     }
 
     .gd-date-picker-select-day:focus,
@@ -155,6 +159,11 @@ $width: 280px;
         stroke-dashoffset: 280;
         stroke-width: 10px;
         transform-origin: 50% 50%;
+      }
+
+      .selected-day {
+        background-color: $gd_gideon_blue;
+        color: white;
       }
     }
 
