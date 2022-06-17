@@ -237,17 +237,15 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
                     const includedTime = getIncludedTimes(this.state.monthAvailabilities[date.format('YYYY-MM-DD')], this.state.duration, date);
                     this.setState({
                         startDate: date,
-                        dateSelected: true,
+                        // dateSelected: true,
                         includedTimes: includedTime ? includedTime : [],
                         timeSelected
-                        // pickerOpen: false
                     });
                 } else {
                     this.setState({
                         startDate: date,
-                        dateSelected: true,
+                        // dateSelected: true,
                         timeSelected
-                        // pickerOpen: false
                     });
                 }
             } else {
@@ -260,6 +258,12 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
             }
         }
 
+    }
+
+    handleDaySubmit() {
+      this.setState({
+        dateSelected: true
+      });
     }
 
     private handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>): any {
@@ -335,7 +339,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
     renderDayPicker = () => {
       const keys = this.state.monthAvailabilities ? Object.keys(this.state.monthAvailabilities).sort((a, b) => Date.parse(a) - Date.parse(b)) : [];
       const startDate = this.state.monthAvailabilities ? moment(keys[0]) : undefined;
-      let endDate: moment.Moment; // = this.state.monthAvailabilities ? moment(keys[keys.length - 1]) : undefined;
+      let endDate: moment.Moment;
       keys.forEach(key => {
         if (this.state.monthAvailabilities[key].length > 0) {
           endDate = moment(key);
@@ -356,7 +360,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
           {this.state.monthAvailabilities && !this.state.loading &&
             keys.map(date =>
               this.availabilitiesExistOnDay(date) && <button
-                className="gd-date-picker-select-day"
+                className={`gd-date-picker-select-day` /*${moment(date).isSame(startDate) && 'selected-day'}`*/}
                 onClick={e => this.handleDateChange(undefined, moment(date), false)}
                 key={date}
               >
@@ -383,6 +387,9 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
                 onClick={e => this.getAvailableTimes(endDate.add(1, 'days'), true)}
               >Next</button>
             </div>
+            <button type="button" className="gd-submit-date-button" onClick={() => this.handleDaySubmit()} title="Submit">
+              Select
+            </button>
         </div>
 
       );
@@ -421,6 +428,9 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
               >{time.format('hh:mm A')}</button>
             )}
           </div>
+          <button type="button" className="gd-submit-date-button" onClick={e => this.clickToSubmitDate(e) } title="Submit">
+            Schedule
+          </button>
         </div>
       );
     }
@@ -504,9 +514,6 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
             />
             {!dateSelected && this.renderDayPicker()}
             {dateSelected && this.renderHourPicker()}
-            <button type="button" className="gd-submit-date-button" onClick={e => this.clickToSubmitDate(e) } title="Submit">
-                Schedule
-            </button>
         </div>
     );
     }
