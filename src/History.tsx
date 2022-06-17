@@ -363,7 +363,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
             if (nodeType === 'date' || nodeType === 'handoff' || nodeType === 'file' || nodeType === 'imBack' || nodeType === 'contact' || nodeType === 'address' || nodeType === 'disclaimer') {
                 return (
                     <div data-activity-id={activity.id } className={wrapperClassName}>
-                        <div className={'wc-message wc-message-from-me wc-message-node wc-message-' + nodeType} ref={ div => this.messageDiv = div }>
+                        <div className={'wc-message wc-message-from-me wc-message-node wc-message-' + nodeType + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
                             <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
                                 <ActivityView
                                     format={this.props.format}
@@ -382,7 +382,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                     </div>
                 );
             }
-        } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'file') {
+        } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'file' + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')) {
             return (
                 <div data-activity-id={activity.id } className={wrapperClassName}>
                     <div className={'wc-message wc-message-from-me wc-message-node wc-message-file'} ref={ div => this.messageDiv = div }>
@@ -392,7 +392,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                     </div>
                 </div>
             );
-        } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer') {
+        } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer' + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')) {
             return (
                 <div data-activity-id={activity.id } className={wrapperClassName}>
                     <div className={'wc-message wc-message-from-me wc-message-node wc-message-disclaimer'} ref={ div => this.messageDiv = div }>
