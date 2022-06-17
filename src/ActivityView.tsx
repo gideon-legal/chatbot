@@ -11,6 +11,7 @@ import { DisclaimerCard } from './DisclaimerCard';
 import { FileUploadCard } from './FileUploadCard';
 import { FormattedText } from './FormattedText';
 import { MultipleChoiceCard } from './MultipleChoiceCard';
+import { SchedulerCard } from './SchedulerCard';
 import { FormatState, SizeState } from './Store';
 
 const Attachments = (props: {
@@ -195,9 +196,13 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
           }
         } else if (activity.type === 'typing') {
             return <div className="wc-typing"/>;
-        } else if (type === 'date' || type === 'handoff') {
+        } else if (type === 'date') {
             return (
                 <DatePickerCard { ...props } node={activityCopy.entities[0]} />
+            );
+        } else if (type === 'handoff') {
+            return(
+              <SchedulerCard { ...props } node={activityCopy.entities[0]} />
             );
         } else if (type === 'file') {
             return (
