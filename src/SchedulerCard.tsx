@@ -307,7 +307,7 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
               >Next</button>
             </div>
             <div>
-                <button type="button" className="gd-submit-date-button" onClick={() => this.handleDaySubmit()} title="Submit">
+                <button type="button" className="gideon-submit-button" onClick={() => this.handleDaySubmit()} title="Submit">
                     Select
                 </button>
             </div>
@@ -350,7 +350,7 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
             )}
           </div>
           <div>
-            <button type="button" className="gd-submit-date-button" onClick={e => this.clickToSubmitDate(e) } title="Submit">
+            <button type="button" className="gideon-submit-button" onClick={e => this.clickToSubmitDate(e) } title="Submit">
                 Schedule
             </button>
           </div>
