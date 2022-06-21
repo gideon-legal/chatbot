@@ -26,7 +26,8 @@ $width: 280px;
     .gd-date-picker-select-day {
       margin: 5px 10% 0px 10%;
       height: fit-content;
-      padding: 4px 0px 4px 0px;
+      padding: 10px 20px;
+      font-weight: 500;
       border-radius: 4px;
       background-color: white;
       border-color: $gd_gideon_blue;
@@ -62,6 +63,7 @@ $width: 280px;
       color: $gd_gideon_blue;
       outline: 0;
       width: 40%;
+      font-weight: 500;
     }
 
     .gd-date-picker-hours-container {
