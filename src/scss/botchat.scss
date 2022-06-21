@@ -1616,7 +1616,7 @@
         fill: white;
     }
 
-    .wc-node-fullscreen {
+    .wc-node-fullscreen:not(.wc-message-disclaimer) {
         width: $gideon-node-width-fullscreen !important;
     }
 
