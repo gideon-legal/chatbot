@@ -561,7 +561,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     >
                         {
                             !!state.format.chatTitle &&
-                                <div className={!fullscreen ? 'wc-header' : 'wc-header wc-header-fullscreen'}>
+                                <div className={!fullscreen ? 'wc-header' : 'wc-header wc-header-fullscreen'} style={{backgroundColor: state.format.themeColor}}>
                                     <img
                                         className="wc-header--logo"
                                         src={state.format.logoUrl ?
