@@ -77,13 +77,14 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
         }
         // has: street, city, state - zipcode, country
         const stateZip = addressArr[2].split(' ');
+        console.log(addressArr[1]);
         if (stateZip.length === 3) {
             // contains zip code
             return(JSON.stringify({
                 address: addressWApt,
                 apartment: this.state.apartment,
                 street: addressArr[0],
-                city: addressArr[1],
+                city: addressArr[1].trim(),
                 state: stateZip[1],
                 zipcode: stateZip[2]
             }));
@@ -92,7 +93,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
                 address: addressWApt,
                 apartment: this.state.apartment,
                 street: addressArr[0],
-                city: addressArr[1],
+                city: addressArr[1].trim(),
                 state: stateZip[1],
                 zipcode: ''
             }));
