@@ -1,7 +1,7 @@
 import { DirectLineOptions, Message} from 'botframework-directlinejs';
 import * as moment from 'moment';
 import * as React from 'react';
-import { FaCaretLeft } from 'react-icons/fa';
+import { FaCaretLeft, FaCaretRight } from 'react-icons/fa';
 import { connect } from 'react-redux';
 import { availableTimes } from './api/bot';
 import { NodeHeader } from './nodes/containers/NodeHeader';
@@ -295,19 +295,18 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
             }
             </div>
             <div className="gd-date-picker-navigation">
-              {startDate > moment() && <button
+              {startDate > moment() && <FaCaretLeft
                 className="gd-date-picker-prev"
-                disabled={this.state.loading}
-                onClick={e => this.getAvailableTimes(this.state.previousStartDates[this.state.previousStartDates.length - 2], true)}
-              >Prev</button>}
-              <button
+                onClick={(e: React.MouseEvent<SVGElement>) => this.getAvailableTimes(this.state.previousStartDates[this.state.previousStartDates.length - 2], true)}
+              />}
+
+              <FaCaretRight
                 className="gd-date-picker-next"
-                disabled={this.state.loading}
-                onClick={e => this.getAvailableTimes(endDate.add(1, 'days'), true)}
-              >Next</button>
+                onClick={(e: React.MouseEvent<SVGElement>) => this.getAvailableTimes(endDate.add(1, 'days'), true)}
+              />
             </div>
             <div>
-                <button type="button" className="gd-submit-date-button" onClick={() => this.handleDaySubmit()} title="Submit">
+                <button type="button" className="gideon-submit-button" onClick={() => this.handleDaySubmit()} title="Submit">
                     Select
                 </button>
             </div>
@@ -350,7 +349,7 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
             )}
           </div>
           <div>
-            <button type="button" className="gd-submit-date-button" onClick={e => this.clickToSubmitDate(e) } title="Submit">
+            <button type="button" className="gideon-submit-button" onClick={e => this.clickToSubmitDate(e) } title="Submit" style={{marginTop: '15px'}}>
                 Schedule
             </button>
           </div>

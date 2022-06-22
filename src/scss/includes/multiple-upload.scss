@@ -70,16 +70,16 @@
     font-size: 14px;
     line-height: 17px;
     padding: 10px 20px;
-    border: 1px solid #3F6DE1;
+    border: 1px solid $c_brand;
     border-radius: 3px;
-    color: black;
+    color: $c_brand;
     margin-bottom: 10px;
     margin-left: auto;
     width: fit-content;
   }
 
   .wc-suggested-options-option:hover {
-    background-color: #3F6DE1;
+    background-color: $c_brand;
     color: white;
     cursor: pointer;
   }

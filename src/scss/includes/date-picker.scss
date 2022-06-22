@@ -26,7 +26,8 @@ $width: 280px;
     .gd-date-picker-select-day {
       margin: 5px 10% 0px 10%;
       height: fit-content;
-      padding: 4px 0px 4px 0px;
+      padding: 10px 20px;
+      font-weight: 500;
       border-radius: 4px;
       background-color: white;
       border-color: $gd_gideon_blue;
@@ -62,6 +63,7 @@ $width: 280px;
       color: $gd_gideon_blue;
       outline: 0;
       width: 40%;
+      font-weight: 500;
     }
 
     .gd-date-picker-hours-container {
@@ -99,8 +101,6 @@ $width: 280px;
 
       span {
         color: $gd_gideon_black;
-        margin-left: 10px;
-        margin-right: 10px;
       }
     }
 
@@ -172,35 +172,8 @@ $width: 280px;
       margin-bottom: 10px;
     }
 
-    .gd-date-picker-next, .gd-date-picker-prev {
-      background-color: $gd_gideon_blue;
-      color: white;
-      border-style: none;
-      margin-right: auto;
-      margin-left: auto;
-      outline: 0;
-      border-radius: 4px;
-      border: 1px solid #3F6DE1;
-      padding: 4px;
-    }
-
-    .gd-date-picker-next:hover:enabled, .gd-date-picker-prev:hover:enabled {
-      color: $gd_gideon_blue;
-      background-color: white;
-      border-color: #3F6DE1;
-    }
-
     .gd-date-picker-next {
-      margin-right: 10%;
-    }
-
-    .gd-date-picker-prev {
-      margin-left: 10%;
-    }
-
-    .gd-date-picker-prev:disabled, .gd-date-picker-next:disabled {
-      color: #cccccc;
-      cursor: default;
+      margin-left: auto;
     }
 
     .gd-date-picker-hours-back {
@@ -237,6 +210,19 @@ $width: 280px;
       flex-direction: row;
       margin-top: 10px;
       margin-bottom: 10px;
+
+      svg {
+        fill: $gd_gideon_blue;
+        height: 24px;
+        width: 24px;
+        border-radius: 4px;
+      }
+
+      svg:hover {
+        fill: white;
+        background-color: $gd_gideon_blue;
+        cursor: pointer;
+      }
     }
 
     &-navigation button {
