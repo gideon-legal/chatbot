@@ -349,7 +349,7 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
             )}
           </div>
           <div>
-            <button type="button" className="gideon-submit-button" onClick={e => this.clickToSubmitDate(e) } title="Submit">
+            <button type="button" className="gideon-submit-button" onClick={e => this.clickToSubmitDate(e) } title="Submit" style={{marginTop: '15px'}}>
                 Schedule
             </button>
           </div>
