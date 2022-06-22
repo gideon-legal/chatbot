@@ -46,6 +46,8 @@ export interface AddressState {
     formattedMessage: string;
     apartment: string;
     apartmentError: string;
+    zipcode: string;
+    zipcodeError: string;
 }
 
 class AddressForm extends React.Component<AddressProps, AddressState> {
@@ -60,7 +62,9 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
             addressSelected: false,
             formattedMessage: '',
             apartment: '',
-            apartmentError: undefined
+            apartmentError: undefined,
+            zipcode: '',
+            zipcodeError: undefined
         };
 
         this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -71,19 +75,20 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
 
     getFormattedAddress = () => {
         const addressArr = this.state.address.split(',');
-        let addressWApt = this.state.address;
+        let addressWApt = this.state.zipcode;
+        const addressZip = this.state.zipcode.split(',');
         if (this.state.apartment !== '') {
-            addressWApt = addressArr[0] + ', ' + this.state.apartment + ',' + addressArr[1] + ',' + addressArr[2] + ',' + addressArr[3];
+            addressWApt = addressArr[0] + ', ' + this.state.apartment + ',' + addressArr[1] + ',' + addressZip[2] + ',' + addressArr[3];
         }
         // has: street, city, state - zipcode, country
-        const stateZip = addressArr[2].split(' ');
+        const stateZip = addressZip[2].split(' ');
         if (stateZip.length === 3) {
             // contains zip code
             return(JSON.stringify({
                 address: addressWApt,
                 apartment: this.state.apartment,
                 street: addressArr[0],
-                city: addressArr[1],
+                city: addressArr[1].trim(),
                 state: stateZip[1],
                 zipcode: stateZip[2]
             }));
@@ -92,7 +97,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
                 address: addressWApt,
                 apartment: this.state.apartment,
                 street: addressArr[0],
-                city: addressArr[1],
+                city: addressArr[1].trim(),
                 state: stateZip[1],
                 zipcode: ''
             }));
@@ -136,7 +141,11 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
         }
         this.setState({ address, addressSelected: true });
         geocodeByAddress(address)
-            .then(results => getLatLng(results[0]))
+            .then(results => {
+                const zipcode = results[0].formatted_address;
+                this.setState({zipcode, addressSelected: true});
+                getLatLng(results[0]);
+            })
             .then(latLang => {
                 console.log('Success', address);
             })
