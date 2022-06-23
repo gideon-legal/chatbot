@@ -100,7 +100,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
     }
 
     if (this.nameActive() && !(this.state.name && this.state.name !== '')) {
-      nameError = 'Please enter your name';
+      nameError = 'Please enter a name';
       validated = false;
     }
 
@@ -252,7 +252,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
           errorOn={this.state.prefixError}
         />)}
 
-        {this.nameActive && (<NodeInputContainer
+        {this.nameActive() && (<NodeInputContainer
           nodeType="contact__form__card"
 
           title={{
