@@ -184,6 +184,7 @@
     .wc-chatbot-content-right {
         flex: 2;
         position: relative;
+        box-shadow: 0px 3px 6px #00000029;
     }
 
     .wc-time {
@@ -244,17 +245,15 @@
         &.no-console {
             bottom: 5%;
         }
-
-        &-fullscreen {
-            &.no-console {
-                bottom: 96px;
-            }
-        }
     }
 
     .wc-message-groups-fullscreen {
         max-width: 100%;
         margin-left: 10px;
+
+        &.no-console {
+            bottom: 96px;
+        }
     }
 
     .wc-message-group-content {
@@ -1750,7 +1749,6 @@
     .wc-chatbot-content-left-wrap {
         height: 100%;
         width: 100%;
-        box-shadow: 0px 3px 6px #00000029;
     }
 
     .wc-fullscreen-logo {
@@ -1779,7 +1777,6 @@
         box-shadow: 2px 2px 4px 0px $c_shadow;
     }
 
-    .gideon-submit-button:focus,
     .gideon-submit-button:hover {
         background-color: #fff;
         border-color: #3F6DE1;
