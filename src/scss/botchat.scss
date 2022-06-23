@@ -801,7 +801,9 @@
         .wc-message-node {
             margin-left: auto;
             border: none;
-            width: $gideon-node-width
+            width: $gideon-node-width;
+            margin-top: 50px;
+            margin-bottom: 50px;
         }
 
         .wc-message-content-node {
@@ -1261,6 +1263,10 @@
     // margin-left: auto;
 }
 
+.from-me-blank {
+    display: none;
+}
+
 .wc-message-from-me-blank.wc-message-from {
     text-align: right;
 }
@@ -1355,7 +1361,9 @@
     .wc-message-node {
       margin-left: auto;
       border: none;
-      width: $gideon-node-width
+      width: $gideon-node-width;
+      margin-top: 50px;
+      margin-bottom: 50px;
     }
 
     .wc-message-imBack {
