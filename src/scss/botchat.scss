@@ -242,7 +242,13 @@
         }
 
         &.no-console {
-            bottom: 0px;
+            bottom: 5%;
+        }
+
+        &-fullscreen {
+            &.no-console {
+                bottom: 96px;
+            }
         }
     }
 
