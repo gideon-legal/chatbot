@@ -179,6 +179,9 @@
         flex: 1;
         margin-top: $headerTotalHeight;
         background-color: #F9F9F9;
+        @include mobile {
+           flex: 0;
+        }
     }
 
     .wc-chatbot-content-right {
