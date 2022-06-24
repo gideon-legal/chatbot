@@ -245,12 +245,14 @@
         }
 
         &.no-console {
-            bottom: 5%;
+            // bottom: 5%;
+            bottom: 0;
         }
 
         &-fullscreen {
             &.no-console {
-                bottom: 96px;
+                // bottom: 96px;
+                bottom: 0;
             }
         }
     }
