@@ -62,7 +62,7 @@
 
 /* docking */
 
-    $chatWidth: 530px;
+    $chatWidth: 25%;
     $chatWidthMobile: 100%;
 
     .wc-hidden {
@@ -110,7 +110,7 @@
         right: 0;
         top: 0;
         z-index: 1;
-        max-width: $chatWidth;
+        max-width: 100%;
         display: flex;
         line-height: 1.2em;
 
@@ -232,7 +232,7 @@
         right: 0;
         top: $headerTotalHeight;
         transition: transform $actionTransition;
-        max-width: $chatWidth;
+        max-width: 100%;
         @include mobileAndTablet {
             max-width: $chatWidthMobile; 
             // max-width: 100%;
@@ -1440,7 +1440,7 @@
         box-sizing: border-box;
         background: white;
         height: $consoleHeight;
-        max-width: $chatWidth;
+        max-width: 100%;
         left: 0;
         // width: 66%;
         position: absolute;
