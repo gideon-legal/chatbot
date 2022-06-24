@@ -114,14 +114,14 @@
         display: flex;
         line-height: 1.2em;
 
-        $logo-size: 42px;
+        $logo-size: 38px;
 
         @include mobileAndTablet {
             max-width: $chatWidthMobile;
         }
 
         span {
-            font-size: 18px;
+            font-size: 16px;
             vertical-align: middle;
             margin-left: 18px;
             margin-right: 18px;
@@ -207,7 +207,7 @@
         font-family: 'Poppins';
         font-style: normal;
         font-weight: 400;
-        font-size: 14px;
+        font-size: 13px;
         line-height: 21px;        
         color: #B5B5B5;
         margin: 0 11px;
