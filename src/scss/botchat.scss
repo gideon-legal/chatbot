@@ -634,7 +634,7 @@
         animation: animationFrames 2s;
         animation-iteration-count: 1;
         clear: both;
-        margin-bottom: 12px;
+        margin-bottom: 25px;
         overflow: hidden;
         position: relative;
         /*transition: max-height 2s ease-in-out;*/
@@ -821,8 +821,8 @@
             margin-left: auto;
             border: none;
             width: $gideon-node-width;
-            margin-top: 40px;
-            margin-bottom: 40px;
+            margin-top: 30px;
+            margin-bottom: 30px;
         }
 
         .wc-message-content-node {
