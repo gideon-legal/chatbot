@@ -179,6 +179,9 @@
         flex: 1;
         margin-top: $headerTotalHeight;
         background-color: #F9F9F9;
+        @include mobile {
+           flex: 0;
+        }
     }
 
     .wc-chatbot-content-right {
@@ -242,12 +245,14 @@
         }
 
         &.no-console {
-            bottom: 5%;
+            // bottom: 5%;
+            bottom: 0;
         }
 
         &-fullscreen {
             &.no-console {
-                bottom: 96px;
+                // bottom: 96px;
+                bottom: 0;
             }
         }
     }
@@ -261,6 +266,14 @@
         overflow: hidden;
         // width: 66%;
         // float: right;
+    }
+
+    .wc-non-fullscreen-last-message {
+        margin-bottom: 5% !important;
+    }
+
+    .wc-fullscreen-last-message {
+        margin-bottom: 96px !important;
     }
 
     .wc-suggested-actions {
