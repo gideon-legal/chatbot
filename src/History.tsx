@@ -125,6 +125,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
             files={[]}
             addFilesToState={ null }
             index={ -1 }
+            inputEnabled={ false }
         >
             <div style={ { width: this.largeWidth } }>&nbsp;</div>
         </WrappedActivity>
@@ -185,6 +186,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                             files={ index in this.state.filesList ? this.state.filesList[index] : [] }
                             addFilesToState={this.addFilesToState}
                             index={ index }
+                            inputEnabled={ this.props.inputEnabled }
                         >
                             <ActivityView
                                 format={ this.props.format }
@@ -326,6 +328,7 @@ export interface WrappedActivityProps {
     files: Array<{ name: string, url: string }>;
     addFilesToState: (index: number, files: [{ name: string, url: string }]) => void;
     index: number;
+    inputEnabled: boolean;
 }
 
 export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
@@ -361,8 +364,14 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
             }
 
             if (nodeType === 'date' || nodeType === 'handoff' || nodeType === 'file' || nodeType === 'imBack' || nodeType === 'contact' || nodeType === 'address' || nodeType === 'disclaimer') {
+                let lastMessageClass = ' ';
+                if (this.props.format.fullscreen && !this.props.inputEnabled) {
+                    lastMessageClass += 'wc-fullscreen-last-message';
+                } else if (!this.props.format.fullscreen && !this.props.inputEnabled) {
+                    lastMessageClass += 'wc-non-fullscreeen-last-message';
+                }
                 return (
-                    <div data-activity-id={activity.id } className={wrapperClassName}>
+                    <div data-activity-id={activity.id } className={wrapperClassName + lastMessageClass}>
                         <div className={'wc-message wc-message-from-me wc-message-node wc-message-' + nodeType + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
                             <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
                                 <ActivityView
@@ -383,8 +392,14 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                 );
             }
         } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'file') {
+            let lastMessageClass = ' ';
+            if (lastMessage && this.props.format.fullscreen && !this.props.inputEnabled) {
+                lastMessageClass += 'wc-fullscreen-last-message';
+            } else if (lastMessage && !this.props.format.fullscreen && !this.props.inputEnabled) {
+                lastMessageClass += 'wc-non-fullscreeen-last-message';
+            }
             return (
-                <div data-activity-id={activity.id } className={wrapperClassName}>
+                <div data-activity-id={activity.id } className={wrapperClassName + lastMessageClass}>
                     <div className={'wc-message wc-message-from-me wc-message-node wc-message-file' + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
                         <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
                             <FileUploadCardReadOnly files={this.props.files}/>
@@ -393,8 +408,14 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                 </div>
             );
         } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer') {
+            let lastMessageClass = ' ';
+            if (lastMessage && this.props.format.fullscreen && !this.props.inputEnabled) {
+                lastMessageClass += 'wc-fullscreen-last-message';
+            } else if (lastMessage && !this.props.format.fullscreen && !this.props.inputEnabled) {
+                lastMessageClass += 'wc-non-fullscreeen-last-message';
+            }
             return (
-                <div data-activity-id={activity.id } className={wrapperClassName}>
+                <div data-activity-id={activity.id } className={wrapperClassName + lastMessageClass}>
                     <div className={'wc-message wc-message-from-me wc-message-node wc-message-disclaimer' + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
                         <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
                             <DisclaimerCardReadOnly text={activityCopy.text}/>
