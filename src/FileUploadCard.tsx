@@ -31,6 +31,7 @@ export interface FileUploadState {
     isUploading: boolean;
     signedUrl: string;
     signedUrls: string[];
+    hoveredFile: number;
 }
 
 export const UPLOAD_PHASES = {
@@ -69,7 +70,8 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
             uploadPhase: UPLOAD_PHASES.OPEN,
             isUploading: false,
             signedUrl: null,
-            signedUrls: []
+            signedUrls: [],
+            hoveredFile: null
         };
 
         this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -259,12 +261,12 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                     {returnDropzone}
                     <div className="uploaded-files-container">
                         <div className="uploaded-files-text">Uploaded Files</div>
-                        {this.state.files.map((f: any) => (
-                            <div className="listed-file">
+                        {this.state.files.map((f: any, index: number) => (
+                            <div className="listed-file" onMouseEnter={() => this.setState({ hoveredFile: index })} onMouseLeave={() => this.setState({ hoveredFile: null })}>
                                 <div className="uploaded-file-name">{f.name}</div>
-                                <div className="remove-uploaded-file" onClick={() => this.removeFile(f)}>
+                                {this.state.hoveredFile === index && <div className="remove-uploaded-file" onClick={() => this.removeFile(f)}>
                                     <RemoveFileIcon />
-                                </div>
+                                </div>}
                             </div>
                         ))}
                     </div>
