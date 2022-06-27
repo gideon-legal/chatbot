@@ -579,16 +579,24 @@
         word-break: break-word;
         overflow: hidden;
         background: white;
-        padding:12px;
+        // padding: 12px;
         position: relative;
         bottom: 23px;
-        font-size: 14px;
-        border-radius: 12px;
+        // font-size: 14px;
+        // border-radius: 12px;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.26);
         visibility: hidden;
         opacity: 0;
         transition: all 1s $cubic;
         transition-delay: 2s;
+
+        // To match standard messages when bot is open
+        padding: 14px;
+        word-break: break-word;
+        border-radius: 2px;
+        font-size: $message_font_size;
+        background-color: #EEF7F9;
+        color: #262626;
 
         &.visible {
             opacity: 1;
