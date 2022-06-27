@@ -264,10 +264,6 @@
     .wc-message-groups-fullscreen {
         max-width: 100%;
         margin-left: 10px;
-
-        &.no-console {
-            bottom: 96px;
-        }
     }
 
     .wc-message-group-content {
@@ -664,7 +660,7 @@
         animation: animationFrames 2s;
         animation-iteration-count: 1;
         clear: both;
-        margin-bottom: 5px;
+        margin-bottom: 10px;
         overflow: hidden;
         position: relative;
         /*transition: max-height 2s ease-in-out;*/
@@ -701,7 +697,7 @@
         align-items: center;
         justify-content: center;
         color: #f6f7f8;
-        margin: auto 0 16px 0;
+        margin: auto 0 6px 0;
         background: #3F6DE1;
     }
 
@@ -931,6 +927,11 @@
         &-disclaimer {
             padding: 0;
            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.12) !important;
+        }
+
+        &-option {
+            overflow-y: scroll;
+            height: 245px;  // should be about 5 options
         }
       }
 
@@ -1688,6 +1689,9 @@
 
     .wc-node-fullscreen:not(.wc-message-disclaimer) {
         width: $gideon-node-width-fullscreen !important;
+        @include mobile {
+            width: $gideon-node-width !important;
+        }
     }
 
 /* animation */
