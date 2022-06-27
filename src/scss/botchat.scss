@@ -62,7 +62,7 @@
 
 /* docking */
 
-    $chatWidth: 25%;
+    $chatWidth: 30%;
     $chatWidthMobile: 100%;
 
     .wc-hidden {
@@ -114,14 +114,14 @@
         display: flex;
         line-height: 1.2em;
 
-        $logo-size: 38px;
+        $logo-size: 42px;
 
         @include mobileAndTablet {
             max-width: $chatWidthMobile;
         }
 
         span {
-            font-size: 16px;
+            font-size: 18px;
             vertical-align: middle;
             margin-left: 18px;
             margin-right: 18px;
@@ -210,7 +210,7 @@
         font-family: 'Poppins';
         font-style: normal;
         font-weight: 400;
-        font-size: 13px;
+        font-size: 14px;
         line-height: 21px;        
         color: #B5B5B5;
         margin: 0 11px;
@@ -634,7 +634,7 @@
         animation: animationFrames 2s;
         animation-iteration-count: 1;
         clear: both;
-        margin-bottom: 25px;
+        margin-bottom: 8px;
         overflow: hidden;
         position: relative;
         /*transition: max-height 2s ease-in-out;*/
@@ -901,7 +901,8 @@
         }
 
         &-disclaimer {
-           box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.12);
+            padding: 0;
+           box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.12) !important;
         }
       }
 
@@ -932,10 +933,6 @@
 
     .wc-message-content audio+h1, .wc-message-content video+h1 {
         margin-top: 11px;
-    }
-
-    .wc-message-content-disclaimer {
-        padding: 0;
     }
 
     .wc-message-from {
