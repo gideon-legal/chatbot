@@ -187,6 +187,7 @@
     .wc-chatbot-content-right {
         flex: 2;
         position: relative;
+        box-shadow: 0px 3px 6px #00000029;
     }
 
     .wc-time {
@@ -260,6 +261,10 @@
     .wc-message-groups-fullscreen {
         max-width: 100%;
         margin-left: 10px;
+
+        &.no-console {
+            bottom: 96px;
+        }
     }
 
     .wc-message-group-content {
@@ -629,7 +634,7 @@
         animation: animationFrames 2s;
         animation-iteration-count: 1;
         clear: both;
-        margin-bottom: 5px;
+        margin-bottom: 25px;
         overflow: hidden;
         position: relative;
         /*transition: max-height 2s ease-in-out;*/
@@ -666,7 +671,7 @@
         align-items: center;
         justify-content: center;
         color: #f6f7f8;
-        margin: auto 0 16px 0;
+        margin: auto 0 6px 0;
         background: #3F6DE1;
     }
 
@@ -815,7 +820,9 @@
         .wc-message-node {
             margin-left: auto;
             border: none;
-            width: $gideon-node-width
+            width: $gideon-node-width;
+            margin-top: 30px;
+            margin-bottom: 30px;
         }
 
         .wc-message-content-node {
@@ -891,6 +898,10 @@
 
         .address-apartment-container {
             margin-top: 18px;
+        }
+
+        &-disclaimer {
+           box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.12);
         }
       }
 
@@ -1275,6 +1286,10 @@
     // margin-left: auto;
 }
 
+.from-me-blank {
+    display: none;
+}
+
 .wc-message-from-me-blank.wc-message-from {
     text-align: right;
 }
@@ -1369,7 +1384,9 @@
     .wc-message-node {
       margin-left: auto;
       border: none;
-      width: $gideon-node-width
+      width: $gideon-node-width;
+      margin-top: 50px;
+      margin-bottom: 50px;
     }
 
     .wc-message-imBack {
@@ -1763,7 +1780,6 @@
     .wc-chatbot-content-left-wrap {
         height: 100%;
         width: 100%;
-        box-shadow: 0px 3px 6px #00000029;
     }
 
     .wc-fullscreen-logo {
@@ -1792,7 +1808,6 @@
         box-shadow: 2px 2px 4px 0px $c_shadow;
     }
 
-    .gideon-submit-button:focus,
     .gideon-submit-button:hover {
         background-color: #fff;
         border-color: #3F6DE1;
