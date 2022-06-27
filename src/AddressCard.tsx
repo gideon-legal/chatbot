@@ -213,7 +213,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
                             ...this.state,
                             apartment: e.target.value
                         }),
-                        placeholder: 'Apt/Suite Number (Optional)',
+                        placeholder: 'Apt/Suite/Unit Number (Optional)',
                         ariaLabel: null,
                         ariaLive: 'polite',
                         onKeyPress: e => this.onKeyPress(e)

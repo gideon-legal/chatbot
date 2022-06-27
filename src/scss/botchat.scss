@@ -179,6 +179,9 @@
         flex: 1;
         margin-top: $headerTotalHeight;
         background-color: #F9F9F9;
+        @include mobile {
+           flex: 0;
+        }
     }
 
     .wc-chatbot-content-right {
@@ -243,7 +246,15 @@
         }
 
         &.no-console {
-            bottom: 5%;
+            // bottom: 5%;
+            bottom: 0;
+        }
+
+        &-fullscreen {
+            &.no-console {
+                // bottom: 96px;
+                bottom: 0;
+            }
         }
     }
 
@@ -260,6 +271,14 @@
         overflow: hidden;
         // width: 66%;
         // float: right;
+    }
+
+    .wc-non-fullscreen-last-message {
+        margin-bottom: 5% !important;
+    }
+
+    .wc-fullscreen-last-message {
+        margin-bottom: 96px !important;
     }
 
     .wc-suggested-actions {
@@ -615,7 +634,7 @@
         animation: animationFrames 2s;
         animation-iteration-count: 1;
         clear: both;
-        margin-bottom: 5px;
+        margin-bottom: 25px;
         overflow: hidden;
         position: relative;
         /*transition: max-height 2s ease-in-out;*/
@@ -652,7 +671,7 @@
         align-items: center;
         justify-content: center;
         color: #f6f7f8;
-        margin: auto 0 16px 0;
+        margin: auto 0 6px 0;
         background: #3F6DE1;
     }
 
@@ -802,8 +821,8 @@
             margin-left: auto;
             border: none;
             width: $gideon-node-width;
-            margin-top: 50px;
-            margin-bottom: 50px;
+            margin-top: 30px;
+            margin-bottom: 30px;
         }
 
         .wc-message-content-node {
@@ -879,6 +898,10 @@
 
         .address-apartment-container {
             margin-top: 18px;
+        }
+
+        &-disclaimer {
+           box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.12);
         }
       }
 
