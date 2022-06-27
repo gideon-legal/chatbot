@@ -168,7 +168,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
                             onSelect={this.handleSelect}
                         >
                             {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                                <div>
+                                <div style={{position: 'relative'}}>
                                     <input
                                         {...getInputProps({
                                             placeholder: 'Search Places ...',
@@ -177,7 +177,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
                                         autoFocus={true}
                                         onKeyPress={ e => this.onKeyPress(e) }
                                     />
-                                    <div className="autocomplete-dropdown-container">
+                                    <div className="autocomplete-dropdown-container" style={suggestions.length > 0 ? {borderLeft: '1px solid #EBEBEB', borderRight: '1px solid #EBEBEB', borderBottom: '1px solid #EBEBEB'} : {}}>
                                         {loading && <div>Loading...</div>}
                                         {suggestions.map(suggestion => {
                                             const className = suggestion.active

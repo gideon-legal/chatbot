@@ -1249,12 +1249,22 @@
         margin-top: 0 !important;
     }
 
+    .autocomplete-dropdown-container {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        transform: translateY(45px);
+        z-index: 10;
+        border-radius: 2px;
+        width: 100%;
+    }
+
     .address-suggestion-item {
-        padding: 4px 0px;
+        padding: 4px 10px;
     }
 
     .address-suggestion-item-active {
-        padding: 4px 0px;
+        padding: 4px 10px;
     }
 
     .wc-message-from-me svg.wc-message-callout path {
