@@ -577,11 +577,11 @@
         cursor: pointer;
         display: inline-block;
         word-break: break-word;
-        overflow: hidden;
+        // overflow: hidden;
         background: white;
         // padding: 12px;
-        position: relative;
-        bottom: 23px;
+        // position: relative;
+        // bottom: 23px;
         // font-size: 14px;
         // border-radius: 12px;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.26);
@@ -598,10 +598,29 @@
         background-color: #EEF7F9;
         color: #262626;
 
+        // Updates to move floating message to left of icon
+        position: absolute;
+        right: 0;
+        bottom: 6px;
+        transform: translate(-120px);
+
         &.visible {
             opacity: 1;
             visibility: visible;
         }
+    }
+
+    .wc-floating-message::after {
+        width: 20px;
+        height: 20px;
+        content: ' ';
+        background-color: #EEF7F9;
+        z-index: 10;
+        position: absolute;
+        right: -9px;
+        transform: rotate(-45deg);
+        box-shadow: 1px 2px 2px 0 rgba(0, 0, 0, 0.16);
+        border-radius: 2px;
     }
 
     .wc-floating {
@@ -611,7 +630,7 @@
         margin: 0 auto;
         background-color: $gideon-logo-yellow;
         border-radius: 80px;
-        box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.16), 0 4px 10px 0 rgba(0, 0, 0, 0.26);
+        box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.16), 0 4px 10px 0 rgb(0, 0, 0 / 26%);
         z-index: 1000;
 
         $difference: -7px;
