@@ -62,7 +62,7 @@
 
 /* docking */
 
-    $chatWidth: 530px;
+    $chatWidth: 25%;
     $chatWidthMobile: 100%;
 
     .wc-hidden {
@@ -110,18 +110,18 @@
         right: 0;
         top: 0;
         z-index: 1;
-        max-width: $chatWidth;
+        max-width: 100%;
         display: flex;
         line-height: 1.2em;
 
-        $logo-size: 42px;
+        $logo-size: 38px;
 
         @include mobileAndTablet {
             max-width: $chatWidthMobile;
         }
 
         span {
-            font-size: 18px;
+            font-size: 16px;
             vertical-align: middle;
             margin-left: 18px;
             margin-right: 18px;
@@ -210,7 +210,7 @@
         font-family: 'Poppins';
         font-style: normal;
         font-weight: 400;
-        font-size: 14px;
+        font-size: 13px;
         line-height: 21px;        
         color: #B5B5B5;
         margin: 0 11px;
@@ -235,7 +235,7 @@
         right: 0;
         top: $headerTotalHeight;
         transition: transform $actionTransition;
-        max-width: $chatWidth;
+        max-width: 100%;
         @include mobileAndTablet {
             max-width: $chatWidthMobile; 
             // max-width: 100%;
@@ -1463,7 +1463,7 @@
         box-sizing: border-box;
         background: white;
         height: $consoleHeight;
-        max-width: $chatWidth;
+        max-width: 100%;
         left: 0;
         // width: 66%;
         position: absolute;
