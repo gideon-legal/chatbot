@@ -88,7 +88,7 @@ class Disclaimer extends React.Component<DisclaimerProps, {}> {
         </div>
         <div className="disclaimer__card__buttons">
           <ul>{ this.props.activityWithSuggestedActions.suggestedActions.actions.map((action, index) =>
-            <button key={index} type="button" onClick={e => this.actionClick(e, action) } title={ action.title }>
+            <button className={index === 0 ? '' : 'button-reverse'} key={index} type="button" onClick={e => this.actionClick(e, action) } title={ action.title }>
             { action.title }
             </button>
           ) }</ul>
