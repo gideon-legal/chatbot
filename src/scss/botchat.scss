@@ -557,6 +557,23 @@
                         border-color: #3F6DE1;
                         color: $c01;
                     }
+
+                    .button-reverse {
+                        background-color: white;
+                        border: 1px solid #3F6DE1;
+                        color: #3F6DE1;
+                    }
+
+                    .button-reverse:focus,
+                    .button-reverse:hover {
+                        background-color: #3F6DE1;
+                        color: white;
+                    }
+
+                    .button-reverse:active {
+                        background-color: white;
+                        color: white;
+                    }
                 }
             }
         }
@@ -566,7 +583,7 @@
         position: fixed;
         right: $rightWeight; 
         bottom: $floatingBottom;
-        width:150px;
+        width: 250px;
         z-index: 200000;
         text-align: center;
 
@@ -607,6 +624,7 @@
         right: 0;
         bottom: 6px;
         transform: translate(-120px);
+        text-align: left;
 
         &.visible {
             opacity: 1;
@@ -631,7 +649,7 @@
         cursor: pointer;
         width: $floatingHeight;
         height: $floatingHeight;
-        margin: 0 auto;
+        margin: 0 47.5px 0 auto;
         background-color: $gideon-logo-yellow;
         border-radius: 80px;
         box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.16), 0 4px 10px 0 rgb(0, 0, 0 / 26%);
