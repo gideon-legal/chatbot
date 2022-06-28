@@ -2,7 +2,8 @@
 @import "settings";
 @import "media-queries";
 
-$gd_dark_sky_blue: #31ace2;
+$gd_gideon_blue: #3F6DE1;
+$gd_gideon_black: #262626;
 
 .react-datepicker__header--time {
     padding-bottom: 8px;
@@ -13,10 +14,7 @@ $gd_dark_sky_blue: #31ace2;
 $width: 280px;
 
 .gd-date-picker {
-    width: $width;
-    max-width: $width;
-
-    padding:2px;
+    background-color: white;
 
     &-inner-container {
       display: flex;
@@ -28,12 +26,14 @@ $width: 280px;
     .gd-date-picker-select-day {
       margin: 5px 10% 0px 10%;
       height: fit-content;
-      padding: 4px 0px 4px 0px;
+      padding: 10px 20px;
+      font-weight: 500;
       border-radius: 4px;
       background-color: white;
-      border-color: $gd_dark_sky_blue;
-      color: $gd_dark_sky_blue;
+      border-color: $gd_gideon_blue;
+      color: $gd_gideon_blue;
       outline: 0;
+      min-height: unset;
     }
 
     .gd-date-picker-inner-header {
@@ -43,7 +43,7 @@ $width: 280px;
       margin-bottom: 10px;
       height: 20px;
       span {
-        color: $gd_dark_sky_blue;
+        color: $gd_gideon_black;
         height: 1.2em;
         line-height: 20px;
       }
@@ -60,10 +60,11 @@ $width: 280px;
       max-height: 2em;
       border-radius: 4px;
       background-color: white;
-      border-color: $gd_dark_sky_blue;
-      color: $gd_dark_sky_blue;
+      border-color: $gd_gideon_blue;
+      color: $gd_gideon_blue;
       outline: 0;
       width: 40%;
+      font-weight: 500;
     }
 
     .gd-date-picker-hours-container {
@@ -75,13 +76,17 @@ $width: 280px;
       max-height: 280px;
       padding-bottom: 20px;
       align-content: flex-start;
+
+      .gd-submit-date-button {
+        padding: 13px;
+      }
     }
 
     .gd-date-picker-select-day:focus,
     .gd-date-picker-select-day:hover:enabled,
     .gd-date-picker-select-hour:focus,
     .gd-date-picker-select-hour:hover:enabled {
-      background-color: $gd_dark_sky_blue;
+      background-color: $gd_gideon_blue;
       color: white;
     }
 
@@ -96,9 +101,7 @@ $width: 280px;
       margin-bottom: 10px;
 
       span {
-        color: $gd_dark_sky_blue;
-        margin-left: 10px;
-        margin-right: 10px;
+        color: $gd_gideon_black;
       }
     }
 
@@ -151,12 +154,17 @@ $width: 280px;
         animation: 1.4s ease-in-out infinite both circle-animation;
         display: block;
         fill: transparent;
-        stroke: $gd_dark_sky_blue;
+        stroke: $gd_gideon_blue;
         stroke-linecap: round;
         stroke-dasharray: 283;
         stroke-dashoffset: 280;
         stroke-width: 10px;
         transform-origin: 50% 50%;
+      }
+
+      .selected-day {
+        background-color: $gd_gideon_blue;
+        color: white;
       }
     }
 
@@ -165,32 +173,8 @@ $width: 280px;
       margin-bottom: 10px;
     }
 
-    .gd-date-picker-next, .gd-date-picker-prev {
-      background-color: white;
-      color: $gd_dark_sky_blue;
-      border-style: none;
-      margin-right: auto;
-      margin-left: auto;
-      outline: 0;
-      border-radius: 4px;
-    }
-
-    .gd-date-picker-next:hover:enabled, .gd-date-picker-prev:hover:enabled {
-      color: white;
-      background-color: $gd_dark_sky_blue;
-    }
-
     .gd-date-picker-next {
-      margin-right: 10%;
-    }
-
-    .gd-date-picker-prev {
-      margin-left: 10%;
-    }
-
-    .gd-date-picker-prev:disabled, .gd-date-picker-next:disabled {
-      color: #cccccc;
-      cursor: default;
+      margin-left: auto;
     }
 
     .gd-date-picker-hours-back {
@@ -203,7 +187,7 @@ $width: 280px;
       margin-left: 10px;
 
       svg {
-        fill: $gd_dark_sky_blue;
+        fill: $gd_gideon_blue;
         height: 24px;
         width: 24px;
         border-radius: 4px;
@@ -211,7 +195,7 @@ $width: 280px;
 
       svg:hover {
         fill: white;
-        background-color: $gd_dark_sky_blue;
+        background-color: $gd_gideon_blue;
         cursor: pointer;
       }
     }
@@ -227,6 +211,19 @@ $width: 280px;
       flex-direction: row;
       margin-top: 10px;
       margin-bottom: 10px;
+
+      svg {
+        fill: $gd_gideon_blue;
+        height: 24px;
+        width: 24px;
+        border-radius: 4px;
+      }
+
+      svg:hover {
+        fill: white;
+        background-color: $gd_gideon_blue;
+        cursor: pointer;
+      }
     }
 
     &-navigation button {
@@ -240,10 +237,10 @@ $width: 280px;
 
     &.withTime {
 
-        max-width: 421px;
+        // max-width: 421px;
 
         @include mobile {
-            max-width: $width;
+            // max-width: $width;
         }
 
         .gd-selected-date {
@@ -272,30 +269,33 @@ $width: 280px;
 
     .gd-submit-date-button {
         width: 100%;
-        height: 42px;
-        background: white;
-        border-top: 2px solid $gd_dark_sky_blue;
-        border-bottom-left-radius: $messageBorderRadius - 2px;
-        border-bottom-right-radius: $messageBorderRadius - 2px;
-        border-bottom: 0;
-        border-left: 0;
-        border-right: 0;
-        color:$gd_dark_sky_blue;
+        height: 48px;
         font-size: 14px;
         font-weight: bold;
+        margin-top: 15px;
+        border-radius: 3px;
+    }
+
+    .gd-submit-date-button-disabled {
+      background-color: #B5B5B5;
     }
 
     .gd-submit-date-button:hover {
-      background: $gd_dark_sky_blue;
+      background-color: $gd_gideon_blue;
       color: white;
+    }
+
+    .gd-submit-date-button-disabled:hover {
+      background-color: #B5B5B5;
+      cursor: not-allowed;
     }
 
     .gd-no-workable-appointment {
         background: white;
         border: 0;
-        border-bottom: 2px solid $gd_dark_sky_blue;
-        border-top: 2px solid $gd_dark_sky_blue;
-        color: $gd_dark_sky_blue;
+        border-bottom: 2px solid $gd_gideon_blue;
+        border-top: 2px solid $gd_gideon_blue;
+        color: $gd_gideon_blue;
         font-size: 14px;
         font-weight: bold;
         height: 42px;
@@ -315,6 +315,7 @@ $width: 280px;
             font-weight: bold;
             position: absolute;
             display: block;
+            color: $gd_gideon_black;
         }
 
         .gd-header-schedule-meeting {
@@ -324,7 +325,6 @@ $width: 280px;
         }
 
         .gd-selected-date {
-            color: #ffffff;
             top: 38%;
             left: 0;
             right: 0;
@@ -350,24 +350,31 @@ $width: 280px;
     }
 
     .gd-selected-date-container {
-        height: 54px;
+        // height: 54px;
+        background-color: white;
+        font-size: 18px;
+        color: #262626;
+        text-align: left;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 19px;
     }
 
     .react-datepicker {
-        width: 100%;
+        // width: 100%;
         border-radius: 0;
         border: 0;
-        border-bottom: 1px solid $gd_dark_sky_blue !important;
 
         &__navigation--previous {
-            border-right-color: $gd_dark_sky_blue;
+            border-right-color: $gd_gideon_blue;
         }
 
         &__navigation--next {
-            border-left-color: $gd_dark_sky_blue;
+            border-left-color: $gd_gideon_blue;
 
             &--with-time {
-                right: 126px !important;
+                // right: 126px !important;
+                right: 10px !important;
 
                 @include mobile {
                     right:10px !important;
@@ -376,17 +383,18 @@ $width: 280px;
         }
 
         .react-datepicker__month-container {
-            width: 100%;
+            width: 100% !important;
         }
 
 
         &__time-container {
-            border-left: 1px solid $gd_dark_sky_blue;
-            width: 30% !important;
+            border-left: 1px solid $gd_gideon_blue;
+            // width: 30% !important;
+            width: 100% !important;
 
             @include mobile {
                 border-left:0;
-                border-top:  1px solid $gd_dark_sky_blue;
+                border-top:  1px solid $gd_gideon_blue;
             }
         }
 
@@ -395,7 +403,7 @@ $width: 280px;
             padding-right: 0px !important;
 
             &-item--selected {
-                background-color: $gd_dark_sky_blue !important;
+                background-color: $gd_gideon_blue !important;
             }
 
             &-item--disabled {
@@ -418,17 +426,21 @@ $width: 280px;
         }
 
         &__month-container {
-            color:$gd_dark_sky_blue !important;
+            color:$gd_gideon_blue !important;
         }
 
         &__day-name, &__day, &__time-name, &__current-month {
-            color:$gd_dark_sky_blue;
+            color: black;
             font-size: 14px;
         }
 
         &__day--selected, &__day--in-range {
-            background-color: $gd_dark_sky_blue;
-            color:white;
+            background-color: $gd_gideon_blue;
+        }
+
+        &__day--selected {
+          border-radius: 50%;
+          color: white;
         }
 
         &__day--disabled {
@@ -440,11 +452,11 @@ $width: 280px;
           margin-top: 10px;
 
           select {
-            border: 1px solid $gd_dark_sky_blue;
+            border: 1px solid $gd_gideon_blue;
             padding: 5px;
             border-radius: 5px;
             outline: none;
-            color: $gd_dark_sky_blue;
+            color: $gd_gideon_blue;
           }
         }
     }
@@ -453,6 +465,8 @@ $width: 280px;
     .react-datepicker__day--range-start,
     .react-datepicker__day--range-end {
         border-radius: 4em;
+        color: white;
+        background-color: #3F6DE1;
     }
 
     .react-datepicker__navigation--next--with-time {
@@ -463,5 +477,153 @@ $width: 280px;
         width: 100% !important;
     }
 
+    .react-datepicker__day--range-start, .react-datepicker__day--range-end {
+        position: relative;
+        z-index: 2;
+    }
 
+    .react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end) {
+        background-color: transparent;
+        position: relative;
+        z-index: 1;
+    }
+
+    .react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end)::after {
+        content: ' ';
+        background-color: #D8E2F9;
+        position: absolute;
+        width: 4.9rem;
+        height: 1.7rem;
+        transform: translateX(-2.7rem);
+        z-index: -1;
+        @include mobile {
+          width: 3rem;
+          transform: translateX(-1.7rem);
+        }
+    }
+
+    [aria-label="day-1"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end)::after {
+        transform: translateX(-1.0rem);
+    }
+
+    .react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sun::after {
+        transform: translateX(-1.4rem);
+    }
+
+    .react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sat::after {
+        width: 3.1rem;
+        @include mobile {
+          width: 2.15rem;
+        }
+    }
+
+    [aria-label="day-1"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sun::after,
+    [aria-label="day-2"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sun::after,
+    [aria-label="day-3"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sun::after,
+    [aria-label="day-4"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sun::after,
+    [aria-label="day-5"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sun::after,
+    [aria-label="day-6"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sun::after,
+    [aria-label="day-7"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sun::after,
+    [aria-label="day-8"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sun::after,
+    [aria-label="day-9"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sun::after {
+        transform: translateX(-1.15rem);
+    }
+
+    [aria-label="day-1"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sat::after,
+    [aria-label="day-2"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sat::after,
+    [aria-label="day-3"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sat::after,
+    [aria-label="day-4"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sat::after,
+    [aria-label="day-5"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sat::after,
+    [aria-label="day-6"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sat::after,
+    [aria-label="day-7"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sat::after,
+    [aria-label="day-8"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sat::after,
+    [aria-label="day-9"].react-datepicker__day--in-range:not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end).react-datepicker__day--sat::after {
+        width: 3.35rem;
+        @include mobile {
+          width: 2.4rem;
+        }
+    }
+        
+    .react-datepicker__day--range-end::after {
+        width: 1.2rem;
+    }
+
+    .react-datepicker__day-name, .react-datepicker__day--outside-month {
+        color: #939393;
+    }
+
+    .react-datepicker__day-name {
+        margin-bottom: 10px;
+    }
+
+    .react-datepicker__day-name, .react-datepicker__day, .react-datepicker__time-name{
+        margin-left: 8px;
+        margin-right: 8px;
+
+      @include mobile {
+        margin-left: 0px;
+        margin-right: 0px;
+      }
+    }
+
+    .react-datepicker__day:not(.react-datepicker__day--selected):hover {
+      border-radius: 50%;
+    }
+
+    .react-datepicker__header {
+      // margin: 0.4rem;
+      width: 100% !important;
+    }
+}
+
+.date-text-container {
+    width: 100%;
+    border: 0.5px solid #B5B5B5;
+    border-radius: 3px;
+    padding: 9px;
+    color: #262626;
+    display: flex;
+    align-items: center;
+}
+
+.date-text-container:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.date-icon {
+  margin-right: 11px;
+  display: flex;
+}
+
+.date-text {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.date-picker-node-content {
+    background-color: white;
+}
+
+.date-picker-node-content-body {
+    // position: relative;
+    margin-bottom: 20px;
+}
+
+.date-picker-popup-outer-container {
+    position: absolute;
+    top: -200px;
+    left: 5px;
+    z-index: 1;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);
+    border-radius: 3px;
+}
+
+.date-picker-popup-container {
+    position: fixed;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);
+    border-radius: 3px;
 }

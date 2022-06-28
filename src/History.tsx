@@ -1,10 +1,13 @@
 import { Activity, CardActionTypes, DirectLineOptions, Message, User } from 'botframework-directlinejs';
+import * as moment from 'moment';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { ActivityView } from './ActivityView';
 import { activityWithSuggestedActions } from './activityWithSuggestedActions';
 import { classList, doCardAction, IDoCardAction } from './Chat';
 import { activityIsDisclaimer, DisclaimerCard } from './DisclaimerCard';
+import { DisclaimerCardReadOnly } from './DisclaimerCardReadOnly';
+import { FileUploadCardReadOnly } from './FileUploadCardReadOnly';
 import * as konsole from './Konsole';
 import { ChatState, FormatState, SizeState } from './Store';
 import { sendMessage } from './Store';
@@ -27,9 +30,14 @@ export interface HistoryProps {
     doCardAction: IDoCardAction;
     gid: string;
     directLine: DirectLineOptions;
+    inputEnabled: boolean;
 }
 
-export class HistoryView extends React.Component<HistoryProps, {}> {
+export interface HistoryState {
+    filesList: { [index: number]: Array<{ name: string, url: string }> };
+}
+
+export class HistoryView extends React.Component<HistoryProps, HistoryState> {
     private scrollMe: HTMLDivElement;
     private scrollContent: HTMLDivElement;
     private scrollToBottom = true;
@@ -39,6 +47,8 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
 
     constructor(props: HistoryProps) {
         super(props);
+        this.state = { filesList: {} };
+        this.addFilesToState = this.addFilesToState.bind(this);
     }
 
     componentWillUpdate(nextProps: HistoryProps) {
@@ -112,6 +122,10 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
             selected={ false }
             showTimestamp={ false }
             gid={null}
+            files={[]}
+            addFilesToState={ null }
+            index={ -1 }
+            inputEnabled={ false }
         >
             <div style={ { width: this.largeWidth } }>&nbsp;</div>
         </WrappedActivity>
@@ -128,6 +142,10 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
         return this.props.doCardAction(type, value);
     }
 
+    private addFilesToState(index: number, files: Array<{ name: string, url: string }>) {
+        this.setState(prevState => ({ filesList: { ...prevState.filesList, [index]: files } }));
+    }
+
     render() {
         let content;
         let lastActivityIsDisclaimer = false;
@@ -139,13 +157,11 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
                 content = <this.measurableCarousel/>;
             } else {
                 const activities = filteredActivities(this.props.activities, this.props.format.strings.pingMessage);
-
                 activityDisclaimer = activities.length > 0 ? activities[activities.length - 1] : undefined;
                 lastActivityIsDisclaimer = activityDisclaimer && activityDisclaimer.entities && activityDisclaimer.entities.length > 0 && activityDisclaimer.entities[0].node_type === 'disclaimer';
-
                 content = activities
                 .map((activity, index) =>
-                    ((activity.type !== 'message' || activity.text || (activity.attachments && !!activity.attachments.length)) && !activityIsDisclaimer(activity)) &&
+                    ((activity.type !== 'message' || activity.text || (activity.attachments && !!activity.attachments.length))) &&
                         <WrappedActivity
                             format={ this.props.format }
                             key={ 'message' + index }
@@ -167,6 +183,10 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
                             } }
                             gid={ this.props.gid }
                             directLine={ this.props.directLine }
+                            files={ index in this.state.filesList ? this.state.filesList[index] : [] }
+                            addFilesToState={this.addFilesToState}
+                            index={ index }
+                            inputEnabled={ this.props.inputEnabled }
                         >
                             <ActivityView
                                 format={ this.props.format }
@@ -177,13 +197,15 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
                                 onImageLoad={ () => this.autoscroll() }
                                 gid={ this.props.gid}
                                 directLine={ this.props.directLine }
+                                addFilesToState={this.addFilesToState}
+                                index={ index }
                             />
                         </WrappedActivity>
                 );
             }
         }
 
-        const groupsClassName = classList('wc-message-groups', !this.props.format.chatTitle && 'no-header');
+        const groupsClassName = classList('wc-message-groups', !this.props.format.chatTitle && 'no-header',  this.props.format.fullscreen && 'wc-message-groups-fullscreen', !this.props.inputEnabled && 'no-console');
 
         return (
             <div>
@@ -194,10 +216,15 @@ export class HistoryView extends React.Component<HistoryProps, {}> {
                 tabIndex={ 0 }
             >
                 <div className="wc-message-group-content" ref={ div => { if (div) { this.scrollContent = div; } }}>
+                    <div className="wc-date-header">
+                        <div className="wc-date-header-line"></div>
+                        <div className="wc-date-header-text">{ moment().format('MM/DD/YYYY') }</div>
+                        <div className="wc-date-header-line"></div>
+                    </div>
                     { content }
                 </div>
             </div>
-            {lastActivityIsDisclaimer && <DisclaimerCard activity={activityDisclaimer} onImageLoad={ () => this.autoscroll() }/>}
+            {/* {lastActivityIsDisclaimer && <DisclaimerCard activity={activityDisclaimer} onImageLoad={ () => this.autoscroll() }/>} */}
             </div>
         );
     }
@@ -210,6 +237,7 @@ export const History = connect(
         size: state.size,
         activities: state.history.activities,
         hasActivityWithSuggestedActions: !!activityWithSuggestedActions(filteredActivities(state.history.activities, state.format.strings.pingMessage)),
+        inputEnabled: state.history.inputEnabled,
         // only used to create helper functions below
         connectionSelectedActivity: state.connection.selectedActivity,
         selectedActivity: state.history.selectedActivity,
@@ -227,6 +255,7 @@ export const History = connect(
         size: stateProps.size,
         activities: stateProps.activities,
         hasActivityWithSuggestedActions: stateProps.hasActivityWithSuggestedActions,
+        inputEnabled: stateProps.inputEnabled,
         // from dispatchProps
         setMeasurements: dispatchProps.setMeasurements,
         onClickRetry: dispatchProps.onClickRetry,
@@ -296,6 +325,10 @@ export interface WrappedActivityProps {
     onClickRetry: React.MouseEventHandler<HTMLAnchorElement>;
     gid: string;
     directLine?: DirectLineOptions;
+    files: Array<{ name: string, url: string }>;
+    addFilesToState: (index: number, files: [{ name: string, url: string }]) => void;
+    index: number;
+    inputEnabled: boolean;
 }
 
 export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
@@ -324,17 +357,23 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
         // Check if there's an additional activity to render to get the user's input
         if (lastMessage && (activityRequiresAdditionalInput || activityHasSuggestedActions)) {
             let nodeType = '';
-            if (activityRequiresAdditionalInput && !activityHasSuggestedActions) {
+            if (activityRequiresAdditionalInput && (!activityHasSuggestedActions || activityCopy.entities[0].node_type === 'disclaimer')) {
                 nodeType = activityCopy.entities[0].node_type;
             } else if (activityHasSuggestedActions) {
                 nodeType = activityActions.actions[0].type;
             }
 
-            if (nodeType === 'date' || nodeType === 'handoff' || nodeType === 'file' || nodeType === 'imBack' || nodeType === 'contact') {
+            if (nodeType === 'date' || nodeType === 'handoff' || nodeType === 'file' || nodeType === 'imBack' || nodeType === 'contact' || nodeType === 'address' || nodeType === 'disclaimer') {
+                let lastMessageClass = ' ';
+                if (this.props.format.fullscreen && !this.props.inputEnabled) {
+                    lastMessageClass += 'wc-fullscreen-last-message';
+                } else if (!this.props.format.fullscreen && !this.props.inputEnabled) {
+                    lastMessageClass += 'wc-non-fullscreeen-last-message';
+                }
                 return (
-                    <div data-activity-id={activity.id } className={wrapperClassName}>
-                        <div className={'wc-message wc-message-from-me wc-message-' + nodeType} ref={ div => this.messageDiv = div }>
-                            <div className={ contentClassName + contactClassName }>
+                    <div data-activity-id={activity.id } className={wrapperClassName + lastMessageClass}>
+                        <div className={'wc-message wc-message-from-me wc-message-node wc-message-' + nodeType + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
+                            <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
                                 <ActivityView
                                     format={this.props.format}
                                     size={null}
@@ -344,12 +383,46 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                                     onImageLoad={null}
                                     gid={this.props.gid}
                                     directLine={this.props.directLine}
+                                    addFilesToState={this.props.addFilesToState}
+                                    index={this.props.index}
                                 />
                             </div>
                         </div>
                     </div>
                 );
             }
+        } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'file') {
+            let lastMessageClass = ' ';
+            if (lastMessage && this.props.format.fullscreen && !this.props.inputEnabled) {
+                lastMessageClass += 'wc-fullscreen-last-message';
+            } else if (lastMessage && !this.props.format.fullscreen && !this.props.inputEnabled) {
+                lastMessageClass += 'wc-non-fullscreeen-last-message';
+            }
+            return (
+                <div data-activity-id={activity.id } className={wrapperClassName + lastMessageClass}>
+                    <div className={'wc-message wc-message-from-me wc-message-node wc-message-file' + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
+                        <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
+                            <FileUploadCardReadOnly files={this.props.files}/>
+                        </div>
+                    </div>
+                </div>
+            );
+        } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer') {
+            let lastMessageClass = ' ';
+            if (lastMessage && this.props.format.fullscreen && !this.props.inputEnabled) {
+                lastMessageClass += 'wc-fullscreen-last-message';
+            } else if (lastMessage && !this.props.format.fullscreen && !this.props.inputEnabled) {
+                lastMessageClass += 'wc-non-fullscreeen-last-message';
+            }
+            return (
+                <div data-activity-id={activity.id } className={wrapperClassName + lastMessageClass}>
+                    <div className={'wc-message wc-message-from-me wc-message-node wc-message-disclaimer' + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
+                        <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
+                            <DisclaimerCardReadOnly text={activityCopy.text}/>
+                        </div>
+                    </div>
+                </div>
+            );
         }
     }
 
@@ -357,6 +430,14 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
         let timeLine: JSX.Element;
 
         const { activity, format } = this.props;
+
+        // These lines determine the type of node. If it is a date node, we need to set overflow to visible to wrapper class
+        const activityCopy: any = activity;
+        const activityEntities = activityCopy.entities;
+        let nodeType = '';
+        if (activityEntities && activityEntities.length > 0) {
+            nodeType = activityEntities[0].node_type;
+        }
 
         switch (activity.id) {
             case undefined:
@@ -386,6 +467,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
 
         const wrapperClassName = classList(
             'wc-message-wrapper',
+            (nodeType === 'date') && 'wc-message-wrapper-overflow-visible',
             (this.props.activity as Message).attachmentLayout || 'list',
             this.props.onClickActivity && 'clickable',
             who
@@ -399,6 +481,30 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
         const avatarColor = this.props.format && this.props.format.themeColor ? this.props.format.themeColor : '#c3ccd0';
         const avatarInitial = this.props.format && this.props.format.display_name && typeof(this.props.format.display_name) === 'string' ? findInitial(this.props.format.display_name) : 'B';
         const showAvatar = this.props.fromMe === false && (this.props.nextActivityFromMe || this.props.lastMessage);
+
+        if (this.props.activity.type === 'message' && who === 'me' && (this.props.activity.text.includes('Skip Upload') || this.props.activity.text.includes('s3.amazonaws') || this.props.activity.text.length <= 0)) {
+            return (
+                <div className={`wc-message-pane from-me-blank`}
+                  >
+                    {(this.props.displayName && <span className="wc-message-bot-name">{this.props.format && this.props.format.display_name ? this.props.format.display_name : 'Bot'}</span>)}
+                    <div data-activity-id={ this.props.activity.id } className={ wrapperClassName } onClick={ this.props.onClickActivity }>
+                        {!this.props.fromMe && (showAvatar ?
+                          <div className="wc-message-avatar" style={{ background: avatarColor }}>{avatarInitial}</div>
+                        :
+                          <div className="wc-message-avatar blank"/>
+                        )}
+                        <div className={ 'wc-message wc-message-from-me-blank' } ref={ div => this.messageDiv = div }>
+                        </div>
+                        {/* <div className={ 'wc-message-from wc-message-from-' + who }>{ timeLine }</div> */}
+                    </div>
+                    {this.renderAdditionalActivity(contentClassName, wrapperClassName)}
+                </div>
+            );
+        }
+
+        if (who !== 'me' && nodeType === 'disclaimer') {
+            return this.renderAdditionalActivity(contentClassName, wrapperClassName);
+        }
 
         return (
             <div className={`wc-message-pane from-${who}`}

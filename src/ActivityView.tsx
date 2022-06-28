@@ -1,6 +1,7 @@
 import { Activity, Attachment, AttachmentLayout, DirectLineOptions } from 'botframework-directlinejs';
 import * as moment from 'moment';
 import * as React from 'react';
+import { AddressCard } from './AddressCard';
 import { AttachmentView } from './Attachment';
 import { Carousel } from './Carousel';
 import { IDoCardAction } from './Chat';
@@ -10,6 +11,7 @@ import { DisclaimerCard } from './DisclaimerCard';
 import { FileUploadCard } from './FileUploadCard';
 import { FormattedText } from './FormattedText';
 import { MultipleChoiceCard } from './MultipleChoiceCard';
+import { SchedulerCard } from './SchedulerCard';
 import { FormatState, SizeState } from './Store';
 
 const Attachments = (props: {
@@ -52,6 +54,8 @@ export interface ActivityViewProps {
     onImageLoad: () => void;
     gid: string;
     directLine: DirectLineOptions;
+    index: number;
+    addFilesToState: (index: number, files: Array<{ name: string, url: string }>) => void;
 }
 
 export class ActivityView extends React.Component<ActivityViewProps, {}> {
@@ -75,6 +79,17 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
         return currentText;
       }
       const newLine = key + ': ' + json[key];
+      if (currentText !== '') {
+        return currentText.concat('\n', newLine);
+      }
+      return currentText.concat(newLine);
+    }
+
+    addFormattedValue = (currentText: string, key: string, json: { [key: string]: string }) => {
+      if (!(key in json)) {
+        return currentText;
+      }
+      const newLine = json[key];
       if (currentText !== '') {
         return currentText.concat('\n', newLine);
       }
@@ -125,14 +140,20 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
         return date;
       }
 
-      try { // contact node
+      try { // contact node + address node formatted for chatbot message
         const o = JSON.parse(text);
         let formattedText = '';
+        if (text.includes('s3.amazonaws') || text.includes('Skip Upload')) {
+          const blank = '';
+          return blank;
+        }
         if (o && typeof o === 'object') {
-          if (('name' in o || 'email' in o || 'phone' in o)) {
+          if (('prefix' in o || 'name' in o || 'email' in o || 'phone' in o || 'address' in o)) {
+            formattedText = this.addFormattedKey(formattedText, 'prefix', o);
             formattedText = this.addFormattedKey(formattedText, 'name', o);
             formattedText = this.addFormattedKey(formattedText, 'email', o);
             formattedText = this.addFormattedKey(formattedText, 'phone', o);
+            formattedText = this.addFormattedValue(formattedText, 'address', o);
             return formattedText;
           } else if ('selected' in o) {
             return this.formatSelectedOptions(o);
@@ -151,30 +172,37 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
         const { activity, type, ...props } = this.props;
         const activityCopy: any = activity;
         const isDisclaimer = activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer';
-
-        if (type === 'message' && activity.type === 'message' && !isDisclaimer) {
+        if (type === 'message' && activity.type === 'message') {
+          if (isDisclaimer === true || this.formatText(activity.text).length > 0) {
             return (
-                <div>
-                    <FormattedText
-                        text={ this.formatText(activity.text) }
-                        format={activity.textFormat}
-                        onImageLoad={ props.onImageLoad }
-                    />
-                    <Attachments
-                        attachments={ activity.attachments }
-                        attachmentLayout={ activity.attachmentLayout }
-                        format={ props.format }
-                        onCardAction={ props.onCardAction }
-                        onImageLoad={ props.onImageLoad }
-                        size={ props.size }
-                    />
-                </div>
-            );
+              <div>
+                  <FormattedText
+                      text={ isDisclaimer ? 'Disclaimer' : this.formatText(activity.text) }
+                      format={activity.textFormat}
+                      onImageLoad={ props.onImageLoad }
+                  />
+                  <Attachments
+                      attachments={ activity.attachments }
+                      attachmentLayout={ activity.attachmentLayout }
+                      format={ props.format }
+                      onCardAction={ props.onCardAction }
+                      onImageLoad={ props.onImageLoad }
+                      size={ props.size }
+                  />
+              </div>
+          );
+          } else {
+            return null;
+          }
         } else if (activity.type === 'typing') {
             return <div className="wc-typing"/>;
-        } else if (type === 'date' || type === 'handoff') {
+        } else if (type === 'date') {
             return (
                 <DatePickerCard { ...props } node={activityCopy.entities[0]} />
+            );
+        } else if (type === 'handoff') {
+            return(
+              <SchedulerCard { ...props } node={activityCopy.entities[0]} />
             );
         } else if (type === 'file') {
             return (
@@ -186,7 +214,15 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
             );
         } else if (type === 'contact') {
             return (
-                  <ContactFormCard { ...props } node={activityCopy.entities[0]} />
+                <ContactFormCard { ...props } node={activityCopy.entities[0]} />
+            );
+        } else if (type === 'address') {
+            return (
+                  <AddressCard { ...props } node={activityCopy.entities[0]} />
+            );
+        } else if (type === 'disclaimer') {
+            return (
+                  <DisclaimerCard { ...props } activity={activityCopy} />
             );
         }
     }

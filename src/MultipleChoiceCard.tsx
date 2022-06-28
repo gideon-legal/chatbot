@@ -12,7 +12,6 @@ export interface MessagePaneProps {
     // activityWithDateAndTimePicker: Message;
 
     takeSuggestedAction: (message: Message) => any;
-    chooseOption: (placeholder: string) => any;
     resetShellInput: () => any;
     sendMessage: (inputText: string) => void;
 
@@ -67,15 +66,11 @@ class SuggestedActions extends React.Component<MessagePaneProps, MultipleChoiceS
 
     componentDidMount() {
         if (this.props.multipleSelect) {
-            this.props.chooseOption('Select all that apply...');
             if (this.state.selected.length === 0) {
                 const defaultSelected = new Array(this.props.activityWithSuggestedActions.suggestedActions.actions.length).fill(false);
                 this.setState({ selected: defaultSelected });
             }
-        } else {
-            this.props.chooseOption('Choose an option above...');
         }
-
     }
 
     shouldComponentUpdate(nextProps: MessagePaneProps) {
@@ -88,11 +83,11 @@ class SuggestedActions extends React.Component<MessagePaneProps, MultipleChoiceS
 
         return (
             <div className="wc-suggested-options">
-                <ul>{ this.props.activityWithSuggestedActions.suggestedActions.actions.map((action, index) =>
-                    <li className={this.props.multipleSelect && this.state.selected[index] ? 'wc-suggested-options-option-selected' : 'wc-suggested-options-option'} key={ index } onClick={e => this.props.multipleSelect ? this.handleSelect(index) : this.actionClick(e, action) } title={ action.title }>
+                { this.props.activityWithSuggestedActions.suggestedActions.actions.map((action, index) =>
+                    <div className={this.props.multipleSelect && this.state.selected[index] ? 'wc-suggested-options-option-selected' : 'wc-suggested-options-option'} key={ index } onClick={e => this.props.multipleSelect ? this.handleSelect(index) : this.actionClick(e, action) } title={ action.title }>
                         { action.title }
-                    </li>
-                ) }</ul>
+                    </div>
+                ) }
                 {this.props.multipleSelect && <button className="wc-suggested-options-submit" onClick={e => this.submitMultipleSelect(e)}>Submit</button>}
             </div>
         );
@@ -109,7 +104,6 @@ export const MultipleChoiceCard = connect(
         locale: state.format.locale
     }), {
         takeSuggestedAction: (message: Message) => ({ type: 'Take_SuggestedAction', message } as ChatActions),
-        chooseOption: (placeholder: string) => ({ type: 'Choose_Option', placeholder} as ChatActions),
         resetShellInput: () => ({ type: 'Submit_Date' } as ChatActions),
         // only used to create helper functions below
         sendMessage
@@ -119,7 +113,6 @@ export const MultipleChoiceCard = connect(
 
         // from dispatchProps
         takeSuggestedAction: dispatchProps.takeSuggestedAction,
-        chooseOption: dispatchProps.chooseOption,
         resetShellInput: dispatchProps.resetShellInput,
         sendMessage: (text: string) => dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),
         // from ownProps

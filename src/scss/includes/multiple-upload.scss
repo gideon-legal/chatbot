@@ -2,18 +2,18 @@
 @import "media-queries";
 
 .wc-message-from-me{
-    &.wc-message-imBack{
-        .wc-message-content {
-            background-color: transparent;
-            border: 1px solid $c_brand;
-            border: none;
-            padding: 10px 5px;
-            box-shadow: none;
-        }
-    }
+  &.wc-message-imBack{
+      .wc-message-content {
+        background-color: transparent;
+        border: 1px solid $c_brand;
+        border: none;
+        padding: 10px 5px;
+        box-shadow: none;
+      }
   }
+} 
 
-  .wc-suggested-options{
+.wc-suggested-options{
     display: flex;
     flex-direction: column;
 
@@ -61,4 +61,25 @@
   li.wc-suggested-options-option-selected {
     background-color: $c_brand;
     color: #ffffff;
+  }
+
+  .wc-suggested-options-option {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    padding: 10px 20px;
+    border: 1px solid $c_brand;
+    border-radius: 3px;
+    color: $c_brand;
+    margin-bottom: 10px;
+    margin-left: auto;
+    width: fit-content;
+  }
+
+  .wc-suggested-options-option:hover {
+    background-color: $c_brand;
+    color: white;
+    cursor: pointer;
   }
