@@ -99,6 +99,12 @@ $gd_gideon_blue: #3F6DE1;
   height: 17px;
 }
 
+.listed-file:hover {
+  background-color: rgba(63, 109, 225, 0.2);
+  border-radius: 3px;
+  padding: 2px 5px 2px 2px;
+}
+
 .uploaded-file-name {
   font-style: normal;
   font-weight: 400;
