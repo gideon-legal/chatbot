@@ -865,6 +865,11 @@
             margin-left: auto;
             border: none;
             width: $gideon-node-width;
+
+            @include mobile {
+                width: 100%;
+                margin-left: $avatarWidth + $fromBotMargin;
+            }
         }
 
         .wc-message-content-node {
@@ -1298,6 +1303,11 @@
         border-radius: 3px 3px 0px 3px;
         margin-left: auto;
         width: $gideon-node-width;
+
+        @include mobile {
+            width: 100%;
+            margin-left: $avatarWidth + $fromBotMargin;
+        }
     }
 
     .wc-message-content-address .gideon-submit-button {
@@ -1370,6 +1380,11 @@
 .wc-message-from-me-blank.wc-message-file {
     margin-left: auto;
     width: $gideon-node-width;
+
+    @include mobile {
+        width: 100%;
+        margin-left: $avatarWidth + $fromBotMargin;
+    }
 }
 
 .wc-message-from-me-blank.wc-message-file .wc-message-content {
@@ -1386,6 +1401,11 @@
     border-radius: 3px 3px 0px 3px;
     margin-left: auto;
     width: $gideon-node-width;
+
+    @include mobile {
+        width: 100%;
+        margin-left: $avatarWidth + $fromBotMargin;
+    }
 }
 
 .wc-message-content-address-blank {
@@ -1440,6 +1460,11 @@
       margin-left: auto;
       border: none;
       width: $gideon-node-width;
+
+      @include mobile {
+        width: 100%;
+        margin-left: $avatarWidth + $fromBotMargin;
+    }
     }
 
     .wc-message-imBack {
@@ -1449,8 +1474,13 @@
     .wc-message-date {
         margin-left: auto;
         border: none;
-        width: $gideon-node-width
-      }
+        width: $gideon-node-width;
+
+        @include mobile {
+            width: 100%;
+            margin-left: $avatarWidth + $fromBotMargin;
+        }
+    }
 
     .wc-message-handoff {
       margin-left: auto;
@@ -1708,7 +1738,8 @@
     .wc-node-fullscreen:not(.wc-message-disclaimer) {
         width: $gideon-node-width-fullscreen !important;
         @include mobile {
-            width: $gideon-node-width !important;
+            width: 100% !important;
+            margin-left: $avatarWidth + $fromBotMargin;
         }
     }
 

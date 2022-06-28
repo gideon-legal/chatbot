@@ -33,6 +33,7 @@ $width: 280px;
       border-color: $gd_gideon_blue;
       color: $gd_gideon_blue;
       outline: 0;
+      min-height: unset;
     }
 
     .gd-date-picker-inner-header {
