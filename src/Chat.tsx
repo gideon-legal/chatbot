@@ -171,7 +171,7 @@ export class Chat extends React.Component<ChatProps, State> {
             full_height: !this.state.full_height
         });
     }
-
+    
     private step = (messageId?: string|null) => {
         const botConnection: any = this.store.getState().connection.botConnection;
         step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
@@ -352,7 +352,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         }
 
                         if (bot_display_options) {
-                            const { alignment, bottomOffset, topOffset, leftOffset, rightOffset, display_name, widget_url, widget_same_as_logo, open_fullscreen, full_height } = bot_display_options;
+                            const { alignment, bottomOffset, topOffset, leftOffset, rightOffset, fullHeight, display_name, widget_url, widget_same_as_logo, open_fullscreen  } = bot_display_options;
 
                             this.store.dispatch({
                                 type: 'Set_Format_Options',
