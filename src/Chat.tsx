@@ -47,6 +47,7 @@ export interface State {
     display: boolean;
     orginalBodyClass: string;
     fullscreen: boolean;
+    full_height: boolean;
 }
 
 import { FloatingIcon } from './FloatingIcon';
@@ -61,6 +62,7 @@ export class Chat extends React.Component<ChatProps, State> {
         opened: false,
         display: false,
         fullscreen: false,
+        full_height: false,
         orginalBodyClass: document.body.className
     };
 
@@ -164,6 +166,12 @@ export class Chat extends React.Component<ChatProps, State> {
         });
     }
 
+    private toggleFullHeight = () => {
+        this.setState({
+            full_height: !this.state.full_height
+        });
+    }
+    
     private step = (messageId?: string|null) => {
         const botConnection: any = this.store.getState().connection.botConnection;
         step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
@@ -354,11 +362,11 @@ export class Chat extends React.Component<ChatProps, State> {
                                     topOffset,
                                     leftOffset,
                                     rightOffset,
-                                    fullHeight,
                                     display_name,
                                     widgetSameAsLogo: widget_same_as_logo,
                                     widgetUrl: widget_url,
-                                    fullscreen: open_fullscreen || false
+                                    fullscreen: open_fullscreen || false,
+                                    fullHeight: full_height || false
                                 }
                             });
                         }
@@ -382,6 +390,10 @@ export class Chat extends React.Component<ChatProps, State> {
                                 });
                             }
                             this.toggleFullscreen();
+                        }
+
+                        if (bot_display_options && bot_display_options.full_height) {
+                            this.toggleFullHeight();
                         }
 
                         this.store.dispatch<ChatActions>({
@@ -510,7 +522,7 @@ export class Chat extends React.Component<ChatProps, State> {
         const bottomOffset = fullHeight ? 0 : (format && format.bottomOffset ? format.bottomOffset + 99 : 17);
         const topOffset = format && format.topOffset ? format.topOffset : 0;
         const rightOffset = fullHeight ? 0 : (alignment !== 'left' && format && format.rightOffset ? format.rightOffset : -1);
-        const height = fullHeight ? '100vh' : `calc(80vh - ${bottomOffset}px - ${topOffset}px - 20px)`;
+        const height = fullHeight ? '100vh' : '80%';
 
         let styles = {
             bottom: bottomOffset,
