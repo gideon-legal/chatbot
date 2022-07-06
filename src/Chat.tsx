@@ -351,7 +351,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         }
 
                         if (bot_display_options) {
-                            const { alignment, bottomOffset, topOffset, leftOffset, rightOffset, fullHeight, display_name, widget_url, widget_same_as_logo, open_fullscreen  } = bot_display_options;
+                            const { alignment, bottomOffset, topOffset, leftOffset, rightOffset, full_height, display_name, widget_url, widget_same_as_logo, open_fullscreen  } = bot_display_options;
 
                             this.store.dispatch({
                                 type: 'Set_Format_Options',
