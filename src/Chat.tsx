@@ -365,7 +365,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                     widgetSameAsLogo: widget_same_as_logo,
                                     widgetUrl: widget_url,
                                     fullscreen: open_fullscreen || false,
-                                    fullHeight: full_height || false
+                                    full_height: full_height || false
                                 }
                             });
                         }
@@ -502,7 +502,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
     private calculateChatviewPanelStyle = (format: FormatOptions) => {
         const alignment = format && format.alignment;
-        const fullHeight = format && format.fullHeight;
+        const fullHeight = format && format.full_height;
         const fullscreen = format && format.fullscreen;
 
         if (fullscreen) {
@@ -526,7 +526,7 @@ export class Chat extends React.Component<ChatProps, State> {
         let styles = {
             bottom: bottomOffset,
             height,
-            ...(rightOffset !== -1 || (format && format.fullHeight)) && { right: rightOffset }
+            ...(rightOffset !== -1 || (format && format.full_height)) && { right: rightOffset }
         };
 
         if (alignment && alignment === 'left') {
