@@ -66,6 +66,8 @@ export class Chat extends React.Component<ChatProps, State> {
         orginalBodyClass: document.body.className
     };
 
+    private clicked: any; // status of if the back button has been clicked already
+
     private store = createStore();
 
     private botConnection: IBotConnection;
@@ -89,6 +91,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
     constructor(props: ChatProps) {
         super(props);
+        this.clicked = {disabled: false};
 
         this.store.dispatch<ChatActions>({
             type: 'Set_Locale',
@@ -171,6 +174,7 @@ export class Chat extends React.Component<ChatProps, State> {
             full_height: !this.state.full_height
         });
     }
+
     private step = (messageId?: string|null) => {
         const botConnection: any = this.store.getState().connection.botConnection;
         step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
@@ -593,10 +597,12 @@ export class Chat extends React.Component<ChatProps, State> {
                                         onClick={() => {this.toggle(); }}
                                         src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/close.svg" /> */}
 
-                                    {/* <img
-                                        className="wc-header--back"
-                                        onClick={() => {this.step(); }}
-                                        src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/back.svg" /> */}
+                                    { <img
+                                        className="wc-header--back" onClick={() => {
+                                            if (!this.clicked.disabled) {
+                                            this.step(); this.clicked.disabled = true; }// disable click action after first click
+                                    }}
+                                    src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/back.svg" />  }
                                 </div>
                         }
                         <div className="wc-chatbot-content">

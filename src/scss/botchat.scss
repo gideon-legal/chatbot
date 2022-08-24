@@ -1589,6 +1589,7 @@
             position: absolute;
             vertical-align: middle;
         }
+        
 
         label, button {
             cursor: pointer;
@@ -1600,6 +1601,15 @@
             fill: #3f6de1;
             margin-right: 16px;
         }
+        
+        //working here
+        .wc-backbutton {
+            height: 50px; // generic box size
+            width: 70px ;
+            top: 20px !important ; // need to get the box/botton/whatever this ends up being out of the corner
+            display: inline-block; // maybe 
+            cursor: pointer;
+        }
 
         input[type=text],
         textarea {
@@ -1609,6 +1619,7 @@
             outline: none;
             padding: 0;
             resize: none;
+            
             width: 100%;
             padding-top:11.5px;
             padding-bottom: 12px;
@@ -1679,7 +1690,7 @@
 
         .wc-textbox {
             bottom: 0;
-            left: 20px;
+            left: 50px; // CHAHANGE THIS TO MAKE ROOM FOR THE BUTTON ON THE LEFT idk how much room et
             right: 76px;
             top: 20px;
 
@@ -1873,7 +1884,7 @@
         min-height: 73px;
         min-width: 250px;
         max-height: 20%;
-        max-width: 80%;
+        max-width: 100%;
         margin-left: 23px;
         margin-top: 30px;
         -o-object-fit: contain;
