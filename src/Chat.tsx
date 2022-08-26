@@ -597,14 +597,15 @@ export class Chat extends React.Component<ChatProps, State> {
                                         onClick={() => {this.toggle(); }}
                                         src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/close.svg" /> */}
 
-                                    { <img
+                                    {/* {{ <img
                                         className="wc-header--back" onClick={() => {
                                             if (!this.clicked.disabled) {
                                             this.step(); this.clicked.disabled = true; }// disable click action after first click
                                     }}
-                                    src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/back.svg" />  }
+                                    src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/back.svg" />  } */} 
                                 </div>
                         }
+
                         <div className="wc-chatbot-content">
                             {fullscreen && <div className="wc-chatbot-content-left">
                                 {/* TODO - Put content to display on left side of fullscreen */}
@@ -614,6 +615,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                                 null}
                                 />
                             </div>}
+
                             <div className="wc-chatbot-content-right">
                                 <History
                                     onCardAction={ this._handleCardAction }
@@ -634,6 +636,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                             />
                                         </a> */}
 
+                            
                                     </div>
 
                                 {

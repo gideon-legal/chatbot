@@ -177,6 +177,7 @@
         width: 100%;
         height: 100%;
     }
+    
 
     .wc-chatbot-content-left {
         flex: 1;
@@ -1537,6 +1538,7 @@
     //     cursor: pointer;
     //     font-weight: 600; 
     // }
+
 /* console */
 
 
@@ -1575,7 +1577,8 @@
         }
 
         &__disabled {
-            display: none;
+            //display: none;
+            visibility: hidden;
         }  
 
         &__disabled::before {
@@ -1604,13 +1607,13 @@
         
         //working here
         .wc-backbutton {
-            height: 50px; // generic box size
-            width: 70px ;
-            top: 20px !important ; // need to get the box/botton/whatever this ends up being out of the corner
+            margin-top: 19px; 
+            margin-left: 20px;
             display: inline-block; // maybe 
+            visibility: visible !important;
             cursor: pointer;
         }
-
+        
         input[type=text],
         textarea {
             border: none;
@@ -1690,7 +1693,7 @@
 
         .wc-textbox {
             bottom: 0;
-            left: 50px; // CHAHANGE THIS TO MAKE ROOM FOR THE BUTTON ON THE LEFT idk how much room et
+            left:129px; // CHAHANGE THIS TO MAKE ROOM FOR THE BUTTON ON THE LEFT idk how much room et
             right: 76px;
             top: 20px;
 
