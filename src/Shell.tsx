@@ -1,12 +1,12 @@
 import { any } from 'bluebird';
-import { DirectLineOptions, User } from 'botframework-directlinejs';
+import { DirectLineOptions, IBotConnection, User } from 'botframework-directlinejs';
 import * as color from 'color';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { conversationHistory, mapMessagesToActivities, step } from './api/bot';
 import { classList } from './Chat';
 import { Speech } from './SpeechModule';
-import { ChatState, createStore, FormatState } from './Store';
+import { ChatState, createStore, FormatState} from './Store';
 import { ChatActions, ListeningState, sendFiles, sendMessage } from './Store';
 import { defaultStrings, Strings } from './Strings';
 
@@ -20,6 +20,7 @@ interface Props {
     fullscreen: boolean;
     themeColor: string;
     gid: string;
+    botConnection?: IBotConnection;
     directLine?: DirectLineOptions;
     onChangeText: (inputText: string) => void;
     sendMessage: (inputText: string) => void;
@@ -42,6 +43,7 @@ class ShellContainer extends React.Component<Props> implements ShellFunctions {
         super(props);
         this.clicked = {disabled: false};
     }
+
     
     private sendMessage() {
         if (this.props.inputText.trim().length > 0) {
@@ -99,8 +101,11 @@ class ShellContainer extends React.Component<Props> implements ShellFunctions {
     }
 
     private step = (messageId?: string|null) => {
+        console.log("here")
         const botConnection: any = this.store.getState().connection.botConnection;
-        step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
+        console.log(this.store.getState());
+        console.log(this.props);
+        step(this.props.gid,this.props.botConnection.conversationId, this.props.directLine.secret, messageId)
         .then((res: any) => {
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, res.data.id)
             .then((res: any) => {
@@ -277,7 +282,9 @@ export const Shell = connect(
         user: state.connection.user,
         listeningState: state.shell.listeningState,
         fullscreen: state.format.fullscreen,
-        themeColor: state.format.themeColor
+        themeColor: state.format.themeColor,
+        botConnection: state.connection.botConnection
+        
     }), {
         // passed down to ShellContainer
         onChangeText: (input: string) => ({ type: 'Update_Input', input, source: 'text' } as ChatActions),
@@ -299,6 +306,7 @@ export const Shell = connect(
         gid: stateProps.string,
         // from dispatchProps
         onChangeText: dispatchProps.onChangeText,
+        botConnection: stateProps.botConnection,
         // helper functions
         sendMessage: (text: string) => dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),
         sendFiles: (files: FileList) => dispatchProps.sendFiles(files, stateProps.user, stateProps.locale),
