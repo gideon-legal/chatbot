@@ -102,12 +102,13 @@ class ShellContainer extends React.Component<Props> implements ShellFunctions {
 
     private step = (messageId?: string|null) => {
         console.log("here")
-        const botConnection: any = this.store.getState().connection.botConnection;
+        const botConnection: any = this.props.botConnection;
+        console.log(botConnection);
         console.log(this.store.getState());
         console.log(this.props);
-        step(this.props.gid,this.props.botConnection.conversationId, this.props.directLine.secret, messageId)
+        step(this.props.gid,botConnection.conversationId, botConnection.secret, messageId)
         .then((res: any) => {
-            conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, res.data.id)
+            conversationHistory(this.props.gid, botConnection.secret, botConnection.conversationId, res.data.id)
             .then((res: any) => {
                 const messages = res.data.messages.reverse();
                 this.store.dispatch<ChatActions>({
