@@ -628,14 +628,14 @@ export class Chat extends React.Component<ChatProps, State> {
                                 <Shell ref={ this._saveShellRef } />
                                 
                                 <div className = 'wc-back-button'>
-                                { <label
+                                { <label 
                                     className="wcbackbutton" onClick={() => {
                                         if (!this.clicked) {
                                         this.step(); this.clicked = true; // disable click action after first click 
                                     }
                                     }}>
 
-                                    <label>
+                                <label style={{cursor: 'pointer'}}>
                                     <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                                         <div style={{position: 'relative', top: '19px', left: '20px', color: '#3F6DE1' }}>
                                             Back
