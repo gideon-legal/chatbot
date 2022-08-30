@@ -174,12 +174,13 @@
         box-sizing: border-box;
         background: white;
         height: $consoleHeight;
-        max-width: $chatWidth;
+        max-width: fit-content;
         left: 0;
         // width: 66%;
         position: absolute;
         right: 0;
         transition: background-color .4s;
+        cursor: pointer;
 
         .wcbackbutton{
             box-sizing: border-box;
@@ -193,8 +194,8 @@
             background: #F8F8F8 !important;
             border: 2px solid #F8F8F8 !important;
             border-radius: 2px;
-            cursor: pointer;
         }
+
         &__disabled {
             visibility: hidden;
         }
