@@ -181,7 +181,7 @@
         right: 0;
         transition: background-color .4s;
 
-        .wc-backbutton{
+        .wcbackbutton{
             box-sizing: border-box;
             position: absolute;
             width: 94px;
@@ -1638,22 +1638,22 @@
             margin-right: 16px;
         }
 
-        // .wc-backbutton{
-        //     box-sizing: border-box;
-        //     position: absolute;
-        //     width: 94px;
-        //     height: 56px;
-        //     margin-top: 19px; 
-        //     margin-left: 20px;
-        //     display: inline-block; // maybe 
-        //     visibility: visible !important;
-        //     background: #F8F8F8 !important;
-        //     border: 2px solid #F8F8F8 !important;
-        //     border-radius: 2px;
-        // }
-        // &__disabled {
-        //     visibility: hidden;
-        // }
+        .wc-backbutton{
+            box-sizing: border-box;
+            position: absolute;
+            width: 94px;
+            height: 56px;
+            margin-top: 19px; 
+            margin-left: 20px;
+            display: inline-block; // maybe 
+            visibility: visible !important;
+            background: #F8F8F8 !important;
+            border: 2px solid #F8F8F8 !important;
+            border-radius: 2px;
+        }
+        &__disabled {
+            visibility: hidden;
+        }
 
         input[type=text],
         textarea {
