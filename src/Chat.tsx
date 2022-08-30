@@ -39,6 +39,7 @@ export interface ChatProps {
     logoUrl?: string;
     fullscreenImageUrl?: string;
     resize?: 'none' | 'window' | 'detect';
+    inputEnabled: boolean;
 }
 
 export interface State {
@@ -88,6 +89,8 @@ export class Chat extends React.Component<ChatProps, State> {
     private _saveHistoryRef = this.saveHistoryRef.bind(this);
     private _saveShellRef = this.saveShellRef.bind(this);
     // tslint:enable:variable-name
+
+    private userMatch = false;
 
     constructor(props: ChatProps) {
         super(props);
@@ -141,6 +144,13 @@ export class Chat extends React.Component<ChatProps, State> {
     private handleIncomingActivity(activity: Activity) {
         const state = this.store.getState();
         const activityCopy: any = activity;
+        console.log(activity.from.id)
+        console.log(state.connection.user.id)
+        if(activity.from.id === state.connection.user.id){
+            this.userMatch = true;
+        } else {
+            this.userMatch = false;
+        }
 
         switch (activity.type) {
             case 'message':
@@ -173,6 +183,11 @@ export class Chat extends React.Component<ChatProps, State> {
         this.setState({
             full_height: !this.state.full_height
         });
+    }
+
+    private checkUserMatch = () => {
+        console.log(this.userMatch)
+        return this.userMatch;
     }
 
     private step = (messageId?: string|null) => {
@@ -551,10 +566,15 @@ export class Chat extends React.Component<ChatProps, State> {
 
     render() {
         const state = this.store.getState();
+        //console.log(state);
 
         const { open, opened, display, fullscreen } = this.state;
 
         const chatviewPanelStyle = this.calculateChatviewPanelStyle(state.format);
+
+        const backButtonClassName = classList(
+            this.checkUserMatch() && 'wc-back-button'
+        )
 
         // only render real stuff after we know our dimensions
         return (
@@ -627,7 +647,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
                                 <Shell ref={ this._saveShellRef } />
                                 
-                                <div className = 'wc-back-button'>
+                                <div className ={backButtonClassName}>
                                 { <label 
                                     className="wcbackbutton" onClick={() => {
                                         if (!this.clicked) {
@@ -649,6 +669,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                     </label>
                                 </label>}   
                                 </div>
+                                
                             </div>  
 
                                         {/* TODO - temporarily commented out for all users to accomodate a new client */}
