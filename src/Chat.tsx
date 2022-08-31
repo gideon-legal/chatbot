@@ -153,11 +153,14 @@ export class Chat extends React.Component<ChatProps, State> {
 
         switch (activity.type) {
             case 'message':
-                this.toggleBackButton(true)
-                /*console.log(activity.entities[0].type)
-                if(activity.entities && (activity.entities[0].type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities' )){
+               // this.toggleBackButton(true)
+               if(activity.entities) {
+                if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
                     this.toggleBackButton(true)
-                }*/
+                }
+               } else {
+                this.toggleBackButton(true)
+               }
                 this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
                 break;
 
@@ -585,7 +588,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
         const backButtonClassName = classList(
             'wc-back-button',
-            !this.checkBackButton() && 'wc-back-button__disabled'
+            this.checkBackButton() === false && 'wc-back-button__disabled'
         )
 
         // only render real stuff after we know our dimensions
