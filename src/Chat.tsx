@@ -48,6 +48,7 @@ export interface State {
     orginalBodyClass: string;
     fullscreen: boolean;
     full_height: boolean;
+    back_visible: boolean;
 }
 
 import { FloatingIcon } from './FloatingIcon';
@@ -64,6 +65,7 @@ export class Chat extends React.Component<ChatProps, State> {
         fullscreen: false,
         full_height: false,
         clicked: false,
+        back_visible: false,
         orginalBodyClass: document.body.className
     };
 
@@ -94,8 +96,10 @@ export class Chat extends React.Component<ChatProps, State> {
         super(props);
         //this.clicked = {disabled: false};
         var button = this.state;
+        //console.log(button)
         button.clicked = false;
         this.setState(button);
+        console.log(button)
 
         this.store.dispatch<ChatActions>({
             type: 'Set_Locale',
@@ -145,13 +149,20 @@ export class Chat extends React.Component<ChatProps, State> {
     private handleIncomingActivity(activity: Activity) {
         const state = this.store.getState();
         const activityCopy: any = activity;
+       // console.log(activity);
 
         switch (activity.type) {
             case 'message':
+                this.toggleBackButton(true)
+                /*console.log(activity.entities[0].type)
+                if(activity.entities && (activity.entities[0].type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities' )){
+                    this.toggleBackButton(true)
+                }*/
                 this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
                 break;
 
             case 'typing':
+                this.toggleBackButton(false)
                 if (activity.from.id !== state.connection.user.id) {
                     this.store.dispatch<ChatActions>({ type: 'Show_Typing', activity });
                 }
@@ -177,6 +188,18 @@ export class Chat extends React.Component<ChatProps, State> {
         this.setState({
             full_height: !this.state.full_height
         });
+    }
+
+    private toggleBackButton = (show: boolean) => {
+        this.setState({
+            back_visible: show
+        })
+        console.log("toogled = " + this.state.back_visible)
+    }
+
+    private checkBackButton = () => {
+        console.log(this.state.back_visible)
+        return this.state.back_visible;
     }
 
     private step = (messageId?: string|null) => {
@@ -471,6 +494,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 });
             });
         }
+
     }
 
     componentWillUnmount() {
@@ -555,14 +579,13 @@ export class Chat extends React.Component<ChatProps, State> {
 
     render() {
         const state = this.store.getState();
-
         const { open, opened, display, fullscreen } = this.state;
 
         const chatviewPanelStyle = this.calculateChatviewPanelStyle(state.format);
 
-        const hideButton = classList(
+        const backButtonClassName = classList(
             'wc-back-button',
-            // if input disabled && 'hidden'
+            !this.checkBackButton() && 'wc-back-button__disabled'
         )
 
         // only render real stuff after we know our dimensions
@@ -662,7 +685,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                 </div> } */}
 
                                 { // if input is enabled show this && or if bot is talking
-                                    <div className = 'wc-back-button'>
+                                    <div className = {backButtonClassName}>
                                     { <label 
                                         className="wcbackbutton" onClick={() => {
                                             if (!this.state.clicked) {
