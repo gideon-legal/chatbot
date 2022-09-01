@@ -6,7 +6,8 @@
 @import "github-markdown.scss";
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap'); // Lato font
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap'); // Poppins font
-
+@import "../assets/lato/lato.css";
+$lato: Lato, sans-serif;
 /* reset */
 
     #bot * {
@@ -116,8 +117,9 @@
         max-width: $chatWidth;
         display: flex;
         line-height: 1.2em;
-
+        font-family: $lato;
         $logo-size: 42px;
+        border-bottom: 0;
 
         @include mobileAndTablet {
             max-width: $chatWidthMobile;
@@ -1912,9 +1914,113 @@
         color: white !important;
     }
 
-  
     .gideon-submit-button-disabled:hover {
         background-color: #B5B5B5 !important;
         cursor: not-allowed !important;
         color: white !important;
+    }
+
+    .history-header {
+        background-color: white;
+        border-bottom: 1.35px solid $gideon-border-gray;
+        color: $gideon-black;
+        font-weight: 700;
+        padding: 20px;
+
+        svg {
+            margin-top: 0;
+        }
+
+        span {
+            margin-left: 5px;
+            justify-content: flex-start;
+        }
+
+        .back__button path {
+            fill: $gideon-black !important;
+        }
+    }
+
+    .icon__button  {
+        border: 0px !important;
+        background-color: transparent !important;
+        padding: 0 !important;
+
+        path {
+            fill: white !important;
+        } 
+
+        :hover {
+            background-color: none !important;
+
+            path {
+                fill: #444444 !important;
+            }
+        }      
+    }
+
+    .history__button {
+        svg {
+            margin-top: 0;
+            padding: 2px;
+        }
+    }
+
+    .conversation__history {
+        margin: 0 10px;
+      
+        span {
+            color: $gideon-gray;
+        }
+    } 
+
+    .conversationCard {
+        width: 100%;
+        color: $gideon-gray;
+        font-size: 14px;
+        padding: 15px !important;
+        cursor: pointer;
+        flex-direction: column;
+        align-items: stretch;
+        border-bottom: 1.35px solid $gideon-border-gray;
+    
+        &:hover {
+          background-color: $gideon-hover-blue;
+        }
+    
+        .messageCount {
+          color: $gideon-black;
+          font-size: 17px;
+          font-weight: 400;
+          margin-bottom: 3px;
+          font-family: $lato;
+        }
+    
+        .messageTime {
+          color: $gideon-black;
+          font-size: 17px;
+          font-weight: 400;
+          font-family: $lato;
+        }
+    
+        .displayMessage {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          margin-top: 8px;
+          font-family: $lato;
+        }
+
+        .convoComplete {
+            background-color: $gideon-dark-blue;
+            padding: 2px 8px;
+            margin-left: 20px;
+            border-radius: 3px;
+            color: white;
+            font-family: $lato;
+        }
+
+        span, div {
+            font-family: $lato;
+        }
     }
