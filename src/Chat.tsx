@@ -173,8 +173,8 @@ export class Chat extends React.Component<ChatProps, State> {
     private toggle = () => {
         this.setState({
             open: !this.state.open,
-            opened: true,
-            back_visible: false
+            opened: true
+           // back_visible: false
         });
     }
 
