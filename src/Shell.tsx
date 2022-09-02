@@ -1,10 +1,12 @@
-import { User } from 'botframework-directlinejs';
+import { any } from 'bluebird';
+import { DirectLineOptions, User } from 'botframework-directlinejs';
 import * as color from 'color';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
+import { conversationHistory, mapMessagesToActivities, step } from './api/bot';
 import { classList } from './Chat';
 import { Speech } from './SpeechModule';
-import { ChatState, FormatState } from './Store';
+import { ChatState, createStore, FormatState } from './Store';
 import { ChatActions, ListeningState, sendFiles, sendMessage } from './Store';
 import { defaultStrings, Strings } from './Strings';
 
@@ -17,6 +19,8 @@ interface Props {
     inputEnabled: boolean;
     fullscreen: boolean;
     themeColor: string;
+    gid: string;
+    directLine?: DirectLineOptions;
     onChangeText: (inputText: string) => void;
     sendMessage: (inputText: string) => void;
     sendFiles: (files: FileList) => void;
@@ -31,7 +35,12 @@ export interface ShellFunctions {
 class ShellContainer extends React.Component<Props> implements ShellFunctions {
     private textInput: HTMLInputElement;
     private fileInput: HTMLInputElement;
+    private store = createStore();
 
+    constructor(props:any) {
+        super(props);
+    }
+    
     private sendMessage() {
         if (this.props.inputText.trim().length > 0) {
             this.props.sendMessage(this.props.inputText);
@@ -87,6 +96,7 @@ class ShellContainer extends React.Component<Props> implements ShellFunctions {
         }
     }
 
+
     public focus(appendKey?: string) {
         this.textInput.focus();
 
@@ -94,7 +104,7 @@ class ShellContainer extends React.Component<Props> implements ShellFunctions {
             this.props.onChangeText(this.props.inputText + appendKey);
         }
     }
-
+    
     render() {
         // Override
         const showUploadButton = false;
@@ -132,6 +142,7 @@ class ShellContainer extends React.Component<Props> implements ShellFunctions {
         return (
             <div className={ className } >
                 <div className="wc-border" style={wcBorderStyles} />
+                    
                 {
                     showUploadButton &&
                         <label
@@ -158,6 +169,7 @@ class ShellContainer extends React.Component<Props> implements ShellFunctions {
                          role="button"
                      />
                 }
+
                 <div className="wc-textbox">
                     <input
                         type="text"
@@ -213,6 +225,7 @@ class ShellContainer extends React.Component<Props> implements ShellFunctions {
         );
     }
 }
+
 export const Shell = connect(
     (state: ChatState) => ({
         // passed down to ShellContainer
@@ -245,6 +258,7 @@ export const Shell = connect(
         listeningState: stateProps.listeningState,
         fullscreen: stateProps.fullscreen,
         themeColor: stateProps.themeColor,
+        gid: stateProps.string,
         // from dispatchProps
         onChangeText: dispatchProps.onChangeText,
         // helper functions
