@@ -468,11 +468,15 @@ export const history: Reducer<HistoryState> = (
         }
 
         case 'Receive_Message':
-            if (state.activities.find(a => a.id === action.activity.id)) { return state; } // don't allow duplicate messages
+            //if (state.activities.find(a => a.id === action.activity.id)) { return state; } // don't allow duplicate messages
 
             const copy: any = action.activity;
             const isDisclaimer = copy && copy.entities && copy.entities.length > 0 && copy.entities[0].node_type === 'disclaimer';
-            const inputEnabled = !copy.entities;
+            let inputEnabled = !copy.entities;
+            // for back button - check if going back to a node with input enabled
+            if(copy && copy.entities && copy.entities.length === 0){
+                inputEnabled = true;
+            }
 
             return {
                 ...state,

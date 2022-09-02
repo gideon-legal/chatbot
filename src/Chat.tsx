@@ -96,10 +96,8 @@ export class Chat extends React.Component<ChatProps, State> {
         super(props);
         //this.clicked = {disabled: false};
         var button = this.state;
-        //console.log(button)
         button.clicked = false;
         this.setState(button);
-        console.log(button)
 
         this.store.dispatch<ChatActions>({
             type: 'Set_Locale',
@@ -149,7 +147,6 @@ export class Chat extends React.Component<ChatProps, State> {
     private handleIncomingActivity(activity: Activity) {
         const state = this.store.getState();
         const activityCopy: any = activity;
-       // console.log(activity);
 
         switch (activity.type) {
             case 'message':
@@ -197,11 +194,9 @@ export class Chat extends React.Component<ChatProps, State> {
         this.setState({
             back_visible: show
         })
-        console.log("toogled = " + this.state.back_visible)
     }
 
     private checkBackButton = () => {
-        console.log(this.state.back_visible)
         return this.state.back_visible;
     }
 
@@ -212,15 +207,25 @@ export class Chat extends React.Component<ChatProps, State> {
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, res.data.id)
             .then((res: any) => {
                 const messages = res.data.messages.reverse();
+                const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
+                console.log(message_activities);
                 this.store.dispatch<ChatActions>({
                     type: 'Set_Messages',
-                    activities: mapMessagesToActivities(messages, this.store.getState().connection.user.id)
+                    activities: message_activities
                 });
 
                 // reset shell input
                 this.store.dispatch<ChatActions>(
                     { type: 'Submit_Date' } as ChatActions
                 );
+
+                // have to resend receive_message for input enabled nodes
+                if(messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
+                    this.store.dispatch<ChatActions>(
+                        { type: 'Receive_Message',
+                          activity: message_activities[message_activities.length-1]}
+                    )
+                }
             });
         })
         .catch((err: any) => {
@@ -584,6 +589,7 @@ export class Chat extends React.Component<ChatProps, State> {
         const state = this.store.getState();
         const { open, opened, display, fullscreen } = this.state;
 
+       // console.log(state)
         const chatviewPanelStyle = this.calculateChatviewPanelStyle(state.format);
 
         const backButtonClassName = classList(
