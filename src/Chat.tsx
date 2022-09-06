@@ -65,7 +65,7 @@ export class Chat extends React.Component<ChatProps, State> {
         fullscreen: false,
         full_height: false,
         clicked: false,
-        back_visible: false,
+        back_visible: true,
         orginalBodyClass: document.body.className
     };
 
@@ -173,8 +173,8 @@ export class Chat extends React.Component<ChatProps, State> {
     private toggle = () => {
         this.setState({
             open: !this.state.open,
-            opened: true
-           // back_visible: false
+            opened: true,
+            back_visible: !this.state.back_visible
         });
     }
 
