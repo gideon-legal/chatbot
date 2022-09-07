@@ -148,7 +148,10 @@ export class Chat extends React.Component<ChatProps, State> {
         const state = this.store.getState();
         const activityCopy: any = activity;
 
+        console.log(activity.type)
+        
         switch (activity.type) {
+
             case 'message':
                // this.toggleBackButton(true)
                if(activity.entities) {
@@ -676,9 +679,9 @@ export class Chat extends React.Component<ChatProps, State> {
                                         className="wcbackbutton" onClick={() => {
                                             if (!this.state.clicked) {
                                             this.step(); 
-                                            var button = this.state; // temp variable in order to change state of clicked
-                                            button.clicked = true; // changes state within variable to true
-                                            this.setState(button); // passes updated boolean back to state
+                                            // var button = this.state; // temp variable in order to change state of clicked
+                                            // button.clicked = true; // changes state within variable to true
+                                            // this.setState(button); // passes updated boolean back to state
                                         } 
                                         }}>
 
