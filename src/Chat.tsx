@@ -353,7 +353,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         }
                     });
 
-                    const campaign = parseReferrer(document.referrer, window.location.href);
+                    const campaign = parseReferrer(document.referrer, window.location.href.toLowerCase());
 
                     verifyConversation(
                         this.props.gid,
