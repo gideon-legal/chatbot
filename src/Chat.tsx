@@ -9,7 +9,7 @@ import { parseReferrer } from 'analytics-utils';
 import { Activity, CardActionTypes, DirectLine, DirectLineOptions, IBotConnection, User } from 'botframework-directlinejs';
 import { isMobile } from 'react-device-detect';
 import { connect, Provider } from 'react-redux';
-import { conversationHistory, mapMessagesToActivities, ping, step, verifyConversation } from './api/bot';
+import { conversationHistory, mapMessagesToActivities, ping, step, verifyConversation, checkNeedBackButton } from './api/bot';
 import { getTabIndex } from './getTabIndex';
 import { guid } from './GUID';
 import * as konsole from './Konsole';
@@ -159,7 +159,14 @@ export class Chat extends React.Component<ChatProps, State> {
                     this.toggleBackButton(true)
                 }
                } else {
-                this.toggleBackButton(true)
+                console.log(activity)
+                const botConnection: any = this.store.getState().connection.botConnection;
+                const notNode = checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)
+                if(notNode === false){
+                    this.toggleBackButton(true)
+                } else {
+                    this.toggleBackButton(false)
+                }
                }
                 this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
                 break;

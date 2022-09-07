@@ -74,3 +74,8 @@ export const mapMessagesToActivities = (messages: any, userId: any): Activity[] 
         };
     });
 };
+
+export const checkNeedBackButton = (baseUrl: string, directLine: string, msftConversationId: string, messageText: string): any => {
+    return axios.get(`${baseUrl}/api/v1/bot/checkbackbutton?msft_conversation_id=${msftConversationId}&directLine=${directLine}&message_text=${messageText}`);
+};
+
