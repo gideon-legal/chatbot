@@ -273,12 +273,28 @@ export class Chat extends React.Component<ChatProps, State> {
         this.setSize();
         const msftUserId = window.localStorage.getItem('msft_user_id');
 
-        const isNew = true;
+        // initially was set to true
+        const isNew = performance.getEntriesByType('navigation')[0].type === 'reload' ? false : true;
         let botConnection: any = null;
+
+        // if page reloaded and there's bot connection in local storage
+        // if(performance.getEntriesByType('navigation')[0].type === 'reload' && localStorage.getItem('botConnection')) {
+        //     botConnection = JSON.parse(localStorage.getItem('botConnection'));
+        // } else {
+        //     botConnection = this.props.directLine ?
+        //     (this.botConnection = new DirectLine(this.props.directLine)) :
+        //     this.props.botConnection;
+        //     // set new botconnection to local storage
+        //     localStorage.setItem('botConnection', JSON.stringify(botConnection));
+        // }
 
         botConnection = this.props.directLine ?
             (this.botConnection = new DirectLine(this.props.directLine)) :
             this.props.botConnection;
+
+        console.log('this.props.directline ', this.props.directLine);
+        console.log('this.props.botConnection ', this.props.botConnection);
+        console.log('this.botConnection ', botConnection);
 
         if (this.props.resize === 'window') {
             window.addEventListener('resize', this.resizeListener);
@@ -311,7 +327,11 @@ export class Chat extends React.Component<ChatProps, State> {
             if (connectionStatus === 2) {  // wait for connection is 'OnLine' to send data to bot
 
                 const botCopy: any = botConnection;
-                const conversationId = botCopy.conversationId;
+                let conversationId = botCopy.conversationId;
+                if(!isNew && localStorage.getItem("msft_conversation_id")) {
+                    conversationId = localStorage.getItem("msft_conversation_id");
+                    console.log("convo id from local storage")
+                }
 
                 if (!state.connection.verification.attempted) {
                     this.store.dispatch<ChatActions>({
@@ -595,7 +615,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                             state.format.logoUrl :
                                             'https://s3.amazonaws.com/com.gideon.static.dev/chatbot-header-default-v1.1.2.png'
                                         }
-                                        style={{ marginRight: "45px" }}
+                                        style={{ marginRight: '45px' }}
                                     />
 
                                     <span>{typeof state.format.chatTitle === 'string' ? state.format.chatTitle : 'Gideon' }</span>
@@ -619,10 +639,10 @@ export class Chat extends React.Component<ChatProps, State> {
                                         src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/back.svg" /> */}
                                 </div>
                                 :
-                                //button back to current convo
+                                // button back to current convo
                                 <div className={!fullscreen ? 'history-header wc-header' : 'wc-header wc-header-fullscreen'}>
                                     <IconButton onClick={this.handleHistory}  className="icon__button" style={{ padding: 0, color: 'white' }}>
-                                        <ArrowBack className='back__button' />
+                                        <ArrowBack className="back__button" />
                                     </IconButton>
                                     <span>Current Conversation</span>
                                 </div>
@@ -637,7 +657,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                 />
                             </div>}
                             {/* current convo or history? */}
-                            {!this.state.showConvoHistory ? 
+                            {!this.state.showConvoHistory ?
                                 <div className="wc-chatbot-content-right">
                                     <History
                                         onCardAction={ this._handleCardAction }
@@ -662,9 +682,9 @@ export class Chat extends React.Component<ChatProps, State> {
                                         this.props.resize === 'detect' &&
                                             <ResizeDetector onresize={ this.resizeListener } />
                                     }
-                                </div> 
+                                </div>
                                 :
-                                <div className="wc-chatbot-content-right" style={{paddingTop:"67px"}}>
+                                <div className="wc-chatbot-content-right" style={{paddingTop:'67px'}}>
                                     <ConvoHistory/>
                                 </div>
                             }

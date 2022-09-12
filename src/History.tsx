@@ -41,6 +41,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
     private scrollMe: HTMLDivElement;
     private scrollContent: HTMLDivElement;
     private scrollToBottom = true;
+    private pageReloaded = false;
 
     private carouselActivity: WrappedActivity;
     private largeWidth: number;
@@ -49,6 +50,10 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         super(props);
         this.state = { filesList: {} };
         this.addFilesToState = this.addFilesToState.bind(this);
+    }
+
+    componentDidMount() {
+        if(performance.getEntriesByType('navigation')[0].type === 'reload') this.pageReloaded = true;
     }
 
     componentWillUpdate(nextProps: HistoryProps) {
@@ -223,6 +228,15 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                     </div>
                     { content }
                 </div>
+                {/* prompt to start new convo if page refreshed */}
+                {/* this.props.activities.length > 1 && */}
+                { this.pageReloaded &&
+                    <div className="new__convo" style={{ textAlign: 'center' }}>Do you want to start a new session?
+                        <a onClick={() => console.log('start new')} style={{ color:'blue', marginLeft: '5px' }}>
+                            Click here to start new
+                        </a>
+                    </div>
+                }
             </div>
             {/* {lastActivityIsDisclaimer && <DisclaimerCard activity={activityDisclaimer} onImageLoad={ () => this.autoscroll() }/>} */}
             </div>
