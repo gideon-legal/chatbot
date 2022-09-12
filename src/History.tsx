@@ -54,21 +54,6 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         this.addFilesToState = this.addFilesToState.bind(this);
     }
 
-    componentDidMount() {
-        console.log("component did mount")
-        //if page was refreshed and is first time
-        if(performance.getEntriesByType("navigation")[0].type === "reload" && !this.pageReloaded) {
-            //gets files and activities from local storage
-            let storageFiles = JSON.parse(localStorage.getItem("user_files"));
-            console.log("storageFiles: ", storageFiles);
-            if(JSON.stringify(storageFiles) !== '{}' && this.state.filesList === undefined) this.setState({filesList: storageFiles});
-            let storageActivities = localStorage.getItem("activities");
-            console.log("storageActivities: ", storageActivities);
-            if(this.activities === undefined && JSON.stringify(storageActivities) !== '{}') this.activities = JSON.parse(localStorage.getItem("activities"));
-            this.pageReloaded = true;
-        }
-    }
-
     componentWillUpdate(nextProps: HistoryProps) {
         let scrollToBottomDetectionTolerance = 1;
 
@@ -174,20 +159,9 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                 this.largeWidth = this.props.size.width * 2;
                 content = <this.measurableCarousel/>;
             } else {   
-                //if no conditional, then when refreshed the previous messages won't show             
-                if(!this.pageReloaded) {
-                    this.activities = filteredActivities(this.props.activities, this.props.format.strings.pingMessage);
-                    console.log("this.activities = filteredactivities");
-                }
-
+                this.activities = filteredActivities(this.props.activities, this.props.format.strings.pingMessage);
                 activityDisclaimer = this.activities.length > 0 ? this.activities[this.activities.length - 1] : undefined;
                 lastActivityIsDisclaimer = activityDisclaimer && activityDisclaimer.entities && activityDisclaimer.entities.length > 0 && activityDisclaimer.entities[0].node_type === 'disclaimer';
-                //user input saved to local storage
-                localStorage.setItem("activities", JSON.stringify(this.activities));
-                localStorage.setItem("user_files", JSON.stringify(this.state.filesList));
-                console.log("activities:", this.activities);
-                console.log("activites props", this.props.activities)
-                // console.log("this.state.filesList", this.state.filesList);
                 content = this.activities
                 .map((activity, index) =>
                     ((activity.type !== 'message' || activity.text || (activity.attachments && !!activity.attachments.length))) &&
