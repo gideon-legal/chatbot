@@ -6,6 +6,12 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { parseReferrer } from 'analytics-utils';
 
+import InfiniteScroll from 'react-infinite-scroll-component';
+import ConvoHistory from './ConversationHistory';
+import { IconButton } from '@material-ui/core';
+import { ArrowBack } from '@material-ui/icons';
+import { HistoryInline } from './assets/icons/HistoryInline'
+
 import { Activity, CardActionTypes, DirectLine, DirectLineOptions, IBotConnection, User } from 'botframework-directlinejs';
 import { isMobile } from 'react-device-detect';
 import { connect, Provider } from 'react-redux';
@@ -48,6 +54,7 @@ export interface State {
     orginalBodyClass: string;
     fullscreen: boolean;
     full_height: boolean;
+    showConvoHistory: boolean;
 }
 
 import { FloatingIcon } from './FloatingIcon';
@@ -63,6 +70,7 @@ export class Chat extends React.Component<ChatProps, State> {
         display: false,
         fullscreen: false,
         full_height: false,
+        showConvoHistory: false,
         orginalBodyClass: document.body.className
     };
 
@@ -463,6 +471,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 });
             });
         }
+        console.log(this.props)
     }
 
     componentWillUnmount() {
@@ -540,6 +549,13 @@ export class Chat extends React.Component<ChatProps, State> {
         return styles;
     }
 
+    //change state of showConvoHistory to show list of convos
+    private handleHistory = () => {
+        this.setState({
+            showConvoHistory: !this.state.showConvoHistory
+        })
+    }
+
     // At startup we do three render passes:
     // 1. To determine the dimensions of the chat panel (nothing needs to actually render here, so we don't)
     // 2. To determine the margins of any given carousel (we just render one mock activity so that we can measure it)
@@ -570,8 +586,8 @@ export class Chat extends React.Component<ChatProps, State> {
                         ref={ this._saveChatviewPanelRef }
                         style={chatviewPanelStyle}
                     >
-                        {
-                            !!state.format.chatTitle &&
+                        { //different header for current convo and history
+                            !!state.format.chatTitle && !this.state.showConvoHistory ?
                                 <div className={!fullscreen ? 'wc-header' : 'wc-header wc-header-fullscreen'} style={{backgroundColor: state.format.themeColor}}>
                                     <img
                                         className="wc-header--logo"
@@ -579,9 +595,13 @@ export class Chat extends React.Component<ChatProps, State> {
                                             state.format.logoUrl :
                                             'https://s3.amazonaws.com/com.gideon.static.dev/chatbot-header-default-v1.1.2.png'
                                         }
-                                      />
+                                        style={{ marginRight: "45px" }}
+                                    />
 
-                                  <span>{typeof state.format.chatTitle === 'string' ? state.format.chatTitle : 'Gideon' }</span>
+                                    <span>{typeof state.format.chatTitle === 'string' ? state.format.chatTitle : 'Gideon' }</span>
+                                    <IconButton onClick={this.handleHistory} className="icon__button history__button">
+                                        <HistoryInline />
+                                    </IconButton>
                                     {/* Close X image on chat */}
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={() => {this.toggle(); }} >
                                         <title>wc-header--close</title>
@@ -598,6 +618,14 @@ export class Chat extends React.Component<ChatProps, State> {
                                         onClick={() => {this.step(); }}
                                         src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/back.svg" /> */}
                                 </div>
+                                :
+                                //button back to current convo
+                                <div className={!fullscreen ? 'history-header wc-header' : 'wc-header wc-header-fullscreen'}>
+                                    <IconButton onClick={this.handleHistory}  className="icon__button" style={{ padding: 0, color: 'white' }}>
+                                        <ArrowBack className='back__button' />
+                                    </IconButton>
+                                    <span>Current Conversation</span>
+                                </div>
                         }
                         <div className="wc-chatbot-content">
                             {fullscreen && <div className="wc-chatbot-content-left">
@@ -608,33 +636,38 @@ export class Chat extends React.Component<ChatProps, State> {
                                                 null}
                                 />
                             </div>}
-                            <div className="wc-chatbot-content-right">
-                                <History
-                                    onCardAction={ this._handleCardAction }
-                                    ref={ this._saveHistoryRef }
-                                    gid={ this.props.gid }
-                                    directLine={ this.props.directLine }
-                                />
+                            {/* current convo or history? */}
+                            {!this.state.showConvoHistory ? 
+                                <div className="wc-chatbot-content-right">
+                                    <History
+                                        onCardAction={ this._handleCardAction }
+                                        ref={ this._saveHistoryRef }
+                                        gid={ this.props.gid }
+                                        directLine={ this.props.directLine }
+                                    />
+                                    <Shell ref={ this._saveShellRef } />
+                                        <div className="wc-footer">
+                                            {/* TODO - temporarily commented out for all users to accomodate a new client */}
+                                            {/* <a href="https://gideon.legal">
+                                            <span>Powered by</span>
+                                            <img
+                                                className="wc-footer--logo"
+                                                src="https://s3.amazonaws.com/com.gideon.static.dev/logotype-v1.1.0.svg"
+                                                />
+                                            </a> */}
 
-                                <Shell ref={ this._saveShellRef } />
+                                        </div>
 
-                                    <div className="wc-footer">
-                                        {/* TODO - temporarily commented out for all users to accomodate a new client */}
-                                        {/* <a href="https://gideon.legal">
-                                        <span>Powered by</span>
-                                        <img
-                                            className="wc-footer--logo"
-                                            src="https://s3.amazonaws.com/com.gideon.static.dev/logotype-v1.1.0.svg"
-                                            />
-                                        </a> */}
-
-                                    </div>
-
-                                {
-                                    this.props.resize === 'detect' &&
-                                        <ResizeDetector onresize={ this.resizeListener } />
-                                }
-                            </div>
+                                    {
+                                        this.props.resize === 'detect' &&
+                                            <ResizeDetector onresize={ this.resizeListener } />
+                                    }
+                                </div> 
+                                :
+                                <div className="wc-chatbot-content-right" style={{paddingTop:"67px"}}>
+                                    <ConvoHistory/>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
