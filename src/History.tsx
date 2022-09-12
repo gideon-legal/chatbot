@@ -1,3 +1,4 @@
+import { any } from 'bluebird';
 import { Activity, CardActionTypes, DirectLineOptions, Message, User } from 'botframework-directlinejs';
 import * as moment from 'moment';
 import * as React from 'react';
@@ -44,11 +45,28 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
 
     private carouselActivity: WrappedActivity;
     private largeWidth: number;
+    private pageReloaded = false;
+    private activities: any[];
 
     constructor(props: HistoryProps) {
         super(props);
         this.state = { filesList: {} };
         this.addFilesToState = this.addFilesToState.bind(this);
+    }
+
+    componentDidMount() {
+        console.log("component did mount")
+        //if page was refreshed and is first time
+        if(performance.getEntriesByType("navigation")[0].type === "reload" && !this.pageReloaded) {
+            //gets files and activities from local storage
+            let storageFiles = JSON.parse(localStorage.getItem("user_files"));
+            console.log("storageFiles: ", storageFiles);
+            if(JSON.stringify(storageFiles) !== '{}' && this.state.filesList === undefined) this.setState({filesList: storageFiles});
+            let storageActivities = localStorage.getItem("activities");
+            console.log("storageActivities: ", storageActivities);
+            if(this.activities === undefined && JSON.stringify(storageActivities) !== '{}') this.activities = JSON.parse(localStorage.getItem("activities"));
+            this.pageReloaded = true;
+        }
     }
 
     componentWillUpdate(nextProps: HistoryProps) {
@@ -155,24 +173,35 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                 // For measuring carousels we need a width known to be larger than the chat itself
                 this.largeWidth = this.props.size.width * 2;
                 content = <this.measurableCarousel/>;
-            } else {
-                const activities = filteredActivities(this.props.activities, this.props.format.strings.pingMessage);
-                activityDisclaimer = activities.length > 0 ? activities[activities.length - 1] : undefined;
+            } else {   
+                //if no conditional, then when refreshed the previous messages won't show             
+                if(!this.pageReloaded) {
+                    this.activities = filteredActivities(this.props.activities, this.props.format.strings.pingMessage);
+                    console.log("this.activities = filteredactivities");
+                }
+
+                activityDisclaimer = this.activities.length > 0 ? this.activities[this.activities.length - 1] : undefined;
                 lastActivityIsDisclaimer = activityDisclaimer && activityDisclaimer.entities && activityDisclaimer.entities.length > 0 && activityDisclaimer.entities[0].node_type === 'disclaimer';
-                content = activities
+                //user input saved to local storage
+                localStorage.setItem("activities", JSON.stringify(this.activities));
+                localStorage.setItem("user_files", JSON.stringify(this.state.filesList));
+                console.log("activities:", this.activities);
+                console.log("activites props", this.props.activities)
+                // console.log("this.state.filesList", this.state.filesList);
+                content = this.activities
                 .map((activity, index) =>
                     ((activity.type !== 'message' || activity.text || (activity.attachments && !!activity.attachments.length))) &&
                         <WrappedActivity
                             format={ this.props.format }
                             key={ 'message' + index }
                             activity={ activity }
-                            nextActivityFromMe={ index + 1 < activities.length ? this.props.isFromMe(activities[index + 1]) : false}
+                            nextActivityFromMe={ index + 1 < this.activities.length ? this.props.isFromMe(this.activities[index + 1]) : false}
                             doCardAction={this.doCardAction}
-                            lastMessage={index === activities.length - 1}
-                            showTimestamp={ index === activities.length - 1 || (index + 1 < activities.length && suitableInterval(activity, activities[index + 1])) }
+                            lastMessage={index === this.activities.length - 1}
+                            showTimestamp={ index === this.activities.length - 1 || (index + 1 < this.activities.length && suitableInterval(activity, this.activities[index + 1])) }
                             selected={ this.props.isSelected(activity) }
                             fromMe={ this.props.isFromMe(activity) }
-                            displayName={ index === 0 || (!this.props.isFromMe(activity) && this.props.isFromMe(activities[index - 1]))}
+                            displayName={ index === 0 || (!this.props.isFromMe(activity) && this.props.isFromMe(this.activities[index - 1]))}
                             onClickActivity={ this.props.onClickActivity(activity) }
                             onClickRetry={e => {
                                 // Since this is a click on an anchor, we need to stop it
@@ -223,6 +252,17 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                     </div>
                     { content }
                 </div>
+                {/* prompt to start new convo if page refreshed */}
+                {/* this.props.activities.length > 1 && */}
+                { this.pageReloaded && 
+                    <div className="new__convo" style={{ textAlign: "center" }}>Do you want to start a new session? 
+                        <a onClick={() => console.log("start new")} style={{ color:"blue", marginLeft: "5px" }}>
+                            Click here to start new
+                        </a>
+                    </div>
+                }
+                
+                
             </div>
             {/* {lastActivityIsDisclaimer && <DisclaimerCard activity={activityDisclaimer} onImageLoad={ () => this.autoscroll() }/>} */}
             </div>
@@ -528,7 +568,6 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
 
                     {/* <div className={ 'wc-message-from wc-message-from-' + who }>{ timeLine }</div> */}
                 </div>
-
                 {this.renderAdditionalActivity(contentClassName, wrapperClassName)}
             </div>
         );

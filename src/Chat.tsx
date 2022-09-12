@@ -305,12 +305,21 @@ export class Chat extends React.Component<ChatProps, State> {
         this.setSize();
         const msftUserId = window.localStorage.getItem('msft_user_id');
 
-        const isNew = true;
+        const isNew = performance.getEntriesByType("navigation")[0].type === "reload" ? false : true;
         let botConnection: any = null;
 
-        botConnection = this.props.directLine ?
+        if(performance.getEntriesByType("navigation")[0].type === "reload" && localStorage.getItem("botConnection")) {
+            botConnection = JSON.parse(localStorage.getItem("botConnection"));
+        } else {
+            botConnection = this.props.directLine ?
             (this.botConnection = new DirectLine(this.props.directLine)) :
             this.props.botConnection;
+            localStorage.setItem("botConnection", JSON.stringify(botConnection));
+        }
+     
+        console.log("this.props.directline ", this.props.directLine);
+        console.log("this.props.botConnection ", this.props.botConnection);
+        console.log("this.botConnection ", botConnection);
 
         if (this.props.resize === 'window') {
             window.addEventListener('resize', this.resizeListener);
@@ -343,7 +352,11 @@ export class Chat extends React.Component<ChatProps, State> {
             if (connectionStatus === 2) {  // wait for connection is 'OnLine' to send data to bot
 
                 const botCopy: any = botConnection;
-                const conversationId = botCopy.conversationId;
+                let conversationId = botCopy.conversationId;
+                if(performance.getEntriesByType("navigation")[0].type === "reload" && localStorage.getItem("msft_conversation_id")) {
+                    conversationId = localStorage.getItem("msft_conversation_id");
+                    console.log("convo id from local storage")
+                }
 
                 if (!state.connection.verification.attempted) {
                     this.store.dispatch<ChatActions>({
