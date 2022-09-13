@@ -144,29 +144,32 @@ export class Chat extends React.Component<ChatProps, State> {
         }
     }
 
-    private handleIncomingActivity(activity: Activity) {
+    private async handleIncomingActivity(activity: Activity) {
         const state = this.store.getState();
         const activityCopy: any = activity;
-
-        console.log(activity.type)
+        
+        console.log("visibility " + this.state.back_visible);
         
         switch (activity.type) {
-
+            
             case 'message':
                // this.toggleBackButton(true)
-               if(activity.entities) {
-                if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
-                    this.toggleBackButton(true)
-                }
+                if(activity.entities) {
+                    // console.log(activity.entities[0].node_type)
+                    if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
+                        this.toggleBackButton(true)
+                    }
                } else {
-                console.log(activity)
+
                 const botConnection: any = this.store.getState().connection.botConnection;
                 const notNode = checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)
-                if(notNode === false){
-                    this.toggleBackButton(true)
-                } else {
-                    this.toggleBackButton(false)
-                }
+               
+                    if(await notNode === true){
+                        this.toggleBackButton(true);
+                    } else {
+                        this.toggleBackButton(false)
+                    }
+
                }
                 this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
                 break;
@@ -179,6 +182,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 break;
         }
     }
+
 
     private toggle = () => {
         this.setState({
@@ -219,7 +223,7 @@ export class Chat extends React.Component<ChatProps, State> {
             .then((res: any) => {
                 const messages = res.data.messages.reverse();
                 const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
-                console.log(message_activities);
+             
                 this.store.dispatch<ChatActions>({
                     type: 'Set_Messages',
                     activities: message_activities
