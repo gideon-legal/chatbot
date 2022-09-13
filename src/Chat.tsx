@@ -148,14 +148,10 @@ export class Chat extends React.Component<ChatProps, State> {
         const state = this.store.getState();
         const activityCopy: any = activity;
         
-        console.log("visibility " + this.state.back_visible);
-        
         switch (activity.type) {
             
             case 'message':
-               // this.toggleBackButton(true)
                 if(activity.entities) {
-                    // console.log(activity.entities[0].node_type)
                     if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
                         this.toggleBackButton(true)
                     }
@@ -163,13 +159,10 @@ export class Chat extends React.Component<ChatProps, State> {
 
                 const botConnection: any = this.store.getState().connection.botConnection;
                 const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)
-                console.log(notNode)
                     
                     if(notNode === true){
-                        console.log(notNode)
                         this.toggleBackButton(false);
                     } else {
-                        console.log(notNode)
                         this.toggleBackButton(true)
                     }
 
@@ -224,7 +217,6 @@ export class Chat extends React.Component<ChatProps, State> {
         .then((res: any) => {
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, res.data.id)
             .then((res: any) => {
-            //    console.log(res.data)
                 const messages = res.data.messages.reverse();
                 const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
              
@@ -609,7 +601,6 @@ export class Chat extends React.Component<ChatProps, State> {
         const state = this.store.getState();
         const { open, opened, display, fullscreen } = this.state;
 
-       // console.log(state)
         const chatviewPanelStyle = this.calculateChatviewPanelStyle(state.format);
 
         const backButtonClassName = classList(
