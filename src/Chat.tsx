@@ -162,12 +162,15 @@ export class Chat extends React.Component<ChatProps, State> {
                } else {
 
                 const botConnection: any = this.store.getState().connection.botConnection;
-                const notNode = checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)
-               
-                    if(await notNode === true){
-                        this.toggleBackButton(true);
+                const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)
+                console.log(notNode)
+                    
+                    if(notNode === true){
+                        console.log(notNode)
+                        this.toggleBackButton(false);
                     } else {
-                        this.toggleBackButton(false)
+                        console.log(notNode)
+                        this.toggleBackButton(true)
                     }
 
                }
@@ -221,6 +224,7 @@ export class Chat extends React.Component<ChatProps, State> {
         .then((res: any) => {
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, res.data.id)
             .then((res: any) => {
+            //    console.log(res.data)
                 const messages = res.data.messages.reverse();
                 const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
              
@@ -241,6 +245,7 @@ export class Chat extends React.Component<ChatProps, State> {
                           activity: message_activities[message_activities.length-1]}
                     )
                 }
+                
             });
         })
         .catch((err: any) => {
