@@ -149,23 +149,22 @@ export class Chat extends React.Component<ChatProps, State> {
         const activityCopy: any = activity;
         
         switch (activity.type) {
-            
             case 'message':
                 if(activity.entities) {
                     if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
                         this.toggleBackButton(true)
                     }
                } else {
-
                 const botConnection: any = this.store.getState().connection.botConnection;
-                const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)
-                    
-                    if(notNode === true){
-                        this.toggleBackButton(false);
-                    } else {
-                        this.toggleBackButton(true)
-                    }
 
+                // if the current activity has no entities, it might be a completion node, in which case we must hide the back button
+                // checkNeedBackButton returns if the current activity corresponds to a completion node or not
+                const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)    
+                if(notNode === true){
+                    this.toggleBackButton(false);
+                } else {
+                    this.toggleBackButton(true)
+                }
                }
                 this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
                 break;
@@ -211,6 +210,7 @@ export class Chat extends React.Component<ChatProps, State> {
         return this.state.back_visible;
     }
 
+    //step function perfoms going back to the previous message
     private step = (messageId?: string|null) => {
         const botConnection: any = this.store.getState().connection.botConnection;
         step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
