@@ -9,7 +9,7 @@ import { parseReferrer } from 'analytics-utils';
 import { Activity, CardActionTypes, DirectLine, DirectLineOptions, IBotConnection, User } from 'botframework-directlinejs';
 import { isMobile } from 'react-device-detect';
 import { connect, Provider } from 'react-redux';
-import { conversationHistory, mapMessagesToActivities, ping, step, verifyConversation } from './api/bot';
+import { conversationHistory, mapMessagesToActivities, ping, step, verifyConversation, checkNeedBackButton } from './api/bot';
 import { getTabIndex } from './getTabIndex';
 import { guid } from './GUID';
 import * as konsole from './Konsole';
@@ -65,7 +65,7 @@ export class Chat extends React.Component<ChatProps, State> {
         fullscreen: false,
         full_height: false,
         clicked: false,
-        back_visible: false,
+        back_visible: true,
         orginalBodyClass: document.body.className
     };
 
@@ -144,19 +144,27 @@ export class Chat extends React.Component<ChatProps, State> {
         }
     }
 
-    private handleIncomingActivity(activity: Activity) {
+    private async handleIncomingActivity(activity: Activity) {
         const state = this.store.getState();
         const activityCopy: any = activity;
-
+        
         switch (activity.type) {
             case 'message':
-               // this.toggleBackButton(true)
-               if(activity.entities) {
-                if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
+                if(activity.entities) {
+                    if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
+                        this.toggleBackButton(true)
+                    }
+               } else {
+                const botConnection: any = this.store.getState().connection.botConnection;
+
+                // if the current activity has no entities, it might be a completion node, in which case we must hide the back button
+                // checkNeedBackButton returns if the current activity corresponds to a completion node or not
+                const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)    
+                if(notNode === true){
+                    this.toggleBackButton(false);
+                } else {
                     this.toggleBackButton(true)
                 }
-               } else {
-                this.toggleBackButton(true)
                }
                 this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
                 break;
@@ -170,11 +178,12 @@ export class Chat extends React.Component<ChatProps, State> {
         }
     }
 
+
     private toggle = () => {
         this.setState({
             open: !this.state.open,
-            opened: true
-           // back_visible: false
+            opened: true,
+            back_visible: !this.state.back_visible
         });
     }
 
@@ -201,6 +210,7 @@ export class Chat extends React.Component<ChatProps, State> {
         return this.state.back_visible;
     }
 
+    //step function perfoms going back to the previous message
     private step = (messageId?: string|null) => {
         const botConnection: any = this.store.getState().connection.botConnection;
         step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
@@ -209,7 +219,7 @@ export class Chat extends React.Component<ChatProps, State> {
             .then((res: any) => {
                 const messages = res.data.messages.reverse();
                 const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
-                console.log(message_activities);
+             
                 this.store.dispatch<ChatActions>({
                     type: 'Set_Messages',
                     activities: message_activities
@@ -227,6 +237,7 @@ export class Chat extends React.Component<ChatProps, State> {
                           activity: message_activities[message_activities.length-1]}
                     )
                 }
+                
             });
         })
         .catch((err: any) => {
@@ -590,7 +601,6 @@ export class Chat extends React.Component<ChatProps, State> {
         const state = this.store.getState();
         const { open, opened, display, fullscreen } = this.state;
 
-       // console.log(state)
         const chatviewPanelStyle = this.calculateChatviewPanelStyle(state.format);
 
         const backButtonClassName = classList(
@@ -676,9 +686,9 @@ export class Chat extends React.Component<ChatProps, State> {
                                         className="wcbackbutton" onClick={() => {
                                             if (!this.state.clicked) {
                                             this.step(); 
-                                            var button = this.state; // temp variable in order to change state of clicked
-                                            button.clicked = true; // changes state within variable to true
-                                            this.setState(button); // passes updated boolean back to state
+                                            // var button = this.state; // temp variable in order to change state of clicked
+                                            // button.clicked = true; // changes state within variable to true
+                                            // this.setState(button); // passes updated boolean back to state
                                         } 
                                         }}>
 
