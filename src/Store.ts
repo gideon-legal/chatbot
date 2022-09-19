@@ -297,7 +297,7 @@ export const format: Reducer<FormatState> = (
             return {
                 ...state,
                 showConsole: action.showConsole
-            }
+            };
         default:
             return state;
     }
@@ -430,12 +430,6 @@ export type HistoryAction = {
 } | {
     type: 'Clear_Typing',
     id: string
-} | {
-    type: 'Toggle_InputEnabled_True',
-    inputEnabled: boolean
-} | {
-    type: 'Toggle_InputEnabled_False',
-    inputEnabled: boolean
 };
 
 const copyArrayWithUpdatedItem = <T>(array: T[], i: number, item: T) => [
@@ -618,19 +612,6 @@ export const history: Reducer<HistoryState> = (
                 activities: copyArrayWithUpdatedItem(state.activities, i, newActivity),
                 selectedActivity: state.selectedActivity === activity ? newActivity : state.selectedActivity
             };
-
-        case 'Toggle_InputEnabled_True':
-            console.log('Toggle InputEnabled')
-            return {
-                ...state,
-                inputEnabled: true
-            }
-        case 'Toggle_InputEnabled_False':
-            console.log('Toggle InputEnabled')
-            return {
-                ...state,
-                inputEnabled: false
-            }
         default:
             return state;
     }

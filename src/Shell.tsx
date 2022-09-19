@@ -109,7 +109,6 @@ class ShellContainer extends React.Component<Props> implements ShellFunctions {
     render() {
         // Override
         const showUploadButton = false;
-        const showConsole = false;
 
         let wcBorderStyles;
         if (this.props.themeColor) {
@@ -122,8 +121,7 @@ class ShellContainer extends React.Component<Props> implements ShellFunctions {
             !this.props.inputEnabled && 'wc-console__disabled',
             this.props.inputText.length > 0 && 'has-text',
             showUploadButton && 'has-upload-button',
-            this.props.fullscreen && 'wc-console-fullscreen',
-            //showConsole && 'wc-console__disabled'
+            this.props.fullscreen && 'wc-console-fullscreen'
         );
 
         const showMicButton = this.props.listeningState !== ListeningState.STOPPED || (Speech.SpeechRecognizer.speechIsAvailable()  && !this.props.inputText.length);
