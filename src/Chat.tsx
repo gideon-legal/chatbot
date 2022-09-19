@@ -154,6 +154,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 if(activity.entities) {
                     if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
                         this.toggleBackButton(true)
+                        this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     }
                } else {
                 const botConnection: any = this.store.getState().connection.botConnection;
@@ -177,6 +178,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 this.toggleBackButton(false)
                 if (activity.from.id !== state.connection.user.id) {
                     this.store.dispatch<ChatActions>({ type: 'Show_Typing', activity });
+                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                 }
                 break;
         }
