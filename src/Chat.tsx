@@ -152,9 +152,9 @@ export class Chat extends React.Component<ChatProps, State> {
         switch (activity.type) {
             case 'message':
                 if(activity.entities) {
+                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
                         this.toggleBackButton(true)
-                        this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     }
                } else {
                 const botConnection: any = this.store.getState().connection.botConnection;
