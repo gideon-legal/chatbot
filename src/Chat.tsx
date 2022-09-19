@@ -34,6 +34,7 @@ export interface ChatProps {
     selectedActivity?: BehaviorSubject<ActivityOrID>;
     sendTyping?: boolean;
     showUploadButton?: boolean;
+    showConsole?: boolean;
     formatOptions?: FormatOptions;
     themeColor?: string;
     logoUrl?: string;
@@ -162,6 +163,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)    
                 if(notNode === true){
                     this.toggleBackButton(false);
+                    this.props.showConsole === false;
                 } else {
                     this.toggleBackButton(true)
                 }
