@@ -491,17 +491,22 @@ export const history: Reducer<HistoryState> = (
 
             const copy: any = action.activity;
             const isDisclaimer = copy && copy.entities && copy.entities.length > 0 && copy.entities[0].node_type === 'disclaimer';
-            let inputEnabled = !copy.entities;
+            let inputEnabled = copy.showConsole;
+
+            console.log("store 1 " + inputEnabled)
 
             // for back button - check if going back to a node with input enabled
             if(copy && copy.entities && copy.entities.length === 0){
-            //    console.log("here")
+                // console.log("here")
                 inputEnabled = true;
             }
             
             if (state.activities.find(a => a.id === action.activity.id)) { 
+                // console.log( "there" )
                 inputEnabled = true;
                 return {...state, inputEnabled} }
+
+            console.log("store 2 " + inputEnabled)
 
             return {
                 ...state,
@@ -583,6 +588,7 @@ export const history: Reducer<HistoryState> = (
 
         case 'Clear_Typing':
             console.log('Clear Typing')
+            console.log(state.inputEnabled)
             return {
                 ...state,
                 activities: state.activities.filter(activity => activity.id !== action.id),
