@@ -34,7 +34,7 @@ export interface HistoryProps {
 }
 
 export interface HistoryState {
-    filesList: { [index: number]: Array<{ name: string, url: string }> };
+    filesList: { [index: number]: { name: string, url: string }[] };
 }
 
 export class HistoryView extends React.Component<HistoryProps, HistoryState> {
@@ -53,7 +53,11 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
     }
 
     componentDidMount() {
-        if(performance.getEntriesByType('navigation')[0].type === 'reload') this.pageReloaded = true;
+        // prompt to start new convo only shows up when:
+        // - page was refreshed
+        // - chat wasn't empty before the page refresh
+        // - not a new convo being started
+        if(performance.getEntriesByType('navigation')[0].type === 'reload' && localStorage.getItem('newConvo') !== 'true' && localStorage.getItem('emptyChat') !== 'true') this.pageReloaded = true;
     }
 
     componentWillUpdate(nextProps: HistoryProps) {
@@ -147,8 +151,13 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         return this.props.doCardAction(type, value);
     }
 
-    private addFilesToState(index: number, files: Array<{ name: string, url: string }>) {
+    private addFilesToState(index: number, files: { name: string, url: string }[]) {
         this.setState(prevState => ({ filesList: { ...prevState.filesList, [index]: files } }));
+    }
+
+    private startNewConvo() {
+        localStorage.setItem('newConvo', 'true');
+        window.location.reload();
     }
 
     render() {
@@ -164,6 +173,14 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                 const activities = filteredActivities(this.props.activities, this.props.format.strings.pingMessage);
                 activityDisclaimer = activities.length > 0 ? activities[activities.length - 1] : undefined;
                 lastActivityIsDisclaimer = activityDisclaimer && activityDisclaimer.entities && activityDisclaimer.entities.length > 0 && activityDisclaimer.entities[0].node_type === 'disclaimer';
+
+                // for cases where user refreshes before any messages appear
+                if(activities.length > 1) {
+                    localStorage.setItem('emptyChat', 'false');
+                } else {
+                    localStorage.setItem('emptyChat', 'true');
+                }
+
                 content = activities
                 .map((activity, index) =>
                     ((activity.type !== 'message' || activity.text || (activity.attachments && !!activity.attachments.length))) &&
@@ -232,7 +249,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                 {/* this.props.activities.length > 1 && */}
                 { this.pageReloaded &&
                     <div className="new__convo" style={{ textAlign: 'center' }}>Do you want to start a new session?
-                        <a onClick={() => console.log('start new')} style={{ color:'blue', marginLeft: '5px' }}>
+                        <a onClick={this.startNewConvo} style={{ color:'blue', marginLeft: '5px', cursor: 'pointer' }}>
                             Click here to start new
                         </a>
                     </div>
@@ -339,7 +356,7 @@ export interface WrappedActivityProps {
     onClickRetry: React.MouseEventHandler<HTMLAnchorElement>;
     gid: string;
     directLine?: DirectLineOptions;
-    files: Array<{ name: string, url: string }>;
+    files: { name: string, url: string }[];
     addFilesToState: (index: number, files: [{ name: string, url: string }]) => void;
     index: number;
     inputEnabled: boolean;

@@ -8,6 +8,7 @@ import { parseReferrer } from 'analytics-utils';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ConvoHistory from './ConversationHistory';
+import ConvoViewer from './ConversationViewer';
 import { IconButton } from '@material-ui/core';
 import { ArrowBack } from '@material-ui/icons';
 import { HistoryInline } from './assets/icons/HistoryInline'
@@ -55,6 +56,7 @@ export interface State {
     fullscreen: boolean;
     full_height: boolean;
     showConvoHistory: boolean;
+    currentConversation: any;
 }
 
 import { FloatingIcon } from './FloatingIcon';
@@ -71,7 +73,8 @@ export class Chat extends React.Component<ChatProps, State> {
         fullscreen: false,
         full_height: false,
         showConvoHistory: false,
-        orginalBodyClass: document.body.className
+        orginalBodyClass: document.body.className,
+        currentConversation: ''
     };
 
     private store = createStore();
@@ -94,6 +97,9 @@ export class Chat extends React.Component<ChatProps, State> {
     private _saveHistoryRef = this.saveHistoryRef.bind(this);
     private _saveShellRef = this.saveShellRef.bind(this);
     // tslint:enable:variable-name
+
+
+    private messages = [] as any;
 
     constructor(props: ChatProps) {
         super(props);
@@ -273,8 +279,9 @@ export class Chat extends React.Component<ChatProps, State> {
         this.setSize();
         const msftUserId = window.localStorage.getItem('msft_user_id');
 
-        // initially was set to true
-        const isNew = performance.getEntriesByType('navigation')[0].type === 'reload' ? false : true;
+        // initially always set to true
+        console.log('props activities: ', this.props.activities)
+        let isNew = performance.getEntriesByType('navigation')[0].type === 'reload' ? false : true;
         let botConnection: any = null;
 
         // if page reloaded and there's bot connection in local storage
@@ -295,6 +302,7 @@ export class Chat extends React.Component<ChatProps, State> {
         console.log('this.props.directline ', this.props.directLine);
         console.log('this.props.botConnection ', this.props.botConnection);
         console.log('this.botConnection ', botConnection);
+        console.log('newCOnvo: ', localStorage.getItem('newConvo'))
 
         if (this.props.resize === 'window') {
             window.addEventListener('resize', this.resizeListener);
@@ -328,9 +336,18 @@ export class Chat extends React.Component<ChatProps, State> {
 
                 const botCopy: any = botConnection;
                 let conversationId = botCopy.conversationId;
-                if(!isNew && localStorage.getItem("msft_conversation_id")) {
-                    conversationId = localStorage.getItem("msft_conversation_id");
-                    console.log("convo id from local storage")
+
+                // if refresh before chat started, new convo id made
+                if(localStorage.getItem('emptyChat') === 'true' || localStorage.getItem('newConvo') === 'true') {
+                    isNew = true;
+                    localStorage.setItem('newConvo', 'false');
+                    localStorage.setItem('emptyChat', 'false');
+                }
+
+                // if not new convo and there's a convo id in local storage
+                if(!isNew && localStorage.getItem('msft_conversation_id')) {
+                    conversationId = localStorage.getItem('msft_conversation_id');
+                    console.log('convo id from local storage')
                 }
 
                 if (!state.connection.verification.attempted) {
@@ -435,6 +452,8 @@ export class Chat extends React.Component<ChatProps, State> {
                             const state = this.store.getState();
                             const messages = res.data.messages.reverse();
 
+                            if(isNew && messages.length === 0) isNew = true;
+
                             this.store.dispatch<ChatActions>({
                                 type: 'Set_Messages',
                                 activities: mapMessagesToActivities(messages, state.connection.user.id)
@@ -492,6 +511,17 @@ export class Chat extends React.Component<ChatProps, State> {
             });
         }
         console.log(this.props)
+
+        // call to get all conversations with this user
+
+        // grabs messages from each message
+        // makes more sense to grab messages when user wants to see it instead of grabbing it in advance(?), but call takes a while for it to come back
+        conversationHistory('http://localhost:3000', 'tKZgVlG3KDw.cwA.dCc.CV65hJS12Vc-2k0-mTNjmd-O7_hrlp5PrZQfvNiUTcQ', '4eCLfxxJ6ek9DKoWYiQ0BK-us'
+        )
+        .then((res: any) => {
+            this.messages = res.data.messages;
+            console.log(this.messages);
+        })
     }
 
     componentWillUnmount() {
@@ -569,11 +599,23 @@ export class Chat extends React.Component<ChatProps, State> {
         return styles;
     }
 
-    //change state of showConvoHistory to show list of convos
-    private handleHistory = () => {
+    // change state of showConvoHistory to show list of convos
+    private handleHistory = (bool: boolean) => {
         this.setState({
-            showConvoHistory: !this.state.showConvoHistory
+            showConvoHistory: bool
         })
+        if(bool) {
+            this.setState({
+                currentConversation: undefined
+            });
+        }
+    }
+
+    private changeCurrentConversation = (convo: any) => {
+        this.setState({
+            currentConversation: convo
+        });
+        console.log('changed current convo to: ', convo)
     }
 
     // At startup we do three render passes:
@@ -606,8 +648,8 @@ export class Chat extends React.Component<ChatProps, State> {
                         ref={ this._saveChatviewPanelRef }
                         style={chatviewPanelStyle}
                     >
-                        { //different header for current convo and history
-                            !!state.format.chatTitle && !this.state.showConvoHistory ?
+                        { // different header for current convo and history
+                            !!state.format.chatTitle && (!this.state.showConvoHistory || this.state.currentConversation) ?
                                 <div className={!fullscreen ? 'wc-header' : 'wc-header wc-header-fullscreen'} style={{backgroundColor: state.format.themeColor}}>
                                     <img
                                         className="wc-header--logo"
@@ -619,7 +661,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                     />
 
                                     <span>{typeof state.format.chatTitle === 'string' ? state.format.chatTitle : 'Gideon' }</span>
-                                    <IconButton onClick={this.handleHistory} className="icon__button history__button">
+                                    <IconButton onClick={() => this.handleHistory(true)} className="icon__button history__button">
                                         <HistoryInline />
                                     </IconButton>
                                     {/* Close X image on chat */}
@@ -641,7 +683,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                 :
                                 // button back to current convo
                                 <div className={!fullscreen ? 'history-header wc-header' : 'wc-header wc-header-fullscreen'}>
-                                    <IconButton onClick={this.handleHistory}  className="icon__button" style={{ padding: 0, color: 'white' }}>
+                                    <IconButton onClick={() => this.handleHistory(false)}  className="icon__button" style={{ padding: 0, color: 'white' }}>
                                         <ArrowBack className="back__button" />
                                     </IconButton>
                                     <span>Current Conversation</span>
@@ -685,7 +727,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                 </div>
                                 :
                                 <div className="wc-chatbot-content-right" style={{paddingTop:'67px'}}>
-                                    <ConvoHistory/>
+                                    {this.state.currentConversation ? <ConvoViewer messages={this.messages}/> : <ConvoHistory setCurrentConversation={this.changeCurrentConversation}/>}
                                 </div>
                             }
                         </div>
@@ -769,7 +811,7 @@ export const renderIfNonempty = (value: any, renderer: (value: any) => JSX.Eleme
     }
 };
 
-export const classList = (...args: Array<string | boolean>) => {
+export const classList = (...args: (string | boolean)[]) => {
     return args.filter(Boolean).join(' ');
 };
 
