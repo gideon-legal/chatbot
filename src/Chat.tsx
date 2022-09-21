@@ -146,13 +146,14 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private async handleIncomingActivity(activity: Activity) {
-        const state = this.store.getState();
+        const state = this.store.getState();step
         const activityCopy: any = activity;
         
         switch (activity.type) {
             case 'message':
                 if(activity.entities) {
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                     if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
                         this.toggleBackButton(true)
                     }
@@ -168,11 +169,13 @@ export class Chat extends React.Component<ChatProps, State> {
                     this.toggleBackButton(false);
                     console.log( " chat 2 " )
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                 } else {
                     // open response only
                     this.toggleBackButton(true)
                     console.log( " chat 3 " )
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
+                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
                 }
                }
                 this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
@@ -183,6 +186,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 if (activity.from.id !== state.connection.user.id) {
                     this.store.dispatch<ChatActions>({ type: 'Show_Typing', activity });
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                 }
                 break;
         }
@@ -232,6 +236,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 
                 this.props.showConsole === false;
                 this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+                this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
 
                 this.store.dispatch<ChatActions>({
                     type: 'Set_Messages',
@@ -247,6 +252,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 if(messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
                     this.toggleBackButton(true)
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
+                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
                     
                     this.store.dispatch<ChatActions>(
                         { type: 'Receive_Message',

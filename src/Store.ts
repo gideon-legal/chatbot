@@ -406,6 +406,7 @@ export interface HistoryState {
     selectedActivity: Activity;
     selectedDisclaimerActivity: Activity;
     inputEnabled: boolean;
+    showConsole: boolean;
 }
 
 export type HistoryAction = {
@@ -430,6 +431,9 @@ export type HistoryAction = {
 } | {
     type: 'Clear_Typing',
     id: string
+} | {
+    type: 'Toggle_InputEnabled',
+    inputEnabled: boolean
 };
 
 const copyArrayWithUpdatedItem = <T>(array: T[], i: number, item: T) => [
@@ -445,7 +449,8 @@ export const history: Reducer<HistoryState> = (
         clientActivityCounter: 0,
         selectedActivity: null,
         selectedDisclaimerActivity: null,
-        inputEnabled: false
+        inputEnabled: false,
+        showConsole: false
     },
     action: HistoryAction
 ) => {
@@ -491,7 +496,8 @@ export const history: Reducer<HistoryState> = (
 
             const copy: any = action.activity;
             const isDisclaimer = copy && copy.entities && copy.entities.length > 0 && copy.entities[0].node_type === 'disclaimer';
-            let inputEnabled = copy.showConsole;
+            let inputEnabled = !copy.entities
+            //let inputEnabled = copy.showConsole;
 
             console.log("store 1 " + inputEnabled)
 
@@ -510,7 +516,7 @@ export const history: Reducer<HistoryState> = (
 
             return {
                 ...state,
-                inputEnabled,
+                //inputEnabled,
                 activities: [
                     ...state.activities.filter(activity => activity.type !== 'typing'),
                     action.activity,
@@ -618,6 +624,15 @@ export const history: Reducer<HistoryState> = (
                 activities: copyArrayWithUpdatedItem(state.activities, i, newActivity),
                 selectedActivity: state.selectedActivity === activity ? newActivity : state.selectedActivity
             };
+        case 'Toggle_InputEnabled':
+            console.log('Toggle input')
+            let input = action.inputEnabled
+            console.log('input:')
+            console.log(input)
+            return {
+                ...state,
+                inputEnabled: action.inputEnabled
+            }
         default:
             return state;
     }
@@ -877,6 +892,7 @@ import { attempt } from 'bluebird';
 import { combineReducers, createStore as reduxCreateStore, Store } from 'redux';
 import { combineEpics, createEpicMiddleware } from 'redux-observable';
 import { MessageWithDate } from './DatePickerCard';
+import { ConsoleLoggingListener } from 'microsoft-speech-browser-sdk';
 
 export const createStore = () =>
     reduxCreateStore(
