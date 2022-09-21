@@ -34,6 +34,7 @@ export interface ChatProps {
     selectedActivity?: BehaviorSubject<ActivityOrID>;
     sendTyping?: boolean;
     showUploadButton?: boolean;
+    showConsole?: boolean;
     formatOptions?: FormatOptions;
     themeColor?: string;
     logoUrl?: string;
@@ -151,6 +152,7 @@ export class Chat extends React.Component<ChatProps, State> {
         switch (activity.type) {
             case 'message':
                 if(activity.entities) {
+                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
                         this.toggleBackButton(true)
                     }
@@ -160,10 +162,14 @@ export class Chat extends React.Component<ChatProps, State> {
                 // if the current activity has no entities, it might be a completion node, in which case we must hide the back button
                 // checkNeedBackButton returns if the current activity corresponds to a completion node or not
                 const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)    
-                if(notNode === true){
+                if(notNode !== "open"){
                     this.toggleBackButton(false);
+                    this.props.showConsole === false;
+                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                 } else {
+                    // open response only
                     this.toggleBackButton(true)
+                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                 }
                }
                 this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
@@ -173,6 +179,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 this.toggleBackButton(false)
                 if (activity.from.id !== state.connection.user.id) {
                     this.store.dispatch<ChatActions>({ type: 'Show_Typing', activity });
+                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                 }
                 break;
         }
@@ -219,7 +226,10 @@ export class Chat extends React.Component<ChatProps, State> {
             .then((res: any) => {
                 const messages = res.data.messages.reverse();
                 const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
-             
+                
+                this.props.showConsole === false;
+                this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+
                 this.store.dispatch<ChatActions>({
                     type: 'Set_Messages',
                     activities: message_activities
@@ -232,6 +242,9 @@ export class Chat extends React.Component<ChatProps, State> {
 
                 // have to resend receive_message for input enabled nodes
                 if(messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
+                    this.toggleBackButton(true)
+                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
+                    
                     this.store.dispatch<ChatActions>(
                         { type: 'Receive_Message',
                           activity: message_activities[message_activities.length-1]}

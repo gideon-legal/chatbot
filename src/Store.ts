@@ -197,6 +197,7 @@ export interface FormatState {
     fullHeight: boolean;
     fullscreen: boolean;
     display_name: string;
+    showConsole: boolean;
 }
 
 export type FormatAction = {
@@ -223,6 +224,9 @@ export type FormatAction = {
 } | {
     type: 'Set_Format_Options',
     formatOptions: FormatOptions
+} | {
+    type: 'Toggle_Input',
+    showConsole: boolean
 };
 
 export const format: Reducer<FormatState> = (
@@ -242,7 +246,8 @@ export const format: Reducer<FormatState> = (
         rightOffset: undefined,
         fullHeight: false,
         fullscreen: false,
-        display_name: undefined
+        display_name: undefined,
+        showConsole: false
     },
     action: FormatAction
 ) => {
@@ -287,6 +292,11 @@ export const format: Reducer<FormatState> = (
             return {
                 ...state,
                 ...action.formatOptions
+            };
+        case 'Toggle_Input':
+            return {
+                ...state,
+                showConsole: action.showConsole
             };
         default:
             return state;
@@ -439,8 +449,12 @@ export const history: Reducer<HistoryState> = (
     },
     action: HistoryAction
 ) => {
+    //console.log(action);
+    //console.log(state)
     switch (action.type) {
         case 'Set_Messages': {
+            console.log('Set_Messages')
+            //console.log(action.activities)
             return {
                 ...state,
                 activities: action.activities
@@ -448,6 +462,7 @@ export const history: Reducer<HistoryState> = (
         }
 
         case 'Receive_Sent_Message': {
+          console.log('Receive_Sent_Message')
             if (!action.activity.channelData || !action.activity.channelData.clientActivityId) {
                 // only postBack messages don't have clientActivityId, and these shouldn't be added to the history
                 return state;
@@ -480,6 +495,7 @@ export const history: Reducer<HistoryState> = (
 
             // for back button - check if going back to a node with input enabled
             if(copy && copy.entities && copy.entities.length === 0){
+            //    console.log("here")
                 inputEnabled = true;
             }
             
@@ -499,6 +515,7 @@ export const history: Reducer<HistoryState> = (
             };
 
         case 'Send_Message':
+            console.log('Send_Message')
             return {
                 ...state,
                 inputEnabled: false,
@@ -515,6 +532,7 @@ export const history: Reducer<HistoryState> = (
             };
 
         case 'Send_Message_Retry': {
+            console.log('Send_Message_Retry')
             const activity = state.activities.find(activity =>
                 activity.channelData && activity.channelData.clientActivityId === action.clientActivityId
             );
@@ -531,9 +549,11 @@ export const history: Reducer<HistoryState> = (
         }
         case 'Send_Message_Succeed':
         case 'Send_Message_Fail': {
+            console.log('Send_Message_Fail/Succeed')
             const i = state.activities.findIndex(activity =>
                 activity.channelData && activity.channelData.clientActivityId === action.clientActivityId
             );
+          //  console.log(i);
             if (i === -1) { return state; }
 
             const activity = state.activities[i];
@@ -551,6 +571,7 @@ export const history: Reducer<HistoryState> = (
             };
         }
         case 'Show_Typing':
+            console.log('Show Typing')
             return {
                 ...state,
                 activities: [
@@ -561,6 +582,7 @@ export const history: Reducer<HistoryState> = (
             };
 
         case 'Clear_Typing':
+            console.log('Clear Typing')
             return {
                 ...state,
                 activities: state.activities.filter(activity => activity.id !== action.id),
@@ -568,6 +590,7 @@ export const history: Reducer<HistoryState> = (
             };
 
         case 'Select_Activity':
+            console.log('Select Activity')
             if (action.selectedActivity === state.selectedActivity) { return state; }
             return {
                 ...state,
@@ -575,18 +598,20 @@ export const history: Reducer<HistoryState> = (
             };
 
         case 'Take_SuggestedAction':
+            console.log('Take Suggested Action')
             const i = state.activities.findIndex(activity => activity === action.message);
+            //console.log(i)
             const activity = state.activities[i];
             const newActivity = {
                 ...activity,
                 suggestedActions: undefined
             };
+            //(newActivity)
             return {
                 ...state,
                 activities: copyArrayWithUpdatedItem(state.activities, i, newActivity),
                 selectedActivity: state.selectedActivity === activity ? newActivity : state.selectedActivity
             };
-
         default:
             return state;
     }
@@ -812,6 +837,8 @@ const updateSelectedActivityEpic: Epic<ChatActions, ChatState> = (action$, store
     )
     .map(action => {
         const state = store.getState();
+        //console.log('state')
+        //console.log(state);
         if (state.connection.selectedActivity) {
             state.connection.selectedActivity.next({ activity: state.history.selectedActivity });
         }

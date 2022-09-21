@@ -26,6 +26,7 @@ interface Props {
     sendFiles: (files: FileList) => void;
     stopListening: () => void;
     startListening: () => void;
+    showConsole: boolean;
 }
 
 export interface ShellFunctions {
@@ -231,7 +232,7 @@ export const Shell = connect(
         // passed down to ShellContainer
         inputText: state.shell.input,
         showUploadButton: state.format.showUploadButton,
-        inputEnabled: state.history.inputEnabled,
+        inputEnabled: state.format.showConsole,
         placeholder: state.shell.placeholder || defaultStrings.consolePlaceholder,
         strings: state.format.strings,
         // only used to create helper functions below
@@ -239,7 +240,8 @@ export const Shell = connect(
         user: state.connection.user,
         listeningState: state.shell.listeningState,
         fullscreen: state.format.fullscreen,
-        themeColor: state.format.themeColor
+        themeColor: state.format.themeColor,
+        showConsole: state.format.showConsole
     }), {
         // passed down to ShellContainer
         onChangeText: (input: string) => ({ type: 'Update_Input', input, source: 'text' } as ChatActions),
@@ -253,7 +255,7 @@ export const Shell = connect(
         inputText: stateProps.inputText,
         placeholder: stateProps.placeholder,
         showUploadButton: stateProps.showUploadButton,
-        inputEnabled: stateProps.inputEnabled,
+        inputEnabled: stateProps.showConsole,
         strings: stateProps.strings,
         listeningState: stateProps.listeningState,
         fullscreen: stateProps.fullscreen,
@@ -265,7 +267,8 @@ export const Shell = connect(
         sendMessage: (text: string) => dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),
         sendFiles: (files: FileList) => dispatchProps.sendFiles(files, stateProps.user, stateProps.locale),
         startListening: () => dispatchProps.startListening(),
-        stopListening: () => dispatchProps.stopListening()
+        stopListening: () => dispatchProps.stopListening(),
+        showConsole: stateProps.showConsole
     }), {
         withRef: true
     }
