@@ -2024,3 +2024,62 @@ $lato: Lato, sans-serif;
             font-family: $lato;
         }
     }
+
+    // same styling from lead profile conversationsController
+    .leadDetail__conversation {
+        &__messages {
+          padding: 12px 15px 0;
+          margin-right: 5px;
+          overflow: auto;
+        }
+      
+        &__message__wrap {
+          height: auto;
+          width: auto;
+          margin: 0 auto 12px;
+          align-items: center;
+          display: flex;
+          font-size: 14px;
+          position: relative;
+          word-wrap: break-word;
+      
+          > div {
+            border-bottom-left-radius: 14px;
+            border-bottom-right-radius: 14px;
+            display: inline-block;
+            height: 100%;
+            align-items: center;
+            display: flex;
+            height: auto;
+            padding: 16px 12px;
+          }
+      
+          &--chatbot_user > div {
+            background: $gideon-dark-blue;
+            color: white;
+            text-align: left;
+            border-radius: 3px 3px 0px 3px;
+            align-self: flex-end;
+            margin-left: auto;
+            display: block;
+          }
+      
+          &--bot > div {
+            background: $gideon-history-grey;
+            color: $gideon-black;
+            border-radius: 3px 3px 3px 0px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+      
+            > p > img {
+              max-width: 350px;
+            }
+          }
+      
+          span {
+            display: block;
+            word-break: break-word;
+          }
+        }
+      }

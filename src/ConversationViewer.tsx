@@ -39,7 +39,7 @@ const ConversationViewer = ({ messages }: Props) => {
               style={styling}
             >
               {sender_type === 'bot' &&
-                <div style={{ backgroundColor: 'transparent', padding: '0', paddingLeft: '5px', fontSize:'11px', color:'#cccccc' }}>*insert bot name*</div>
+                <div style={{ backgroundColor: 'transparent', padding: '0', paddingLeft: '5px', fontSize:'12px', color:'#cccccc' }}>*insert bot name*</div>
               }
               <div>
                 <ReactMarkdown children={formatted_message} />
