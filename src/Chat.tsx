@@ -146,7 +146,7 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private async handleIncomingActivity(activity: Activity) {
-        const state = this.store.getState();step
+        const state = this.store.getState();
         const activityCopy: any = activity;
         
         switch (activity.type) {
