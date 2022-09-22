@@ -408,21 +408,27 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                 </div>
             );
         } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer') {
-            let lastMessageClass = ' ';
-            if (lastMessage && this.props.format.fullscreen && !this.props.inputEnabled) {
-                lastMessageClass += 'wc-fullscreen-last-message';
-            } else if (lastMessage && !this.props.format.fullscreen && !this.props.inputEnabled) {
-                lastMessageClass += 'wc-non-fullscreeen-last-message';
-            }
-            return (
-                <div data-activity-id={activity.id } className={wrapperClassName + lastMessageClass}>
-                    <div className={'wc-message wc-message-from-me wc-message-node wc-message-disclaimer' + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
-                        <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
-                            <DisclaimerCardReadOnly text={activityCopy.text}/>
+            console.log("in else if statement")
+            console.log(activityCopy)
+            if(activityCopy.from && !activity.from.name && activityCopy.from.id != ""){
+                console.log("from user")
+            } else {
+                let lastMessageClass = ' ';
+                if (lastMessage && this.props.format.fullscreen && !this.props.inputEnabled) {
+                    lastMessageClass += 'wc-fullscreen-last-message';
+                } else if (lastMessage && !this.props.format.fullscreen && !this.props.inputEnabled) {
+                    lastMessageClass += 'wc-non-fullscreeen-last-message';
+                }
+                return (
+                    <div data-activity-id={activity.id } className={wrapperClassName + lastMessageClass}>
+                        <div className={'wc-message wc-message-from-me wc-message-node wc-message-disclaimer' + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
+                            <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
+                                <DisclaimerCardReadOnly text={activityCopy.text}/>
+                            </div>
                         </div>
                     </div>
-                </div>
-            );
+                );
+            }
         }
     }
 
