@@ -151,7 +151,6 @@ export class Chat extends React.Component<ChatProps, State> {
         
         switch (activity.type) {
             case 'message':
-                console.log(activity.text);
                 if(activity.entities) {
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
@@ -161,20 +160,17 @@ export class Chat extends React.Component<ChatProps, State> {
                } else {
                 const botConnection: any = this.store.getState().connection.botConnection;
 
-                console.log("chat 1 ")
 
                 // if the current activity has no entities, it might be a completion node, in which case we must hide the back button
                 // checkNeedBackButton returns if the current activity corresponds to a completion node or not
-                const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)    
+                const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)   
                 if(notNode !== "open" && !activity.text.includes("Sorry, but that's not a valid")){
                     this.toggleBackButton(false);
-                    console.log( " chat 2 " )
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                 } else {
                     // open response only
                     this.toggleBackButton(true)
-                    console.log( " chat 3 " )
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
                 }
@@ -234,7 +230,6 @@ export class Chat extends React.Component<ChatProps, State> {
             .then((res: any) => {
                 const messages = res.data.messages.reverse();
                 const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
-                
                 this.props.showConsole === false;
                 this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                 this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});

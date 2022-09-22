@@ -206,7 +206,6 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         }
 
         const groupsClassName = classList('wc-message-groups', !this.props.format.chatTitle && 'no-header',  this.props.format.fullscreen && 'wc-message-groups-fullscreen', !this.props.inputEnabled && 'no-console');
-        console.log("history " + this.props.inputEnabled)
         return (
             <div>
             <div
@@ -408,10 +407,11 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                 </div>
             );
         } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer') {
-            console.log("in else if statement")
-            console.log(activityCopy)
+            //console.log("in else if statement")
+            //console.log(activityCopy.text)
+            //console.log(activityCopy)
             if(activityCopy.from && !activity.from.name && activityCopy.from.id != ""){
-                console.log("from user")
+               // console.log("from user")
             } else {
                 let lastMessageClass = ' ';
                 if (lastMessage && this.props.format.fullscreen && !this.props.inputEnabled) {
