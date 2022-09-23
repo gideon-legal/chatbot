@@ -177,7 +177,7 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
             return (
               <div>
                   <FormattedText
-                      text={ isDisclaimer ? 'Disclaimer' : this.formatText(activity.text) }
+                      text={ this.formatText(activity.text) }
                       format={activity.textFormat}
                       onImageLoad={ props.onImageLoad }
                   />
