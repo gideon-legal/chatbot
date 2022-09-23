@@ -868,7 +868,7 @@ import { attempt } from 'bluebird';
 import { combineReducers, createStore as reduxCreateStore, Store } from 'redux';
 import { combineEpics, createEpicMiddleware } from 'redux-observable';
 import { MessageWithDate } from './DatePickerCard';
-import { ConsoleLoggingListener } from 'microsoft-speech-browser-sdk';
+//import { ConsoleLoggingListener } from 'microsoft-speech-browser-sdk';
 
 export const createStore = () =>
     reduxCreateStore(
