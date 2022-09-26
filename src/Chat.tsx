@@ -151,6 +151,7 @@ export class Chat extends React.Component<ChatProps, State> {
         
         switch (activity.type) {
             case 'message':
+                console.log(activity)
                 if(activity.entities) {
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
@@ -163,13 +164,19 @@ export class Chat extends React.Component<ChatProps, State> {
 
                 // if the current activity has no entities, it might be a completion node, in which case we must hide the back button
                 // checkNeedBackButton returns if the current activity corresponds to a completion node or not
+                console.log("checking for open vs complete")
+                console.log("text sent: "+ activity.text)
                 const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)   
                 if(notNode !== "open" && !activity.text.includes("Sorry, but that's not a valid")){
+                    console.log("not open response")
+                    console.log(notNode);
                     this.toggleBackButton(false);
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                 } else {
                     // open response only
+                    console.log("is open response")
+                    console.log(notNode);
                     this.toggleBackButton(true)
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
