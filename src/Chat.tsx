@@ -13,7 +13,7 @@ import { IconButton } from '@material-ui/core';
 import { ArrowBack } from '@material-ui/icons';
 import { HistoryInline } from './assets/icons/HistoryInline'
 
-import { Activity, CardActionTypes, DirectLine, DirectLineOptions, IBotConnection, User } from 'botframework-directlinejs';
+import { Activity, CardActionTypes, DirectLine, DirectLineOptions, IBotConnection, User, Conversation } from 'botframework-directlinejs';
 import { isMobile } from 'react-device-detect';
 import { connect, Provider } from 'react-redux';
 import { conversationHistory, mapMessagesToActivities, ping, step, verifyConversation } from './api/bot';
@@ -281,28 +281,28 @@ export class Chat extends React.Component<ChatProps, State> {
 
         // initially always set to true
         console.log('props activities: ', this.props.activities)
-        let isNew = performance.getEntriesByType('navigation')[0].type === 'reload' ? false : true;
+        let reloaded = performance.getEntriesByType('navigation')[0].type === 'reload' ? true : false;
+        let isNew = localStorage.getItem("newConvo") === "true" ? true : false;
         let botConnection: any = null;
 
-        // if page reloaded and there's bot connection in local storage
-        // if(performance.getEntriesByType('navigation')[0].type === 'reload' && localStorage.getItem('botConnection')) {
-        //     botConnection = JSON.parse(localStorage.getItem('botConnection'));
-        // } else {
-        //     botConnection = this.props.directLine ?
-        //     (this.botConnection = new DirectLine(this.props.directLine)) :
-        //     this.props.botConnection;
-        //     // set new botconnection to local storage
-        //     localStorage.setItem('botConnection', JSON.stringify(botConnection));
-        // }
+        if(reloaded && !isNew) {
+            botConnection = this.props.directLine ?
+                (this.botConnection = new DirectLine({
+                    secret: this.props.directLine.secret,
+                    conversationId: localStorage.getItem('msft_conversation_id')
+                })) :
+                this.props.botConnection;
 
-        botConnection = this.props.directLine ?
-            (this.botConnection = new DirectLine(this.props.directLine)) :
-            this.props.botConnection;
+        } else {
+            botConnection = this.props.directLine ? (this.botConnection = new DirectLine(this.props.directLine)) : this.props.botConnection;
+            console.log('inside if statement ', botConnection);
+            console.log(botConnection.streamUrl);
+            console.log(botConnection.watermark);
+        }
 
         console.log('this.props.directline ', this.props.directLine);
         console.log('this.props.botConnection ', this.props.botConnection);
         console.log('this.botConnection ', botConnection);
-        console.log('newCOnvo: ', localStorage.getItem('newConvo'))
 
         if (this.props.resize === 'window') {
             window.addEventListener('resize', this.resizeListener);
@@ -338,14 +338,14 @@ export class Chat extends React.Component<ChatProps, State> {
                 let conversationId = botCopy.conversationId;
 
                 // if refresh before chat started, new convo id made
-                if(localStorage.getItem('emptyChat') === 'true' || localStorage.getItem('newConvo') === 'true') {
-                    isNew = true;
-                    localStorage.setItem('newConvo', 'false');
-                    localStorage.setItem('emptyChat', 'false');
-                }
+                // if(localStorage.getItem('emptyChat') === 'true' || localStorage.getItem('newConvo') === 'true') {
+                //     isNew = true;
+                //     localStorage.setItem('newConvo', 'false');
+                //     localStorage.setItem('emptyChat', 'false');
+                // }
 
                 // if not new convo and there's a convo id in local storage
-                if(!isNew && localStorage.getItem('msft_conversation_id')) {
+                if(performance.getEntriesByType('navigation')[0].type === 'reload' && localStorage.getItem('msft_conversation_id')) {
                     conversationId = localStorage.getItem('msft_conversation_id');
                     console.log('convo id from local storage')
                 }
