@@ -280,12 +280,21 @@ export class Chat extends React.Component<ChatProps, State> {
         const msftUserId = window.localStorage.getItem('msft_user_id');
 
         // initially always set to true
-        console.log('props activities: ', this.props.activities)
         let reloaded = performance.getEntriesByType('navigation')[0].type === 'reload' ? true : false;
-        let isNew = localStorage.getItem("newConvo") === "true" ? true : false;
+        let isNew = true;
+
+        //if newConvo exists in localstorage
+        if(localStorage.getItem('newConvo') === 'true') {
+            isNew = true;
+        } else if(localStorage.getItem('newConvo') === 'false') {
+            isNew = false;
+        }
+
         let botConnection: any = null;
 
-        if(reloaded && !isNew) {
+        console.log((reloaded && !isNew )|| (reloaded && localStorage.getItem('emptyChat') === 'false'));
+        if((reloaded && !isNew ) || (reloaded && localStorage.getItem('emptyChat') === 'false')) {
+            console.log("entered if statemnet")
             botConnection = this.props.directLine ?
                 (this.botConnection = new DirectLine({
                     secret: this.props.directLine.secret,
@@ -295,9 +304,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
         } else {
             botConnection = this.props.directLine ? (this.botConnection = new DirectLine(this.props.directLine)) : this.props.botConnection;
-            console.log('inside if statement ', botConnection);
-            console.log(botConnection.streamUrl);
-            console.log(botConnection.watermark);
+            localStorage.setItem('emptyChat', 'true');
         }
 
         console.log('this.props.directline ', this.props.directLine);
@@ -345,7 +352,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 // }
 
                 // if not new convo and there's a convo id in local storage
-                if(performance.getEntriesByType('navigation')[0].type === 'reload' && localStorage.getItem('msft_conversation_id')) {
+                if(reloaded && !isNew && localStorage.getItem('newConvo') === 'false') {
                     conversationId = localStorage.getItem('msft_conversation_id');
                     console.log('convo id from local storage')
                 }

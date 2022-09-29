@@ -52,14 +52,6 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         this.addFilesToState = this.addFilesToState.bind(this);
     }
 
-    componentDidMount() {
-        // prompt to start new convo only shows up when:
-        // - page was refreshed
-        // - chat wasn't empty before the page refresh
-        // - not a new convo being started
-        if(performance.getEntriesByType('navigation')[0].type === 'reload' && localStorage.getItem('newConvo') !== 'true' && localStorage.getItem('emptyChat') !== 'true') this.pageReloaded = true;
-    }
-
     componentWillUpdate(nextProps: HistoryProps) {
         let scrollToBottomDetectionTolerance = 1;
 
@@ -157,6 +149,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
 
     private startNewConvo() {
         localStorage.setItem('newConvo', 'true');
+        localStorage.setItem('emptyChat', 'true');
         window.location.reload();
     }
 
@@ -164,6 +157,13 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         let content;
         let lastActivityIsDisclaimer = false;
         let activityDisclaimer: any;
+        
+        // prompt to start new convo only shows up when:
+        // - page was refreshed
+        // - chat wasn't empty before the page refresh
+        // - not a new convo being started
+        if(performance.getEntriesByType('navigation')[0].type === 'reload' && localStorage.getItem('newConvo') !== 'true' && localStorage.getItem('emptyChat') !== 'true') this.pageReloaded = true;
+
         if (this.props.size.width !== undefined) {
             if (this.props.format.carouselMargin === undefined) {
                 // For measuring carousels we need a width known to be larger than the chat itself
@@ -174,55 +174,63 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                 activityDisclaimer = activities.length > 0 ? activities[activities.length - 1] : undefined;
                 lastActivityIsDisclaimer = activityDisclaimer && activityDisclaimer.entities && activityDisclaimer.entities.length > 0 && activityDisclaimer.entities[0].node_type === 'disclaimer';
 
-                // for cases where user refreshes before any messages appear
-                if(activities.length > 1) {
-                    localStorage.setItem('emptyChat', 'false');
-                } else {
-                    localStorage.setItem('emptyChat', 'true');
-                }
+                // // for cases where user refreshes before any messages appear
+                // if(activities.length > 1) {
+                //     localStorage.setItem('emptyChat', 'false');
+                // } else {
+                //     localStorage.setItem('emptyChat', 'true');
+                // }
 
                 content = activities
-                .map((activity, index) =>
-                    ((activity.type !== 'message' || activity.text || (activity.attachments && !!activity.attachments.length))) &&
-                        <WrappedActivity
-                            format={ this.props.format }
-                            key={ 'message' + index }
-                            activity={ activity }
-                            nextActivityFromMe={ index + 1 < activities.length ? this.props.isFromMe(activities[index + 1]) : false}
-                            doCardAction={this.doCardAction}
-                            lastMessage={index === activities.length - 1}
-                            showTimestamp={ index === activities.length - 1 || (index + 1 < activities.length && suitableInterval(activity, activities[index + 1])) }
-                            selected={ this.props.isSelected(activity) }
-                            fromMe={ this.props.isFromMe(activity) }
-                            displayName={ index === 0 || (!this.props.isFromMe(activity) && this.props.isFromMe(activities[index - 1]))}
-                            onClickActivity={ this.props.onClickActivity(activity) }
-                            onClickRetry={e => {
-                                // Since this is a click on an anchor, we need to stop it
-                                // from trying to actually follow a (nonexistant) link
-                                e.preventDefault();
-                                e.stopPropagation();
-                                this.props.onClickRetry(activity);
-                            } }
-                            gid={ this.props.gid }
-                            directLine={ this.props.directLine }
-                            files={ index in this.state.filesList ? this.state.filesList[index] : [] }
-                            addFilesToState={this.addFilesToState}
-                            index={ index }
-                            inputEnabled={ this.props.inputEnabled }
-                        >
-                            <ActivityView
-                                format={ this.props.format }
-                                size={ this.props.size }
-                                activity={ activity }
-                                type={activity.type}
-                                onCardAction={ (type: CardActionTypes, value: string | object) => this.doCardAction(type, value) }
-                                onImageLoad={ () => this.autoscroll() }
-                                gid={ this.props.gid}
-                                directLine={ this.props.directLine }
-                                addFilesToState={this.addFilesToState}
-                                index={ index }
-                            />
-                        </WrappedActivity>
+                .map((activity, index) => {
+                        // for cases where user refreshes before any messages appear
+                        if(this.props.isFromMe(activity) && activities.length > 1) {
+                            localStorage.setItem('emptyChat', 'false');
+                        }
+
+                        return (
+                            ((activity.type !== 'message' || activity.text || (activity.attachments && !!activity.attachments.length))) &&
+                                <WrappedActivity
+                                    format={ this.props.format }
+                                    key={ 'message' + index }
+                                    activity={ activity }
+                                    nextActivityFromMe={ index + 1 < activities.length ? this.props.isFromMe(activities[index + 1]) : false}
+                                    doCardAction={this.doCardAction}
+                                    lastMessage={index === activities.length - 1}
+                                    showTimestamp={ index === activities.length - 1 || (index + 1 < activities.length && suitableInterval(activity, activities[index + 1])) }
+                                    selected={ this.props.isSelected(activity) }
+                                    fromMe={ this.props.isFromMe(activity) }
+                                    displayName={ index === 0 || (!this.props.isFromMe(activity) && this.props.isFromMe(activities[index - 1]))}
+                                    onClickActivity={ this.props.onClickActivity(activity) }
+                                    onClickRetry={e => {
+                                        // Since this is a click on an anchor, we need to stop it
+                                        // from trying to actually follow a (nonexistant) link
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        this.props.onClickRetry(activity);
+                                    } }
+                                    gid={ this.props.gid }
+                                    directLine={ this.props.directLine }
+                                    files={ index in this.state.filesList ? this.state.filesList[index] : [] }
+                                    addFilesToState={this.addFilesToState}
+                                    index={ index }
+                                    inputEnabled={ this.props.inputEnabled }
+                                >
+                                    <ActivityView
+                                        format={ this.props.format }
+                                        size={ this.props.size }
+                                        activity={ activity }
+                                        type={activity.type}
+                                        onCardAction={ (type: CardActionTypes, value: string | object) => this.doCardAction(type, value) }
+                                        onImageLoad={ () => this.autoscroll() }
+                                        gid={ this.props.gid}
+                                        directLine={ this.props.directLine }
+                                        addFilesToState={this.addFilesToState}
+                                        index={ index }
+                                    />
+                                </WrappedActivity>
+                        )
+                    }
                 );
             }
         }
