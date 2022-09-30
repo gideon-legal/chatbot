@@ -19,3 +19,4 @@ export class RemoveFileIcon extends React.Component<{}, {}> {
         );
     }
 }
+

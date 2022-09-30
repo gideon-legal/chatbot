@@ -170,6 +170,40 @@ $lato: Lato, sans-serif;
         }
     }
 
+    //working here now
+    .wc-back-button {
+        bottom: 0;
+        box-sizing: border-box;
+        background: white;
+        height: $consoleHeight;
+        max-width: fit-content;
+        left: 0;
+        // width: 66%;
+        position: absolute;
+        right: 0;
+        transition: background-color .4s;
+        cursor: pointer;
+
+        .wcbackbutton{
+            box-sizing: border-box;
+            position: absolute;
+            width: 94px;
+            height: 56px;
+            margin-top: 19px; 
+            margin-left: 20px;
+            display: inline-block; // maybe 
+            //visibility: visible;
+            background: #F8F8F8 !important;
+            border: 2px solid #F8F8F8 !important;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        &__disabled {
+            visibility: hidden;
+        }
+    }
+
     .wc-header-fullscreen {
         max-width: 100%;
     }
@@ -179,6 +213,7 @@ $lato: Lato, sans-serif;
         width: 100%;
         height: 100%;
     }
+    
 
     .wc-chatbot-content-left {
         flex: 1;
@@ -1539,6 +1574,7 @@ $lato: Lato, sans-serif;
     //     cursor: pointer;
     //     font-weight: 600; 
     // }
+
 /* console */
 
 
@@ -1577,7 +1613,8 @@ $lato: Lato, sans-serif;
         }
 
         &__disabled {
-            display: none;
+            //display: none;
+            visibility: hidden;
         }  
 
         &__disabled::before {
@@ -1587,10 +1624,12 @@ $lato: Lato, sans-serif;
         > .wc-upload,
         > .wc-textbox,
         > .wc-send,
-        > .wc-mic {
+        > .wc-mic,
+        > .wc-back-button {
             position: absolute;
             vertical-align: middle;
         }
+        
 
         label, button {
             cursor: pointer;
@@ -1603,6 +1642,23 @@ $lato: Lato, sans-serif;
             margin-right: 16px;
         }
 
+        .wc-backbutton{
+            box-sizing: border-box;
+            position: absolute;
+            width: 94px;
+            height: 56px;
+            margin-top: 19px; 
+            margin-left: 20px;
+            display: inline-block; // maybe 
+            visibility: visible !important;
+            background: #F8F8F8 !important;
+            border: 2px solid #F8F8F8 !important;
+            border-radius: 2px;
+        }
+        &__disabled {
+            visibility: hidden;
+        }
+
         input[type=text],
         textarea {
             border: none;
@@ -1611,6 +1667,7 @@ $lato: Lato, sans-serif;
             outline: none;
             padding: 0;
             resize: none;
+            
             width: 100%;
             padding-top:11.5px;
             padding-bottom: 12px;
@@ -1681,7 +1738,7 @@ $lato: Lato, sans-serif;
 
         .wc-textbox {
             bottom: 0;
-            left: 20px;
+            left:129px; // CHAHANGE THIS TO MAKE ROOM FOR THE BUTTON ON THE LEFT idk how much room et
             right: 76px;
             top: 20px;
 
@@ -1875,7 +1932,7 @@ $lato: Lato, sans-serif;
         min-height: 73px;
         min-width: 250px;
         max-height: 20%;
-        max-width: 80%;
+        max-width: 100%;
         margin-left: 23px;
         margin-top: 30px;
         -o-object-fit: contain;

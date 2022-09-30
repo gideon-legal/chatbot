@@ -74,3 +74,11 @@ export const mapMessagesToActivities = (messages: any, userId: any): Activity[] 
         };
     });
 };
+
+// checkNeedBackButton - checks if the current activity corresponds to acompletion node, returns a boolean
+export const checkNeedBackButton = async (baseUrl: string, directLine: string, msftConversationId: string, messageText: string): Promise<any> => {
+    const temp = axios.get(`${baseUrl}/api/v1/bot/checkbackbutton?msft_conversation_id=${msftConversationId}&directLine=${directLine}&message_text=${messageText}`);
+    const attempt = (await temp).data
+    return attempt;
+};
+
