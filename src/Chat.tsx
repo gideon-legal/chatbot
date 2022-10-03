@@ -164,10 +164,12 @@ export class Chat extends React.Component<ChatProps, State> {
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                     if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
                         this.addNodeCount();
-                        this.toggleBackButton(true)
-                    }
-                    if( curr_node_count == 0 ) {
-                        this.toggleBackButton(false)
+                        if( curr_node_count == 0 ) {
+                            console.log("curr node count 0, switch to false")
+                            this.toggleBackButton(false)
+                        } else {
+                            this.toggleBackButton(true)
+                        }
                     }
                } else {
                 const botConnection: any = this.store.getState().connection.botConnection;
@@ -183,7 +185,13 @@ export class Chat extends React.Component<ChatProps, State> {
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                 } else {
                     // open response only
-                    this.toggleBackButton(true)
+                    if( curr_node_count == 0 ) {
+                        console.log("curr node count 0, switch to false")
+                        this.toggleBackButton(false)
+                    } else {
+                        this.toggleBackButton(true)
+                    }
+                    //this.toggleBackButton(true)
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
                 }
@@ -242,10 +250,21 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private deleteNodeCount = () => {
-        const updated_count = this.state.node_count - 1
-        this.setState({
-            node_count: updated_count
-        })
+        if (this.state.node_count > 0){
+            if(this.state.node_count == 1){
+                const updated_count = this.state.node_count - 1
+                this.setState({
+                  node_count: updated_count
+                })
+            } else {
+                const updated_count = this.state.node_count - 2
+                this.setState({
+                  node_count: updated_count
+                })
+            }
+        }
+        console.log("updated node count after delete")
+        console.log(this.state.node_count)
     }
 
 
@@ -275,6 +294,8 @@ export class Chat extends React.Component<ChatProps, State> {
                 this.store.dispatch<ChatActions>(
                     { type: 'Submit_Date' } as ChatActions
                 );
+
+                this.deleteNodeCount();
 
                 // have to resend receive_message for input enabled nodes
                 if(messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
