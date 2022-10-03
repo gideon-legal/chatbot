@@ -166,6 +166,9 @@ export class Chat extends React.Component<ChatProps, State> {
                         this.addNodeCount();
                         this.toggleBackButton(true)
                     }
+                    if( curr_node_count == 0 ) {
+                        this.toggleBackButton(false)
+                    }
                } else {
                 const botConnection: any = this.store.getState().connection.botConnection;
                 this.addNodeCount();
@@ -237,6 +240,14 @@ export class Chat extends React.Component<ChatProps, State> {
             node_count: new_count
         })
     }
+
+    private deleteNodeCount = () => {
+        const updated_count = this.state.node_count - 1
+        this.setState({
+            node_count: updated_count
+        })
+    }
+
 
     private checkNodeCount = () => {
         return this.state.node_count;
