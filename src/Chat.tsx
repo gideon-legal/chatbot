@@ -304,7 +304,11 @@ export class Chat extends React.Component<ChatProps, State> {
 
                 // have to resend receive_message for input enabled nodes
                 if(messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
-                    this.toggleBackButton(true)
+                    if(this.checkNodeCount() == 0){
+                        this.toggleBackButton(false)
+                    } else {
+                        this.toggleBackButton(true)
+                    }
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
                     
