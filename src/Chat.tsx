@@ -156,7 +156,6 @@ export class Chat extends React.Component<ChatProps, State> {
                 // adding node count to check if first node, need to grey out back button
                 console.log("message activity")
                 console.log(activity);
-                this.addNodeCount();
                 const curr_node_count = this.checkNodeCount();
                 console.log("current node count")
                 console.log(curr_node_count)
@@ -164,10 +163,12 @@ export class Chat extends React.Component<ChatProps, State> {
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                     if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
+                        this.addNodeCount();
                         this.toggleBackButton(true)
                     }
                } else {
                 const botConnection: any = this.store.getState().connection.botConnection;
+                this.addNodeCount();
 
 
                 // if the current activity has no entities, it might be a completion node, in which case we must hide the back button
