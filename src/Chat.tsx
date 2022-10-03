@@ -67,7 +67,7 @@ export class Chat extends React.Component<ChatProps, State> {
         fullscreen: false,
         full_height: false,
         clicked: false,
-        back_visible: true,
+        back_visible: false,
         orginalBodyClass: document.body.className,
         node_count: 0
     };
