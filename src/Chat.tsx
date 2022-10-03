@@ -50,6 +50,7 @@ export interface State {
     fullscreen: boolean;
     full_height: boolean;
     back_visible: boolean;
+    node_count: number;
 }
 
 import { FloatingIcon } from './FloatingIcon';
@@ -67,7 +68,8 @@ export class Chat extends React.Component<ChatProps, State> {
         full_height: false,
         clicked: false,
         back_visible: true,
-        orginalBodyClass: document.body.className
+        orginalBodyClass: document.body.className,
+        node_count: 0
     };
 
     private clicked: any; // status of if the back button has been clicked already
@@ -151,6 +153,13 @@ export class Chat extends React.Component<ChatProps, State> {
         
         switch (activity.type) {
             case 'message':
+                // adding node count to check if first node, need to grey out back button
+                console.log("message activity")
+                console.log(activity);
+                this.addNodeCount();
+                const curr_node_count = this.checkNodeCount();
+                console.log("current node count")
+                console.log(curr_node_count)
                 if(activity.entities) {
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
@@ -219,6 +228,17 @@ export class Chat extends React.Component<ChatProps, State> {
 
     private checkBackButton = () => {
         return this.state.back_visible;
+    }
+
+    private addNodeCount = () => {
+        const new_count = this.state.node_count+1
+        this.setState({
+            node_count: new_count
+        })
+    }
+
+    private checkNodeCount = () => {
+        return this.state.node_count;
     }
 
     //step function perfoms going back to the previous message
