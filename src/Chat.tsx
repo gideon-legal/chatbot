@@ -248,20 +248,26 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private deleteNodeCount = () => {
-        if (this.state.node_count >= 0){
-            const updated_count = this.state.node_count-3
+        console.log("delete from count")
+        console.log("current count")
+        const curr_node = this.checkNodeCount();
+        console.log(curr_node);
+        if (curr_node >= 0){
+            const updated_count = curr_node-3
             this.setState({
                 node_count: updated_count
             })
             this.state.node_count = updated_count
         } 
-        if (this.state.node_count < 0) {
+        if (curr_node < 0) {
             this.setState({
                 node_count: 0
             })
             this.state.node_count = 0
 
         }
+        console.log("after delete count")
+        console.log(this.checkNodeCount())
     }
 
 
