@@ -154,11 +154,7 @@ export class Chat extends React.Component<ChatProps, State> {
         switch (activity.type) {
             case 'message':
                 // adding node count to check if first node, need to grey out back button
-                console.log("message activity")
-                console.log(activity);
                 const curr_node_count = this.checkNodeCount();
-                console.log("current node count")
-                console.log(curr_node_count)
                 if(activity.entities) {
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
@@ -166,7 +162,6 @@ export class Chat extends React.Component<ChatProps, State> {
                         this.toggleBackButton(false)
                     } else {
                         if( this.checkNodeCount() == 0 ) {
-                            console.log("curr node count 0, switch to false")
                             this.toggleBackButton(false)
                         } else {
                             this.toggleBackButton(true)
@@ -189,7 +184,6 @@ export class Chat extends React.Component<ChatProps, State> {
                 } else {
                     // open response only
                     if( this.checkNodeCount() == 0 ) {
-                        console.log("curr node count 0, switch to false")
                         this.toggleBackButton(false)
                     } else {
                         this.toggleBackButton(true)
@@ -255,11 +249,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
     private deleteNodeCount = () => {
         if (this.state.node_count >= 0){
-            console.log("deleteing from")
-            console.log(this.state.node_count)
-            console.log("remove 2")
             const updated_count = this.state.node_count-3
-            console.log(updated_count)
             this.setState({
                 node_count: updated_count
             })
@@ -272,8 +262,6 @@ export class Chat extends React.Component<ChatProps, State> {
             this.state.node_count = 0
 
         }
-        console.log("updated node count after delete")
-        console.log(this.state.node_count)
     }
 
 
