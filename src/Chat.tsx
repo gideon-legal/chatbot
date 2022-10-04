@@ -250,23 +250,23 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private deleteNodeCount = () => {
-        if (this.state.node_count > 0){
-            if(this.state.node_count >= 2){
-                console.log("remove 2")
-                const updated_count = this.state.node_count-3
-                this.setState({
-                  node_count: updated_count
-                })
-            } else {
-                console.log("remove 1")
-                const updated_count = this.state.node_count-2
-                this.setState({
-                  node_count: updated_count
-                })
-            }
-        }
-        if(this.state.node_count == 0){
-            this.toggleBackButton(false);
+        if (this.state.node_count >= 0){
+            console.log("deleteing from")
+            console.log(this.state.node_count)
+            console.log("remove 2")
+            const updated_count = this.state.node_count-3
+            console.log(updated_count)
+            this.setState({
+                node_count: updated_count
+            })
+            this.state.node_count = updated_count
+        } 
+        if (this.state.node_count < 0) {
+            this.setState({
+                node_count: 0
+            })
+            this.state.node_count = 0
+
         }
         console.log("updated node count after delete")
         console.log(this.state.node_count)
