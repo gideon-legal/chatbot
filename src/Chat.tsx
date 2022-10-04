@@ -252,14 +252,15 @@ export class Chat extends React.Component<ChatProps, State> {
         console.log("current count")
         const curr_node = this.checkNodeCount();
         console.log(curr_node);
-        if (curr_node >= 0){
+        if (curr_node > 0){
             const updated_count = curr_node-3
             this.setState({
                 node_count: updated_count
             })
             this.state.node_count = updated_count
         } 
-        if (curr_node < 0) {
+        const updated_count = this.checkNodeCount()
+        if (updated_count <= 0) {
             this.setState({
                 node_count: 0
             })
