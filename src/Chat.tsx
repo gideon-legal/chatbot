@@ -50,6 +50,7 @@ export interface State {
     fullscreen: boolean;
     full_height: boolean;
     back_visible: boolean;
+    node_count: number;
 }
 
 import { FloatingIcon } from './FloatingIcon';
@@ -66,8 +67,9 @@ export class Chat extends React.Component<ChatProps, State> {
         fullscreen: false,
         full_height: false,
         clicked: false,
-        back_visible: true,
-        orginalBodyClass: document.body.className
+        back_visible: false,
+        orginalBodyClass: document.body.className,
+        node_count: 0
     };
 
     private clicked: any; // status of if the back button has been clicked already
@@ -151,11 +153,22 @@ export class Chat extends React.Component<ChatProps, State> {
         
         switch (activity.type) {
             case 'message':
+                // adding node count to check if first node, need to grey out back button
+                const curr_node_count = this.checkNodeCount();
                 if(activity.entities) {
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
+                    if(activity.entities[0].node_type == 'prompt' || activity.entities[0].type == 'ClientCapabilities') {
+                        this.toggleBackButton(false)
+                    } else {
+                        if( this.checkNodeCount() == 0 ) {
+                            this.toggleBackButton(false)
+                        } else {
+                            this.toggleBackButton(true)
+                        }
+                    }
                     if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
-                        this.toggleBackButton(true)
+                        this.addNodeCount();
                     }
                } else {
                 const botConnection: any = this.store.getState().connection.botConnection;
@@ -170,10 +183,16 @@ export class Chat extends React.Component<ChatProps, State> {
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                 } else {
                     // open response only
-                    this.toggleBackButton(true)
+                    if( this.checkNodeCount() == 0 ) {
+                        this.toggleBackButton(false)
+                    } else {
+                        this.toggleBackButton(true)
+                    }
+                    //this.toggleBackButton(true)
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
                 }
+                this.addNodeCount();
                }
                 this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
                 break;
@@ -221,6 +240,35 @@ export class Chat extends React.Component<ChatProps, State> {
         return this.state.back_visible;
     }
 
+    private addNodeCount = () => {
+        const new_count = this.state.node_count+1
+        this.setState({
+            node_count: new_count
+        })
+    }
+
+    private deleteNodeCount = () => {
+        if (this.state.node_count >= 0){
+            const updated_count = this.state.node_count-3
+            this.setState({
+                node_count: updated_count
+            })
+            this.state.node_count = updated_count
+        } 
+        if (this.state.node_count < 0) {
+            this.setState({
+                node_count: 0
+            })
+            this.state.node_count = 0
+
+        }
+    }
+
+
+    private checkNodeCount = () => {
+        return this.state.node_count;
+    }
+
     //step function perfoms going back to the previous message
     private step = (messageId?: string|null) => {
         const botConnection: any = this.store.getState().connection.botConnection;
@@ -244,9 +292,14 @@ export class Chat extends React.Component<ChatProps, State> {
                     { type: 'Submit_Date' } as ChatActions
                 );
 
+
                 // have to resend receive_message for input enabled nodes
                 if(messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
-                    this.toggleBackButton(true)
+                    if(this.checkNodeCount() == 0){
+                        this.toggleBackButton(false)
+                    } else {
+                        this.toggleBackButton(true)
+                    }
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
                     
@@ -705,6 +758,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                         className="wcbackbutton" onClick={() => {
                                             if (!this.state.clicked) {
                                             this.step(); 
+                                            this.deleteNodeCount();
                                             // var button = this.state; // temp variable in order to change state of clicked
                                             // button.clicked = true; // changes state within variable to true
                                             // this.setState(button); // passes updated boolean back to state
