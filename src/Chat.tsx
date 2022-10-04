@@ -162,11 +162,15 @@ export class Chat extends React.Component<ChatProps, State> {
                 if(activity.entities) {
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
-                    if( this.checkNodeCount() == 0 ) {
-                        console.log("curr node count 0, switch to false")
+                    if(activity.entities[0].node_type == 'prompt' || activity.entities[0].type == 'ClientCapabilities') {
                         this.toggleBackButton(false)
                     } else {
-                        this.toggleBackButton(true)
+                        if( this.checkNodeCount() == 0 ) {
+                            console.log("curr node count 0, switch to false")
+                            this.toggleBackButton(false)
+                        } else {
+                            this.toggleBackButton(true)
+                        }
                     }
                     if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
                         this.addNodeCount();
