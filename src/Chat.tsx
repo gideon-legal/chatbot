@@ -300,7 +300,6 @@ export class Chat extends React.Component<ChatProps, State> {
                     { type: 'Submit_Date' } as ChatActions
                 );
 
-                this.deleteNodeCount();
 
                 // have to resend receive_message for input enabled nodes
                 if(messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
@@ -766,6 +765,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                         className="wcbackbutton" onClick={() => {
                                             if (!this.state.clicked) {
                                             this.step(); 
+                                            this.deleteNodeCount();
                                             // var button = this.state; // temp variable in order to change state of clicked
                                             // button.clicked = true; // changes state within variable to true
                                             // this.setState(button); // passes updated boolean back to state
