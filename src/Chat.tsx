@@ -278,6 +278,16 @@ export class Chat extends React.Component<ChatProps, State> {
         });
     }
 
+    private getConvoList = (userID: string) => {
+        conversationList(this.props.gid, userID)
+        .then((res: any) => {
+            console.log("getConvoList results: ", res.data)
+        })
+        .catch((err: any) => {
+            console.log(err);
+        });
+    }
+
     private setSize() {
         this.store.dispatch<ChatActions>({
             type: 'Set_Size',

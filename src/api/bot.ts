@@ -82,3 +82,11 @@ export const checkNeedBackButton = async (baseUrl: string, directLine: string, m
     return attempt;
 };
 
+//
+export const conversationList = (
+    baseUrl: string,
+    user_id: string
+): any => {
+    return axios.get(`${baseUrl}/api/v1/conversations/list?user_id=${user_id}`);
+}
+
