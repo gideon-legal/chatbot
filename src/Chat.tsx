@@ -16,7 +16,7 @@ import { HistoryInline } from './assets/icons/HistoryInline'
 import { Activity, CardActionTypes, DirectLine, DirectLineOptions, IBotConnection, User, Conversation } from 'botframework-directlinejs';
 import { isMobile } from 'react-device-detect';
 import { connect, Provider } from 'react-redux';
-import { conversationHistory, mapMessagesToActivities, ping, step, verifyConversation, checkNeedBackButton } from './api/bot';
+import { conversationHistory, mapMessagesToActivities, ping, step, verifyConversation, checkNeedBackButton, conversationList } from './api/bot';
 import { getTabIndex } from './getTabIndex';
 import { guid } from './GUID';
 import * as konsole from './Konsole';
@@ -371,16 +371,13 @@ export class Chat extends React.Component<ChatProps, State> {
 
         let botConnection: any = null;
 
-        console.log((reloaded && !isNew )|| (reloaded && localStorage.getItem('emptyChat') === 'false'));
         if((reloaded && !isNew ) || (reloaded && localStorage.getItem('emptyChat') === 'false')) {
-            console.log("entered if statemnet")
             botConnection = this.props.directLine ?
                 (this.botConnection = new DirectLine({
                     secret: this.props.directLine.secret,
                     conversationId: localStorage.getItem('msft_conversation_id')
                 })) :
                 this.props.botConnection;
-
         } else {
             botConnection = this.props.directLine ? (this.botConnection = new DirectLine(this.props.directLine)) : this.props.botConnection;
             localStorage.setItem('emptyChat', 'true');
@@ -562,6 +559,24 @@ export class Chat extends React.Component<ChatProps, State> {
                             // Send initial message to start conversation
                             this.store.dispatch(sendMessage(state.format.strings.pingMessage, state.connection.user, state.format.locale));
                         }
+
+                        //if(localStorage.getItem('lastUserMsgID') && Number.isInteger(Number(localStorage.getItem('lastUserMsgID')))){
+                        // if(localStorage.getItem('lastUserMsgID')){
+                        //     let messageID = localStorage.getItem('lastUserMsgID').slice(localStorage.getItem('lastUserMsgID').length - 6);
+                        //     let noLeadingZeros = "";
+                        //     for(let i = 0; i < messageID.length; i++) {
+                        //         if(messageID[i] !== "0"){
+                        //             noLeadingZeros +=  messageID[i];
+                        //         }
+                        //     }
+                        //     console.log(Number.isInteger(Number(noLeadingZeros)));
+                        //     if(Number.isInteger(Number(noLeadingZeros))){
+                        //         //this.step();
+                        //         //console.log("stepping back");
+                        //     }
+                        // }
+
+                        this.getConvoList(user.id);
                     })
                     .catch((err: any) => {
                         this.store.dispatch<ChatActions>({
@@ -713,7 +728,6 @@ export class Chat extends React.Component<ChatProps, State> {
         // only render real stuff after we know our dimensions
         return (
             <Provider store={ this.store }>
-                <div>
                 <div
                     className={`wc-wrap ${display ? '' : 'hide'}`}
                     style={{ display: 'none'}}
@@ -756,15 +770,12 @@ export class Chat extends React.Component<ChatProps, State> {
                                         onClick={() => {this.toggle(); }}
                                         src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/close.svg" /> */}
 
-                                    {/* {{ <img
-                                        className="wc-header--back" onClick={() => {
-                                            if (!this.clicked.disabled) {
-                                            this.step(); this.clicked.disabled = true; }// disable click action after first click
-                                    }}
-                                    src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/back.svg" />  } */} 
+                                    {/* <img
+                                        className="wc-header--back"
+                                        onClick={() => {this.step(); }}
+                                        src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/back.svg" /> */}
                                 </div>
                                 :
-                                // button back to current convo
                                 <div className={!fullscreen ? 'history-header wc-header' : 'wc-header wc-header-fullscreen'}>
                                     <IconButton onClick={() => this.handleHistory(false)}  className="icon__button" style={{ padding: 0, color: 'white' }}>
                                         <ArrowBack className="back__button" />
@@ -772,7 +783,6 @@ export class Chat extends React.Component<ChatProps, State> {
                                     <span>Current Conversation</span>
                                 </div>
                         }
-
                         <div className="wc-chatbot-content">
                             {fullscreen && <div className="wc-chatbot-content-left">
                                 {/* TODO - Put content to display on left side of fullscreen */}
@@ -790,54 +800,54 @@ export class Chat extends React.Component<ChatProps, State> {
                                         ref={ this._saveHistoryRef }
                                         gid={ this.props.gid }
                                         directLine={ this.props.directLine }
+                                        step={() => console.log("step that's passed to kid")}
                                     />
+                                    <Shell ref={ this._saveShellRef } />
 
-                                <Shell ref={ this._saveShellRef } />
+                                    { // if input is enabled show this && or if bot is talking
+                                        <div className = {backButtonClassName}>
+                                        { 
+                                            <label style={ { visibility:  this.state.back_visible ? 'visible' : 'hidden' } }
+                                                className="wcbackbutton" onClick={() => {
+                                                    if (!this.state.clicked) {
+                                                        this.step(); 
+                                                        // var button = this.state; // temp variable in order to change state of clicked
+                                                        // button.clicked = true; // changes state within variable to true
+                                                        // this.setState(button); // passes updated boolean back to state
+                                                    } 
+                                                }}>
 
-                                { // if input is enabled show this && or if bot is talking
-                                    <div className = {backButtonClassName}>
-                                    { <label style={ { visibility:  this.state.back_visible ? 'visible' : 'hidden' } }
-                                        className="wcbackbutton" onClick={() => {
-                                            if (!this.state.clicked) {
-                                            this.step(); 
-                                            // var button = this.state; // temp variable in order to change state of clicked
-                                            // button.clicked = true; // changes state within variable to true
-                                            // this.setState(button); // passes updated boolean back to state
-                                        } 
-                                        }}>
-
-                                        <label style={{cursor: 'pointer'}}>
-                                            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                                                <div style={{position: 'relative', top: '19px', left: '20px', color: (this.state.clicked ? '#979797' : '#3F6DE1' ) }}>
-                                                    Back
-                                                    <div style = {{position: 'absolute', left: '-30px', top:'0'}}>
-                                                        <svg width="20" height="16" viewBox="0 0 20 16"  fill={(this.state.clicked ? '#979797' : '#3F6DE1' )} xmlns="http://www.w3.org/2000/svg">
-                                                            <path fill={(this.state.clicked ? '#979797' : '#3F6DE1' )} d="M18.75 6.85796H3.925L8.4625 1.87555C8.67467 1.64218 8.77675 1.34131 8.74628 1.03914C8.7158 0.736965 8.55527 0.458234 8.3 0.264265C8.04473 0.070295 7.71563 -0.0230245 7.3851 0.00483557C7.05456 0.0326956 6.74967 0.179453 6.5375 0.412823L0.2875 7.26935C0.245451 7.32389 0.207849 7.38118 0.175 7.44076C0.175 7.4979 0.175 7.53218 0.0875002 7.58932C0.0308421 7.72035 0.0011764 7.85982 0 8.00071C0.0011764 8.1416 0.0308421 8.28108 0.0875002 8.4121C0.0875002 8.46924 0.0874998 8.50353 0.175 8.56066C0.207849 8.62025 0.245451 8.67754 0.2875 8.73208L6.5375 15.5886C6.65503 15.7176 6.8022 15.8213 6.96856 15.8924C7.13491 15.9635 7.31636 16.0003 7.5 16C7.79207 16.0005 8.07511 15.9075 8.3 15.7372C8.42657 15.6412 8.5312 15.5234 8.60789 15.3905C8.68458 15.2575 8.73183 15.112 8.74692 14.9623C8.76202 14.8127 8.74466 14.6617 8.69586 14.5182C8.64705 14.3747 8.56775 14.2414 8.4625 14.1259L3.925 9.14347H18.75C19.0815 9.14347 19.3995 9.02307 19.6339 8.80876C19.8683 8.59446 20 8.30379 20 8.00071C20 7.69764 19.8683 7.40697 19.6339 7.19266C19.3995 6.97836 19.0815 6.85796 18.75 6.85796Z"/>
-                                                        </svg>
+                                                <label style={{cursor: 'pointer'}}>
+                                                    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                                                        <div style={{position: 'relative', top: '19px', left: '20px', color: (this.state.clicked ? '#979797' : '#3F6DE1' ) }}>
+                                                            Back
+                                                            <div style = {{position: 'absolute', left: '-30px', top:'0'}}>
+                                                                <svg width="20" height="16" viewBox="0 0 20 16"  fill={(this.state.clicked ? '#979797' : '#3F6DE1' )} xmlns="http://www.w3.org/2000/svg">
+                                                                    <path fill={(this.state.clicked ? '#979797' : '#3F6DE1' )} d="M18.75 6.85796H3.925L8.4625 1.87555C8.67467 1.64218 8.77675 1.34131 8.74628 1.03914C8.7158 0.736965 8.55527 0.458234 8.3 0.264265C8.04473 0.070295 7.71563 -0.0230245 7.3851 0.00483557C7.05456 0.0326956 6.74967 0.179453 6.5375 0.412823L0.2875 7.26935C0.245451 7.32389 0.207849 7.38118 0.175 7.44076C0.175 7.4979 0.175 7.53218 0.0875002 7.58932C0.0308421 7.72035 0.0011764 7.85982 0 8.00071C0.0011764 8.1416 0.0308421 8.28108 0.0875002 8.4121C0.0875002 8.46924 0.0874998 8.50353 0.175 8.56066C0.207849 8.62025 0.245451 8.67754 0.2875 8.73208L6.5375 15.5886C6.65503 15.7176 6.8022 15.8213 6.96856 15.8924C7.13491 15.9635 7.31636 16.0003 7.5 16C7.79207 16.0005 8.07511 15.9075 8.3 15.7372C8.42657 15.6412 8.5312 15.5234 8.60789 15.3905C8.68458 15.2575 8.73183 15.112 8.74692 14.9623C8.76202 14.8127 8.74466 14.6617 8.69586 14.5182C8.64705 14.3747 8.56775 14.2414 8.4625 14.1259L3.925 9.14347H18.75C19.0815 9.14347 19.3995 9.02307 19.6339 8.80876C19.8683 8.59446 20 8.30379 20 8.00071C20 7.69764 19.8683 7.40697 19.6339 7.19266C19.3995 6.97836 19.0815 6.85796 18.75 6.85796Z"/>
+                                                                </svg>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </label>
-                                    </label>}   
-                                </div> }
-                             </div> 
+                                                </label>
+                                            </label>
+                                        }   
+                                        </div> 
+                                    }
 
-                                        {/* TODO - temporarily commented out for all users to accomodate a new client */}
-                                        {/* <a href="https://gideon.legal">
-                                        <span>Powered by</span>
-                                        <img
-                                            className="wc-footer--logo"
-                                            src="https://s3.amazonaws.com/com.gideon.static.dev/logotype-v1.1.0.svg"
-                                            />
-                                        </a> */}
+                                            {/* TODO - temporarily commented out for all users to accomodate a new client */}
+                                            {/* <a href="https://gideon.legal">
+                                            <span>Powered by</span>
+                                            <img
+                                                className="wc-footer--logo"
+                                                src="https://s3.amazonaws.com/com.gideon.static.dev/logotype-v1.1.0.svg"
+                                                />
+                                            </a> */}
 
-                            
-                            </div>
-                                {
-                                    this.props.resize === 'detect' &&
-                                        <ResizeDetector onresize={ this.resizeListener } />
-                                }
-                            </div>
+                                    {
+                                        this.props.resize === 'detect' &&
+                                            <ResizeDetector onresize={ this.resizeListener } />
+                                    }
+                                </div>
                                 :
                                 <div className="wc-chatbot-content-right" style={{paddingTop:'67px'}}>
                                     {this.state.currentConversation ? <ConvoViewer messages={this.messages}/> : <ConvoHistory setCurrentConversation={this.changeCurrentConversation}/>}
@@ -845,6 +855,7 @@ export class Chat extends React.Component<ChatProps, State> {
                             }
                         </div>
                     </div>
+                </div>
             </Provider >
         );
     }
