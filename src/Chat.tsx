@@ -158,11 +158,11 @@ export class Chat extends React.Component<ChatProps, State> {
                 if(activity.entities) {
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
-                   /* if(activity.entities[0].node_type == 'prompt' || activity.entities[0].type == 'ClientCapabilities') {
+                    if(activity.entities[0].node_type == 'prompt' || activity.entities[0].type == 'ClientCapabilities') {
                         this.toggleBackButton(false)
                     } else {
                         this.toggleBackButton(true)
-                    }*/
+                    }
                     /*else {
                         if( this.checkNodeCount() == 0 ) {
                             this.toggleBackButton(false)
@@ -198,8 +198,9 @@ export class Chat extends React.Component<ChatProps, State> {
                 this.addNodeCount();
                }
                 this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
+                console.log(this.checkNodeCount())
                 break;
-
+                
             case 'typing':
                 this.toggleBackButton(false)
                 if (activity.from.id !== state.connection.user.id) {
@@ -268,7 +269,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 node_count: 0
             })
             this.state.node_count = 0
-
+            this.toggleBackButton(false)
         }
         console.log("after delete count")
         console.log(this.checkNodeCount())
