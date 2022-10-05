@@ -76,9 +76,8 @@ export class Chat extends React.Component<ChatProps, State> {
         full_height: false,
         clicked: false,
         back_visible: true,
-        orginalBodyClass: document.body.className
-        showConvoHistory: false,
         orginalBodyClass: document.body.className,
+        showConvoHistory: false,
         currentConversation: ''
     };
 
