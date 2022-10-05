@@ -161,15 +161,12 @@ export class Chat extends React.Component<ChatProps, State> {
                     if(activity.entities[0].node_type == 'prompt' || activity.entities[0].type == 'ClientCapabilities') {
                         this.toggleBackButton(false)
                     } else {
-                        this.toggleBackButton(true)
-                    }
-                    /*else {
                         if( this.checkNodeCount() == 0 ) {
                             this.toggleBackButton(false)
                         } else {
                             this.toggleBackButton(true)
                         }
-                    }*/
+                    }
                     if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
                         this.addNodeCount();
                     }
@@ -186,11 +183,11 @@ export class Chat extends React.Component<ChatProps, State> {
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                 } else {
                     // open response only
-                  //  if( this.checkNodeCount() == 0 ) {
-                  //      this.toggleBackButton(false)
-                   // } else {
+                    if( this.checkNodeCount() == 0 ) {
+                        this.toggleBackButton(false)
+                    } else {
                         this.toggleBackButton(true)
-                   // }
+                    }
                     //this.toggleBackButton(true)
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
