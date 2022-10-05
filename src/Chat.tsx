@@ -158,15 +158,18 @@ export class Chat extends React.Component<ChatProps, State> {
                 if(activity.entities) {
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
-                    if(activity.entities[0].node_type == 'prompt' || activity.entities[0].type == 'ClientCapabilities') {
+                   /* if(activity.entities[0].node_type == 'prompt' || activity.entities[0].type == 'ClientCapabilities') {
                         this.toggleBackButton(false)
                     } else {
+                        this.toggleBackButton(true)
+                    }*/
+                    /*else {
                         if( this.checkNodeCount() == 0 ) {
                             this.toggleBackButton(false)
                         } else {
                             this.toggleBackButton(true)
                         }
-                    }
+                    }*/
                     if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
                         this.addNodeCount();
                     }
@@ -183,11 +186,11 @@ export class Chat extends React.Component<ChatProps, State> {
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                 } else {
                     // open response only
-                    if( this.checkNodeCount() == 0 ) {
-                        this.toggleBackButton(false)
-                    } else {
+                  //  if( this.checkNodeCount() == 0 ) {
+                  //      this.toggleBackButton(false)
+                   // } else {
                         this.toggleBackButton(true)
-                    }
+                   // }
                     //this.toggleBackButton(true)
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
@@ -279,7 +282,11 @@ export class Chat extends React.Component<ChatProps, State> {
     //step function perfoms going back to the previous message
     private step = (messageId?: string|null) => {
         const botConnection: any = this.store.getState().connection.botConnection;
-        step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
+        // check the node count, if node count is 0, don't perform step function
+        console.log("going back")
+        console.log(this.checkNodeCount())
+        if(this.checkNodeCount() > 0){
+            step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
         .then((res: any) => {
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, res.data.id)
             .then((res: any) => {
@@ -321,6 +328,7 @@ export class Chat extends React.Component<ChatProps, State> {
         .catch((err: any) => {
             console.log(err);
         });
+        } 
     }
 
     private setSize() {
