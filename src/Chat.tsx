@@ -69,7 +69,7 @@ export class Chat extends React.Component<ChatProps, State> {
         clicked: false,
         back_visible: false,
         orginalBodyClass: document.body.className,
-        node_count: 0
+        node_count: -1,
     };
 
     private clicked: any; // status of if the back button has been clicked already
@@ -254,7 +254,7 @@ export class Chat extends React.Component<ChatProps, State> {
         const curr_node = this.checkNodeCount();
         console.log(curr_node);
         if (curr_node > 0){
-            const updated_count = curr_node-3
+            const updated_count = curr_node - 2
             this.setState({
                 node_count: updated_count
             })
@@ -283,7 +283,7 @@ export class Chat extends React.Component<ChatProps, State> {
         // check the node count, if node count is 0, don't perform step function
         console.log("going back")
         console.log(this.checkNodeCount())
-        if(this.checkNodeCount() > 0){
+        {
             step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
         .then((res: any) => {
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, res.data.id)
@@ -769,7 +769,8 @@ export class Chat extends React.Component<ChatProps, State> {
                                     { <label style={ { visibility:  this.state.back_visible ? 'visible' : 'hidden' } }
                                         className="wcbackbutton" onClick={() => {
                                             if (!this.state.clicked) {
-                                            this.step(); 
+                                            this.step();
+                                             
                                             this.deleteNodeCount();
                                             // var button = this.state; // temp variable in order to change state of clicked
                                             // button.clicked = true; // changes state within variable to true
