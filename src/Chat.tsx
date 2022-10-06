@@ -59,6 +59,8 @@ export interface State {
     showConvoHistory: boolean;
     currentConversation: any;
     back_visible: boolean;
+    pastConversations: any[];
+    messages: any[];
 }
 
 import { FloatingIcon } from './FloatingIcon';
@@ -78,7 +80,9 @@ export class Chat extends React.Component<ChatProps, State> {
         back_visible: true,
         orginalBodyClass: document.body.className,
         showConvoHistory: false,
-        currentConversation: ''
+        currentConversation: {} as any,
+        pastConversations: [] as any,
+        messages: [] as any
     };
 
     private clicked: any; // status of if the back button has been clicked already
@@ -278,9 +282,12 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private getConvoList = (userID: string) => {
+        let conversations = [] as any;
         conversationList(this.props.gid, userID)
         .then((res: any) => {
-            console.log("getConvoList results: ", res.data)
+            this.setState({
+                pastConversations: res.data.conversations
+            });  
         })
         .catch((err: any) => {
             console.log(err);
@@ -707,6 +714,19 @@ export class Chat extends React.Component<ChatProps, State> {
             currentConversation: convo
         });
         console.log('changed current convo to: ', convo)
+
+        let currentConvoID = convo.msft_conversation_id;
+
+        conversationHistory(this.props.gid, this.props.directLine.secret, currentConvoID)
+        .then((res: any) => {
+            console.log("convo history within change current convo ", res.data);
+            this.setState({
+                messages: res.data.messages
+            });
+        })
+        .catch((err: any) => {
+            console.log(err);
+        })
     }
 
     // At startup we do three render passes:
@@ -724,6 +744,8 @@ export class Chat extends React.Component<ChatProps, State> {
             'wc-back-button',
             this.checkBackButton() === false && 'wc-back-button__disabled'
         )
+
+        console.log("conversation within getConvoList: ", this.state.pastConversations);
 
         // only render real stuff after we know our dimensions
         return (
@@ -850,7 +872,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                 </div>
                                 :
                                 <div className="wc-chatbot-content-right" style={{paddingTop:'67px'}}>
-                                    {this.state.currentConversation ? <ConvoViewer messages={this.messages}/> : <ConvoHistory setCurrentConversation={this.changeCurrentConversation}/>}
+                                    {this.state.currentConversation ? <ConvoViewer messages={this.state.messages} updated_at={this.state.currentConversation.updated_at}/> : <ConvoHistory conversations={this.state.pastConversations} setCurrentConversation={this.changeCurrentConversation}/>}
                                 </div>
                             }
                         </div>

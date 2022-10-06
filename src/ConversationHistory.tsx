@@ -10,7 +10,9 @@ import ReactMarkdown from 'react-markdown';
 export interface HistoryProps {
   getConversations?: any;
   toggleView?: any;
+  conversations: any[];
   setCurrentConversation?: (convo: any) => void;
+
 }
 
 export interface State {
@@ -63,12 +65,23 @@ export class ConversationHistory extends React.Component<HistoryProps, State> {
     this.props.setCurrentConversation(conversation);
   }
 
-  private conversationListItems = this.conversations.map((conversation, i) => {
-    const { updated_at, message_count, lead_count } = conversation;
+  private convertDate(date: Date) {
+    const d = new Date(date);
+    return d.toLocaleString("en-us", { year: "2-digit", month: "2-digit", day: "2-digit" });
+  }
+
+  private convertTime(time: Date) {
+    const t = new Date(time);
+    return t.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+  }
+
+  private conversationListItems = this.props.conversations.map((conversation, i) => {
+    let { updated_at, message_count, lead_count, is_complete } = conversation;
+    lead_count = 9;
     if (lead_count) {
-      const formattedDate = '10/20/20';
-      const time = '12:00AM';
-      const conversationComplete = true;
+      const formattedDate = this.convertDate(updated_at);
+      const time = this.convertTime(updated_at);
+      const conversationComplete = is_complete ? true : false;
       // const conversationComplete = checkNeedBackButton(gid, directLine.secret, id, activity.text)
       // const formattedDate = moment(updated_at).format('MM/DD/YYYY');
       // const time = moment(updated_at).format('h:mm a');
@@ -98,6 +111,8 @@ export class ConversationHistory extends React.Component<HistoryProps, State> {
   });
 
   render() {
+    console.log("props conversation", this.props.conversations)
+
     return (
       <ConversationWrapper
         body={

@@ -6,22 +6,24 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 export interface Conversation {
     id: number,
     formatted_message: string,
-    created_at: string,
+    created_at: Date,
+    updated_at: Date,
     sender_type: string
 }
 
 type Props = {
-  messages: Conversation[]
+  messages: Conversation[],
+  updated_at: Date
 };
 
-const ConversationViewer = ({ messages }: Props) => {
+const ConversationViewer = ({ messages, updated_at }: Props) => {
 
-  const handleBackClick = () => {
-    // setCurrentConversation(null);
-  };
+  const convertDate = (date: Date) => {
+    const d = new Date(date);
+    return d.toLocaleString("en-us", { year: "2-digit", month: "2-digit", day: "2-digit" });
+  }
 
   const getMessageList = () => {
-      console.log('get message list')
       console.log('messages from viewer: ', messages)
       return messages.map((m: any, i: any) => {
         const { sender_type, formatted_message } = m;
@@ -38,9 +40,10 @@ const ConversationViewer = ({ messages }: Props) => {
               className={`leadDetail__conversation__message__wrap leadDetail__conversation__message__wrap--${sender_type}`}
               style={styling}
             >
-              {sender_type === 'bot' &&
+              {/* if we want bot name above the bot msgs */}
+              {/* {sender_type === 'bot' &&
                 <div style={{ backgroundColor: 'transparent', padding: '0', paddingLeft: '5px', fontSize:'12px', color:'#cccccc' }}>*insert bot name*</div>
-              }
+              } */}
               <div>
                 <ReactMarkdown children={formatted_message} />
               </div>
@@ -61,7 +64,7 @@ const ConversationViewer = ({ messages }: Props) => {
           <div>
             <div className="wc-date-header">
               <div className="wc-date-header-line"></div>
-              <div className="wc-date-header-text">{ 'MM/DD/YYYY' }</div>
+              <div className="wc-date-header-text">{ convertDate(updated_at) }</div>
               <div className="wc-date-header-line"></div>
             </div>
             <ul className="leadDetail__conversation__messages">
