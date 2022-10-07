@@ -150,7 +150,7 @@ export class Chat extends React.Component<ChatProps, State> {
     private async handleIncomingActivity(activity: Activity) {
         const state = this.store.getState();
         const activityCopy: any = activity;
-        
+        this.toggleBackButton(false);
         switch (activity.type) {
             case 'message':
                 // adding node count to check if first node, need to grey out back button
@@ -280,7 +280,7 @@ export class Chat extends React.Component<ChatProps, State> {
     //step function perfoms going back to the previous message
     private step = (messageId?: string|null) => {
         const botConnection: any = this.store.getState().connection.botConnection;
-        // check the node count, if node count is 0, don't perform step function
+        
         console.log("going back")
         console.log(this.checkNodeCount())
         {
@@ -307,11 +307,6 @@ export class Chat extends React.Component<ChatProps, State> {
 
                 // have to resend receive_message for input enabled nodes
                 if(messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
-                    if(this.checkNodeCount() == 0){
-                        this.toggleBackButton(false)
-                    } else {
-                        this.toggleBackButton(true)
-                    }
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
                     
