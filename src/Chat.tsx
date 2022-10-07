@@ -161,7 +161,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     if(activity.entities[0].node_type == 'prompt' || activity.entities[0].type == 'ClientCapabilities') {
                         this.toggleBackButton(false)
                     } else {
-                        if( this.checkNodeCount() == 0 ) {
+                        if( this.checkNodeCount() <= 0 ) {
                             this.toggleBackButton(false)
                         } else {
                             this.toggleBackButton(true)
@@ -283,12 +283,12 @@ export class Chat extends React.Component<ChatProps, State> {
         
         console.log("going back")
         console.log(this.checkNodeCount())
-        {
-            step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
+        step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
         .then((res: any) => {
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, res.data.id)
             .then((res: any) => {
                 const messages = res.data.messages.reverse();
+                console.log(messages)
                 const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
                 this.props.showConsole === false;
                 this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
@@ -321,7 +321,7 @@ export class Chat extends React.Component<ChatProps, State> {
         .catch((err: any) => {
             console.log(err);
         });
-        } 
+         
     }
 
     private setSize() {
