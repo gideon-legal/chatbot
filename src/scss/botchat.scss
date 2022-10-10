@@ -285,7 +285,7 @@
 
         &.no-console {
             // bottom: 5%;
-            bottom: 0;
+            bottom: $consoleHeight;
         }
 
         &-fullscreen {
