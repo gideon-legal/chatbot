@@ -285,7 +285,7 @@
 
         &.no-console {
             // bottom: 5%;
-            bottom: $consoleHeight;
+            bottom: 0;
         }
 
         &-fullscreen {
@@ -1620,6 +1620,7 @@
           background-position: 100%;
         }
 
+       
         > .wc-upload,
         > .wc-textbox,
         > .wc-send,
