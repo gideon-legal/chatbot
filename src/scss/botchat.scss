@@ -285,7 +285,7 @@
 
         &.no-console {
             // bottom: 5%;
-            bottom: 0;
+            bottom: $consoleHeight;
         }
 
         &-fullscreen {
@@ -297,6 +297,7 @@
     }
 
     .wc-message-groups-fullscreen {
+        bottom: $consoleHeight;
         max-width: 100%;
         margin-left: 10px;
     }
