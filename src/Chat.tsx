@@ -195,7 +195,6 @@ export class Chat extends React.Component<ChatProps, State> {
                 this.addNodeCount();
                }
                 this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
-                console.log(this.checkNodeCount())
                 break;
                 
             case 'typing':
@@ -249,10 +248,7 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private deleteNodeCount = () => {
-        console.log("delete from count")
-        console.log("current count")
         const curr_node = this.checkNodeCount();
-        console.log(curr_node);
         if (curr_node > 0){
             const updated_count = curr_node - 2
             this.setState({
@@ -268,8 +264,6 @@ export class Chat extends React.Component<ChatProps, State> {
             this.state.node_count = 0
             this.toggleBackButton(false)
         }
-        console.log("after delete count")
-        console.log(this.checkNodeCount())
     }
 
 
@@ -280,15 +274,13 @@ export class Chat extends React.Component<ChatProps, State> {
     //step function perfoms going back to the previous message
     private step = (messageId?: string|null) => {
         const botConnection: any = this.store.getState().connection.botConnection;
-        
-        console.log("going back")
-        console.log(this.checkNodeCount())
+
         step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
         .then((res: any) => {
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, res.data.id)
             .then((res: any) => {
                 const messages = res.data.messages.reverse();
-                console.log(messages)
+                //console.log(messages)
                 const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
                 this.props.showConsole === false;
                 this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
