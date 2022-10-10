@@ -41,15 +41,20 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
     private scrollMe: HTMLDivElement;
     private scrollContent: HTMLDivElement;
     private scrollToBottom = true;
-    private pageReloaded = false;
+    private newConvoPrompt = false;
 
     private carouselActivity: WrappedActivity;
     private largeWidth: number;
+    private initialActivitiesLength: number;
 
     constructor(props: HistoryProps) {
         super(props);
         this.state = { filesList: {} };
         this.addFilesToState = this.addFilesToState.bind(this);
+    }
+
+    componentDidMount(): void {
+       setTimeout( () => this.initialActivitiesLength = this.props.activities.length, 2500);
     }
 
     componentWillUpdate(nextProps: HistoryProps) {
@@ -153,6 +158,19 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         window.location.reload();
     }
 
+    //takes msg ID and takes number value at end of string
+    private getMessageIndex(msgID: string) {
+        console.log("msgID: ", msgID);
+        let cutID = msgID.slice(msgID.length - 7);
+        let noLeadingZeros = "";
+        for(let i = 0; i < cutID.length; i++) {
+            if(cutID[i] !== "0"){
+                noLeadingZeros +=  cutID[i];
+            }
+        }
+        return noLeadingZeros;
+    }
+
     render() {
         let content;
         let lastActivityIsDisclaimer = false;
@@ -162,7 +180,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         // - page was refreshed
         // - chat wasn't empty before the page refresh
         // - not a new convo being started
-        if(performance.getEntriesByType('navigation')[0].type === 'reload' && localStorage.getItem('newConvo') !== 'true' && localStorage.getItem('emptyChat') !== 'true') this.pageReloaded = true;
+        if(performance.getEntriesByType('navigation')[0].type === 'reload' && localStorage.getItem('newConvo') !== 'true' && localStorage.getItem('emptyChat') !== 'true') this.newConvoPrompt = true;
 
         if (this.props.size.width !== undefined) {
             if (this.props.format.carouselMargin === undefined) {
@@ -173,17 +191,22 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                 const activities = filteredActivities(this.props.activities, this.props.format.strings.pingMessage);
                 activityDisclaimer = activities.length > 0 ? activities[activities.length - 1] : undefined;
                 lastActivityIsDisclaimer = activityDisclaimer && activityDisclaimer.entities && activityDisclaimer.entities.length > 0 && activityDisclaimer.entities[0].node_type === 'disclaimer';
-
-                // // for cases where user refreshes before any messages appear
-                // if(activities.length > 1) {
-                //     localStorage.setItem('emptyChat', 'false');
-                // } else {
-                //     localStorage.setItem('emptyChat', 'true');
+                console.log(activities);
+                // if(performance.getEntriesByType('navigation')[0].type === 'reload' && localStorage.getItem("lastUserMsgID")) {
+                //     let currentMsgIndex = -1;
+                //     let previousMsgIndex = Number(localStorage.getItem("lastUserMsgID"));
+                //     if(activities.length > previousMsgIndex) {
+                //         //currentMsgIndex = Number(this.getMessageIndex(activities[activities.length - 1].id));
+                //         //if(previousMsgIndex + 1 !== currentMsgIndex){
+                
+                //         //}
+                //     }                  
                 // }
-
+                console.log("pingMsg", this.props.format.strings.pingMessage)
                 content = activities
                 .map((activity, index) => {
                         // for cases where user refreshes before any messages appear
+                        // saves message id of last message given
                         if(this.props.isFromMe(activity) && activities.length > 1) {
                             localStorage.setItem('emptyChat', 'false');
                         }
@@ -232,8 +255,29 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                         )
                     }
                 );
+
+                //saves last message id into local storage
+                //makes sure id last values are numbers (excludes typing msgs)
+                // if(performance.getEntriesByType('navigation')[0].type !== 'reload' && activities && activities.length > 1) {
+                //     console.log(activities[activities.length-1].id)
+                //     let messageID;
+                //     if(activities[activities.length-1].id !== undefined && !Number.isInteger(Number(activities[activities.length-1].id))) {
+                //         let noLeadingZeros = this.getMessageIndex(activities[activities.length - 1].id);
+                //         console.log("noLeadingZeros ", noLeadingZeros);
+                //         if(Number.isInteger(Number(noLeadingZeros))) localStorage.setItem('lastUserMsgID', noLeadingZeros);                     
+                //     }
+                // }
             }
         }
+
+        //checks if user interacted with bot to hide new convo prompt
+        let activitiesChanged;
+        if(this.initialActivitiesLength === this.props.activities.length) {
+            activitiesChanged = true;
+        } else if(this.initialActivitiesLength - this.props.activities.length >= 1 || this.props.activities.length - this.initialActivitiesLength <= -1) {
+            this.initialActivitiesLength = -1;
+            activitiesChanged = false;
+        } 
 
         const groupsClassName = classList('wc-message-groups', !this.props.format.chatTitle && 'no-header',  this.props.format.fullscreen && 'wc-message-groups-fullscreen', !this.props.inputEnabled && 'no-console');
         return (
@@ -254,7 +298,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                 </div>
                 {/* prompt to start new convo if page refreshed */}
                 {/* this.props.activities.length > 1 && */}
-                { this.pageReloaded &&
+                { this.newConvoPrompt && activitiesChanged && 
                     <div className="new__convo" style={{ textAlign: 'center' }}>Do you want to start a new session?
                         <a onClick={this.startNewConvo} style={{ color:'blue', marginLeft: '5px', cursor: 'pointer' }}>
                             Click here to start new
@@ -305,7 +349,7 @@ export const History = connect(
         onClickActivity: (activity: Activity) => stateProps.connectionSelectedActivity && (() => stateProps.connectionSelectedActivity.next({ activity })),
         onCardAction: ownProps.onCardAction,
         gid: ownProps.gid,
-        directLine: ownProps.directLine
+        directLine: ownProps.directLine,
     }), {
         withRef: true
     }

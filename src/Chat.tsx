@@ -110,6 +110,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
 
     private messages = [] as any;
+    private initialActivitiesLength: number;
 
     constructor(props: ChatProps) {
         super(props);
@@ -241,6 +242,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
     //step function perfoms going back to the previous message
     private step = (messageId?: string|null) => {
+        console.log("inside step")
         const botConnection: any = this.store.getState().connection.botConnection;
         step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
         .then((res: any) => {
@@ -389,10 +391,6 @@ export class Chat extends React.Component<ChatProps, State> {
             botConnection = this.props.directLine ? (this.botConnection = new DirectLine(this.props.directLine)) : this.props.botConnection;
             localStorage.setItem('emptyChat', 'true');
         }
-
-        console.log('this.props.directline ', this.props.directLine);
-        console.log('this.props.botConnection ', this.props.botConnection);
-        console.log('this.botConnection ', botConnection);
 
         if (this.props.resize === 'window') {
             window.addEventListener('resize', this.resizeListener);
@@ -583,6 +581,9 @@ export class Chat extends React.Component<ChatProps, State> {
                         //     }
                         // }
 
+                        //takes initial length of activities after component is mounted
+                        setTimeout( () => this.initialActivitiesLength = this.store.getState().history.activities.length, 2500);
+
                         this.getConvoList(user.id);
                     })
                     .catch((err: any) => {
@@ -745,7 +746,21 @@ export class Chat extends React.Component<ChatProps, State> {
             this.checkBackButton() === false && 'wc-back-button__disabled'
         )
 
-        console.log("conversation within getConvoList: ", this.state.pastConversations);
+        setTimeout(() => {
+            console.log(this.initialActivitiesLength, this.store.getState().history.activities.length)
+
+            //if page reloaded, 2nd msg id in activities array is a number, and initial activities length = the current activities length (makes sure step only happens one time at inital reload)
+            if(performance.getEntriesByType('navigation')[0].type === 'reload' && 
+                Number.isInteger(Number(this.store.getState().history.activities[this.store.getState().history.activities.length - 2].id)) &&
+                this.initialActivitiesLength === this.store.getState().history.activities.length
+            ) {
+                //take step back
+                console.log("entered if statement")
+                this.step();
+                console.log("stepped back from if statement");
+                this.initialActivitiesLength = -1;
+            }
+        }, 3000);
 
         // only render real stuff after we know our dimensions
         return (
@@ -822,7 +837,6 @@ export class Chat extends React.Component<ChatProps, State> {
                                         ref={ this._saveHistoryRef }
                                         gid={ this.props.gid }
                                         directLine={ this.props.directLine }
-                                        step={() => console.log("step that's passed to kid")}
                                     />
                                     <Shell ref={ this._saveShellRef } />
 

@@ -77,7 +77,6 @@ export class ConversationHistory extends React.Component<HistoryProps, State> {
 
   private conversationListItems = this.props.conversations.map((conversation, i) => {
     let { updated_at, message_count, lead_count, is_complete } = conversation;
-    lead_count = 9;
     if (lead_count) {
       const formattedDate = this.convertDate(updated_at);
       const time = this.convertTime(updated_at);
