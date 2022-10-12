@@ -108,7 +108,7 @@ export class Chat extends React.Component<ChatProps, State> {
     private _saveShellRef = this.saveShellRef.bind(this);
     // tslint:enable:variable-name
 
-
+    private initialOpen = false;
     private messages = [] as any;
     private initialActivitiesLength: number;
 
@@ -288,7 +288,7 @@ export class Chat extends React.Component<ChatProps, State> {
         conversationList(this.props.gid, userID)
         .then((res: any) => {
             this.setState({
-                pastConversations: res.data.conversations
+                pastConversations: res.data.conversations.reverse()
             });  
         })
         .catch((err: any) => {
@@ -380,11 +380,12 @@ export class Chat extends React.Component<ChatProps, State> {
 
         let botConnection: any = null;
 
-        if((reloaded && !isNew ) || (reloaded && localStorage.getItem('emptyChat') === 'false')) {
+        //if it's not new convo or it's not a empty chat
+        if((reloaded && !isNew ) || (reloaded && localStorage.getItem('emptyChat') === 'false') || localStorage.getItem('pastConvoID')) {
             botConnection = this.props.directLine ?
                 (this.botConnection = new DirectLine({
                     secret: this.props.directLine.secret,
-                    conversationId: localStorage.getItem('msft_conversation_id')
+                    conversationId: localStorage.getItem('pastConvoID') ? localStorage.getItem('pastConvoID') : localStorage.getItem('msft_conversation_id')
                 })) :
                 this.props.botConnection;
         } else {
@@ -425,17 +426,12 @@ export class Chat extends React.Component<ChatProps, State> {
                 const botCopy: any = botConnection;
                 let conversationId = botCopy.conversationId;
 
-                // if refresh before chat started, new convo id made
-                // if(localStorage.getItem('emptyChat') === 'true' || localStorage.getItem('newConvo') === 'true') {
-                //     isNew = true;
-                //     localStorage.setItem('newConvo', 'false');
-                //     localStorage.setItem('emptyChat', 'false');
-                // }
-
                 // if not new convo and there's a convo id in local storage
                 if(reloaded && !isNew && localStorage.getItem('newConvo') === 'false') {
                     conversationId = localStorage.getItem('msft_conversation_id');
                     console.log('convo id from local storage')
+                } else if(localStorage.getItem('pastConvoID')) {
+                    conversationId = localStorage.getItem('pastConvoID');
                 }
 
                 if (!state.connection.verification.attempted) {
@@ -460,9 +456,11 @@ export class Chat extends React.Component<ChatProps, State> {
                     .then((res: any) => {
                         // Only save these when we successfully connect
                         // uncomment when re-enabling chat history
-                        window.localStorage.setItem('msft_conversation_id', conversationId);
-                        window.localStorage.setItem('gid', this.props.gid);
-                        window.localStorage.setItem('msft_user_id', user.id);
+                        if(isNew && conversationId !== localStorage.getItem("pastConvoID")) {
+                            window.localStorage.setItem('msft_conversation_id', conversationId);
+                            window.localStorage.setItem('gid', this.props.gid);
+                            window.localStorage.setItem('msft_user_id', user.id);
+                        }
 
                         this.setState({
                             display: true
@@ -564,22 +562,6 @@ export class Chat extends React.Component<ChatProps, State> {
                             // Send initial message to start conversation
                             this.store.dispatch(sendMessage(state.format.strings.pingMessage, state.connection.user, state.format.locale));
                         }
-
-                        //if(localStorage.getItem('lastUserMsgID') && Number.isInteger(Number(localStorage.getItem('lastUserMsgID')))){
-                        // if(localStorage.getItem('lastUserMsgID')){
-                        //     let messageID = localStorage.getItem('lastUserMsgID').slice(localStorage.getItem('lastUserMsgID').length - 6);
-                        //     let noLeadingZeros = "";
-                        //     for(let i = 0; i < messageID.length; i++) {
-                        //         if(messageID[i] !== "0"){
-                        //             noLeadingZeros +=  messageID[i];
-                        //         }
-                        //     }
-                        //     console.log(Number.isInteger(Number(noLeadingZeros)));
-                        //     if(Number.isInteger(Number(noLeadingZeros))){
-                        //         //this.step();
-                        //         //console.log("stepping back");
-                        //     }
-                        // }
 
                         //takes initial length of activities after component is mounted
                         setTimeout( () => this.initialActivitiesLength = this.store.getState().history.activities.length, 2500);
@@ -700,34 +682,41 @@ export class Chat extends React.Component<ChatProps, State> {
 
     // change state of showConvoHistory to show list of convos
     private handleHistory = (bool: boolean) => {
-        this.setState({
-            showConvoHistory: bool
-        })
         if(bool) {
             this.setState({
-                currentConversation: undefined
+                currentConversation: undefined,
+                showConvoHistory: bool
+            });
+        } else {
+            if(localStorage.getItem('pastConvoID')) {
+                window.location.reload();
+                localStorage.removeItem('pastConvoID');
+            }
+            this.setState({
+                showConvoHistory: bool
             });
         }
     }
 
     private changeCurrentConversation = (convo: any) => {
-        this.setState({
-            currentConversation: convo
-        });
-        console.log('changed current convo to: ', convo)
+        // this.setState({
+        //     currentConversation: convo
+        // });
+        // console.log('changed current convo to: ', convo)
 
         let currentConvoID = convo.msft_conversation_id;
-
-        conversationHistory(this.props.gid, this.props.directLine.secret, currentConvoID)
-        .then((res: any) => {
-            console.log("convo history within change current convo ", res.data);
-            this.setState({
-                messages: res.data.messages
-            });
-        })
-        .catch((err: any) => {
-            console.log(err);
-        })
+        localStorage.setItem("pastConvoID", currentConvoID);
+        // conversationHistory(this.props.gid, this.props.directLine.secret, currentConvoID)
+        // .then((res: any) => {
+        //     console.log("convo history within change current convo ", res.data);
+        //     this.setState({
+        //         messages: res.data.messages
+        //     });
+        // })
+        // .catch((err: any) => {
+        //     console.log(err);
+        // })
+        window.location.reload();
     }
 
     // At startup we do three render passes:
@@ -756,8 +745,8 @@ export class Chat extends React.Component<ChatProps, State> {
             ) {
                 //take step back
                 console.log("entered if statement")
-                this.step();
-                console.log("stepped back from if statement");
+                // this.step();
+                // console.log("stepped back from if statement");
                 this.initialActivitiesLength = -1;
             }
         }, 3000);

@@ -25,6 +25,7 @@ const ConversationViewer = ({ messages, updated_at }: Props) => {
 
   const getMessageList = () => {
       console.log('messages from viewer: ', messages)
+      messages = messages.reverse();
       return messages.map((m: any, i: any) => {
         const { sender_type, formatted_message } = m;
         let styling;
@@ -67,9 +68,27 @@ const ConversationViewer = ({ messages, updated_at }: Props) => {
               <div className="wc-date-header-text">{ convertDate(updated_at) }</div>
               <div className="wc-date-header-line"></div>
             </div>
-            <ul className="leadDetail__conversation__messages">
+            {/* <ul className="leadDetail__conversation__messages">
               {getMessageList()}
-            </ul>
+            </ul> */}
+            <InfiniteScroll
+                dataLength={messages.length}
+                next={() => console.log("next")}
+                hasMore={false}
+                scrollableTarget="scrollableList"
+                loader={
+                  <h3 className="loader" key={0}>
+                    Loading ...
+                  </h3>
+                }
+              >
+                {getMessageList()}
+              </InfiniteScroll>
+            <div className="new__convo" style={{ textAlign: 'center' }}>Do you want to continue this conversation?
+                <a onClick={() => console.log("new convo")} style={{ color:'blue', marginLeft: '5px', cursor: 'pointer' }}>
+                    Click here to continue
+                </a>
+            </div>
           </div>
         }
       />

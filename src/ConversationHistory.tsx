@@ -1,7 +1,4 @@
 import * as React from 'react';
-
-// import moment from 'moment';
-
 import { Divider, List, ListItem } from '@material-ui/core';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ConversationWrapper from './ConversationsWrapper'
@@ -20,28 +17,6 @@ export interface State {
 }
 
 export class ConversationHistory extends React.Component<HistoryProps, State> {
-
-  private conversations = [{
-      updated_at: '11,22,333',
-      message_count: 50,
-      lead_count: 10
-    },
-    {
-      updated_at: '11,22,333',
-      message_count: 50,
-      lead_count: 10
-    },
-    {
-      updated_at: '11,22,333',
-      message_count: 50,
-      lead_count: 10
-    },
-    {
-      updated_at: '11,22,333',
-      message_count: 50,
-      lead_count: 10
-    }
-  ];
 
   static initialState = {
     currentConversationID : ''
@@ -81,9 +56,7 @@ export class ConversationHistory extends React.Component<HistoryProps, State> {
       const formattedDate = this.convertDate(updated_at);
       const time = this.convertTime(updated_at);
       const conversationComplete = is_complete ? true : false;
-      // const conversationComplete = checkNeedBackButton(gid, directLine.secret, id, activity.text)
-      // const formattedDate = moment(updated_at).format('MM/DD/YYYY');
-      // const time = moment(updated_at).format('h:mm a');
+
       return (
         <div key={i}>
           <ListItem onClick={() => this.handleClickConvo(conversation)} className="conversationCard">
@@ -115,20 +88,9 @@ export class ConversationHistory extends React.Component<HistoryProps, State> {
     return (
       <ConversationWrapper
         body={
-            <List disablePadding className="conversationList" id="scrollableList">
-              <InfiniteScroll
-                dataLength={this.conversationListItems.length}
-                next={this.loadMore}
-                hasMore={false}
-                scrollableTarget="scrollableList"
-                loader={
-                  <h3 className="loader" key={0}>
-                    Loading ...
-                  </h3>
-                }
-              >
+            <List disablePadding style={{ overflowY: "scroll", height: "inherit" }}>
+              
                 {this.conversationListItems}
-              </InfiniteScroll>
             </List>
         }
         // onScroll={}

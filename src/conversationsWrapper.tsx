@@ -17,8 +17,8 @@ class ConversationsWrapper extends React.Component<WrapperProps, {}> {
 
     render() {
         return (
-            <div className="conversation__history">
-                <div className="conversation__history__body" onScroll={e => this.props.onScroll ? this.props.onScroll(e) : null}>
+            <div className="conversation__history" style={{ height: "100%" }}>
+                <div className="conversation__history__body" style={{ height: "inherit" }} onScroll={e => this.props.onScroll ? this.props.onScroll(e) : null}>
                     {this.props.body}
                 </div>
             </div>
