@@ -456,6 +456,7 @@ export const history: Reducer<HistoryState> = (
 ) => {
     switch (action.type) {
         case 'Set_Messages': {
+            console.log('set messages')
             return {
                 ...state,
                 activities: action.activities
@@ -463,6 +464,7 @@ export const history: Reducer<HistoryState> = (
         }
 
         case 'Receive_Sent_Message': {
+            console.log('receive sent messages')
             if (!action.activity.channelData || !action.activity.channelData.clientActivityId) {
                 // only postBack messages don't have clientActivityId, and these shouldn't be added to the history
                 return state;
@@ -483,6 +485,7 @@ export const history: Reducer<HistoryState> = (
         }
 
         case 'Receive_Message':
+            console.log('receive messages')
              // don't allow duplicate messages
              // if (state.activities.find(a => a.id === action.activity.id)) { 
             //     inputEnabled = true;
@@ -517,6 +520,7 @@ export const history: Reducer<HistoryState> = (
             };
 
         case 'Send_Message':
+            console.log('send messages')
             return {
                 ...state,
                 inputEnabled: false,
@@ -533,6 +537,7 @@ export const history: Reducer<HistoryState> = (
             };
 
         case 'Send_Message_Retry': {
+            console.log('send message retry')
             const activity = state.activities.find(activity =>
                 activity.channelData && activity.channelData.clientActivityId === action.clientActivityId
             );
@@ -549,6 +554,7 @@ export const history: Reducer<HistoryState> = (
         }
         case 'Send_Message_Succeed':
         case 'Send_Message_Fail': {
+            console.log('send message succeed/fail')
             const i = state.activities.findIndex(activity =>
                 activity.channelData && activity.channelData.clientActivityId === action.clientActivityId
             );
@@ -586,6 +592,7 @@ export const history: Reducer<HistoryState> = (
             };
 
         case 'Select_Activity':
+            console.log('select activity')
             if (action.selectedActivity === state.selectedActivity) { return state; }
             return {
                 ...state,
@@ -593,6 +600,7 @@ export const history: Reducer<HistoryState> = (
             };
 
         case 'Take_SuggestedAction':
+            console.log('take suggested action')
             const i = state.activities.findIndex(activity => activity === action.message);
             const activity = state.activities[i];
             const newActivity = {
