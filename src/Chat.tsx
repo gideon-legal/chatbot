@@ -166,10 +166,27 @@ export class Chat extends React.Component<ChatProps, State> {
 
     private async handleIncomingActivity(activity: Activity) {
         const state = this.store.getState();
+        console.log(state);
         const activityCopy: any = activity;
+        let reload = false;
+
+       /* if(performance.getEntriesByType('navigation')[0].type === 'reload' && 
+                Number.isInteger(Number(this.store.getState().history.activities[this.store.getState().history.activities.length - 2].id)) &&
+                this.initialActivitiesLength === this.store.getState().history.activities.length
+            ) {
+                //take step back
+                console.log("entered if statement")
+                // this.step();
+                // console.log("stepped back from if statement");
+                this.initialActivitiesLength = -1;
+                reload = true;
+                console.log(reload)
+            }*/
+            
         
         switch (activity.type) {
             case 'message':
+                console.log(activity)
                 if(activity.entities) {
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
@@ -699,6 +716,7 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private changeCurrentConversation = (convo: any) => {
+        console.log("changing conversation")
         // this.setState({
         //     currentConversation: convo
         // });
@@ -716,7 +734,12 @@ export class Chat extends React.Component<ChatProps, State> {
         // .catch((err: any) => {
         //     console.log(err);
         // })
+        console.log("state after switching convo id")
+        console.log(this.store.getState().history.activities)
         window.location.reload();
+        console.log("state after switching convo id")
+        console.log(this.store.getState().history.activities)
+
     }
 
     // At startup we do three render passes:
@@ -745,8 +768,21 @@ export class Chat extends React.Component<ChatProps, State> {
             ) {
                 //take step back
                 console.log("entered if statement")
-                // this.step();
-                // console.log("stepped back from if statement");
+                console.log(this.store.getState().history.activities) 
+                const reload_messages = this.store.getState().history.activities
+                const rewind_messages = reload_messages.slice(0,reload_messages.length-1)
+                console.log("rewind messages")
+                console.log(rewind_messages)
+                this.store.dispatch<ChatActions>({
+                    type: 'Set_Messages',
+                    activities: rewind_messages
+                })
+           //     this.store.dispatch<ChatActions>(
+            //        { type: 'Receive_Message',
+            //           activity: reload_messages[reload_messages.length-2]}
+            //    )
+               //  this.step();
+                console.log("stepped back from if statement");
                 this.initialActivitiesLength = -1;
             }
         }, 3000);
@@ -884,6 +920,7 @@ export class Chat extends React.Component<ChatProps, State> {
             </Provider >
         );
     }
+  
 }
 
 export type IDoCardAction = (type: CardActionTypes, value: string | object) => void;
