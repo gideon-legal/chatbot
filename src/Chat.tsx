@@ -814,7 +814,6 @@ export class Chat extends React.Component<ChatProps, State> {
                 //take step back
                 console.log("entered if statement")
                 console.log(this.store.getState().history.activities) 
-                const reload_messages = this.store.getState().history.activities
                 this.reload_messages()
                 //this.reload_messages(reload_messages)
                 //const rewind_messages = reload_messages.slice(0,reload_messages.length-1)
