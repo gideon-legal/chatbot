@@ -90,3 +90,16 @@ export const conversationList = (
     return axios.get(`${baseUrl}/api/v1/conversations/list?user_id=${user_id}`);
 }
 
+export const reloadMessages = (
+    baseUrl: string,
+    msftConversationId: string,
+    directLine: string,
+    messageId: string
+): any => {
+    return axios.post(`${baseUrl}/api/v1/bot/reload`, {
+        msft_conversation_id: msftConversationId,
+        directLine,
+        message_id: messageId
+    });
+};
+

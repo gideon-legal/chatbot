@@ -16,7 +16,7 @@ import { HistoryInline } from './assets/icons/HistoryInline'
 import { Activity, CardActionTypes, DirectLine, DirectLineOptions, IBotConnection, User, Conversation } from 'botframework-directlinejs';
 import { isMobile } from 'react-device-detect';
 import { connect, Provider } from 'react-redux';
-import { conversationHistory, mapMessagesToActivities, ping, step, verifyConversation, checkNeedBackButton, conversationList } from './api/bot';
+import { conversationHistory, mapMessagesToActivities, ping, step, verifyConversation, checkNeedBackButton, conversationList, reloadMessages } from './api/bot';
 import { getTabIndex } from './getTabIndex';
 import { guid } from './GUID';
 import * as konsole from './Konsole';
@@ -186,6 +186,10 @@ export class Chat extends React.Component<ChatProps, State> {
         
         switch (activity.type) {
             case 'message':
+                if(activity.text.includes("GIDEON MESSAGE START")){
+                    console.log("caught gideon message start")
+                   // this.reload_messages()
+                }
                 console.log(activity)
                 if(activity.entities) {
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
@@ -255,6 +259,46 @@ export class Chat extends React.Component<ChatProps, State> {
 
     private checkBackButton = () => {
         return this.state.back_visible;
+    }
+
+    private reload_messages = (messageId?: string|null) => {
+        console.log("reloading messages")
+        const botConnection: any = this.store.getState().connection.botConnection;
+        reloadMessages(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId).then((res: any) => {
+            conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, res.data.id)
+            .then((res: any) => {
+                const messages = res.data.messages.reverse();
+                console.log("messages from api reload")
+                const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
+                this.props.showConsole === false;
+                this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+                this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
+                console.log(message_activities)
+
+                this.store.dispatch<ChatActions>({
+                    type: 'Set_Messages',
+                    activities: message_activities
+                });
+
+                // reset shell input
+                this.store.dispatch<ChatActions>(
+                    { type: 'Submit_Date' } as ChatActions
+                );
+
+                // have to resend receive_message for input enabled nodes
+                if(messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
+                    this.toggleBackButton(true)
+                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
+                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
+                    
+                    this.store.dispatch<ChatActions>(
+                        { type: 'Receive_Message',
+                          activity: message_activities[message_activities.length-1]}
+                    )
+                }
+                
+            });
+        })
     }
 
     //step function perfoms going back to the previous message
@@ -739,6 +783,7 @@ export class Chat extends React.Component<ChatProps, State> {
         window.location.reload();
         console.log("state after switching convo id")
         console.log(this.store.getState().history.activities)
+       // this.reload_messages()
 
     }
 
@@ -770,18 +815,21 @@ export class Chat extends React.Component<ChatProps, State> {
                 console.log("entered if statement")
                 console.log(this.store.getState().history.activities) 
                 const reload_messages = this.store.getState().history.activities
-                const rewind_messages = reload_messages.slice(0,reload_messages.length-1)
-                console.log("rewind messages")
-                console.log(rewind_messages)
-                this.store.dispatch<ChatActions>({
+                this.reload_messages()
+                //this.reload_messages(reload_messages)
+                //const rewind_messages = reload_messages.slice(0,reload_messages.length-1)
+                //console.log("rewind messages")
+                //console.log(rewind_messages)
+                /*this.store.dispatch<ChatActions>({
                     type: 'Set_Messages',
                     activities: rewind_messages
-                })
+                })*/
            //     this.store.dispatch<ChatActions>(
             //        { type: 'Receive_Message',
             //           activity: reload_messages[reload_messages.length-2]}
             //    )
                //  this.step();
+               //this.reload_messages()
                 console.log("stepped back from if statement");
                 this.initialActivitiesLength = -1;
             }
