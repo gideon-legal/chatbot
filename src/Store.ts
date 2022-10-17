@@ -706,11 +706,6 @@ import 'rxjs/add/observable/of';
 const sendMessageEpic: Epic<ChatActions, ChatState> = (action$, store) =>
     action$.ofType('Send_Message')
     .map(action => {
-        console.log("inside sendMsgEpic ", action );
-        localStorage.setItem("lastResponse", JSON.stringify(action.activity.text));
-        if(action === null) localStorage.setItem("null?", "null caught");
-        if(action.activity === null) localStorage.setItem("null?", "null caught");
-        if(action.activity.text === null) localStorage.setItem("null?", "null caught");
         const state = store.getState();
         const clientActivityId = state.history.clientActivityBase + (state.history.clientActivityCounter - 1);
         return ({ type: 'Send_Message_Try', clientActivityId } as HistoryAction);
@@ -722,8 +717,6 @@ const trySendMessageEpic: Epic<ChatActions, ChatState> = (action$, store) =>
         const state = store.getState();
         const clientActivityId = action.clientActivityId;
         const activity = state.history.activities.find(activity => activity.channelData && activity.channelData.clientActivityId === clientActivityId);
-        console.log("activity from trysend ", activity);
-        if(activity === null) localStorage.setItem("null?", "null caught");
         if (!activity) {
             konsole.log('trySendMessage: activity not found');
             return Observable.empty<HistoryAction>();
