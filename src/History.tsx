@@ -202,7 +202,6 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                 //         //}
                 //     }                  
                 // }
-                console.log("pingMsg", this.props.format.strings.pingMessage)
                 content = activities
                 .map((activity, index) => {
                         // for cases where user refreshes before any messages appear
@@ -258,15 +257,14 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
 
                 //saves last message id into local storage
                 //makes sure id last values are numbers (excludes typing msgs)
-                // if(performance.getEntriesByType('navigation')[0].type !== 'reload' && activities && activities.length > 1) {
-                //     console.log(activities[activities.length-1].id)
-                //     let messageID;
-                //     if(activities[activities.length-1].id !== undefined && !Number.isInteger(Number(activities[activities.length-1].id))) {
-                //         let noLeadingZeros = this.getMessageIndex(activities[activities.length - 1].id);
-                //         console.log("noLeadingZeros ", noLeadingZeros);
-                //         if(Number.isInteger(Number(noLeadingZeros))) localStorage.setItem('lastUserMsgID', noLeadingZeros);                     
-                //     }
-                // }
+                if(performance.getEntriesByType('navigation')[0].type !== 'reload' && activities && activities.length > 1) {
+                    console.log(activities[activities.length-1].id)
+                    let messageID;
+                    if(activities[activities.length-1].id !== undefined && !Number.isInteger(Number(activities[activities.length-1].id))) {
+                        let noLeadingZeros = this.getMessageIndex(activities[activities.length - 1].id);
+                        if(Number.isInteger(Number(noLeadingZeros))) localStorage.setItem('lastUserMsgID', activities[activities.length - 1].id);                     
+                    }
+                }
             }
         }
 

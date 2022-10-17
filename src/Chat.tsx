@@ -381,11 +381,11 @@ export class Chat extends React.Component<ChatProps, State> {
         let botConnection: any = null;
 
         //if it's not new convo or it's not a empty chat
-        if((reloaded && !isNew ) || (reloaded && localStorage.getItem('emptyChat') === 'false') || localStorage.getItem('pastConvoID')) {
+        if((reloaded && !isNew ) || (reloaded && localStorage.getItem('emptyChat') === 'false') || sessionStorage.getItem('pastConvoID')) {
             botConnection = this.props.directLine ?
                 (this.botConnection = new DirectLine({
                     secret: this.props.directLine.secret,
-                    conversationId: localStorage.getItem('pastConvoID') ? localStorage.getItem('pastConvoID') : localStorage.getItem('msft_conversation_id')
+                    conversationId: sessionStorage.getItem('pastConvoID') ? sessionStorage.getItem('pastConvoID') : localStorage.getItem('msft_conversation_id')
                 })) :
                 this.props.botConnection;
         } else {
@@ -430,8 +430,8 @@ export class Chat extends React.Component<ChatProps, State> {
                 if(reloaded && !isNew && localStorage.getItem('newConvo') === 'false') {
                     conversationId = localStorage.getItem('msft_conversation_id');
                     console.log('convo id from local storage')
-                } else if(localStorage.getItem('pastConvoID')) {
-                    conversationId = localStorage.getItem('pastConvoID');
+                } else if(sessionStorage.getItem('pastConvoID')) {
+                    conversationId = sessionStorage.getItem('pastConvoID');
                 }
 
                 if (!state.connection.verification.attempted) {
@@ -456,7 +456,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     .then((res: any) => {
                         // Only save these when we successfully connect
                         // uncomment when re-enabling chat history
-                        if(isNew && conversationId !== localStorage.getItem("pastConvoID")) {
+                        if(isNew && conversationId !== sessionStorage.getItem("pastConvoID")) {
                             window.localStorage.setItem('msft_conversation_id', conversationId);
                             window.localStorage.setItem('gid', this.props.gid);
                             window.localStorage.setItem('msft_user_id', user.id);
@@ -603,6 +603,13 @@ export class Chat extends React.Component<ChatProps, State> {
             });
         }
 
+        this.initialOpen = this.state.open;
+
+        //open === true if new convo or past convo
+        if(Boolean(localStorage.getItem('newConvo')) || sessionStorage.getItem('pastConvoID') || (!sessionStorage.getItem('pastConvoID') && localStorage.getItem('emptyChat') && reloaded)) {
+            this.initialOpen = true;
+            console.log("intial open now")
+        }
     }
 
     componentWillUnmount() {
@@ -688,9 +695,9 @@ export class Chat extends React.Component<ChatProps, State> {
                 showConvoHistory: bool
             });
         } else {
-            if(localStorage.getItem('pastConvoID')) {
+            if(sessionStorage.getItem('pastConvoID')) {
                 window.location.reload();
-                localStorage.removeItem('pastConvoID');
+                sessionStorage.removeItem('pastConvoID');
             }
             this.setState({
                 showConvoHistory: bool
@@ -705,7 +712,7 @@ export class Chat extends React.Component<ChatProps, State> {
         // console.log('changed current convo to: ', convo)
 
         let currentConvoID = convo.msft_conversation_id;
-        localStorage.setItem("pastConvoID", currentConvoID);
+        sessionStorage.setItem("pastConvoID", currentConvoID);
         // conversationHistory(this.props.gid, this.props.directLine.secret, currentConvoID)
         // .then((res: any) => {
         //     console.log("convo history within change current convo ", res.data);
@@ -726,7 +733,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
     render() {
         const state = this.store.getState();
-        const { open, opened, display, fullscreen } = this.state;
+        let { open, opened, display, fullscreen } = this.state;
 
         const chatviewPanelStyle = this.calculateChatviewPanelStyle(state.format);
 
@@ -734,6 +741,11 @@ export class Chat extends React.Component<ChatProps, State> {
             'wc-back-button',
             this.checkBackButton() === false && 'wc-back-button__disabled'
         )
+
+        //stays open after reloading for a new convo or past convo
+        if(this.initialOpen) {
+            open = this.initialOpen;
+        }
 
         setTimeout(() => {
             console.log(this.initialActivitiesLength, this.store.getState().history.activities.length)
@@ -786,7 +798,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                         <HistoryInline />
                                     </IconButton>
                                     {/* Close X image on chat */}
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={() => {this.toggle(); }} >
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={() => {this.toggle(); this.initialOpen = false;}} >
                                         <title>wc-header--close</title>
                                         <path className="wc-header--close" d="M18 2L2 18" stroke="#FCFCFC" stroke-width="3" stroke-linecap="round" />
                                         <path className="wc-header--close" d="M2 2L18 18" stroke="#FCFCFC" stroke-width="3" stroke-linecap="round" />
