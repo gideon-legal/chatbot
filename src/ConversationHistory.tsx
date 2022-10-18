@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { Divider, List, ListItem } from '@material-ui/core';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import ConversationWrapper from './ConversationsWrapper'
-import ReactMarkdown from 'react-markdown';
 
 export interface HistoryProps {
   getConversations?: any;
@@ -23,16 +21,6 @@ export class ConversationHistory extends React.Component<HistoryProps, State> {
   }
 
   state = ConversationHistory.initialState;
-
-  // fetch conversations
-  // React.useEffect(() => {
-  //     getConversations(lead.id, 1);
-  // }, []);
-
-  private loadMore = () => {
-    // get more conversations
-    // getConversations(lead.id, page + 1, order);
-  };
 
   private handleClickConvo = (conversation: any) => {
     // set state of convo viewer to the key

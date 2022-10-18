@@ -6,10 +6,8 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { parseReferrer } from 'analytics-utils';
 
-import InfiniteScroll from 'react-infinite-scroll-component';
 import ConvoHistory from './ConversationHistory';
-import ConvoViewer from './ConversationViewer';
-import { IconButton } from '@material-ui/core';
+import { IconButton, ThemeProvider } from '@material-ui/core';
 import { ArrowBack } from '@material-ui/icons';
 import { HistoryInline } from './assets/icons/HistoryInline'
 
@@ -57,7 +55,6 @@ export interface State {
     fullscreen: boolean;
     full_height: boolean;
     showConvoHistory: boolean;
-    currentConversation: any;
     back_visible: boolean;
     pastConversations: any[];
     messages: any[];
@@ -80,7 +77,6 @@ export class Chat extends React.Component<ChatProps, State> {
         back_visible: true,
         orginalBodyClass: document.body.className,
         showConvoHistory: false,
-        currentConversation: {} as any,
         pastConversations: [] as any,
         messages: [] as any
     };
@@ -109,7 +105,6 @@ export class Chat extends React.Component<ChatProps, State> {
     // tslint:enable:variable-name
 
     private initialOpen = false;
-    private messages = [] as any;
     private initialActivitiesLength: number;
 
     constructor(props: ChatProps) {
@@ -284,7 +279,6 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private getConvoList = (userID: string) => {
-        let conversations = [] as any;
         conversationList(this.props.gid, userID)
         .then((res: any) => {
             this.setState({
@@ -372,16 +366,16 @@ export class Chat extends React.Component<ChatProps, State> {
         let isNew = true;
 
         //if newConvo exists in localstorage
-        if(localStorage.getItem('newConvo') === 'true') {
+        if(sessionStorage.getItem('newConvo') === 'true') {
             isNew = true;
-        } else if(localStorage.getItem('newConvo') === 'false') {
+        } else if(sessionStorage.getItem('newConvo') === 'false') {
             isNew = false;
         }
 
         let botConnection: any = null;
 
-        //if it's not new convo or it's not a empty chat
-        if((reloaded && !isNew ) || (reloaded && localStorage.getItem('emptyChat') === 'false') || sessionStorage.getItem('pastConvoID')) {
+        //if it's not new convo, it's not a empty chat, or past convo being viewed
+        if((reloaded && !isNew ) || (reloaded && sessionStorage.getItem('emptyChat') === 'false') || sessionStorage.getItem('pastConvoID')) {
             botConnection = this.props.directLine ?
                 (this.botConnection = new DirectLine({
                     secret: this.props.directLine.secret,
@@ -390,7 +384,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 this.props.botConnection;
         } else {
             botConnection = this.props.directLine ? (this.botConnection = new DirectLine(this.props.directLine)) : this.props.botConnection;
-            localStorage.setItem('emptyChat', 'true');
+            sessionStorage.setItem('emptyChat', 'true');
         }
 
         if (this.props.resize === 'window') {
@@ -427,7 +421,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 let conversationId = botCopy.conversationId;
 
                 // if not new convo and there's a convo id in local storage
-                if(reloaded && !isNew && localStorage.getItem('newConvo') === 'false') {
+                if(reloaded && !isNew && sessionStorage.getItem('newConvo') === 'false') {
                     conversationId = localStorage.getItem('msft_conversation_id');
                     console.log('convo id from local storage')
                 } else if(sessionStorage.getItem('pastConvoID')) {
@@ -606,7 +600,7 @@ export class Chat extends React.Component<ChatProps, State> {
         this.initialOpen = this.state.open;
 
         //open === true if new convo or past convo
-        if(Boolean(localStorage.getItem('newConvo')) || sessionStorage.getItem('pastConvoID') || (!sessionStorage.getItem('pastConvoID') && localStorage.getItem('emptyChat') && reloaded)) {
+        if(Boolean(sessionStorage.getItem('newConvo')) || sessionStorage.getItem('pastConvoID') || (!sessionStorage.getItem('pastConvoID') && sessionStorage.getItem('emptyChat') && reloaded)) {
             this.initialOpen = true;
             console.log("intial open now")
         }
@@ -689,40 +683,21 @@ export class Chat extends React.Component<ChatProps, State> {
 
     // change state of showConvoHistory to show list of convos
     private handleHistory = (bool: boolean) => {
-        if(bool) {
-            this.setState({
-                currentConversation: undefined,
-                showConvoHistory: bool
-            });
-        } else {
-            if(sessionStorage.getItem('pastConvoID')) {
-                window.location.reload();
-                sessionStorage.removeItem('pastConvoID');
-            }
-            this.setState({
-                showConvoHistory: bool
-            });
+        this.setState({
+            showConvoHistory: bool
+        });
+
+        if(!bool && sessionStorage.getItem('pastConvoID')) {
+            window.location.reload();
+            sessionStorage.removeItem('pastConvoID');
+            sessionStorage.removeItem("convoComplete");
         }
     }
 
     private changeCurrentConversation = (convo: any) => {
-        // this.setState({
-        //     currentConversation: convo
-        // });
-        // console.log('changed current convo to: ', convo)
-
         let currentConvoID = convo.msft_conversation_id;
         sessionStorage.setItem("pastConvoID", currentConvoID);
-        // conversationHistory(this.props.gid, this.props.directLine.secret, currentConvoID)
-        // .then((res: any) => {
-        //     console.log("convo history within change current convo ", res.data);
-        //     this.setState({
-        //         messages: res.data.messages
-        //     });
-        // })
-        // .catch((err: any) => {
-        //     console.log(err);
-        // })
+        sessionStorage.setItem("convoComplete", convo.is_complete);
         window.location.reload();
     }
 
@@ -782,7 +757,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         style={chatviewPanelStyle}
                     >
                         { // different header for current convo and history
-                            !!state.format.chatTitle && (!this.state.showConvoHistory || this.state.currentConversation) ?
+                            !!state.format.chatTitle && !this.state.showConvoHistory ?
                                 <div className={!fullscreen ? 'wc-header' : 'wc-header wc-header-fullscreen'} style={{backgroundColor: state.format.themeColor}}>
                                     <img
                                         className="wc-header--logo"
@@ -844,7 +819,11 @@ export class Chat extends React.Component<ChatProps, State> {
                                     { // if input is enabled show this && or if bot is talking
                                         <div className = {backButtonClassName}>
                                         { 
-                                            <label style={ { visibility:  this.state.back_visible ? 'visible' : 'hidden' } }
+                                            <label style={ { 
+                                                visibility: 
+                                                    this.state.back_visible && 
+                                                    (!sessionStorage.getItem("convoComplete") || sessionStorage.getItem("convoComplete") === 'null' || sessionStorage.getItem("convoComplete") === "false" )
+                                                ? 'visible' : 'hidden' } }
                                                 className="wcbackbutton" onClick={() => {
                                                     if (!this.state.clicked) {
                                                         this.step(); 
@@ -887,7 +866,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                 </div>
                                 :
                                 <div className="wc-chatbot-content-right" style={{paddingTop:'67px'}}>
-                                    {this.state.currentConversation ? <ConvoViewer messages={this.state.messages} updated_at={this.state.currentConversation.updated_at}/> : <ConvoHistory conversations={this.state.pastConversations} setCurrentConversation={this.changeCurrentConversation}/>}
+                                    <ConvoHistory conversations={this.state.pastConversations} setCurrentConversation={this.changeCurrentConversation}/>
                                 </div>
                             }
                         </div>

@@ -3,8 +3,6 @@
  * Exists to ensure uniformity in styling and structure
  */
 
-import { IconButton } from '@material-ui/core';
-import { ArrowBack } from '@material-ui/icons';
 import * as React from 'react';
 
 export interface WrapperProps {

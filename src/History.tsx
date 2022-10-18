@@ -153,22 +153,9 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
     }
 
     private startNewConvo() {
-        localStorage.setItem('newConvo', 'true');
-        localStorage.setItem('emptyChat', 'true');
+        sessionStorage.setItem('newConvo', 'true');
+        sessionStorage.setItem('emptyChat', 'true');
         window.location.reload();
-    }
-
-    //takes msg ID and takes number value at end of string
-    private getMessageIndex(msgID: string) {
-        console.log("msgID: ", msgID);
-        let cutID = msgID.slice(msgID.length - 7);
-        let noLeadingZeros = "";
-        for(let i = 0; i < cutID.length; i++) {
-            if(cutID[i] !== "0"){
-                noLeadingZeros +=  cutID[i];
-            }
-        }
-        return noLeadingZeros;
     }
 
     render() {
@@ -180,7 +167,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         // - page was refreshed
         // - chat wasn't empty before the page refresh
         // - not a new convo being started
-        if(performance.getEntriesByType('navigation')[0].type === 'reload' && localStorage.getItem('newConvo') !== 'true' && localStorage.getItem('emptyChat') !== 'true') this.newConvoPrompt = true;
+        if(performance.getEntriesByType('navigation')[0].type === 'reload' && sessionStorage.getItem('newConvo') !== 'true' && sessionStorage.getItem('emptyChat') !== 'true') this.newConvoPrompt = true;
 
         if (this.props.size.width !== undefined) {
             if (this.props.format.carouselMargin === undefined) {
@@ -191,23 +178,12 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                 const activities = filteredActivities(this.props.activities, this.props.format.strings.pingMessage);
                 activityDisclaimer = activities.length > 0 ? activities[activities.length - 1] : undefined;
                 lastActivityIsDisclaimer = activityDisclaimer && activityDisclaimer.entities && activityDisclaimer.entities.length > 0 && activityDisclaimer.entities[0].node_type === 'disclaimer';
-                console.log(activities);
-                // if(performance.getEntriesByType('navigation')[0].type === 'reload' && localStorage.getItem("lastUserMsgID")) {
-                //     let currentMsgIndex = -1;
-                //     let previousMsgIndex = Number(localStorage.getItem("lastUserMsgID"));
-                //     if(activities.length > previousMsgIndex) {
-                //         //currentMsgIndex = Number(this.getMessageIndex(activities[activities.length - 1].id));
-                //         //if(previousMsgIndex + 1 !== currentMsgIndex){
-                
-                //         //}
-                //     }                  
-                // }
                 content = activities
                 .map((activity, index) => {
                         // for cases where user refreshes before any messages appear
                         // saves message id of last message given
                         if(this.props.isFromMe(activity) && activities.length > 1) {
-                            localStorage.setItem('emptyChat', 'false');
+                            sessionStorage.setItem('emptyChat', 'false');
                         }
 
                         return (
@@ -294,16 +270,16 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                         <div className="wc-date-header-line"></div>
                     </div>
                     { content }
+                    {/* prompt to start new convo if page refreshed */}
+                    {/* this.props.activities.length > 1 && */}
+                    { this.newConvoPrompt && this.activitiesChanged && 
+                        <div className="new__convo" style={{ textAlign: 'center', paddingBottom: "100px" }}>Do you want to start a new session?
+                            <a onClick={this.startNewConvo} style={{ color:'blue', marginLeft: '5px', cursor: 'pointer'}}>
+                                Click here to start new
+                            </a>
+                        </div>
+                    }
                 </div>
-                {/* prompt to start new convo if page refreshed */}
-                {/* this.props.activities.length > 1 && */}
-                { this.newConvoPrompt && activitiesChanged && 
-                    <div className="new__convo" style={{ textAlign: 'center' }}>Do you want to start a new session?
-                        <a onClick={this.startNewConvo} style={{ color:'blue', marginLeft: '5px', cursor: 'pointer' }}>
-                            Click here to start new
-                        </a>
-                    </div>
-                }
             </div>
             {/* {lastActivityIsDisclaimer && <DisclaimerCard activity={activityDisclaimer} onImageLoad={ () => this.autoscroll() }/>} */}
             </div>
