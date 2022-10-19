@@ -167,6 +167,8 @@ export class Chat extends React.Component<ChatProps, State> {
             case 'message':
                 if(activity.text.includes("GIDEON_MESSAGE_START")){
                     console.log("reached gideon message")
+                    console.log("getting history")
+                    this.reload_messages()
                 }
                 if(activity.entities) {
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
@@ -772,8 +774,8 @@ export class Chat extends React.Component<ChatProps, State> {
                 console.log("entered if statement")
                 // this.step();
                 // console.log("stepped back from if statement");
-                console.log("getting history")
-                this.reload_messages()
+               // console.log("getting history")
+               // this.reload_messages()
                 this.initialActivitiesLength = -1;
             }
         }, 3000);
