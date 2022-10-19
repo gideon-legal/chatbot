@@ -165,6 +165,9 @@ export class Chat extends React.Component<ChatProps, State> {
         
         switch (activity.type) {
             case 'message':
+                if(activity.text.includes("GIDEON_MESSAGE_START")){
+                    console.log("reached gideon message")
+                }
                 if(activity.entities) {
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
@@ -233,6 +236,41 @@ export class Chat extends React.Component<ChatProps, State> {
 
     private checkBackButton = () => {
         return this.state.back_visible;
+    }
+
+    private reload_messages = (messageId?: string|null) => {
+        const botConnection: any = this.store.getState().connection.botConnection;
+        conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
+        .then((res: any) => {
+            const messages = res.data.messages.reverse();
+            const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
+            this.props.showConsole === false;
+            this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+            this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
+
+            this.store.dispatch<ChatActions>({
+                type: 'Set_Messages',
+                activities: message_activities
+            });
+
+            // reset shell input
+            this.store.dispatch<ChatActions>(
+                { type: 'Submit_Date' } as ChatActions
+            );
+
+            // have to resend receive_message for input enabled nodes
+            if(messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
+                this.toggleBackButton(true)
+                this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
+                this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
+                
+                this.store.dispatch<ChatActions>(
+                    { type: 'Receive_Message',
+                      activity: message_activities[message_activities.length-1]}
+                )
+            }
+            
+        });
     }
 
     //step function perfoms going back to the previous message
@@ -734,6 +772,8 @@ export class Chat extends React.Component<ChatProps, State> {
                 console.log("entered if statement")
                 // this.step();
                 // console.log("stepped back from if statement");
+                console.log("getting history")
+                this.reload_messages()
                 this.initialActivitiesLength = -1;
             }
         }, 3000);
