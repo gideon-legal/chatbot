@@ -55,6 +55,12 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
 
     componentDidMount(): void {
        setTimeout( () => this.initialActivitiesLength = this.props.activities.length, 2500);
+
+       // prompt to start new convo only shows up when:
+        // - page was refreshed
+        // - chat wasn't empty before the page refresh
+        // - not a new convo being started
+        if(performance.getEntriesByType('navigation')[0].type === 'reload' && sessionStorage.getItem('newConvo') !== 'true' && sessionStorage.getItem('emptyChat') !== 'true') this.newConvoPrompt = true;
     }
 
     componentWillUpdate(nextProps: HistoryProps) {
@@ -162,12 +168,6 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         let content;
         let lastActivityIsDisclaimer = false;
         let activityDisclaimer: any;
-        
-        // prompt to start new convo only shows up when:
-        // - page was refreshed
-        // - chat wasn't empty before the page refresh
-        // - not a new convo being started
-        if(performance.getEntriesByType('navigation')[0].type === 'reload' && sessionStorage.getItem('newConvo') !== 'true' && sessionStorage.getItem('emptyChat') !== 'true') this.newConvoPrompt = true;
 
         if (this.props.size.width !== undefined) {
             if (this.props.format.carouselMargin === undefined) {
@@ -185,7 +185,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                         if(this.props.isFromMe(activity) && activities.length > 1) {
                             sessionStorage.setItem('emptyChat', 'false');
                         }
-
+                        
                         return (
                             ((activity.type !== 'message' || activity.text || (activity.attachments && !!activity.attachments.length))) &&
                                 <WrappedActivity
@@ -231,6 +231,13 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                     }
                 );
 
+                if(activities[activities.length - 1]) {
+                    //if((performance.getEntriesByType('navigation')[0].type !== 'reload') && ((this.initialActivitiesLength - this.props.activities.length >= 1) || (activities[activities.length - 1].from.id === localStorage.getItem("msft_user_id")))) {
+                    if(performance.getEntriesByType('navigation')[0].type === 'reload' && activities[activities.length - 1].from.id === localStorage.getItem("msft_user_id")) {
+                        this.newConvoPrompt = false;
+                    }
+                }
+
                 //saves last message id into local storage
                 //makes sure id last values are numbers (excludes typing msgs)
                 // if(performance.getEntriesByType('navigation')[0].type !== 'reload' && activities && activities.length > 1) {
@@ -272,7 +279,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                     { content }
                     {/* prompt to start new convo if page refreshed */}
                     {/* this.props.activities.length > 1 && */}
-                    { this.newConvoPrompt && this.activitiesChanged && 
+                    { this.newConvoPrompt &&
                         <div className="new__convo" style={{ textAlign: 'center', paddingBottom: "100px" }}>Do you want to start a new session?
                             <a onClick={this.startNewConvo} style={{ color:'blue', marginLeft: '5px', cursor: 'pointer'}}>
                                 Click here to start new
