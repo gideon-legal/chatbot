@@ -46,6 +46,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
     private carouselActivity: WrappedActivity;
     private largeWidth: number;
     private initialActivitiesLength: number;
+    activitiesChanged: boolean;
 
     constructor(props: HistoryProps) {
         super(props);
@@ -60,7 +61,20 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         // - page was refreshed
         // - chat wasn't empty before the page refresh
         // - not a new convo being started
-        if(performance.getEntriesByType('navigation')[0].type === 'reload' && sessionStorage.getItem('newConvo') !== 'true' && sessionStorage.getItem('emptyChat') !== 'true') this.newConvoPrompt = true;
+        this.newConvoPrompt = false;
+        console.log("entered componentDidMount")
+        console.log(performance.getEntriesByType('navigation')[0])
+        console.log(sessionStorage.getItem('newConvo'))
+        console.log(sessionStorage.getItem('emptyChat'))
+        
+        if(performance.getEntriesByType('navigation')[0].type === 'reload' && sessionStorage.getItem('newConvo') !== 'true' && sessionStorage.getItem('emptyChat') !== 'true'){
+            console.log("set prompt to true")
+            this.newConvoPrompt = true;
+        } //else {
+         //   console.log("set prompt to false")
+         //   this.newConvoPrompt = false;
+
+       // }
     }
 
     componentWillUpdate(nextProps: HistoryProps) {
@@ -159,6 +173,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
     }
 
     private startNewConvo() {
+        console.log("started new convo")
         sessionStorage.setItem('newConvo', 'true');
         sessionStorage.setItem('emptyChat', 'true');
         window.location.reload();
@@ -168,6 +183,9 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         let content;
         let lastActivityIsDisclaimer = false;
         let activityDisclaimer: any;
+        console.log("in render, check convoPrompt")
+        console.log(sessionStorage.getItem('newConvoPrompt'))
+        //sessionStorage.setItem('newConvoPrompt', 'false')
 
         if (this.props.size.width !== undefined) {
             if (this.props.format.carouselMargin === undefined) {
