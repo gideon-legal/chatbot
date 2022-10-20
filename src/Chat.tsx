@@ -245,7 +245,11 @@ export class Chat extends React.Component<ChatProps, State> {
         conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
         .then((res: any) => {
             const messages = res.data.messages.reverse();
+            console.log("messages from reload")
+            console.log(messages)
             const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
+            console.log("message activites from reload")
+            console.log(message_activities)
             this.props.showConsole === false;
             this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
             this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
@@ -258,6 +262,11 @@ export class Chat extends React.Component<ChatProps, State> {
             // reset shell input
             this.store.dispatch<ChatActions>(
                 { type: 'Submit_Date' } as ChatActions
+            );
+
+            this.store.dispatch<ChatActions>(
+                { type: 'Show_Typing', 
+                  activity: message_activities[message_activities.length-1] }
             );
 
             // have to resend receive_message for input enabled nodes
