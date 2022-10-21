@@ -162,6 +162,8 @@ export class Chat extends React.Component<ChatProps, State> {
     private async handleIncomingActivity(activity: Activity) {
         const state = this.store.getState();
         const activityCopy: any = activity;
+        console.log("handling incoming activity")
+        console.log(activity)
         
         switch (activity.type) {
             case 'message':
@@ -241,8 +243,8 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private reload_messages = (messageId?: string|null) => {
-        sessionStorage.setItem('NewConvo','true')
-        sessionStorage.setItem('emptyChat','true')
+       // sessionStorage.setItem('newConvo','false')
+       // sessionStorage.setItem('emptyChat','false')
         const botConnection: any = this.store.getState().connection.botConnection;
         conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
         .then((res: any) => {
@@ -284,15 +286,15 @@ export class Chat extends React.Component<ChatProps, State> {
             }
             
         });
-        sessionStorage.setItem('NewConvo','true')
-        sessionStorage.setItem('emptyChat','true')
+        sessionStorage.setItem('newConvo','false')
+        sessionStorage.setItem('emptyChat','false')
     }
 
     //step function perfoms going back to the previous message
     private step = (messageId?: string|null) => {
        // this.historyRef.newConvoPrompt
-       sessionStorage.setItem('NewConvo','false')
-       sessionStorage.setItem('emptyChat','false')
+       //sessionStorage.setItem('newConvo','true')
+      // sessionStorage.setItem('emptyChat','true')
         console.log("inside step")
         const botConnection: any = this.store.getState().connection.botConnection;
         step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
@@ -328,8 +330,8 @@ export class Chat extends React.Component<ChatProps, State> {
                 }
                 
             });
-         //   sessionStorage.setItem('NewConvo','false')
-         //   sessionStorage.setItem('emptyChat','false')
+            sessionStorage.setItem('newConvo','true')
+            sessionStorage.setItem('emptyChat','true')
         })
         .catch((err: any) => {
             console.log(err);
