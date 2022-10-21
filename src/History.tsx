@@ -61,13 +61,13 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         // - page was refreshed
         // - chat wasn't empty before the page refresh
         // - not a new convo being started
-        this.newConvoPrompt = false;
+        //this.newConvoPrompt = false;
         console.log("entered componentDidMount")
         console.log(performance.getEntriesByType('navigation')[0])
-        console.log(sessionStorage.getItem('newConvo'))
-        console.log(sessionStorage.getItem('emptyChat'))
+        console.log(localStorage.getItem('is_refresh'))
+        console.log(localStorage.getItem('emptyChat'))
         
-        if(performance.getEntriesByType('navigation')[0].type === 'reload' && sessionStorage.getItem('newConvo') !== 'true' && sessionStorage.getItem('emptyChat') !== 'true'){
+        if(performance.getEntriesByType('navigation')[0].type === 'reload' && localStorage.getItem('is_refresh') == 'true' && localStorage.getItem('emptyChat') !== 'true'){
             console.log("set prompt to true")
             this.newConvoPrompt = true;
         } //else {
@@ -174,8 +174,8 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
 
     private startNewConvo() {
         console.log("started new convo")
-        sessionStorage.setItem('newConvo', 'true');
-        sessionStorage.setItem('emptyChat', 'true');
+        localStorage.setItem('newConvo', 'true');
+        localStorage.setItem('emptyChat', 'true');
         window.location.reload();
     }
 
@@ -183,8 +183,8 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         let content;
         let lastActivityIsDisclaimer = false;
         let activityDisclaimer: any;
-        console.log("in render, check convoPrompt")
-        console.log(sessionStorage.getItem('newConvoPrompt'))
+        console.log("in render, check convot")
+        console.log(localStorage.getItem('newConvo'))
         //sessionStorage.setItem('newConvoPrompt', 'false')
 
         if (this.props.size.width !== undefined) {
@@ -201,7 +201,8 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                         // for cases where user refreshes before any messages appear
                         // saves message id of last message given
                         if(this.props.isFromMe(activity) && activities.length > 1) {
-                            sessionStorage.setItem('emptyChat', 'false');
+                            console.log("message from user, setting emptyChat to false")
+                            localStorage.setItem('emptyChat', 'false');
                         }
                         
                         return (
@@ -252,7 +253,8 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                 if(activities[activities.length - 1]) {
                     //if((performance.getEntriesByType('navigation')[0].type !== 'reload') && ((this.initialActivitiesLength - this.props.activities.length >= 1) || (activities[activities.length - 1].from.id === localStorage.getItem("msft_user_id")))) {
                     if(performance.getEntriesByType('navigation')[0].type === 'reload' && activities[activities.length - 1].from.id === localStorage.getItem("msft_user_id")) {
-                        this.newConvoPrompt = false;
+                        console.log("compated user ids of refresh")
+                        this.newConvoPrompt = true;
                     }
                 }
 

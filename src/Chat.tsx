@@ -106,6 +106,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
     private initialOpen = false;
     private initialActivitiesLength: number;
+    private is_refresh = false;
 
     constructor(props: ChatProps) {
         super(props);
@@ -164,15 +165,22 @@ export class Chat extends React.Component<ChatProps, State> {
         const activityCopy: any = activity;
         console.log("handling incoming activity")
         console.log(activity)
+        console.log("is refresh variable")
+        console.log(this.is_refresh)
         
         switch (activity.type) {
             case 'message':
                 if(activity.text.includes("GIDEON_MESSAGE_START")){
                     console.log("reached gideon message")
                     console.log("getting history")
+                    localStorage.setItem('is_refresh', 'true')
                     this.reload_messages()
+                    //this.reload_messages()
+                    this.is_refresh = true;
+                    localStorage.setItem('is_refresh', 'true')
                 }
                 if(activity.entities) {
+                    console.log("reaching toggle for input 1")
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                     if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
@@ -186,11 +194,13 @@ export class Chat extends React.Component<ChatProps, State> {
                 // checkNeedBackButton returns if the current activity corresponds to a completion node or not
                 const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)   
                 if(notNode !== "open" && !activity.text.includes("Sorry, but that's not a valid")){
+                    console.log("reaching toggle for input 2")
                     this.toggleBackButton(false);
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                 } else {
                     // open response only
+                    console.log("reaching toggle for input 3")
                     this.toggleBackButton(true)
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
@@ -202,12 +212,25 @@ export class Chat extends React.Component<ChatProps, State> {
             case 'typing':
                 this.toggleBackButton(false)
                 if (activity.from.id !== state.connection.user.id) {
+                    console.log("reaching toggle for input 4")
                     this.store.dispatch<ChatActions>({ type: 'Show_Typing', activity });
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                 }
                 break;
         }
+        console.log("check refresh at botton of incomingactivity")
+        console.log(this.is_refresh)
+        if(this.is_refresh == true){
+             localStorage.setItem('newConvo','false')
+             localStorage.setItem('emptyChat','false')
+             localStorage.setItem('is_refresh', 'true')
+             this.is_refresh = false
+         } else {
+            localStorage.setItem('newConvo','true')
+            localStorage.setItem('emptyChat','false')
+            localStorage.setItem('is_refresh', 'false')
+         }
     }
 
 
@@ -243,6 +266,7 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private reload_messages = (messageId?: string|null) => {
+        this.is_refresh = true;
        // sessionStorage.setItem('newConvo','false')
        // sessionStorage.setItem('emptyChat','false')
         const botConnection: any = this.store.getState().connection.botConnection;
@@ -286,8 +310,9 @@ export class Chat extends React.Component<ChatProps, State> {
             }
             
         });
-        sessionStorage.setItem('newConvo','false')
-        sessionStorage.setItem('emptyChat','false')
+       // sessionStorage.setItem('newConvo','false')
+      //  sessionStorage.setItem('emptyChat','false')
+      localStorage.setItem('is_refresh', 'true')
     }
 
     //step function perfoms going back to the previous message
@@ -330,8 +355,9 @@ export class Chat extends React.Component<ChatProps, State> {
                 }
                 
             });
-            sessionStorage.setItem('newConvo','true')
-            sessionStorage.setItem('emptyChat','true')
+         //   sessionStorage.setItem('newConvo','true')
+          //  sessionStorage.setItem('emptyChat','false')
+          localStorage.setItem('is_refresh', 'false')
         })
         .catch((err: any) => {
             console.log(err);
@@ -436,15 +462,18 @@ export class Chat extends React.Component<ChatProps, State> {
 
         //if it's not new convo, it's not a empty chat, or past convo being viewed
         if((reloaded && !isNew ) || (reloaded && sessionStorage.getItem('emptyChat') === 'false') || sessionStorage.getItem('pastConvoID')) {
+            console.log("reloading convo")
             botConnection = this.props.directLine ?
                 (this.botConnection = new DirectLine({
                     secret: this.props.directLine.secret,
                     conversationId: sessionStorage.getItem('pastConvoID') ? sessionStorage.getItem('pastConvoID') : localStorage.getItem('msft_conversation_id')
                 })) :
                 this.props.botConnection;
+                console.log(this.botConnection)
+
         } else {
             botConnection = this.props.directLine ? (this.botConnection = new DirectLine(this.props.directLine)) : this.props.botConnection;
-            sessionStorage.setItem('emptyChat', 'true');
+            localStorage.setItem('emptyChat', 'true');
         }
 
         if (this.props.resize === 'window') {
@@ -790,6 +819,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 Number.isInteger(Number(this.store.getState().history.activities[this.store.getState().history.activities.length - 2].id)) &&
                 this.initialActivitiesLength === this.store.getState().history.activities.length
             ) {
+                this.is_refresh = true;
                 //take step back
                 console.log("entered if statement")
                 // this.step();
