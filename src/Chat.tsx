@@ -8,7 +8,7 @@ import { parseReferrer } from 'analytics-utils';
 
 import ConvoHistory from './ConversationHistory';
 import { IconButton, ThemeProvider } from '@material-ui/core';
-import { ArrowBack } from '@material-ui/icons';
+import { ArrowBack, ThumbUpSharp } from '@material-ui/icons';
 import { HistoryInline } from './assets/icons/HistoryInline'
 
 import { Activity, CardActionTypes, DirectLine, DirectLineOptions, IBotConnection, User, Conversation } from 'botframework-directlinejs';
@@ -170,7 +170,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 if(activity.text.includes("GIDEON_MESSAGE_START")){
                     console.log("reached gideon message")
                     console.log("getting history")
-                    this.reload_messages()
+                    //this.reload_messages()
                 }
                 if(activity.entities) {
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
@@ -268,11 +268,6 @@ export class Chat extends React.Component<ChatProps, State> {
                 { type: 'Submit_Date' } as ChatActions
             );
 
-       //     this.store.dispatch<ChatActions>(
-       //         { type: 'Show_Typing', 
-        //        activity: message_activities[message_activities.length-1] }
-        //    );
-
             // have to resend receive_message for input enabled nodes
             if(messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
                 this.toggleBackButton(true)
@@ -283,18 +278,14 @@ export class Chat extends React.Component<ChatProps, State> {
                     { type: 'Receive_Message',
                       activity: message_activities[message_activities.length-1]}
                 )
-            }
-            
+            };
+            sessionStorage.setItem('newConvo','false')
+            sessionStorage.setItem('emptyChat','false')
         });
-        sessionStorage.setItem('newConvo','false')
-        sessionStorage.setItem('emptyChat','false')
     }
 
     //step function perfoms going back to the previous message
     private step = (messageId?: string|null) => {
-       // this.historyRef.newConvoPrompt
-       //sessionStorage.setItem('newConvo','true')
-      // sessionStorage.setItem('emptyChat','true')
         console.log("inside step")
         const botConnection: any = this.store.getState().connection.botConnection;
         step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
@@ -328,10 +319,8 @@ export class Chat extends React.Component<ChatProps, State> {
                           activity: message_activities[message_activities.length-1]}
                     )
                 }
-                
+            
             });
-            sessionStorage.setItem('newConvo','true')
-            sessionStorage.setItem('emptyChat','true')
         })
         .catch((err: any) => {
             console.log(err);
@@ -783,7 +772,7 @@ export class Chat extends React.Component<ChatProps, State> {
         }
 
         setTimeout(() => {
-            console.log(this.initialActivitiesLength, this.store.getState().history.activities.length)
+            console.log("initialActivitieslength " +  this.initialActivitiesLength, " getState.history.activies.length " + this.store.getState().history.activities.length)
 
             //if page reloaded, 2nd msg id in activities array is a number, and initial activities length = the current activities length (makes sure step only happens one time at inital reload)
             if(performance.getEntriesByType('navigation')[0].type === 'reload' && 
@@ -795,7 +784,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 // this.step();
                 // console.log("stepped back from if statement");
                // console.log("getting history")
-               // this.reload_messages()
+                this.reload_messages()
                 this.initialActivitiesLength = -1;
             }
         }, 3000);
