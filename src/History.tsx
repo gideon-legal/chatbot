@@ -67,7 +67,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         console.log(sessionStorage.getItem('newConvo'))
         console.log(sessionStorage.getItem('emptyChat'))
         
-        if(performance.getEntriesByType('navigation')[0].type === 'reload' && sessionStorage.getItem('newConvo') !== 'true' && sessionStorage.getItem('emptyChat') !== 'true'){
+        if(performance.getEntriesByType('navigation')[0].type === 'reload' && !Boolean(sessionStorage.getItem('newConvo')) && !Boolean(sessionStorage.getItem('emptyChat'))){
             console.log("set prompt to true")
             this.newConvoPrompt = true;
         } //else {
@@ -249,6 +249,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                     }
                 );
 
+                //prompt disappears once user interacts with it
                 if(activities[activities.length - 1]) {
                     //if((performance.getEntriesByType('navigation')[0].type !== 'reload') && ((this.initialActivitiesLength - this.props.activities.length >= 1) || (activities[activities.length - 1].from.id === localStorage.getItem("msft_user_id")))) {
                     if(performance.getEntriesByType('navigation')[0].type === 'reload' && activities[activities.length - 1].from.id === localStorage.getItem("msft_user_id")) {
