@@ -45,8 +45,6 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
 
     private carouselActivity: WrappedActivity;
     private largeWidth: number;
-    private initialActivitiesLength: number;
-    activitiesChanged: boolean;
 
     constructor(props: HistoryProps) {
         super(props);
@@ -55,8 +53,6 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
     }
 
     componentDidMount(): void {
-       setTimeout( () => this.initialActivitiesLength = this.props.activities.length, 2500);
-
        // prompt to start new convo only shows up when:
         // - page was refreshed
         // - chat wasn't empty before the page refresh
@@ -183,8 +179,8 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         let content;
         let lastActivityIsDisclaimer = false;
         let activityDisclaimer: any;
-        console.log("in render, check convoPrompt")
-        console.log(sessionStorage.getItem('newConvoPrompt'))
+        //console.log("in render, check convoPrompt")
+        //console.log(sessionStorage.getItem('newConvoPrompt'))
         //sessionStorage.setItem('newConvoPrompt', 'false')
 
         if (this.props.size.width !== undefined) {
@@ -196,12 +192,15 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                 const activities = filteredActivities(this.props.activities, this.props.format.strings.pingMessage);
                 activityDisclaimer = activities.length > 0 ? activities[activities.length - 1] : undefined;
                 lastActivityIsDisclaimer = activityDisclaimer && activityDisclaimer.entities && activityDisclaimer.entities.length > 0 && activityDisclaimer.entities[0].node_type === 'disclaimer';
+                console.log(activities);
                 content = activities
                 .map((activity, index) => {
                         // for cases where user refreshes before any messages appear
                         // saves message id of last message given
                         if(this.props.isFromMe(activity) && activities.length > 1) {
                             sessionStorage.setItem('emptyChat', 'false');
+
+                            if(sessionStorage.getItem("newConvo")) sessionStorage.removeItem("newConvo")
                         }
                         
                         return (
@@ -249,36 +248,29 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                     }
                 );
 
-                //prompt disappears once user interacts with it
+                let reloaded = performance.getEntriesByType('navigation')[0].type === 'reload';
+
+                //saves the length of activities for prompt timing
+                if(!this.newConvoPrompt) {
+                //if(!reloaded && !Boolean(sessionStorage.getItem("newConvo")) && !Boolean(sessionStorage.getItem("pastConvoID"))) {
+                    sessionStorage.setItem("original_length", activities.length.toString());
+                }
+
+                //instances where prompt disappears
                 if(activities[activities.length - 1]) {
-                    //if((performance.getEntriesByType('navigation')[0].type !== 'reload') && ((this.initialActivitiesLength - this.props.activities.length >= 1) || (activities[activities.length - 1].from.id === localStorage.getItem("msft_user_id")))) {
-                    if(performance.getEntriesByType('navigation')[0].type === 'reload' && activities[activities.length - 1].from.id === localStorage.getItem("msft_user_id")) {
+                    //prompt disappears once user interacts with it
+                    if(reloaded && activities[activities.length - 1].from.id === localStorage.getItem("msft_user_id") && !Number.isInteger(Number(activities[activities.length - 1].id))){    
+                        this.newConvoPrompt = false;
+                    //prompt disappears after back button pressed
+                    } else if(Number(sessionStorage.getItem("original_length")) - 1 > activities.length && this.newConvoPrompt){
+                        this.newConvoPrompt = false;
+                    //prompt disappears if uncompleted past convo is being viewed
+                    } else if(sessionStorage.getItem("pastConvoID") && !sessionStorage.getItem("convoComplete") || sessionStorage.getItem("convoComplete") === "null") {
                         this.newConvoPrompt = false;
                     }
                 }
-
-                //saves last message id into local storage
-                //makes sure id last values are numbers (excludes typing msgs)
-                // if(performance.getEntriesByType('navigation')[0].type !== 'reload' && activities && activities.length > 1) {
-                //     console.log(activities[activities.length-1].id)
-                //     let messageID;
-                //     if(activities[activities.length-1].id !== undefined && !Number.isInteger(Number(activities[activities.length-1].id))) {
-                //         let noLeadingZeros = this.getMessageIndex(activities[activities.length - 1].id);
-                //         console.log("noLeadingZeros ", noLeadingZeros);
-                //         if(Number.isInteger(Number(noLeadingZeros))) localStorage.setItem('lastUserMsgID', noLeadingZeros);                     
-                //     }
-                // }
             }
         }
-
-        //checks if user interacted with bot to hide new convo prompt
-        let activitiesChanged;
-        if(this.initialActivitiesLength === this.props.activities.length) {
-            activitiesChanged = true;
-        } else if(this.initialActivitiesLength - this.props.activities.length >= 1 || this.props.activities.length - this.initialActivitiesLength <= -1) {
-            this.initialActivitiesLength = -1;
-            activitiesChanged = false;
-        } 
 
         const groupsClassName = classList('wc-message-groups', !this.props.format.chatTitle && 'no-header',  this.props.format.fullscreen && 'wc-message-groups-fullscreen', !this.props.inputEnabled && 'no-console');
         return (

@@ -106,6 +106,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
     private initialOpen = false;
     private initialActivitiesLength: number;
+    private reloadMsgsCalled = false;
 
     constructor(props: ChatProps) {
         super(props);
@@ -245,15 +246,16 @@ export class Chat extends React.Component<ChatProps, State> {
     private reload_messages = (messageId?: string|null) => {
        // sessionStorage.setItem('newConvo','false')
        // sessionStorage.setItem('emptyChat','false')
+        console.log("reload_msg")
         const botConnection: any = this.store.getState().connection.botConnection;
         conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
         .then((res: any) => {
             const messages = res.data.messages.reverse();
-            console.log("messages from reload")
-            console.log(messages)
+            //console.log("messages from reload")
+            //console.log(messages)
             const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
-            console.log("message activites from reload")
-            console.log(message_activities)
+            //console.log("message activites from reload")
+            //console.log(message_activities)
             this.props.showConsole === false;
             this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
             this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
@@ -279,8 +281,8 @@ export class Chat extends React.Component<ChatProps, State> {
                       activity: message_activities[message_activities.length-1]}
                 )
             };
-            sessionStorage.setItem('newConvo','false')
-            sessionStorage.setItem('emptyChat','false')
+            //sessionStorage.setItem('newConvo','false')
+            //sessionStorage.setItem('emptyChat','false')
         });
     }
 
@@ -319,7 +321,7 @@ export class Chat extends React.Component<ChatProps, State> {
                           activity: message_activities[message_activities.length-1]}
                     )
                 }
-            
+
             });
         })
         .catch((err: any) => {
@@ -732,6 +734,8 @@ export class Chat extends React.Component<ChatProps, State> {
 
     // change state of showConvoHistory to show list of convos
     private handleHistory = (bool: boolean) => {
+        this.getConvoList(localStorage.getItem('msft_user_id'));
+
         this.setState({
             showConvoHistory: bool
         });
@@ -770,24 +774,32 @@ export class Chat extends React.Component<ChatProps, State> {
         if(this.initialOpen) {
             open = this.initialOpen;
         }
+        
+        // setTimeout(() => {
+        //     console.log("initialActivitieslength " +  this.initialActivitiesLength, " getState.history.activies.length " + this.store.getState().history.activities.length)
 
-        setTimeout(() => {
-            console.log("initialActivitieslength " +  this.initialActivitiesLength, " getState.history.activies.length " + this.store.getState().history.activities.length)
+        //     //if page reloaded, 2nd msg id in activities array is a number, and initial activities length = the current activities length (makes sure step only happens one time at inital reload)
+        //     if(performance.getEntriesByType('navigation')[0].type === 'reload' && 
+        //         Number.isInteger(Number(this.store.getState().history.activities[this.store.getState().history.activities.length - 2].id)) &&
+        //         this.initialActivitiesLength === this.store.getState().history.activities.length
+        //     ) {
+        //         //take step back
+        //         console.log("entered if statement")
+        //         // this.step();
+        //         // console.log("stepped back from if statement");
+        //        // console.log("getting history")
+        //         this.reload_messages()
+        //         this.initialActivitiesLength = -1;
+        //     }
+        // }, 3000);
 
-            //if page reloaded, 2nd msg id in activities array is a number, and initial activities length = the current activities length (makes sure step only happens one time at inital reload)
-            if(performance.getEntriesByType('navigation')[0].type === 'reload' && 
-                Number.isInteger(Number(this.store.getState().history.activities[this.store.getState().history.activities.length - 2].id)) &&
-                this.initialActivitiesLength === this.store.getState().history.activities.length
-            ) {
-                //take step back
-                console.log("entered if statement")
-                // this.step();
-                // console.log("stepped back from if statement");
-               // console.log("getting history")
-                this.reload_messages()
-                this.initialActivitiesLength = -1;
-            }
-        }, 3000);
+        //reload msg when reloaded and waits until all previous msg appear before reload_messages is called
+        if(performance.getEntriesByType('navigation')[0].type === 'reload' 
+           && Number(sessionStorage.getItem("original_length")) === this.store.getState().history.activities.length
+           && !this.reloadMsgsCalled) {
+            this.reload_messages();
+            this.reloadMsgsCalled = true;
+        }
 
         // only render real stuff after we know our dimensions
         return (
