@@ -53,24 +53,24 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
     }
 
     componentDidMount(): void {
-       // prompt to start new convo only shows up when:
+        // prompt to start new convo only shows up when:
         // - page was refreshed
         // - chat wasn't empty before the page refresh
         // - not a new convo being started
         this.newConvoPrompt = false;
-        console.log("entered componentDidMount")
-        console.log(performance.getEntriesByType('navigation')[0])
-        console.log(sessionStorage.getItem('newConvo'))
-        console.log(sessionStorage.getItem('emptyChat'))
         
-        if(performance.getEntriesByType('navigation')[0].type === 'reload' &&  sessionStorage.getItem('newConvo') !== 'true' && sessionStorage.getItem('emptyChat') !== 'true'){
+        if(performance.getEntriesByType('navigation')[0].type === 'reload' 
+          && sessionStorage.getItem('newConvo') !== 'true' 
+          && sessionStorage.getItem('emptyChat') !== 'true'
+        ){
             console.log("set prompt to true")
             this.newConvoPrompt = true;
-        } //else {
-         //   console.log("set prompt to false")
-         //   this.newConvoPrompt = false;
+        } 
 
-       // }
+        //prompt disappears if uncompleted past convo is being viewed
+        if(sessionStorage.getItem("pastConvoID") && !sessionStorage.getItem("convoComplete") || sessionStorage.getItem("convoComplete") === "null") {
+            this.newConvoPrompt = false;
+        }
     }
 
     componentWillUpdate(nextProps: HistoryProps) {
@@ -179,9 +179,6 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         let content;
         let lastActivityIsDisclaimer = false;
         let activityDisclaimer: any;
-        //console.log("in render, check convoPrompt")
-        //console.log(sessionStorage.getItem('newConvoPrompt'))
-        //sessionStorage.setItem('newConvoPrompt', 'false')
 
         if (this.props.size.width !== undefined) {
             if (this.props.format.carouselMargin === undefined) {
@@ -200,6 +197,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                         if(this.props.isFromMe(activity) && activities.length > 1) {
                             sessionStorage.setItem('emptyChat', 'false');
 
+                            //removes newconvo from storage once user responds
                             if(sessionStorage.getItem("newConvo")) sessionStorage.removeItem("newConvo")
                         }
                         
@@ -264,12 +262,17 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                     //prompt disappears after back button pressed
                     } else if(Number(sessionStorage.getItem("original_length")) - 1 > activities.length && this.newConvoPrompt){
                         this.newConvoPrompt = false;
-                    //prompt disappears if uncompleted past convo is being viewed
-                    } else if(sessionStorage.getItem("pastConvoID") && !sessionStorage.getItem("convoComplete") || sessionStorage.getItem("convoComplete") === "null") {
-                        this.newConvoPrompt = false;
                     }
                 }
             }
+        }
+
+        let date: any;
+
+        //changing time at top of chat for past ones
+        if(sessionStorage.getItem("pastConvoDate")) {
+            date = new Date(sessionStorage.getItem("pastConvoDate"));
+            date = date.toLocaleDateString();
         }
 
         const groupsClassName = classList('wc-message-groups', !this.props.format.chatTitle && 'no-header',  this.props.format.fullscreen && 'wc-message-groups-fullscreen', !this.props.inputEnabled && 'no-console');
@@ -284,12 +287,11 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                 <div className="wc-message-group-content" ref={ div => { if (div) { this.scrollContent = div; } }}>
                     <div className="wc-date-header">
                         <div className="wc-date-header-line"></div>
-                        <div className="wc-date-header-text">{ moment().format('MM/DD/YYYY') }</div>
+                        <div className="wc-date-header-text">{ date ? date : moment().format('MM/DD/YYYY') }</div>
                         <div className="wc-date-header-line"></div>
                     </div>
                     { content }
                     {/* prompt to start new convo if page refreshed */}
-                    {/* this.props.activities.length > 1 && */}
                     { this.newConvoPrompt &&
                         <div className="new__convo" style={{ textAlign: 'center', paddingBottom: "100px" }}>Do you want to start a new session?
                             <a onClick={this.startNewConvo} style={{ color:'blue', marginLeft: '5px', cursor: 'pointer'}}>

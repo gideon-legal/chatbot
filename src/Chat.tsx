@@ -105,7 +105,6 @@ export class Chat extends React.Component<ChatProps, State> {
     // tslint:enable:variable-name
 
     private initialOpen = false;
-    private initialActivitiesLength: number;
     private reloadMsgsCalled = false;
 
     constructor(props: ChatProps) {
@@ -244,18 +243,13 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private reload_messages = (messageId?: string|null) => {
-       // sessionStorage.setItem('newConvo','false')
-       // sessionStorage.setItem('emptyChat','false')
         console.log("reload_msg")
         const botConnection: any = this.store.getState().connection.botConnection;
         conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
         .then((res: any) => {
             const messages = res.data.messages.reverse();
-            //console.log("messages from reload")
-            //console.log(messages)
             const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
-            //console.log("message activites from reload")
-            //console.log(message_activities)
+
             this.props.showConsole === false;
             this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
             this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
@@ -472,7 +466,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 let conversationId = botCopy.conversationId;
 
                 // if not new convo and there's a convo id in local storage
-                if(reloaded && !isNew && sessionStorage.getItem('newConvo') === 'false') {
+                if(reloaded && !isNew) {
                     conversationId = localStorage.getItem('msft_conversation_id');
                     console.log('convo id from local storage')
                 } else if(sessionStorage.getItem('pastConvoID')) {
@@ -608,10 +602,6 @@ export class Chat extends React.Component<ChatProps, State> {
                             this.store.dispatch(sendMessage(state.format.strings.pingMessage, state.connection.user, state.format.locale));
                         }
 
-                        //takes initial length of activities after component is mounted
-                        setTimeout( () => this.initialActivitiesLength = this.store.getState().history.activities.length, 2500);
-
-                        this.getConvoList(user.id);
                     })
                     .catch((err: any) => {
                         this.store.dispatch<ChatActions>({
@@ -655,6 +645,8 @@ export class Chat extends React.Component<ChatProps, State> {
             this.initialOpen = true;
             console.log("intial open now")
         }
+
+        this.getConvoList(localStorage.getItem('msft_user_id'));
     }
 
     componentWillUnmount() {
@@ -744,12 +736,14 @@ export class Chat extends React.Component<ChatProps, State> {
             window.location.reload();
             sessionStorage.removeItem('pastConvoID');
             sessionStorage.removeItem("convoComplete");
+            sessionStorage.removeItem("pastConvoDate");
         }
     }
 
     private changeCurrentConversation = (convo: any) => {
         let currentConvoID = convo.msft_conversation_id;
         sessionStorage.setItem("pastConvoID", currentConvoID);
+        sessionStorage.setItem("pastConvoDate", convo.created_at);
         sessionStorage.setItem("convoComplete", convo.is_complete);
         window.location.reload();
     }
@@ -774,29 +768,13 @@ export class Chat extends React.Component<ChatProps, State> {
         if(this.initialOpen) {
             open = this.initialOpen;
         }
-        
-        // setTimeout(() => {
-        //     console.log("initialActivitieslength " +  this.initialActivitiesLength, " getState.history.activies.length " + this.store.getState().history.activities.length)
-
-        //     //if page reloaded, 2nd msg id in activities array is a number, and initial activities length = the current activities length (makes sure step only happens one time at inital reload)
-        //     if(performance.getEntriesByType('navigation')[0].type === 'reload' && 
-        //         Number.isInteger(Number(this.store.getState().history.activities[this.store.getState().history.activities.length - 2].id)) &&
-        //         this.initialActivitiesLength === this.store.getState().history.activities.length
-        //     ) {
-        //         //take step back
-        //         console.log("entered if statement")
-        //         // this.step();
-        //         // console.log("stepped back from if statement");
-        //        // console.log("getting history")
-        //         this.reload_messages()
-        //         this.initialActivitiesLength = -1;
-        //     }
-        // }, 3000);
 
         //reload msg when reloaded and waits until all previous msg appear before reload_messages is called
+        //only happens once every reload
         if(performance.getEntriesByType('navigation')[0].type === 'reload' 
            && Number(sessionStorage.getItem("original_length")) === this.store.getState().history.activities.length
-           && !this.reloadMsgsCalled) {
+           && !this.reloadMsgsCalled
+        ) {
             this.reload_messages();
             this.reloadMsgsCalled = true;
         }
