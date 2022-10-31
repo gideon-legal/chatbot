@@ -457,7 +457,7 @@ export class Chat extends React.Component<ChatProps, State> {
         this.setSize();
         const msftUserId = window.localStorage.getItem('msft_user_id');
 
-        if(!sessionStorage.getItem("node_count") || sessionStorage.getItem("node_count") === "null") {
+        if(sessionStorage.getItem("node_count")) {
             this.setState({
                 node_count: Number(sessionStorage.getItem("node_count"))
             });
