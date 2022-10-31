@@ -172,6 +172,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         console.log("started new convo")
         sessionStorage.setItem('newConvo', 'true');
         sessionStorage.setItem('emptyChat', 'true');
+        sessionStorage.removeItem("node_count");
         window.location.reload();
     }
 
