@@ -78,7 +78,6 @@ export class Chat extends React.Component<ChatProps, State> {
         back_visible: false,
         orginalBodyClass: document.body.className,
         node_count: -1,
-        orginalBodyClass: document.body.className,
         showConvoHistory: false,
         pastConversations: [] as any,
         messages: [] as any
@@ -259,24 +258,27 @@ export class Chat extends React.Component<ChatProps, State> {
         const new_count = this.state.node_count+1
         this.setState({
             node_count: new_count
-        })
+        });
+        sessionStorage.setItem("node_count", new_count.toString());
     }
 
     private deleteNodeCount = () => {
         const curr_node = this.checkNodeCount();
         if (curr_node > 0){
-            const updated_count = curr_node - 2
+            const updated_count = curr_node - 2;
             this.setState({
                 node_count: updated_count
-            })
-            this.state.node_count = updated_count
+            });
+            this.state.node_count = updated_count;
+            sessionStorage.setItem("node_count", updated_count.toString());
         } 
         const updated_count = this.checkNodeCount()
         if (updated_count <= 0) {
             this.setState({
                 node_count: 0
-            })
-            this.state.node_count = 0
+            });
+            this.state.node_count = 0;
+            sessionStorage.setItem("node_count", "0");
             this.toggleBackButton(false)
         }
     }
@@ -361,6 +363,8 @@ export class Chat extends React.Component<ChatProps, State> {
                           activity: message_activities[message_activities.length-1]}
                     )
                 }
+
+                sessionStorage.removeItem("node_count");
 
             });
         })
@@ -452,6 +456,12 @@ export class Chat extends React.Component<ChatProps, State> {
         // Now that we're mounted, we know our dimensions. Put them in the store (this will force a re-render)
         this.setSize();
         const msftUserId = window.localStorage.getItem('msft_user_id');
+
+        if(!sessionStorage.getItem("node_count") || sessionStorage.getItem("node_count") === "null") {
+            this.setState({
+                node_count: Number(sessionStorage.getItem("node_count"))
+            });
+        }
 
         // initially always set to true
         let reloaded = performance.getEntriesByType('navigation')[0].type === 'reload' ? true : false;
