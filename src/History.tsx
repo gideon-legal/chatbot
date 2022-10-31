@@ -190,7 +190,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                 const activities = filteredActivities(this.props.activities, this.props.format.strings.pingMessage);
                 activityDisclaimer = activities.length > 0 ? activities[activities.length - 1] : undefined;
                 lastActivityIsDisclaimer = activityDisclaimer && activityDisclaimer.entities && activityDisclaimer.entities.length > 0 && activityDisclaimer.entities[0].node_type === 'disclaimer';
-                console.log(activities);
+                //console.log(activities);
                 content = activities
                 .map((activity, index) => {
                         // for cases where user refreshes before any messages appear
