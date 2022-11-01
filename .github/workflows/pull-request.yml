@@ -18,4 +18,5 @@ jobs:
         npm install
     - name: Build application
       run: |
+        export NODE_OPTIONS="--max_old_space_size=4096"
         npm run prepublish
