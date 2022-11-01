@@ -23,7 +23,6 @@ jobs:
         npm run prepublish
       env:
         NODE_PATH: src
-        NODE_OPTIONS: "--max_old_space_size=4096"
     - name: Upload application to S3
       uses: jakejarvis/s3-sync-action@v0.5.1
       with:
