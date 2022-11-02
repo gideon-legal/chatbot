@@ -376,8 +376,11 @@ export class Chat extends React.Component<ChatProps, State> {
          
     }
 
-    private getConvoList = (userID: string) => {
-        conversationList(this.props.gid, userID)
+    private getConvoList = (userID: string, convoId: string) => {
+        console.log("sending to convo list call")
+        console.log(userID)
+        console.log(convoId)
+        conversationList(this.props.gid, userID, convoId)
         .then((res: any) => {
             this.setState({
                 pastConversations: res.data.conversations.reverse()
@@ -705,7 +708,7 @@ export class Chat extends React.Component<ChatProps, State> {
             console.log("intial open now")
         }
 
-        this.getConvoList(localStorage.getItem('msft_user_id'));
+        this.getConvoList(localStorage.getItem('msft_user_id'),sessionStorage.getItem('msft_conversation_id'));
     }
 
     componentWillUnmount() {
@@ -785,7 +788,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
     // change state of showConvoHistory to show list of convos
     private handleHistory = (bool: boolean) => {
-        this.getConvoList(localStorage.getItem('msft_user_id'));
+        this.getConvoList(localStorage.getItem('msft_user_id'),sessionStorage.getItem('msft_conversation_id'));
 
         this.setState({
             showConvoHistory: bool
