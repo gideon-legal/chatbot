@@ -291,41 +291,39 @@ export class Chat extends React.Component<ChatProps, State> {
     private reload_messages = (messageId?: string|null) => {
         console.log("reload_msg")
         const botConnection: any = this.store.getState().connection.botConnection;
-        if(botConnection && botConnection.conversationId){
-            conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
-                .then((res: any) => {
-                    const messages = res.data.messages.reverse();
-                    const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
+        conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
+        .then((res: any) => {
+            const messages = res.data.messages.reverse();
+            const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
 
-                    this.props.showConsole === false;
-                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
-                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
+            this.props.showConsole === false;
+            this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+            this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
 
-                    this.store.dispatch<ChatActions>({
-                        type: 'Set_Messages',
-                        activities: message_activities
-                    });
-
-                    // reset shell input
-                    this.store.dispatch<ChatActions>(
-                        { type: 'Submit_Date' } as ChatActions
-                    );
-
-                    // have to resend receive_message for input enabled nodes
-                    if(messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
-                        this.toggleBackButton(true)
-                        this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
-                        this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
-                        
-                        this.store.dispatch<ChatActions>(
-                            { type: 'Receive_Message',
-                            activity: message_activities[message_activities.length-1]}
-                        )
-                    };
-                    //sessionStorage.setItem('newConvo','false')
-                    //sessionStorage.setItem('emptyChat','false')
+            this.store.dispatch<ChatActions>({
+                type: 'Set_Messages',
+                activities: message_activities
             });
-        }
+
+            // reset shell input
+            this.store.dispatch<ChatActions>(
+                { type: 'Submit_Date' } as ChatActions
+            );
+
+            // have to resend receive_message for input enabled nodes
+            if(messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
+                this.toggleBackButton(true)
+                this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
+                this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
+                
+                this.store.dispatch<ChatActions>(
+                    { type: 'Receive_Message',
+                      activity: message_activities[message_activities.length-1]}
+                )
+            };
+            //sessionStorage.setItem('newConvo','false')
+            //sessionStorage.setItem('emptyChat','false')
+        });
     }
 
     //step function perfoms going back to the previous message
@@ -483,7 +481,7 @@ export class Chat extends React.Component<ChatProps, State> {
             botConnection = this.props.directLine ?
                 (this.botConnection = new DirectLine({
                     secret: this.props.directLine.secret,
-                    conversationId: sessionStorage.getItem('pastConvoID') ? sessionStorage.getItem('pastConvoID') : sessionStorage.getItem('msft_conversation_id')
+                    conversationId: sessionStorage.getItem('pastConvoID') ? sessionStorage.getItem('pastConvoID') : localStorage.getItem('msft_conversation_id')
                 })) :
                 this.props.botConnection;
         } else {
@@ -526,7 +524,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
                 // if not new convo and there's a convo id in local storage
                 if(reloaded && !isNew) {
-                    conversationId = sessionStorage.getItem('msft_conversation_id');
+                    conversationId = localStorage.getItem('msft_conversation_id');
                     console.log('convo id from local storage')
                 } else if(sessionStorage.getItem('pastConvoID')) {
                     conversationId = sessionStorage.getItem('pastConvoID');
@@ -555,7 +553,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         // Only save these when we successfully connect
                         // uncomment when re-enabling chat history
                         if(isNew && conversationId !== sessionStorage.getItem("pastConvoID")) {
-                            window.sessionStorage.setItem('msft_conversation_id', conversationId);
+                            window.localStorage.setItem('msft_conversation_id', conversationId);
                             window.localStorage.setItem('gid', this.props.gid);
                             window.localStorage.setItem('msft_user_id', user.id);
                         }
