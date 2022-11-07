@@ -60,8 +60,8 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         this.newConvoPrompt = false;
         
         if(performance.getEntriesByType('navigation')[0].type === 'reload' 
-          && sessionStorage.getItem('newConvo') !== 'true' 
-          && sessionStorage.getItem('emptyChat') !== 'true'
+            && (!sessionStorage.getItem('newConvo') || sessionStorage.getItem('newConvo') !== 'true')
+            && (!sessionStorage.getItem('emptyChat') || sessionStorage.getItem('emptyChat') !== 'true')
         ){
             console.log("set prompt to true")
             this.newConvoPrompt = true;
