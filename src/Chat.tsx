@@ -309,6 +309,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 }
                 
             });
+            //this.state.clicked = true
         })
         .catch((err: any) => {
             console.log(err);
@@ -756,14 +757,19 @@ export class Chat extends React.Component<ChatProps, State> {
 
                                 { // if input is enabled show this && or if bot is talking
                                     <div className = {backButtonClassName}>
-                                    { <label style={ { visibility:  this.state.back_visible ? 'visible' : 'hidden' } }
+                                    { <label style={ { visibility:  this.state.back_visible ? 'visible' : 'hidden', color: (this.state.clicked ? '#979797' : '#3F6DE1' ) } }
+
+                                
+                        
                                         className="wcbackbutton" onClick={() => {
                                             if (!this.state.clicked) {
+                                            this.state.clicked = false
                                             this.step();
                                              
                                             this.deleteNodeCount();
+                                            this.state.clicked = true
                                             // var button = this.state; // temp variable in order to change state of clicked
-                                            // button.clicked = true; // changes state within variable to true
+                                            //button.clicked = true; // changes state within variable to true
                                             // this.setState(button); // passes updated boolean back to state
                                         } 
                                         }}>
