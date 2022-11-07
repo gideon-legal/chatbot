@@ -6,10 +6,15 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { parseReferrer } from 'analytics-utils';
 
-import { Activity, CardActionTypes, DirectLine, DirectLineOptions, IBotConnection, User } from 'botframework-directlinejs';
+import ConvoHistory from './ConversationHistory';
+import { IconButton, ThemeProvider } from '@material-ui/core';
+import { ArrowBack, ThumbUpSharp } from '@material-ui/icons';
+import { HistoryInline } from './assets/icons/HistoryInline'
+
+import { Activity, CardActionTypes, DirectLine, DirectLineOptions, IBotConnection, User, Conversation } from 'botframework-directlinejs';
 import { isMobile } from 'react-device-detect';
 import { connect, Provider } from 'react-redux';
-import { conversationHistory, mapMessagesToActivities, ping, step, verifyConversation, checkNeedBackButton } from './api/bot';
+import { conversationHistory, mapMessagesToActivities, ping, step, verifyConversation, checkNeedBackButton, conversationList } from './api/bot';
 import { getTabIndex } from './getTabIndex';
 import { guid } from './GUID';
 import * as konsole from './Konsole';
@@ -49,8 +54,11 @@ export interface State {
     orginalBodyClass: string;
     fullscreen: boolean;
     full_height: boolean;
+    showConvoHistory: boolean;
     back_visible: boolean;
     node_count: number;
+    pastConversations: any[];
+    messages: any[];
 }
 
 import { FloatingIcon } from './FloatingIcon';
@@ -70,6 +78,9 @@ export class Chat extends React.Component<ChatProps, State> {
         back_visible: false,
         orginalBodyClass: document.body.className,
         node_count: -1,
+        showConvoHistory: false,
+        pastConversations: [] as any,
+        messages: [] as any
     };
 
     private clicked: any; // status of if the back button has been clicked already
@@ -94,6 +105,9 @@ export class Chat extends React.Component<ChatProps, State> {
     private _saveHistoryRef = this.saveHistoryRef.bind(this);
     private _saveShellRef = this.saveShellRef.bind(this);
     // tslint:enable:variable-name
+
+    private initialOpen = false;
+    private reloadMsgsCalled = false;
 
     constructor(props: ChatProps) {
         super(props);
@@ -244,24 +258,27 @@ export class Chat extends React.Component<ChatProps, State> {
         const new_count = this.state.node_count+1
         this.setState({
             node_count: new_count
-        })
+        });
+        sessionStorage.setItem("node_count", new_count.toString());
     }
 
     private deleteNodeCount = () => {
         const curr_node = this.checkNodeCount();
         if (curr_node > 0){
-            const updated_count = curr_node - 2
+            const updated_count = curr_node - 2;
             this.setState({
                 node_count: updated_count
-            })
-            this.state.node_count = updated_count
+            });
+            this.state.node_count = updated_count;
+            sessionStorage.setItem("node_count", updated_count.toString());
         } 
         const updated_count = this.checkNodeCount()
         if (updated_count <= 0) {
             this.setState({
                 node_count: 0
-            })
-            this.state.node_count = 0
+            });
+            this.state.node_count = 0;
+            sessionStorage.setItem("node_count", "0");
             this.toggleBackButton(false)
         }
     }
@@ -271,8 +288,49 @@ export class Chat extends React.Component<ChatProps, State> {
         return this.state.node_count;
     }
 
+    private reload_messages = (messageId?: string|null) => {
+        console.log("reload_msg")
+        const botConnection: any = this.store.getState().connection.botConnection;
+        if(botConnection && botConnection.conversationId){
+            conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
+                .then((res: any) => {
+                    const messages = res.data.messages.reverse();
+                    const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
+
+                    this.props.showConsole === false;
+                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
+
+                    this.store.dispatch<ChatActions>({
+                        type: 'Set_Messages',
+                        activities: message_activities
+                    });
+
+                    // reset shell input
+                    this.store.dispatch<ChatActions>(
+                        { type: 'Submit_Date' } as ChatActions
+                    );
+
+                    // have to resend receive_message for input enabled nodes
+                    if(messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
+                        this.toggleBackButton(true)
+                        this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
+                        this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
+                        
+                        this.store.dispatch<ChatActions>(
+                            { type: 'Receive_Message',
+                            activity: message_activities[message_activities.length-1]}
+                        )
+                    };
+                    //sessionStorage.setItem('newConvo','false')
+                    //sessionStorage.setItem('emptyChat','false')
+            });
+        }
+    }
+
     //step function perfoms going back to the previous message
     private step = (messageId?: string|null) => {
+        console.log("inside step")
         const botConnection: any = this.store.getState().connection.botConnection;
 
         step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
@@ -307,13 +365,30 @@ export class Chat extends React.Component<ChatProps, State> {
                           activity: message_activities[message_activities.length-1]}
                     )
                 }
-                
+
+                sessionStorage.removeItem("node_count");
+
             });
         })
         .catch((err: any) => {
             console.log(err);
         });
          
+    }
+
+    private getConvoList = (userID: string, convoId: string) => {
+        console.log("sending to convo list call")
+        console.log(userID)
+        console.log(convoId)
+        conversationList(this.props.gid, userID, convoId)
+        .then((res: any) => {
+            this.setState({
+                pastConversations: res.data.conversations.reverse()
+            });  
+        })
+        .catch((err: any) => {
+            console.log(err);
+        });
     }
 
     private setSize() {
@@ -387,12 +462,37 @@ export class Chat extends React.Component<ChatProps, State> {
         this.setSize();
         const msftUserId = window.localStorage.getItem('msft_user_id');
 
-        const isNew = true;
+        if(sessionStorage.getItem("node_count")) {
+            this.setState({
+                node_count: Number(sessionStorage.getItem("node_count"))
+            });
+        }
+
+        // initially always set to true
+        let reloaded = performance.getEntriesByType('navigation')[0].type === 'reload' ? true : false;
+        let isNew = true;
+
+        //if newConvo exists in localstorage
+        if(sessionStorage.getItem('newConvo') === 'true') {
+            isNew = true;
+        } else if(sessionStorage.getItem('newConvo') === 'false') {
+            isNew = false;
+        }
+
         let botConnection: any = null;
 
-        botConnection = this.props.directLine ?
-            (this.botConnection = new DirectLine(this.props.directLine)) :
-            this.props.botConnection;
+        //if it's not new convo, it's not a empty chat, or past convo being viewed
+        if((reloaded && !isNew ) || (reloaded && sessionStorage.getItem('emptyChat') === 'false') || sessionStorage.getItem('pastConvoID')) {
+            botConnection = this.props.directLine ?
+                (this.botConnection = new DirectLine({
+                    secret: this.props.directLine.secret,
+                    conversationId: sessionStorage.getItem('pastConvoID') ? sessionStorage.getItem('pastConvoID') : sessionStorage.getItem('msft_conversation_id')
+                })) :
+                this.props.botConnection;
+        } else {
+            botConnection = this.props.directLine ? (this.botConnection = new DirectLine(this.props.directLine)) : this.props.botConnection;
+            sessionStorage.setItem('emptyChat', 'true');
+        }
 
         if (this.props.resize === 'window') {
             window.addEventListener('resize', this.resizeListener);
@@ -425,7 +525,15 @@ export class Chat extends React.Component<ChatProps, State> {
             if (connectionStatus === 2) {  // wait for connection is 'OnLine' to send data to bot
 
                 const botCopy: any = botConnection;
-                const conversationId = botCopy.conversationId;
+                let conversationId = botCopy.conversationId;
+
+                // if not new convo and there's a convo id in local storage
+                if(reloaded && !isNew) {
+                    conversationId = sessionStorage.getItem('msft_conversation_id');
+                    console.log('convo id from local storage')
+                } else if(sessionStorage.getItem('pastConvoID')) {
+                    conversationId = sessionStorage.getItem('pastConvoID');
+                }
 
                 if (!state.connection.verification.attempted) {
                     this.store.dispatch<ChatActions>({
@@ -436,9 +544,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     });
 
                     const campaign = parseReferrer(document.referrer, window.location.href.toLowerCase());
-
-                    console.log('campaign logging:', campaign, document.referrer, window.location.href.toLowerCase());
-
+                    console.log('campaign:', campaign, document.referrer, window.location.href.toLowerCase());
 
                     verifyConversation(
                         this.props.gid,
@@ -451,9 +557,11 @@ export class Chat extends React.Component<ChatProps, State> {
                     .then((res: any) => {
                         // Only save these when we successfully connect
                         // uncomment when re-enabling chat history
-                        window.localStorage.setItem('msft_conversation_id', conversationId);
-                        window.localStorage.setItem('gid', this.props.gid);
-                        window.localStorage.setItem('msft_user_id', user.id);
+                        if(isNew && conversationId !== sessionStorage.getItem("pastConvoID")) {
+                            window.sessionStorage.setItem('msft_conversation_id', conversationId);
+                            window.localStorage.setItem('gid', this.props.gid);
+                            window.localStorage.setItem('msft_user_id', user.id);
+                        }
 
                         this.setState({
                             display: true
@@ -532,6 +640,8 @@ export class Chat extends React.Component<ChatProps, State> {
                             const state = this.store.getState();
                             const messages = res.data.messages.reverse();
 
+                            if(isNew && messages.length === 0) isNew = true;
+
                             this.store.dispatch<ChatActions>({
                                 type: 'Set_Messages',
                                 activities: mapMessagesToActivities(messages, state.connection.user.id)
@@ -553,6 +663,7 @@ export class Chat extends React.Component<ChatProps, State> {
                             // Send initial message to start conversation
                             this.store.dispatch(sendMessage(state.format.strings.pingMessage, state.connection.user, state.format.locale));
                         }
+
                     })
                     .catch((err: any) => {
                         this.store.dispatch<ChatActions>({
@@ -589,6 +700,15 @@ export class Chat extends React.Component<ChatProps, State> {
             });
         }
 
+        this.initialOpen = this.state.open;
+
+        //open === true if new convo or past convo
+        if(Boolean(sessionStorage.getItem('newConvo')) || sessionStorage.getItem('pastConvoID') || (!sessionStorage.getItem('pastConvoID') && sessionStorage.getItem('emptyChat') && reloaded)) {
+            this.initialOpen = true;
+            console.log("intial open now")
+        }
+
+        this.getConvoList(localStorage.getItem('msft_user_id'),sessionStorage.getItem('msft_conversation_id'));
     }
 
     componentWillUnmount() {
@@ -666,6 +786,30 @@ export class Chat extends React.Component<ChatProps, State> {
         return styles;
     }
 
+    // change state of showConvoHistory to show list of convos
+    private handleHistory = (bool: boolean) => {
+        this.getConvoList(localStorage.getItem('msft_user_id'),sessionStorage.getItem('msft_conversation_id'));
+
+        this.setState({
+            showConvoHistory: bool
+        });
+
+        if(!bool && sessionStorage.getItem('pastConvoID')) {
+            window.location.reload();
+            sessionStorage.removeItem('pastConvoID');
+            sessionStorage.removeItem("convoComplete");
+            sessionStorage.removeItem("pastConvoDate");
+        }
+    }
+
+    private changeCurrentConversation = (convo: any) => {
+        let currentConvoID = convo.msft_conversation_id;
+        sessionStorage.setItem("pastConvoID", currentConvoID);
+        sessionStorage.setItem("pastConvoDate", convo.created_at);
+        sessionStorage.setItem("convoComplete", convo.is_complete);
+        window.location.reload();
+    }
+
     // At startup we do three render passes:
     // 1. To determine the dimensions of the chat panel (nothing needs to actually render here, so we don't)
     // 2. To determine the margins of any given carousel (we just render one mock activity so that we can measure it)
@@ -673,7 +817,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
     render() {
         const state = this.store.getState();
-        const { open, opened, display, fullscreen } = this.state;
+        let { open, opened, display, fullscreen } = this.state;
 
         const chatviewPanelStyle = this.calculateChatviewPanelStyle(state.format);
 
@@ -682,10 +826,24 @@ export class Chat extends React.Component<ChatProps, State> {
             this.checkBackButton() === false && 'wc-back-button__disabled'
         )
 
+        //stays open after reloading for a new convo or past convo
+        if(this.initialOpen) {
+            open = this.initialOpen;
+        }
+
+        //reload msg when reloaded and waits until all previous msg appear before reload_messages is called
+        //only happens once every reload
+        if(performance.getEntriesByType('navigation')[0].type === 'reload' 
+           && Number(sessionStorage.getItem("original_length")) === this.store.getState().history.activities.length
+           && !this.reloadMsgsCalled
+        ) {
+            this.reload_messages();
+            this.reloadMsgsCalled = true;
+        }
+
         // only render real stuff after we know our dimensions
         return (
             <Provider store={ this.store }>
-                <div>
                 <div
                     className={`wc-wrap ${display ? '' : 'hide'}`}
                     style={{ display: 'none'}}
@@ -701,8 +859,8 @@ export class Chat extends React.Component<ChatProps, State> {
                         ref={ this._saveChatviewPanelRef }
                         style={chatviewPanelStyle}
                     >
-                        {
-                            !!state.format.chatTitle &&
+                        { // different header for current convo and history
+                            !!state.format.chatTitle && !this.state.showConvoHistory ?
                                 <div className={!fullscreen ? 'wc-header' : 'wc-header wc-header-fullscreen'} style={{backgroundColor: state.format.themeColor}}>
                                     <img
                                         className="wc-header--logo"
@@ -710,11 +868,15 @@ export class Chat extends React.Component<ChatProps, State> {
                                             state.format.logoUrl :
                                             'https://s3.amazonaws.com/com.gideon.static.dev/chatbot-header-default-v1.1.2.png'
                                         }
-                                      />
+                                        style={{ marginRight: '45px' }}
+                                    />
 
-                                  <span>{typeof state.format.chatTitle === 'string' ? state.format.chatTitle : 'Gideon' }</span>
+                                    <span>{typeof state.format.chatTitle === 'string' ? state.format.chatTitle : 'Gideon' }</span>
+                                    <IconButton onClick={() => this.handleHistory(true)} className="icon__button history__button">
+                                        <HistoryInline />
+                                    </IconButton>
                                     {/* Close X image on chat */}
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={() => {this.toggle(); }} >
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={() => {this.toggle(); this.initialOpen = false;}} >
                                         <title>wc-header--close</title>
                                         <path className="wc-header--close" d="M18 2L2 18" stroke="#FCFCFC" stroke-width="3" stroke-linecap="round" />
                                         <path className="wc-header--close" d="M2 2L18 18" stroke="#FCFCFC" stroke-width="3" stroke-linecap="round" />
@@ -724,15 +886,19 @@ export class Chat extends React.Component<ChatProps, State> {
                                         onClick={() => {this.toggle(); }}
                                         src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/close.svg" /> */}
 
-                                    {/* {{ <img
-                                        className="wc-header--back" onClick={() => {
-                                            if (!this.clicked.disabled) {
-                                            this.step(); this.clicked.disabled = true; }// disable click action after first click
-                                    }}
-                                    src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/back.svg" />  } */} 
+                                    {/* <img
+                                        className="wc-header--back"
+                                        onClick={() => {this.step(); }}
+                                        src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/back.svg" /> */}
+                                </div>
+                                :
+                                <div className={!fullscreen ? 'history-header wc-header' : 'wc-header wc-header-fullscreen'}>
+                                    <IconButton onClick={() => this.handleHistory(false)}  className="icon__button" style={{ padding: 0, color: 'white' }}>
+                                        <ArrowBack className="back__button" />
+                                    </IconButton>
+                                    <span>Current Conversation</span>
                                 </div>
                         }
-
                         <div className="wc-chatbot-content">
                             {fullscreen && <div className="wc-chatbot-content-left">
                                 {/* TODO - Put content to display on left side of fullscreen */}
@@ -742,66 +908,75 @@ export class Chat extends React.Component<ChatProps, State> {
                                                 null}
                                 />
                             </div>}
+                            {/* current convo or history? */}
+                            {!this.state.showConvoHistory ?
+                                <div className="wc-chatbot-content-right">
+                                    <History
+                                        onCardAction={ this._handleCardAction }
+                                        ref={ this._saveHistoryRef }
+                                        gid={ this.props.gid }
+                                        directLine={ this.props.directLine }
+                                    />
+                                    <Shell ref={ this._saveShellRef } />
 
-                            <div className="wc-chatbot-content-right">
-                                <History
-                                    onCardAction={ this._handleCardAction }
-                                    ref={ this._saveHistoryRef }
-                                    gid={ this.props.gid }
-                                    directLine={ this.props.directLine }
-                                />
+                                    { // if input is enabled show this && or if bot is talking
+                                        <div className = {backButtonClassName}>
+                                        { 
+                                            <label style={ { 
+                                                visibility: 
+                                                    this.state.back_visible && 
+                                                    (!sessionStorage.getItem("convoComplete") || sessionStorage.getItem("convoComplete") === 'null' || sessionStorage.getItem("convoComplete") === "false" )
+                                                ? 'visible' : 'hidden' } }
+                                                className="wcbackbutton" onClick={() => {
+                                                    if (!this.state.clicked) {
+                                                        this.step(); 
 
-                                <Shell ref={ this._saveShellRef } />
-                                
+                                                        this.deleteNodeCount();
+                                                        // var button = this.state; // temp variable in order to change state of clicked
+                                                        // button.clicked = true; // changes state within variable to true
+                                                        // this.setState(button); // passes updated boolean back to state
+                                                    } 
+                                                }}>
 
-                                { // if input is enabled show this && or if bot is talking
-                                    <div className = {backButtonClassName}>
-                                    { <label style={ { visibility:  this.state.back_visible ? 'visible' : 'hidden' } }
-                                        className="wcbackbutton" onClick={() => {
-                                            if (!this.state.clicked) {
-                                            this.step();
-                                             
-                                            this.deleteNodeCount();
-                                            // var button = this.state; // temp variable in order to change state of clicked
-                                            // button.clicked = true; // changes state within variable to true
-                                            // this.setState(button); // passes updated boolean back to state
-                                        } 
-                                        }}>
-
-                                        <label style={{cursor: 'pointer'}}>
-                                            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                                                <div style={{position: 'relative', top: '19px', left: '20px', color: (this.state.clicked ? '#979797' : '#3F6DE1' ) }}>
-                                                    Back
-                                                    <div style = {{position: 'absolute', left: '-30px', top:'0'}}>
-                                                        <svg width="20" height="16" viewBox="0 0 20 16"  fill={(this.state.clicked ? '#979797' : '#3F6DE1' )} xmlns="http://www.w3.org/2000/svg">
-                                                            <path fill={(this.state.clicked ? '#979797' : '#3F6DE1' )} d="M18.75 6.85796H3.925L8.4625 1.87555C8.67467 1.64218 8.77675 1.34131 8.74628 1.03914C8.7158 0.736965 8.55527 0.458234 8.3 0.264265C8.04473 0.070295 7.71563 -0.0230245 7.3851 0.00483557C7.05456 0.0326956 6.74967 0.179453 6.5375 0.412823L0.2875 7.26935C0.245451 7.32389 0.207849 7.38118 0.175 7.44076C0.175 7.4979 0.175 7.53218 0.0875002 7.58932C0.0308421 7.72035 0.0011764 7.85982 0 8.00071C0.0011764 8.1416 0.0308421 8.28108 0.0875002 8.4121C0.0875002 8.46924 0.0874998 8.50353 0.175 8.56066C0.207849 8.62025 0.245451 8.67754 0.2875 8.73208L6.5375 15.5886C6.65503 15.7176 6.8022 15.8213 6.96856 15.8924C7.13491 15.9635 7.31636 16.0003 7.5 16C7.79207 16.0005 8.07511 15.9075 8.3 15.7372C8.42657 15.6412 8.5312 15.5234 8.60789 15.3905C8.68458 15.2575 8.73183 15.112 8.74692 14.9623C8.76202 14.8127 8.74466 14.6617 8.69586 14.5182C8.64705 14.3747 8.56775 14.2414 8.4625 14.1259L3.925 9.14347H18.75C19.0815 9.14347 19.3995 9.02307 19.6339 8.80876C19.8683 8.59446 20 8.30379 20 8.00071C20 7.69764 19.8683 7.40697 19.6339 7.19266C19.3995 6.97836 19.0815 6.85796 18.75 6.85796Z"/>
-                                                        </svg>
+                                                <label style={{cursor: 'pointer'}}>
+                                                    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                                                        <div style={{position: 'relative', top: '19px', left: '20px', color: (this.state.clicked ? '#979797' : '#3F6DE1' ) }}>
+                                                            Back
+                                                            <div style = {{position: 'absolute', left: '-30px', top:'0'}}>
+                                                                <svg width="20" height="16" viewBox="0 0 20 16"  fill={(this.state.clicked ? '#979797' : '#3F6DE1' )} xmlns="http://www.w3.org/2000/svg">
+                                                                    <path fill={(this.state.clicked ? '#979797' : '#3F6DE1' )} d="M18.75 6.85796H3.925L8.4625 1.87555C8.67467 1.64218 8.77675 1.34131 8.74628 1.03914C8.7158 0.736965 8.55527 0.458234 8.3 0.264265C8.04473 0.070295 7.71563 -0.0230245 7.3851 0.00483557C7.05456 0.0326956 6.74967 0.179453 6.5375 0.412823L0.2875 7.26935C0.245451 7.32389 0.207849 7.38118 0.175 7.44076C0.175 7.4979 0.175 7.53218 0.0875002 7.58932C0.0308421 7.72035 0.0011764 7.85982 0 8.00071C0.0011764 8.1416 0.0308421 8.28108 0.0875002 8.4121C0.0875002 8.46924 0.0874998 8.50353 0.175 8.56066C0.207849 8.62025 0.245451 8.67754 0.2875 8.73208L6.5375 15.5886C6.65503 15.7176 6.8022 15.8213 6.96856 15.8924C7.13491 15.9635 7.31636 16.0003 7.5 16C7.79207 16.0005 8.07511 15.9075 8.3 15.7372C8.42657 15.6412 8.5312 15.5234 8.60789 15.3905C8.68458 15.2575 8.73183 15.112 8.74692 14.9623C8.76202 14.8127 8.74466 14.6617 8.69586 14.5182C8.64705 14.3747 8.56775 14.2414 8.4625 14.1259L3.925 9.14347H18.75C19.0815 9.14347 19.3995 9.02307 19.6339 8.80876C19.8683 8.59446 20 8.30379 20 8.00071C20 7.69764 19.8683 7.40697 19.6339 7.19266C19.3995 6.97836 19.0815 6.85796 18.75 6.85796Z"/>
+                                                                </svg>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </label>
-                                    </label>}   
-                                </div> }
-                             </div> 
+                                                </label>
+                                            </label>
+                                        }   
+                                        </div> 
+                                    }
 
-                                        {/* TODO - temporarily commented out for all users to accomodate a new client */}
-                                        {/* <a href="https://gideon.legal">
-                                        <span>Powered by</span>
-                                        <img
-                                            className="wc-footer--logo"
-                                            src="https://s3.amazonaws.com/com.gideon.static.dev/logotype-v1.1.0.svg"
-                                            />
-                                        </a> */}
+                                            {/* TODO - temporarily commented out for all users to accomodate a new client */}
+                                            {/* <a href="https://gideon.legal">
+                                            <span>Powered by</span>
+                                            <img
+                                                className="wc-footer--logo"
+                                                src="https://s3.amazonaws.com/com.gideon.static.dev/logotype-v1.1.0.svg"
+                                                />
+                                            </a> */}
 
-                            
-                            </div>
-                                {
-                                    this.props.resize === 'detect' &&
-                                        <ResizeDetector onresize={ this.resizeListener } />
-                                }
-                            </div>
+                                    {
+                                        this.props.resize === 'detect' &&
+                                            <ResizeDetector onresize={ this.resizeListener } />
+                                    }
+                                </div>
+                                :
+                                <div className="wc-chatbot-content-right" style={{paddingTop:'67px'}}>
+                                    <ConvoHistory conversations={this.state.pastConversations} setCurrentConversation={this.changeCurrentConversation}/>
+                                </div>
+                            }
                         </div>
                     </div>
+                </div>
             </Provider >
         );
     }
@@ -880,7 +1055,7 @@ export const renderIfNonempty = (value: any, renderer: (value: any) => JSX.Eleme
     }
 };
 
-export const classList = (...args: Array<string | boolean>) => {
+export const classList = (...args: (string | boolean)[]) => {
     return args.filter(Boolean).join(' ');
 };
 
