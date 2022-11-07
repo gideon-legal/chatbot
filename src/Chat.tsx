@@ -872,7 +872,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                     />
 
                                     <span>{typeof state.format.chatTitle === 'string' ? state.format.chatTitle : 'Gideon' }</span>
-                                    <IconButton onClick={() => this.handleHistory(true)} className="icon__button history__button">
+                                    <IconButton onClick={() => this.handleHistory(true)} className="icon__button history__button" style={{ height: "auto" }}>
                                         <HistoryInline />
                                     </IconButton>
                                     {/* Close X image on chat */}
