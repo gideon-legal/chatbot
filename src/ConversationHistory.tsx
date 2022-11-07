@@ -76,12 +76,13 @@ export class ConversationHistory extends React.Component<HistoryProps, State> {
     return (
       <ConversationWrapper
         body={
-            <List disablePadding style={{ overflowY: "scroll", height: "inherit" }}>
-              
+          this.props.conversations.length > 0 ?
+            <List disablePadding style={{ overflowY: "scroll", height: "inherit" }}>            
                 {this.conversationListItems}
             </List>
+            :
+            <div>No past conversations yet.</div>
         }
-        // onScroll={}
       >
       </ConversationWrapper>
     );
