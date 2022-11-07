@@ -9,7 +9,7 @@ import { parseReferrer } from 'analytics-utils';
 import { Activity, CardActionTypes, DirectLine, DirectLineOptions, IBotConnection, User } from 'botframework-directlinejs';
 import { isMobile } from 'react-device-detect';
 import { connect, Provider } from 'react-redux';
-import { conversationHistory, mapMessagesToActivities, ping, step, verifyConversation } from './api/bot';
+import { conversationHistory, mapMessagesToActivities, ping, step, verifyConversation, checkNeedBackButton } from './api/bot';
 import { getTabIndex } from './getTabIndex';
 import { guid } from './GUID';
 import * as konsole from './Konsole';
@@ -34,6 +34,7 @@ export interface ChatProps {
     selectedActivity?: BehaviorSubject<ActivityOrID>;
     sendTyping?: boolean;
     showUploadButton?: boolean;
+    showConsole?: boolean;
     formatOptions?: FormatOptions;
     themeColor?: string;
     logoUrl?: string;
@@ -48,6 +49,8 @@ export interface State {
     orginalBodyClass: string;
     fullscreen: boolean;
     full_height: boolean;
+    back_visible: boolean;
+    node_count: number;
 }
 
 import { FloatingIcon } from './FloatingIcon';
@@ -63,8 +66,13 @@ export class Chat extends React.Component<ChatProps, State> {
         display: false,
         fullscreen: false,
         full_height: false,
-        orginalBodyClass: document.body.className
+        clicked: false,
+        back_visible: false,
+        orginalBodyClass: document.body.className,
+        node_count: -1,
     };
+
+    private clicked: any; // status of if the back button has been clicked already
 
     private store = createStore();
 
@@ -89,6 +97,10 @@ export class Chat extends React.Component<ChatProps, State> {
 
     constructor(props: ChatProps) {
         super(props);
+        //this.clicked = {disabled: false};
+        var button = this.state;
+        button.clicked = false;
+        this.setState(button);
 
         this.store.dispatch<ChatActions>({
             type: 'Set_Locale',
@@ -135,27 +147,73 @@ export class Chat extends React.Component<ChatProps, State> {
         }
     }
 
-    private handleIncomingActivity(activity: Activity) {
+    private async handleIncomingActivity(activity: Activity) {
         const state = this.store.getState();
         const activityCopy: any = activity;
-
+        this.toggleBackButton(false);
         switch (activity.type) {
             case 'message':
+                // adding node count to check if first node, need to grey out back button
+                const curr_node_count = this.checkNodeCount();
+                if(activity.entities) {
+                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
+                    if(activity.entities[0].node_type == 'prompt' || activity.entities[0].type == 'ClientCapabilities') {
+                        this.toggleBackButton(false)
+                    } else {
+                        if( this.checkNodeCount() <= 0 ) {
+                            this.toggleBackButton(false)
+                        } else {
+                            this.toggleBackButton(true)
+                        }
+                    }
+                    if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
+                        this.addNodeCount();
+                    }
+               } else {
+                const botConnection: any = this.store.getState().connection.botConnection;
+
+
+                // if the current activity has no entities, it might be a completion node, in which case we must hide the back button
+                // checkNeedBackButton returns if the current activity corresponds to a completion node or not
+                const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)   
+                if(notNode !== "open" && !activity.text.includes("Sorry, but that's not a valid")){
+                    this.toggleBackButton(false);
+                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
+                } else {
+                    // open response only
+                    if( this.checkNodeCount() == 0 ) {
+                        this.toggleBackButton(false)
+                    } else {
+                        this.toggleBackButton(true)
+                    }
+                    //this.toggleBackButton(true)
+                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
+                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
+                }
+                this.addNodeCount();
+               }
                 this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
                 break;
-
+                
             case 'typing':
+                this.toggleBackButton(false)
                 if (activity.from.id !== state.connection.user.id) {
                     this.store.dispatch<ChatActions>({ type: 'Show_Typing', activity });
+                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                 }
                 break;
         }
     }
 
+
     private toggle = () => {
         this.setState({
             open: !this.state.open,
-            opened: true
+            opened: true,
+            back_visible: !this.state.back_visible
         });
     }
 
@@ -171,27 +229,91 @@ export class Chat extends React.Component<ChatProps, State> {
             full_height: !this.state.full_height
         });
     }
+
+    private toggleBackButton = (show: boolean) => {
+        this.setState({
+            back_visible: show
+        })
+    }
+
+    private checkBackButton = () => {
+        return this.state.back_visible;
+    }
+
+    private addNodeCount = () => {
+        const new_count = this.state.node_count+1
+        this.setState({
+            node_count: new_count
+        })
+    }
+
+    private deleteNodeCount = () => {
+        const curr_node = this.checkNodeCount();
+        if (curr_node > 0){
+            const updated_count = curr_node - 2
+            this.setState({
+                node_count: updated_count
+            })
+            this.state.node_count = updated_count
+        } 
+        const updated_count = this.checkNodeCount()
+        if (updated_count <= 0) {
+            this.setState({
+                node_count: 0
+            })
+            this.state.node_count = 0
+            this.toggleBackButton(false)
+        }
+    }
+
+
+    private checkNodeCount = () => {
+        return this.state.node_count;
+    }
+
+    //step function perfoms going back to the previous message
     private step = (messageId?: string|null) => {
         const botConnection: any = this.store.getState().connection.botConnection;
+
         step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
         .then((res: any) => {
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, res.data.id)
             .then((res: any) => {
                 const messages = res.data.messages.reverse();
+                //console.log(messages)
+                const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
+                this.props.showConsole === false;
+                this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+                this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
+
                 this.store.dispatch<ChatActions>({
                     type: 'Set_Messages',
-                    activities: mapMessagesToActivities(messages, this.store.getState().connection.user.id)
+                    activities: message_activities
                 });
 
                 // reset shell input
                 this.store.dispatch<ChatActions>(
                     { type: 'Submit_Date' } as ChatActions
                 );
+
+
+                // have to resend receive_message for input enabled nodes
+                if(messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
+                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
+                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
+                    
+                    this.store.dispatch<ChatActions>(
+                        { type: 'Receive_Message',
+                          activity: message_activities[message_activities.length-1]}
+                    )
+                }
+                
             });
         })
         .catch((err: any) => {
             console.log(err);
         });
+         
     }
 
     private setSize() {
@@ -314,7 +436,9 @@ export class Chat extends React.Component<ChatProps, State> {
                     });
 
                     const campaign = parseReferrer(document.referrer, window.location.href.toLowerCase());
+
                     console.log('campaign logging:', campaign, document.referrer, window.location.href.toLowerCase());
+
 
                     verifyConversation(
                         this.props.gid,
@@ -464,6 +588,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 });
             });
         }
+
     }
 
     componentWillUnmount() {
@@ -548,14 +673,19 @@ export class Chat extends React.Component<ChatProps, State> {
 
     render() {
         const state = this.store.getState();
-
         const { open, opened, display, fullscreen } = this.state;
 
         const chatviewPanelStyle = this.calculateChatviewPanelStyle(state.format);
 
+        const backButtonClassName = classList(
+            'wc-back-button',
+            this.checkBackButton() === false && 'wc-back-button__disabled'
+        )
+
         // only render real stuff after we know our dimensions
         return (
             <Provider store={ this.store }>
+                <div>
                 <div
                     className={`wc-wrap ${display ? '' : 'hide'}`}
                     style={{ display: 'none'}}
@@ -594,12 +724,15 @@ export class Chat extends React.Component<ChatProps, State> {
                                         onClick={() => {this.toggle(); }}
                                         src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/close.svg" /> */}
 
-                                    {/* <img
-                                        className="wc-header--back"
-                                        onClick={() => {this.step(); }}
-                                        src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/back.svg" /> */}
+                                    {/* {{ <img
+                                        className="wc-header--back" onClick={() => {
+                                            if (!this.clicked.disabled) {
+                                            this.step(); this.clicked.disabled = true; }// disable click action after first click
+                                    }}
+                                    src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/back.svg" />  } */} 
                                 </div>
                         }
+
                         <div className="wc-chatbot-content">
                             {fullscreen && <div className="wc-chatbot-content-left">
                                 {/* TODO - Put content to display on left side of fullscreen */}
@@ -609,6 +742,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                                 null}
                                 />
                             </div>}
+
                             <div className="wc-chatbot-content-right">
                                 <History
                                     onCardAction={ this._handleCardAction }
@@ -618,8 +752,38 @@ export class Chat extends React.Component<ChatProps, State> {
                                 />
 
                                 <Shell ref={ this._saveShellRef } />
+                                
 
-                                    <div className="wc-footer">
+                                { // if input is enabled show this && or if bot is talking
+                                    <div className = {backButtonClassName}>
+                                    { <label style={ { visibility:  this.state.back_visible ? 'visible' : 'hidden' } }
+                                        className="wcbackbutton" onClick={() => {
+                                            if (!this.state.clicked) {
+                                            this.step();
+                                             
+                                            this.deleteNodeCount();
+                                            // var button = this.state; // temp variable in order to change state of clicked
+                                            // button.clicked = true; // changes state within variable to true
+                                            // this.setState(button); // passes updated boolean back to state
+                                        } 
+                                        }}>
+
+                                        <label style={{cursor: 'pointer'}}>
+                                            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                                                <div style={{position: 'relative', top: '19px', left: '20px', color: (this.state.clicked ? '#979797' : '#3F6DE1' ) }}>
+                                                    Back
+                                                    <div style = {{position: 'absolute', left: '-30px', top:'0'}}>
+                                                        <svg width="20" height="16" viewBox="0 0 20 16"  fill={(this.state.clicked ? '#979797' : '#3F6DE1' )} xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill={(this.state.clicked ? '#979797' : '#3F6DE1' )} d="M18.75 6.85796H3.925L8.4625 1.87555C8.67467 1.64218 8.77675 1.34131 8.74628 1.03914C8.7158 0.736965 8.55527 0.458234 8.3 0.264265C8.04473 0.070295 7.71563 -0.0230245 7.3851 0.00483557C7.05456 0.0326956 6.74967 0.179453 6.5375 0.412823L0.2875 7.26935C0.245451 7.32389 0.207849 7.38118 0.175 7.44076C0.175 7.4979 0.175 7.53218 0.0875002 7.58932C0.0308421 7.72035 0.0011764 7.85982 0 8.00071C0.0011764 8.1416 0.0308421 8.28108 0.0875002 8.4121C0.0875002 8.46924 0.0874998 8.50353 0.175 8.56066C0.207849 8.62025 0.245451 8.67754 0.2875 8.73208L6.5375 15.5886C6.65503 15.7176 6.8022 15.8213 6.96856 15.8924C7.13491 15.9635 7.31636 16.0003 7.5 16C7.79207 16.0005 8.07511 15.9075 8.3 15.7372C8.42657 15.6412 8.5312 15.5234 8.60789 15.3905C8.68458 15.2575 8.73183 15.112 8.74692 14.9623C8.76202 14.8127 8.74466 14.6617 8.69586 14.5182C8.64705 14.3747 8.56775 14.2414 8.4625 14.1259L3.925 9.14347H18.75C19.0815 9.14347 19.3995 9.02307 19.6339 8.80876C19.8683 8.59446 20 8.30379 20 8.00071C20 7.69764 19.8683 7.40697 19.6339 7.19266C19.3995 6.97836 19.0815 6.85796 18.75 6.85796Z"/>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </label>}   
+                                </div> }
+                             </div> 
+
                                         {/* TODO - temporarily commented out for all users to accomodate a new client */}
                                         {/* <a href="https://gideon.legal">
                                         <span>Powered by</span>
@@ -629,8 +793,8 @@ export class Chat extends React.Component<ChatProps, State> {
                                             />
                                         </a> */}
 
-                                    </div>
-
+                            
+                            </div>
                                 {
                                     this.props.resize === 'detect' &&
                                         <ResizeDetector onresize={ this.resizeListener } />
@@ -638,7 +802,6 @@ export class Chat extends React.Component<ChatProps, State> {
                             </div>
                         </div>
                     </div>
-                </div>
             </Provider >
         );
     }

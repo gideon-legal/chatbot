@@ -197,6 +197,7 @@ export interface FormatState {
     fullHeight: boolean;
     fullscreen: boolean;
     display_name: string;
+    showConsole: boolean;
 }
 
 export type FormatAction = {
@@ -223,6 +224,9 @@ export type FormatAction = {
 } | {
     type: 'Set_Format_Options',
     formatOptions: FormatOptions
+} | {
+    type: 'Toggle_Input',
+    showConsole: boolean
 };
 
 export const format: Reducer<FormatState> = (
@@ -242,7 +246,8 @@ export const format: Reducer<FormatState> = (
         rightOffset: undefined,
         fullHeight: false,
         fullscreen: false,
-        display_name: undefined
+        display_name: undefined,
+        showConsole: false
     },
     action: FormatAction
 ) => {
@@ -287,6 +292,11 @@ export const format: Reducer<FormatState> = (
             return {
                 ...state,
                 ...action.formatOptions
+            };
+        case 'Toggle_Input':
+            return {
+                ...state,
+                showConsole: action.showConsole
             };
         default:
             return state;
@@ -396,6 +406,7 @@ export interface HistoryState {
     selectedActivity: Activity;
     selectedDisclaimerActivity: Activity;
     inputEnabled: boolean;
+    showConsole: boolean;
 }
 
 export type HistoryAction = {
@@ -420,6 +431,9 @@ export type HistoryAction = {
 } | {
     type: 'Clear_Typing',
     id: string
+} | {
+    type: 'Toggle_InputEnabled',
+    inputEnabled: boolean
 };
 
 const copyArrayWithUpdatedItem = <T>(array: T[], i: number, item: T) => [
@@ -435,7 +449,8 @@ export const history: Reducer<HistoryState> = (
         clientActivityCounter: 0,
         selectedActivity: null,
         selectedDisclaimerActivity: null,
-        inputEnabled: false
+        inputEnabled: false,
+        showConsole: false
     },
     action: HistoryAction
 ) => {
@@ -468,15 +483,31 @@ export const history: Reducer<HistoryState> = (
         }
 
         case 'Receive_Message':
-            if (state.activities.find(a => a.id === action.activity.id)) { return state; } // don't allow duplicate messages
+             // don't allow duplicate messages
+             // if (state.activities.find(a => a.id === action.activity.id)) { 
+            //     inputEnabled = true;
+            //     return state; }
+                
 
             const copy: any = action.activity;
             const isDisclaimer = copy && copy.entities && copy.entities.length > 0 && copy.entities[0].node_type === 'disclaimer';
-            const inputEnabled = !copy.entities;
+            let inputEnabled = !copy.entities
+            //let inputEnabled = copy.showConsole;
+
+
+            // for back button - check if going back to a node with input enabled
+            if(copy && copy.entities && copy.entities.length === 0){
+                inputEnabled = true;
+            }
+            
+            if (state.activities.find(a => a.id === action.activity.id)) { 
+                inputEnabled = true;
+                return {...state, inputEnabled} }
+
 
             return {
                 ...state,
-                inputEnabled,
+                //inputEnabled,
                 activities: [
                     ...state.activities.filter(activity => activity.type !== 'typing'),
                     action.activity,
@@ -568,12 +599,18 @@ export const history: Reducer<HistoryState> = (
                 ...activity,
                 suggestedActions: undefined
             };
+            //(newActivity)
             return {
                 ...state,
                 activities: copyArrayWithUpdatedItem(state.activities, i, newActivity),
                 selectedActivity: state.selectedActivity === activity ? newActivity : state.selectedActivity
             };
-
+        case 'Toggle_InputEnabled':
+            let input = action.inputEnabled
+            return {
+                ...state,
+                inputEnabled: action.inputEnabled
+            }
         default:
             return state;
     }
@@ -831,6 +868,7 @@ import { attempt } from 'bluebird';
 import { combineReducers, createStore as reduxCreateStore, Store } from 'redux';
 import { combineEpics, createEpicMiddleware } from 'redux-observable';
 import { MessageWithDate } from './DatePickerCard';
+//import { ConsoleLoggingListener } from 'microsoft-speech-browser-sdk';
 
 export const createStore = () =>
     reduxCreateStore(
