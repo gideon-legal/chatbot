@@ -912,7 +912,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                 </div>
                                 :
                                 <div className={!fullscreen ? 'history-header wc-header' : 'wc-header wc-header-fullscreen'}>
-                                    <IconButton onClick={() => this.handleHistory(false)}  className="icon__button" style={{ padding: 0, color: 'white' }}>
+                                    <IconButton onClick={() => this.handleHistory(false)}  className="icon__button" style={{ padding: 0, color: 'white', height: "auto" }}>
                                         <ArrowBack className="back__button" />
                                     </IconButton>
                                     <span>Current Conversation</span>
