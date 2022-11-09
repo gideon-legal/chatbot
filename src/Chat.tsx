@@ -933,7 +933,9 @@ export class Chat extends React.Component<ChatProps, State> {
                             {/* current convo or history? */}
                             {!this.state.showConvoHistory ?
                                 (this.state.loading ?
-                                    <div id="loading-bar-spinner" className="spinner"><div className="spinner-icon"></div></div>
+                                    <div className="wc-chatbot-content-right">
+                                        <div id="loading-bar-spinner" className="spinner"><div className="spinner-icon"></div></div>
+                                    </div>
                                     :
                                     <div className="wc-chatbot-content-right">
                                         <History
