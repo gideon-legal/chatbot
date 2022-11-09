@@ -47,10 +47,6 @@ export class ConversationHistory extends React.Component<HistoryProps, State> {
       const time = this.convertTime(updated_at);
       const conversationComplete = is_complete ? true : false;
 
-      this.setState({
-        nonEmptyConvos: this.state.nonEmptyConvos + 1
-      });
-
       return (
         <div key={i}>
           <ListItem onClick={() => this.handleClickConvo(conversation)} className="conversationCard">
@@ -77,12 +73,10 @@ export class ConversationHistory extends React.Component<HistoryProps, State> {
   });
 
   render() {
-    console.log("props conversation", this.props.conversations)
-
     return (
       <ConversationWrapper
         body={
-          this.state.nonEmptyConvos > 0 ?
+          this.conversationListItems[0] !== undefined ?
             <List disablePadding style={{ overflowY: "scroll", height: "inherit" }}>            
                 {this.conversationListItems}
             </List>
