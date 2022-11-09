@@ -82,7 +82,7 @@ export class Chat extends React.Component<ChatProps, State> {
         showConvoHistory: false,
         pastConversations: [] as any,
         messages: [] as any,
-        loading: false
+        loading: true
     };
 
     private clicked: any; // status of if the back button has been clicked already
@@ -214,7 +214,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 break;
                 
             case 'typing':
-                this.toggleBackButton(false)
+                this.toggleBackButton(false);
                 if (activity.from.id !== state.connection.user.id) {
                     this.store.dispatch<ChatActions>({ type: 'Show_Typing', activity });
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
@@ -222,6 +222,9 @@ export class Chat extends React.Component<ChatProps, State> {
                 }
                 break;
         }
+        this.setState({
+            loading: false
+        });
     }
 
 
