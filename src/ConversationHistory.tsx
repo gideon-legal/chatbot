@@ -11,13 +11,15 @@ export interface HistoryProps {
 }
 
 export interface State {
-  currentConversationID: string
+  currentConversationID: string,
+  nonEmptyConvos: number
 }
 
 export class ConversationHistory extends React.Component<HistoryProps, State> {
 
   static initialState = {
-    currentConversationID : ''
+    currentConversationID : '',
+    nonEmptyConvos: 0
   }
 
   state = ConversationHistory.initialState;
@@ -44,6 +46,10 @@ export class ConversationHistory extends React.Component<HistoryProps, State> {
       const formattedDate = this.convertDate(updated_at);
       const time = this.convertTime(updated_at);
       const conversationComplete = is_complete ? true : false;
+
+      this.setState({
+        nonEmptyConvos: this.state.nonEmptyConvos + 1
+      });
 
       return (
         <div key={i}>
@@ -76,12 +82,12 @@ export class ConversationHistory extends React.Component<HistoryProps, State> {
     return (
       <ConversationWrapper
         body={
-          this.props.conversations.length > 0 ?
+          this.state.nonEmptyConvos > 0 ?
             <List disablePadding style={{ overflowY: "scroll", height: "inherit" }}>            
                 {this.conversationListItems}
             </List>
             :
-            <div>No past conversations yet.</div>
+            <div style={{ textAlign: "center", paddingTop: "30px" }}>No past conversations yet.</div>
         }
       >
       </ConversationWrapper>
