@@ -668,6 +668,12 @@ export class Chat extends React.Component<ChatProps, State> {
                                 type: 'Set_Messages',
                                 activities: mapMessagesToActivities(messages, state.connection.user.id)
                             });
+
+                            if(sessionStorage.getItem("convoComplete") && Boolean(sessionStorage.getItem("convoComplete"))) {
+                                this.setState({
+                                    loading: false
+                                })
+                            }
                         });
 
                         // Ping server with activity every 30 seconds
