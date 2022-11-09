@@ -835,7 +835,6 @@ export class Chat extends React.Component<ChatProps, State> {
         sessionStorage.setItem("pastConvoID", currentConvoID);
         sessionStorage.setItem("pastConvoDate", convo.created_at);
         sessionStorage.setItem("convoComplete", convo.is_complete);
-        sessionStorage.removeItem('msft_conversation_id')
         window.location.reload();
     }
 
