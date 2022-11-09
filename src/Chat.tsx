@@ -859,7 +859,7 @@ export class Chat extends React.Component<ChatProps, State> {
            && Number(sessionStorage.getItem("original_length")) === this.store.getState().history.activities.length
            && !this.reloadMsgsCalled
         ) {
-            this.reload_messages();
+            //this.reload_messages();
             this.reloadMsgsCalled = true;
         }
 
