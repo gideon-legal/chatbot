@@ -51,6 +51,7 @@ export interface State {
     full_height: boolean;
     back_visible: boolean;
     clicked: boolean;
+    unclicked: boolean;
     node_count: number;
 }
 
@@ -68,6 +69,7 @@ export class Chat extends React.Component<ChatProps, State> {
         fullscreen: false,
         full_height: false,
         clicked: false,
+        unclicked: true,
         back_visible: false,
         orginalBodyClass: document.body.className,
         node_count: -1,
@@ -163,6 +165,7 @@ export class Chat extends React.Component<ChatProps, State> {
                             this.toggleBackButton(false)
                         } else {
                             this.toggleBackButton(true)
+                            this.unclicked();
                         }
                     }
                     if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
@@ -185,6 +188,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         this.toggleBackButton(false)
                     } else {
                         this.toggleBackButton(true)
+                        this.unclicked();
                     }
                     //this.toggleBackButton(true)
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
@@ -267,7 +271,16 @@ export class Chat extends React.Component<ChatProps, State> {
     private clicked() {
         this.toggleBackButton(false);
         this.setState({
-            clicked: true
+            clicked: true,
+            unclicked: false
+        })
+    }
+
+    private unclicked() {
+        this.toggleBackButton(true);
+        this.setState({
+            unclicked: true,
+            clicked: false
         })
     }
 
@@ -761,7 +774,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
                                 { // if input is enabled show this && or if bot is talking
                                     <div className = {backButtonClassName}>
-                                    { <label style={ { visibility:  this.state.clicked ? 'hidden' : 'visible', color: (this.state.clicked ? '#979797' : '#3F6DE1' ) } }
+                                    { <label 
                         
                                         className="wcbackbutton" onClick={() => {
                                             
@@ -769,6 +782,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                             this.step();
                                             // need to get the button back here
                                             this.deleteNodeCount();
+                                           // this.unclicked();
                                          
                                         }}>
 
