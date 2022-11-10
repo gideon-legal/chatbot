@@ -269,7 +269,7 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private clicked() {
-        this.toggleBackButton(false);
+        //this.toggleBackButton(false);
         this.setState({
             clicked: true,
             unclicked: false
@@ -277,7 +277,7 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private unclicked() {
-        this.toggleBackButton(true);
+        //this.toggleBackButton(true);
         this.setState({
             unclicked: true,
             clicked: false
@@ -621,6 +621,12 @@ export class Chat extends React.Component<ChatProps, State> {
         window.removeEventListener('resize', this.resizeListener);
     }
 
+    componentDidUpdate(prevProps: Readonly<ChatProps>, prevState: Readonly<State>): void {
+        if( prevState.clicked !== this.state.clicked) {
+            console.log("help")
+        }
+    }
+
     componentWillReceiveProps(nextProps: ChatProps) {
         if (this.props.adaptiveCardsHostConfig !== nextProps.adaptiveCardsHostConfig) {
             this.store.dispatch<ChatActions>({
@@ -782,7 +788,10 @@ export class Chat extends React.Component<ChatProps, State> {
                                             this.step();
                                             // need to get the button back here
                                             this.deleteNodeCount();
-                                           // this.unclicked();
+                                            this.state.clicked = false;
+
+                                            
+                                            // this.unclicked();
                                          
                                         }}>
 
