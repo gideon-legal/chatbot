@@ -50,6 +50,7 @@ export interface State {
     fullscreen: boolean;
     full_height: boolean;
     back_visible: boolean;
+    clicked: boolean;
     node_count: number;
 }
 
@@ -72,7 +73,6 @@ export class Chat extends React.Component<ChatProps, State> {
         node_count: -1,
     };
 
-    private clicked: any; // status of if the back button has been clicked already
 
     private store = createStore();
 
@@ -97,10 +97,8 @@ export class Chat extends React.Component<ChatProps, State> {
 
     constructor(props: ChatProps) {
         super(props);
-        //this.clicked = {disabled: false};
-        var button = this.state;
-        button.clicked = false;
-        this.setState(button);
+        
+       
 
         this.store.dispatch<ChatActions>({
             type: 'Set_Locale',
@@ -266,6 +264,13 @@ export class Chat extends React.Component<ChatProps, State> {
         }
     }
 
+    private clicked() {
+        this.toggleBackButton(false);
+        this.setState({
+            clicked: true
+        })
+    }
+
 
     private checkNodeCount = () => {
         return this.state.node_count;
@@ -309,7 +314,6 @@ export class Chat extends React.Component<ChatProps, State> {
                 }
                 
             });
-            //this.state.clicked = true
         })
         .catch((err: any) => {
             console.log(err);
@@ -757,21 +761,15 @@ export class Chat extends React.Component<ChatProps, State> {
 
                                 { // if input is enabled show this && or if bot is talking
                                     <div className = {backButtonClassName}>
-                                    { <label style={ { visibility:  this.state.back_visible ? 'visible' : 'hidden', color: (this.state.clicked ? '#979797' : '#3F6DE1' ) } }
-
-                                
+                                    { <label style={ { visibility:  this.state.clicked ? 'hidden' : 'visible', color: (this.state.clicked ? '#979797' : '#3F6DE1' ) } }
                         
                                         className="wcbackbutton" onClick={() => {
-                                            if (!this.state.clicked) {
-                                            this.state.clicked = false
+                                            
+                                            this.clicked();
                                             this.step();
-                                             
+                                            // need to get the button back here
                                             this.deleteNodeCount();
-                                            this.state.clicked = true
-                                            // var button = this.state; // temp variable in order to change state of clicked
-                                            //button.clicked = true; // changes state within variable to true
-                                            // this.setState(button); // passes updated boolean back to state
-                                        } 
+                                         
                                         }}>
 
                                         <label style={{cursor: 'pointer'}}>
