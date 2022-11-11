@@ -268,11 +268,10 @@ export class Chat extends React.Component<ChatProps, State> {
         }
     }
 
-    private clicked() {
+    private clicked = (show: boolean) => {
         //this.toggleBackButton(false);
         this.setState({
-            clicked: true,
-            unclicked: false
+            clicked: show
         })
     }
 
@@ -623,7 +622,18 @@ export class Chat extends React.Component<ChatProps, State> {
 
     componentDidUpdate(prevProps: Readonly<ChatProps>, prevState: Readonly<State>): void {
         if( prevState.clicked !== this.state.clicked) {
-            console.log("help")
+
+            console.log( prevState.clicked + " previous state");
+            console.log( this.state.clicked + " current state ")
+
+            setTimeout(() =>
+            {
+                this.clicked(false);
+            }, 2000);
+
+
+            console.log( prevState.clicked + " previous state after ");
+            console.log( this.state.clicked + " current state after ")
         }
     }
 
@@ -784,11 +794,11 @@ export class Chat extends React.Component<ChatProps, State> {
                         
                                         className="wcbackbutton" onClick={() => {
                                             
-                                            this.clicked();
+                                            this.clicked(true);
                                             this.step();
                                             // need to get the button back here
                                             this.deleteNodeCount();
-                                            this.state.clicked = false;
+                                            //this.state.clicked = false;
 
                                             
                                             // this.unclicked();
