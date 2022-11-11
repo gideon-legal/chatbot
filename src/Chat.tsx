@@ -832,10 +832,16 @@ export class Chat extends React.Component<ChatProps, State> {
 
     private changeCurrentConversation = (convo: any) => {
         let currentConvoID = convo.msft_conversation_id;
-        sessionStorage.setItem("pastConvoID", currentConvoID);
         sessionStorage.setItem("pastConvoDate", convo.created_at);
         sessionStorage.setItem("convoComplete", convo.is_complete);
-        window.location.reload();
+        //viewing current convo
+        if(currentConvoID === sessionStorage.getItem("msft_conversation_id")) {
+            sessionStorage.removeItem("pastConvoID");
+            this.handleHistory(false);
+        } else {
+            sessionStorage.setItem("pastConvoID", currentConvoID);
+            window.location.reload();
+        }
     }
 
     // At startup we do three render passes:
