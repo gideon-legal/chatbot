@@ -96,7 +96,6 @@ export class Chat extends React.Component<ChatProps, State> {
     private _saveHistoryRef = this.saveHistoryRef.bind(this);
     private _saveShellRef = this.saveShellRef.bind(this);
     // tslint:enable:variable-name
-
     constructor(props: ChatProps) {
         super(props);
         
@@ -270,13 +269,15 @@ export class Chat extends React.Component<ChatProps, State> {
 
     private clicked = (show: boolean) => {
         //this.toggleBackButton(false);
+        document.getElementById('btn1').style.pointerEvents = 'none';
         this.setState({
             clicked: show
-        })
+        })  
     }
 
     private unclicked() {
         //this.toggleBackButton(true);
+        document.getElementById('btn1').style.pointerEvents = 'auto';
         this.setState({
             unclicked: true,
             clicked: false
@@ -318,7 +319,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 if(messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
-                    
+                    this.unclicked()
                     this.store.dispatch<ChatActions>(
                         { type: 'Receive_Message',
                           activity: message_activities[message_activities.length-1]}
@@ -790,7 +791,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
                                 { // if input is enabled show this && or if bot is talking
                                     <div className = {backButtonClassName}>
-                                    { <label 
+                                    { <label id="btn1"
                         
                                         className="wcbackbutton" onClick={() => {
                                             
