@@ -56,8 +56,6 @@ export interface State {
     full_height: boolean;
     showConvoHistory: boolean;
     back_visible: boolean;
-    clicked: boolean;
-    unclicked: boolean;
     node_count: number;
     pastConversations: any[];
     messages: any[];
@@ -78,7 +76,6 @@ export class Chat extends React.Component<ChatProps, State> {
         fullscreen: false,
         full_height: false,
         clicked: false,
-        unclicked: true,
         back_visible: false,
         orginalBodyClass: document.body.className,
         node_count: -1,
@@ -185,6 +182,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         } else {
                             this.toggleBackButton(true)
                             this.unclicked();
+
                         }
                     }
                     if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
@@ -291,34 +289,6 @@ export class Chat extends React.Component<ChatProps, State> {
             sessionStorage.setItem("node_count", "0");
             this.toggleBackButton(false)
         }
-    }
-
-    private clicked = (show: boolean) => {
-        //this.toggleBackButton(false);
-        //document.getElementById('btn1').style.pointerEvents = 'none';
-        //document.getElementById('btn3').style.pointerEvents = 'none';
-        if (show == true){
-            document.getElementById('btn3').style.pointerEvents = 'none';
-
-        } else {
-            document.getElementById('btn3').style.pointerEvents = 'auto';
-
-        }
-        console.log(document.getElementById('btn3').style.pointerEvents)
-        this.setState({
-            clicked: show
-        })  
-    }
-
-    private unclicked() {
-        //this.toggleBackButton(true);
-        //document.getElementById('btn3').style.pointerEvents = 'auto';
-        console.log(document.getElementById('btn3').style.pointerEvents)
-       // document.getElementById('btn1').style.pointerEvents = 'auto';
-        this.setState({
-            unclicked: true,
-            clicked: false
-        })
     }
 
 
@@ -523,6 +493,9 @@ export class Chat extends React.Component<ChatProps, State> {
         //if newConvo exists in localstorage
         if(sessionStorage.getItem('newConvo') === 'true') {
             isNew = true;
+            this.setState({
+                loading: false
+            });
         } else if(sessionStorage.getItem('newConvo') === 'false') {
             isNew = false;
             this.setState({
@@ -784,26 +757,6 @@ export class Chat extends React.Component<ChatProps, State> {
         window.removeEventListener('resize', this.resizeListener);
     }
 
-    componentDidUpdate(prevProps: Readonly<ChatProps>, prevState: Readonly<State>): void {
-        if( prevState.clicked !== this.state.clicked) {
-
-            console.log( prevState.clicked + " previous state");
-            console.log( this.state.clicked + " current state ")
-
-
-            setTimeout(() =>
-            {
-                this.clicked(false);
-            }, 2000);
-            console.log(document.getElementById('btn3').style.pointerEvents)
-            console.log(document.getElementById('btn3').style.pointerEvents)
-
-
-            console.log( prevState.clicked + " previous state after ");
-            console.log( this.state.clicked + " current state after ")
-        }
-    }
-
     componentWillReceiveProps(nextProps: ChatProps) {
         if (this.props.adaptiveCardsHostConfig !== nextProps.adaptiveCardsHostConfig) {
             this.store.dispatch<ChatActions>({
@@ -920,7 +873,7 @@ export class Chat extends React.Component<ChatProps, State> {
         //reload msg when reloaded and waits until all previous msg appear before reload_messages is called
         //only happens once every reload
         if(performance.getEntriesByType('navigation')[0].type === 'reload' 
-           && Number(sessionStorage.getItem("original_length")) === this.store.getState().history.activities.length
+           && (Number(sessionStorage.getItem("original_length")) === this.store.getState().history.activities.length || sessionStorage.getItem("convoComplete") && sessionStorage.getItem("convoComplete") !== "null")
            && !this.reloadMsgsCalled
         ) {
             this.reload_messages();

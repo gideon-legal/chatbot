@@ -174,8 +174,8 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         sessionStorage.setItem('newConvo', 'true');
         sessionStorage.setItem('emptyChat', 'true');
         sessionStorage.removeItem("node_count");
-        //sessionStorage.removeItem('pastConvoID');
-        //sessionStorage.removeItem('pastConvoDate');
+        sessionStorage.removeItem('pastConvoID');
+        sessionStorage.removeItem('pastConvoDate');
         window.location.reload();
     }
 
