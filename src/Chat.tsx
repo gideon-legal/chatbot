@@ -60,6 +60,8 @@ export interface State {
     pastConversations: any[];
     messages: any[];
     loading: boolean;
+    clicked: boolean;
+    unclicked: boolean;
 }
 
 import { FloatingIcon } from './FloatingIcon';
@@ -76,6 +78,7 @@ export class Chat extends React.Component<ChatProps, State> {
         fullscreen: false,
         full_height: false,
         clicked: false,
+        unclicked: true,
         back_visible: false,
         orginalBodyClass: document.body.className,
         node_count: -1,
@@ -291,9 +294,36 @@ export class Chat extends React.Component<ChatProps, State> {
         }
     }
 
-
     private checkNodeCount = () => {
         return this.state.node_count;
+    }
+
+    private clicked = (show: boolean) => {
+        //this.toggleBackButton(false);
+        //document.getElementById('btn1').style.pointerEvents = 'none';
+        //document.getElementById('btn3').style.pointerEvents = 'none';
+        if (show == true){
+            document.getElementById('btn3').style.pointerEvents = 'none';
+
+        } else {
+            document.getElementById('btn3').style.pointerEvents = 'auto';
+
+        }
+        console.log(document.getElementById('btn3').style.pointerEvents)
+        this.setState({
+            clicked: show
+        })  
+    }
+
+    private unclicked() {
+        //this.toggleBackButton(true);
+        //document.getElementById('btn3').style.pointerEvents = 'auto';
+        console.log(document.getElementById('btn3').style.pointerEvents)
+       // document.getElementById('btn1').style.pointerEvents = 'auto';
+        this.setState({
+            unclicked: true,
+            clicked: false
+        })
     }
 
     private reload_messages = (messageId?: string|null) => {
@@ -777,6 +807,26 @@ export class Chat extends React.Component<ChatProps, State> {
                 type: 'Set_Chat_Title',
                 chatTitle: nextProps.chatTitle
             });
+        }
+    }
+
+    componentDidUpdate(prevProps: Readonly<ChatProps>, prevState: Readonly<State>): void {
+        if( prevState.clicked !== this.state.clicked) {
+
+            console.log( prevState.clicked + " previous state");
+            console.log( this.state.clicked + " current state ")
+
+
+            setTimeout(() =>
+            {
+                this.clicked(false);
+            }, 2000);
+            console.log(document.getElementById('btn3').style.pointerEvents)
+            console.log(document.getElementById('btn3').style.pointerEvents)
+
+
+            console.log( prevState.clicked + " previous state after ");
+            console.log( this.state.clicked + " current state after ")
         }
     }
 
