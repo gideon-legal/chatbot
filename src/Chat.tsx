@@ -490,6 +490,9 @@ export class Chat extends React.Component<ChatProps, State> {
         //if newConvo exists in localstorage
         if(sessionStorage.getItem('newConvo') === 'true') {
             isNew = true;
+            this.setState({
+                loading: false
+            });
         } else if(sessionStorage.getItem('newConvo') === 'false') {
             isNew = false;
             this.setState({
@@ -867,7 +870,7 @@ export class Chat extends React.Component<ChatProps, State> {
         //reload msg when reloaded and waits until all previous msg appear before reload_messages is called
         //only happens once every reload
         if(performance.getEntriesByType('navigation')[0].type === 'reload' 
-           && Number(sessionStorage.getItem("original_length")) === this.store.getState().history.activities.length
+           && (Number(sessionStorage.getItem("original_length")) === this.store.getState().history.activities.length || sessionStorage.getItem("convoComplete") && sessionStorage.getItem("convoComplete") !== "null")
            && !this.reloadMsgsCalled
         ) {
             this.reload_messages();
