@@ -589,7 +589,6 @@ export class Chat extends React.Component<ChatProps, State> {
                 } else if(sessionStorage.getItem('pastConvoID')) {
                     conversationId = sessionStorage.getItem('pastConvoID');
                 }
-                console.log("inside connection status ",this.state.loading)
 
                 if (!state.connection.verification.attempted) {
                     this.store.dispatch<ChatActions>({
@@ -690,8 +689,6 @@ export class Chat extends React.Component<ChatProps, State> {
                                 status: 1
                             }
                         });
-
-                        console.log("before convo hspty", this.state.loading)
 
                         conversationHistory(this.props.gid, this.props.directLine.secret, conversationId)
                         .then((res: any) => {
@@ -923,6 +920,7 @@ export class Chat extends React.Component<ChatProps, State> {
         //reload msg when reloaded and waits until all previous msg appear before reload_messages is called
         //only happens once every reload
         if(performance.getEntriesByType('navigation')[0].type === 'reload' 
+            //either waits for all msg to load or checks if convo is complete
            && (Number(sessionStorage.getItem("original_length")) === this.store.getState().history.activities.length || sessionStorage.getItem("convoComplete") && sessionStorage.getItem("convoComplete") !== "null")
            && !this.reloadMsgsCalled
         ) {
