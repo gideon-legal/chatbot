@@ -60,6 +60,8 @@ export interface State {
     pastConversations: any[];
     messages: any[];
     loading: boolean;
+    clicked: boolean;
+    unclicked: boolean;
 }
 
 import { FloatingIcon } from './FloatingIcon';
@@ -76,6 +78,7 @@ export class Chat extends React.Component<ChatProps, State> {
         fullscreen: false,
         full_height: false,
         clicked: false,
+        unclicked: true,
         back_visible: false,
         orginalBodyClass: document.body.className,
         node_count: -1,
@@ -85,7 +88,7 @@ export class Chat extends React.Component<ChatProps, State> {
         loading: true
     };
 
-    private clicked: any; // status of if the back button has been clicked already
+   // private clicked: any; // status of if the back button has been clicked already
 
     private store = createStore();
 
@@ -114,9 +117,9 @@ export class Chat extends React.Component<ChatProps, State> {
     constructor(props: ChatProps) {
         super(props);
         //this.clicked = {disabled: false};
-        var button = this.state;
-        button.clicked = false;
-        this.setState(button);
+       // var button = this.state;
+       // button.clicked = false;
+      //  this.setState(button);
 
         this.store.dispatch<ChatActions>({
             type: 'Set_Locale',
@@ -181,6 +184,8 @@ export class Chat extends React.Component<ChatProps, State> {
                             this.toggleBackButton(false)
                         } else {
                             this.toggleBackButton(true)
+                            this.unclicked();
+
                         }
                     }
                     if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
@@ -203,6 +208,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         this.toggleBackButton(false)
                     } else {
                         this.toggleBackButton(true)
+                        this.unclicked();
                     }
                     //this.toggleBackButton(true)
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
@@ -288,9 +294,36 @@ export class Chat extends React.Component<ChatProps, State> {
         }
     }
 
-
     private checkNodeCount = () => {
         return this.state.node_count;
+    }
+
+    private clicked = (show: boolean) => {
+        //this.toggleBackButton(false);
+        //document.getElementById('btn1').style.pointerEvents = 'none';
+        //document.getElementById('btn3').style.pointerEvents = 'none';
+        if (show == true){
+            document.getElementById('btn3').style.pointerEvents = 'none';
+
+        } else {
+            document.getElementById('btn3').style.pointerEvents = 'auto';
+
+        }
+        console.log(document.getElementById('btn3').style.pointerEvents)
+        this.setState({
+            clicked: show
+        })  
+    }
+
+    private unclicked() {
+        //this.toggleBackButton(true);
+        //document.getElementById('btn3').style.pointerEvents = 'auto';
+        console.log(document.getElementById('btn3').style.pointerEvents)
+       // document.getElementById('btn1').style.pointerEvents = 'auto';
+        this.setState({
+            unclicked: true,
+            clicked: false
+        })
     }
 
     private reload_messages = (messageId?: string|null) => {
@@ -368,7 +401,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 if(messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
-                    
+                    this.unclicked()
                     this.store.dispatch<ChatActions>(
                         { type: 'Receive_Message',
                           activity: message_activities[message_activities.length-1]}
@@ -774,6 +807,26 @@ export class Chat extends React.Component<ChatProps, State> {
         }
     }
 
+    componentDidUpdate(prevProps: Readonly<ChatProps>, prevState: Readonly<State>): void {
+        if( prevState.clicked !== this.state.clicked) {
+
+            console.log( prevState.clicked + " previous state");
+            console.log( this.state.clicked + " current state ")
+
+
+            setTimeout(() =>
+            {
+                this.clicked(false);
+            }, 2000);
+            console.log(document.getElementById('btn3').style.pointerEvents)
+            console.log(document.getElementById('btn3').style.pointerEvents)
+
+
+            console.log( prevState.clicked + " previous state after ");
+            console.log( this.state.clicked + " current state after ")
+        }
+    }
+
     private calculateChatviewPanelStyle = (format: FormatOptions) => {
         const alignment = format && format.alignment;
         const fullHeight = format && format.full_height;
@@ -959,7 +1012,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                         <Shell ref={ this._saveShellRef } />
 
                                         { // if input is enabled show this && or if bot is talking
-                                            <div className = {backButtonClassName}>
+                                            <div id="btn3" className = {backButtonClassName}>
                                             { 
                                                 <label style={ { 
                                                     visibility: 
@@ -967,14 +1020,14 @@ export class Chat extends React.Component<ChatProps, State> {
                                                         (!sessionStorage.getItem("convoComplete") || sessionStorage.getItem("convoComplete") === 'null' || sessionStorage.getItem("convoComplete") === "false" )
                                                     ? 'visible' : 'hidden' } }
                                                     className="wcbackbutton" onClick={() => {
-                                                        if (!this.state.clicked) {
+                                                            this.clicked(true)
                                                             this.step(); 
 
                                                             this.deleteNodeCount();
                                                             // var button = this.state; // temp variable in order to change state of clicked
                                                             // button.clicked = true; // changes state within variable to true
                                                             // this.setState(button); // passes updated boolean back to state
-                                                        } 
+                                                        
                                                     }}>
 
                                                     <label style={{cursor: 'pointer'}}>
