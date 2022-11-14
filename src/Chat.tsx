@@ -280,7 +280,6 @@ export class Chat extends React.Component<ChatProps, State> {
             document.getElementById('btn3').style.pointerEvents = 'auto';
 
         }
-        console.log(document.getElementById('btn3').style.pointerEvents)
         this.setState({
             clicked: show
         })  
@@ -289,7 +288,6 @@ export class Chat extends React.Component<ChatProps, State> {
     private unclicked() {
         //this.toggleBackButton(true);
         //document.getElementById('btn3').style.pointerEvents = 'auto';
-        console.log(document.getElementById('btn3').style.pointerEvents)
        // document.getElementById('btn1').style.pointerEvents = 'auto';
         this.setState({
             unclicked: true,
@@ -311,7 +309,6 @@ export class Chat extends React.Component<ChatProps, State> {
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, res.data.id)
             .then((res: any) => {
                 const messages = res.data.messages.reverse();
-                //console.log(messages)
                 const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
                 this.props.showConsole === false;
                 this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
@@ -469,7 +466,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
                     const campaign = parseReferrer(document.referrer, window.location.href.toLowerCase());
 
-                    console.log('campaign logging:', campaign, document.referrer, window.location.href.toLowerCase());
+                    //console.log('campaign logging:', campaign, document.referrer, window.location.href.toLowerCase());
 
 
                     verifyConversation(
@@ -638,20 +635,12 @@ export class Chat extends React.Component<ChatProps, State> {
     componentDidUpdate(prevProps: Readonly<ChatProps>, prevState: Readonly<State>): void {
         if( prevState.clicked !== this.state.clicked) {
 
-            console.log( prevState.clicked + " previous state");
-            console.log( this.state.clicked + " current state ")
 
 
             setTimeout(() =>
             {
                 this.clicked(false);
             }, 2000);
-            console.log(document.getElementById('btn3').style.pointerEvents)
-            console.log(document.getElementById('btn3').style.pointerEvents)
-
-
-            console.log( prevState.clicked + " previous state after ");
-            console.log( this.state.clicked + " current state after ")
         }
     }
 
