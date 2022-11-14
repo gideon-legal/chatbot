@@ -556,7 +556,6 @@ export class Chat extends React.Component<ChatProps, State> {
                 } else if(sessionStorage.getItem('pastConvoID')) {
                     conversationId = sessionStorage.getItem('pastConvoID');
                 }
-                console.log("inside connection status ",this.state.loading)
 
                 if (!state.connection.verification.attempted) {
                     this.store.dispatch<ChatActions>({
@@ -657,8 +656,6 @@ export class Chat extends React.Component<ChatProps, State> {
                                 status: 1
                             }
                         });
-
-                        console.log("before convo hspty", this.state.loading)
 
                         conversationHistory(this.props.gid, this.props.directLine.secret, conversationId)
                         .then((res: any) => {
