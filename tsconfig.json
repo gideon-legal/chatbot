@@ -16,6 +16,9 @@
         "inlineSources": true,
         "strictNullChecks": false
     },
+    "exclude": [
+        "node_modules"
+    ],
     "files": [
         "src/adaptivecards-hostconfig.d.ts",
         "src/BotChat.ts",
