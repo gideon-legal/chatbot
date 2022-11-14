@@ -56,8 +56,6 @@ export interface State {
     full_height: boolean;
     showConvoHistory: boolean;
     back_visible: boolean;
-    clicked: boolean;
-    unclicked: boolean;
     node_count: number;
     pastConversations: any[];
     messages: any[];
@@ -78,7 +76,6 @@ export class Chat extends React.Component<ChatProps, State> {
         fullscreen: false,
         full_height: false,
         clicked: false,
-        unclicked: true,
         back_visible: false,
         orginalBodyClass: document.body.className,
         node_count: -1,
@@ -88,6 +85,7 @@ export class Chat extends React.Component<ChatProps, State> {
         loading: true
     };
 
+    private clicked: any; // status of if the back button has been clicked already
 
     private store = createStore();
 
@@ -109,13 +107,16 @@ export class Chat extends React.Component<ChatProps, State> {
     private _saveHistoryRef = this.saveHistoryRef.bind(this);
     private _saveShellRef = this.saveShellRef.bind(this);
     // tslint:enable:variable-name
+
     private initialOpen = false;
     private reloadMsgsCalled = false;
 
     constructor(props: ChatProps) {
         super(props);
-        
-       
+        //this.clicked = {disabled: false};
+        var button = this.state;
+        button.clicked = false;
+        this.setState(button);
 
         this.store.dispatch<ChatActions>({
             type: 'Set_Locale',
@@ -180,8 +181,6 @@ export class Chat extends React.Component<ChatProps, State> {
                             this.toggleBackButton(false)
                         } else {
                             this.toggleBackButton(true)
-                           // document.getElementById('btn3').style.pointerEvents = 'auto';
-                            this.unclicked();
                         }
                     }
                     if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
@@ -204,8 +203,6 @@ export class Chat extends React.Component<ChatProps, State> {
                         this.toggleBackButton(false)
                     } else {
                         this.toggleBackButton(true)
-                        //document.getElementById('btn3').style.pointerEvents = 'auto';
-                        this.unclicked();
                     }
                     //this.toggleBackButton(true)
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
@@ -291,34 +288,6 @@ export class Chat extends React.Component<ChatProps, State> {
         }
     }
 
-    private clicked = (show: boolean) => {
-        //this.toggleBackButton(false);
-        //document.getElementById('btn1').style.pointerEvents = 'none';
-        //document.getElementById('btn3').style.pointerEvents = 'none';
-        if (show == true){
-            document.getElementById('btn3').style.pointerEvents = 'none';
-
-        } else {
-            document.getElementById('btn3').style.pointerEvents = 'auto';
-
-        }
-        console.log(document.getElementById('btn3').style.pointerEvents)
-        this.setState({
-            clicked: show
-        })  
-    }
-
-    private unclicked() {
-        //this.toggleBackButton(true);
-        //document.getElementById('btn3').style.pointerEvents = 'auto';
-        console.log(document.getElementById('btn3').style.pointerEvents)
-       // document.getElementById('btn1').style.pointerEvents = 'auto';
-        this.setState({
-            unclicked: true,
-            clicked: false
-        })
-    }
-
 
     private checkNodeCount = () => {
         return this.state.node_count;
@@ -399,8 +368,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 if(messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
-                 //   document.getElementById('btn3').style.pointerEvents = 'auto';
-                    this.unclicked()
+                    
                     this.store.dispatch<ChatActions>(
                         { type: 'Receive_Message',
                           activity: message_activities[message_activities.length-1]}
@@ -783,26 +751,6 @@ export class Chat extends React.Component<ChatProps, State> {
         window.removeEventListener('resize', this.resizeListener);
     }
 
-    componentDidUpdate(prevProps: Readonly<ChatProps>, prevState: Readonly<State>): void {
-        if( prevState.clicked !== this.state.clicked) {
-
-            console.log( prevState.clicked + " previous state");
-            console.log( this.state.clicked + " current state ")
-
-
-            setTimeout(() =>
-            {
-                this.clicked(false);
-            }, 2000);
-            console.log(document.getElementById('btn3').style.pointerEvents)
-            console.log(document.getElementById('btn3').style.pointerEvents)
-
-
-            console.log( prevState.clicked + " previous state after ");
-            console.log( this.state.clicked + " current state after ")
-        }
-    }
-
     componentWillReceiveProps(nextProps: ChatProps) {
         if (this.props.adaptiveCardsHostConfig !== nextProps.adaptiveCardsHostConfig) {
             this.store.dispatch<ChatActions>({
@@ -1044,49 +992,6 @@ export class Chat extends React.Component<ChatProps, State> {
                                             }   
                                             </div> 
                                         }
-
-                            <div className="wc-chatbot-content-right">
-                                <History
-                                    onCardAction={ this._handleCardAction }
-                                    ref={ this._saveHistoryRef }
-                                    gid={ this.props.gid }
-                                    directLine={ this.props.directLine }
-                                />
-
-                                <Shell ref={ this._saveShellRef } />
-                                
-
-                                { // if input is enabled show this && or if bot is talking
-                                    <div id="btn3" className = {backButtonClassName}>
-                                    { <label id="btn1"
-                        
-                                        className="wcbackbutton" onClick={() => {
-                                            this.clicked(true);
-                                            this.step();
-                                            // need to get the button back here
-                                            this.deleteNodeCount();
-                                            //this.state.clicked = false;
-
-                                            
-                                            // this.unclicked();
-                                         
-                                        }}>
-
-                                        <label style={{cursor: 'pointer'}}>
-                                            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                                                <div style={{position: 'relative', top: '19px', left: '20px', color: (this.state.clicked ? '#979797' : '#3F6DE1' ) }}>
-                                                    Back
-                                                    <div style = {{position: 'absolute', left: '-30px', top:'0'}}>
-                                                        <svg id="btn2" width="20" height="16" viewBox="0 0 20 16"  fill={(this.state.clicked ? '#979797' : '#3F6DE1' )} xmlns="http://www.w3.org/2000/svg">
-                                                            <path fill={(this.state.clicked ? '#979797' : '#3F6DE1' )} d="M18.75 6.85796H3.925L8.4625 1.87555C8.67467 1.64218 8.77675 1.34131 8.74628 1.03914C8.7158 0.736965 8.55527 0.458234 8.3 0.264265C8.04473 0.070295 7.71563 -0.0230245 7.3851 0.00483557C7.05456 0.0326956 6.74967 0.179453 6.5375 0.412823L0.2875 7.26935C0.245451 7.32389 0.207849 7.38118 0.175 7.44076C0.175 7.4979 0.175 7.53218 0.0875002 7.58932C0.0308421 7.72035 0.0011764 7.85982 0 8.00071C0.0011764 8.1416 0.0308421 8.28108 0.0875002 8.4121C0.0875002 8.46924 0.0874998 8.50353 0.175 8.56066C0.207849 8.62025 0.245451 8.67754 0.2875 8.73208L6.5375 15.5886C6.65503 15.7176 6.8022 15.8213 6.96856 15.8924C7.13491 15.9635 7.31636 16.0003 7.5 16C7.79207 16.0005 8.07511 15.9075 8.3 15.7372C8.42657 15.6412 8.5312 15.5234 8.60789 15.3905C8.68458 15.2575 8.73183 15.112 8.74692 14.9623C8.76202 14.8127 8.74466 14.6617 8.69586 14.5182C8.64705 14.3747 8.56775 14.2414 8.4625 14.1259L3.925 9.14347H18.75C19.0815 9.14347 19.3995 9.02307 19.6339 8.80876C19.8683 8.59446 20 8.30379 20 8.00071C20 7.69764 19.8683 7.40697 19.6339 7.19266C19.3995 6.97836 19.0815 6.85796 18.75 6.85796Z"/>
-                                                        </svg>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </label>
-                                    </label>}   
-                                </div> }
-                             </div> 
 
                                                 {/* TODO - temporarily commented out for all users to accomodate a new client */}
                                                 {/* <a href="https://gideon.legal">
