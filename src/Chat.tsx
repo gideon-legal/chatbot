@@ -59,6 +59,8 @@ import { FloatingIcon } from './FloatingIcon';
 import { FullscreenStaticContent } from './FullscreenStaticContent';
 import { History } from './History';
 import { Shell, ShellFunctions } from './Shell';
+import { any, reject, resolve } from 'bluebird';
+import { FaSourcetree } from 'react-icons/fa';
 
 export class Chat extends React.Component<ChatProps, State> {
 
@@ -165,7 +167,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         } else {
                             this.toggleBackButton(true)
                            // document.getElementById('btn3').style.pointerEvents = 'auto';
-                            this.unclicked();
+                            this.clicked(false);
                         }
                     }
                     if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
@@ -186,10 +188,11 @@ export class Chat extends React.Component<ChatProps, State> {
                     // open response only
                     if( this.checkNodeCount() == 0 ) {
                         this.toggleBackButton(false)
+                        this.clicked(true);
                     } else {
                         this.toggleBackButton(true)
                         //document.getElementById('btn3').style.pointerEvents = 'auto';
-                        this.unclicked();
+                        this.clicked(false);
                     }
                     //this.toggleBackButton(true)
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
@@ -258,6 +261,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 node_count: updated_count
             })
             this.state.node_count = updated_count
+            this.clicked(false);
         } 
         const updated_count = this.checkNodeCount()
         if (updated_count <= 0) {
@@ -265,7 +269,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 node_count: 0
             })
             this.state.node_count = 0
-            this.toggleBackButton(false)
+            this.clicked(true)
         }
     }
 
@@ -335,14 +339,15 @@ export class Chat extends React.Component<ChatProps, State> {
                         { type: 'Receive_Message',
                           activity: message_activities[message_activities.length-1]}
                     )
-                }
-                
+                    }
+
+                this.clicked(false);
             });
-        })
+        }
+        )
         .catch((err: any) => {
             console.log(err);
         });
-         
     }
 
     private setSize() {
@@ -632,17 +637,15 @@ export class Chat extends React.Component<ChatProps, State> {
         window.removeEventListener('resize', this.resizeListener);
     }
 
-    componentDidUpdate(prevProps: Readonly<ChatProps>, prevState: Readonly<State>): void {
-        if( prevState.clicked !== this.state.clicked) {
+    // componentDidUpdate(prevProps: Readonly<ChatProps>, prevState: Readonly<State>): void {
+    //     if( prevState.clicked !== this.state.clicked) {
+            
+    //         this.step();
+    //         this.clicked(false);
+    //     }
+    // }
 
-
-
-            setTimeout(() =>
-            {
-                this.clicked(false);
-            }, 2000);
-        }
-    }
+    
 
     componentWillReceiveProps(nextProps: ChatProps) {
         if (this.props.adaptiveCardsHostConfig !== nextProps.adaptiveCardsHostConfig) {
@@ -799,7 +802,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                     <div id="btn3" className = {backButtonClassName}>
                                     { <label id="btn1"
                         
-                                        className="wcbackbutton" onClick={() => {
+                                        className="wcbackbutton" onClick={ () => {
                                             this.clicked(true);
                                             this.step();
                                             // need to get the button back here
