@@ -702,11 +702,12 @@ export class Chat extends React.Component<ChatProps, State> {
                                 activities: mapMessagesToActivities(messages, state.connection.user.id)
                             });
 
-                            if(sessionStorage.getItem("convoComplete") && Boolean(sessionStorage.getItem("convoComplete"))) {
+                            //if(sessionStorage.getItem("convoComplete") && Boolean(sessionStorage.getItem("convoComplete"))) {
                                 this.setState({
                                     loading: false
-                                })
-                            }
+                                });
+                                console.log("loading false in convo history")
+                            //}
                         });
 
                         // Ping server with activity every 30 seconds
