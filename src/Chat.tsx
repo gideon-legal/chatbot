@@ -51,7 +51,6 @@ export interface State {
     full_height: boolean;
     back_visible: boolean;
     clicked: boolean;
-    unclicked: boolean;
     node_count: number;
 }
 
@@ -69,7 +68,6 @@ export class Chat extends React.Component<ChatProps, State> {
         fullscreen: false,
         full_height: false,
         clicked: false,
-        unclicked: true,
         back_visible: false,
         orginalBodyClass: document.body.className,
         node_count: -1,
@@ -771,13 +769,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                         className="wcbackbutton" onClick={ () => {
                                             this.clicked(true);
                                             this.step();
-                                            // need to get the button back here
                                             this.deleteNodeCount();
-                                            //this.state.clicked = false;
-
-                                            
-                                            // this.unclicked();
-                                         
                                         }}>
 
                                         <label style={{cursor: 'pointer'}}>
