@@ -59,8 +59,6 @@ import { FloatingIcon } from './FloatingIcon';
 import { FullscreenStaticContent } from './FullscreenStaticContent';
 import { History } from './History';
 import { Shell, ShellFunctions } from './Shell';
-import { any, reject, resolve } from 'bluebird';
-import { FaSourcetree } from 'react-icons/fa';
 
 export class Chat extends React.Component<ChatProps, State> {
 
@@ -270,11 +268,11 @@ export class Chat extends React.Component<ChatProps, State> {
         }
     }
 
+    private checkNodeCount = () => {
+        return this.state.node_count;
+    }
+
     private clicked = (show: boolean) => {
-        //this.toggleBackButton(false);
-        //document.getElementById('btn1').style.pointerEvents = 'none';
-        //document.getElementById('btn3').style.pointerEvents = 'none';
-        console.log("clicked")
         if (show == true){
             document.getElementById('btn3').style.pointerEvents = 'none';
 
@@ -285,21 +283,6 @@ export class Chat extends React.Component<ChatProps, State> {
         this.setState({
             clicked: show
         })  
-    }
-
-    private unclicked() {
-        //this.toggleBackButton(true);
-        //document.getElementById('btn3').style.pointerEvents = 'auto';
-       // document.getElementById('btn1').style.pointerEvents = 'auto';
-        this.setState({
-            unclicked: true,
-            clicked: false
-        })
-    }
-
-
-    private checkNodeCount = () => {
-        return this.state.node_count;
     }
 
     //step function perfoms going back to the previous message
@@ -467,9 +450,6 @@ export class Chat extends React.Component<ChatProps, State> {
 
                     const campaign = parseReferrer(document.referrer, window.location.href.toLowerCase());
 
-                    //console.log('campaign logging:', campaign, document.referrer, window.location.href.toLowerCase());
-
-
                     verifyConversation(
                         this.props.gid,
                         conversationId,
@@ -632,16 +612,6 @@ export class Chat extends React.Component<ChatProps, State> {
         }
         window.removeEventListener('resize', this.resizeListener);
     }
-
-    // componentDidUpdate(prevProps: Readonly<ChatProps>, prevState: Readonly<State>): void {
-    //     if( prevState.clicked !== this.state.clicked) {
-            
-    //         this.step();
-    //         this.clicked(false);
-    //     }
-    // }
-
-    
 
     componentWillReceiveProps(nextProps: ChatProps) {
         if (this.props.adaptiveCardsHostConfig !== nextProps.adaptiveCardsHostConfig) {
