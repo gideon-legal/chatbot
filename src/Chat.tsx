@@ -167,7 +167,6 @@ export class Chat extends React.Component<ChatProps, State> {
                         } else {
                             this.toggleBackButton(true)
                            // document.getElementById('btn3').style.pointerEvents = 'auto';
-                            this.clicked(false);
                         }
                     }
                     if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
@@ -188,11 +187,9 @@ export class Chat extends React.Component<ChatProps, State> {
                     // open response only
                     if( this.checkNodeCount() == 0 ) {
                         this.toggleBackButton(false)
-                        this.clicked(true);
                     } else {
                         this.toggleBackButton(true)
                         //document.getElementById('btn3').style.pointerEvents = 'auto';
-                        this.clicked(false);
                     }
                     //this.toggleBackButton(true)
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
@@ -261,7 +258,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 node_count: updated_count
             })
             this.state.node_count = updated_count
-            this.clicked(false);
+            this.toggleBackButton(true);
         } 
         const updated_count = this.checkNodeCount()
         if (updated_count <= 0) {
@@ -269,7 +266,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 node_count: 0
             })
             this.state.node_count = 0
-            this.clicked(true)
+            this.toggleBackButton(false);
         }
     }
 
@@ -277,6 +274,7 @@ export class Chat extends React.Component<ChatProps, State> {
         //this.toggleBackButton(false);
         //document.getElementById('btn1').style.pointerEvents = 'none';
         //document.getElementById('btn3').style.pointerEvents = 'none';
+        console.log("clicked")
         if (show == true){
             document.getElementById('btn3').style.pointerEvents = 'none';
 
@@ -334,13 +332,11 @@ export class Chat extends React.Component<ChatProps, State> {
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
                  //   document.getElementById('btn3').style.pointerEvents = 'auto';
-                    this.unclicked()
                     this.store.dispatch<ChatActions>(
                         { type: 'Receive_Message',
                           activity: message_activities[message_activities.length-1]}
                     )
                     }
-
                 this.clicked(false);
             });
         }
