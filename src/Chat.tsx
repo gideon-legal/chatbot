@@ -184,7 +184,6 @@ export class Chat extends React.Component<ChatProps, State> {
                             this.toggleBackButton(false)
                         } else {
                             this.toggleBackButton(true)
-                            this.unclicked();
 
                         }
                     }
@@ -208,7 +207,6 @@ export class Chat extends React.Component<ChatProps, State> {
                         this.toggleBackButton(false)
                     } else {
                         this.toggleBackButton(true)
-                        this.unclicked();
                     }
                     //this.toggleBackButton(true)
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
@@ -282,6 +280,7 @@ export class Chat extends React.Component<ChatProps, State> {
             });
             this.state.node_count = updated_count;
             sessionStorage.setItem("node_count", updated_count.toString());
+            this.toggleBackButton(true);
         } 
         const updated_count = this.checkNodeCount()
         if (updated_count <= 0) {
@@ -290,7 +289,7 @@ export class Chat extends React.Component<ChatProps, State> {
             });
             this.state.node_count = 0;
             sessionStorage.setItem("node_count", "0");
-            this.toggleBackButton(false)
+            this.toggleBackButton(false);
         }
     }
 
@@ -401,7 +400,6 @@ export class Chat extends React.Component<ChatProps, State> {
                 if(messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
-                    this.unclicked()
                     this.store.dispatch<ChatActions>(
                         { type: 'Receive_Message',
                           activity: message_activities[message_activities.length-1]}
@@ -409,6 +407,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 }
 
                 sessionStorage.removeItem("node_count");
+                this.clicked(false);
 
             });
         })
@@ -805,26 +804,6 @@ export class Chat extends React.Component<ChatProps, State> {
                 type: 'Set_Chat_Title',
                 chatTitle: nextProps.chatTitle
             });
-        }
-    }
-
-    componentDidUpdate(prevProps: Readonly<ChatProps>, prevState: Readonly<State>): void {
-        if( prevState.clicked !== this.state.clicked) {
-
-            console.log( prevState.clicked + " previous state");
-            console.log( this.state.clicked + " current state ")
-
-
-            setTimeout(() =>
-            {
-                this.clicked(false);
-            }, 2000);
-            console.log(document.getElementById('btn3').style.pointerEvents)
-            console.log(document.getElementById('btn3').style.pointerEvents)
-
-
-            console.log( prevState.clicked + " previous state after ");
-            console.log( this.state.clicked + " current state after ")
         }
     }
 
