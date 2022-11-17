@@ -73,6 +73,7 @@ export class Chat extends React.Component<ChatProps, State> {
         clicked: false
     };
 
+    private clicked: any; // status of if the back button has been clicked already
 
     private store = createStore();
 
@@ -94,10 +95,13 @@ export class Chat extends React.Component<ChatProps, State> {
     private _saveHistoryRef = this.saveHistoryRef.bind(this);
     private _saveShellRef = this.saveShellRef.bind(this);
     // tslint:enable:variable-name
+
     constructor(props: ChatProps) {
         super(props);
-        
-       
+        //this.clicked = {disabled: false};
+        var button = this.state;
+        button.clicked = false;
+        this.setState(button);
 
         this.store.dispatch<ChatActions>({
             type: 'Set_Locale',
@@ -162,7 +166,6 @@ export class Chat extends React.Component<ChatProps, State> {
                             this.toggleBackButton(false)
                         } else {
                             this.toggleBackButton(true)
-                           // document.getElementById('btn3').style.pointerEvents = 'auto';
                         }
                     }
                     if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
@@ -185,7 +188,6 @@ export class Chat extends React.Component<ChatProps, State> {
                         this.toggleBackButton(false)
                     } else {
                         this.toggleBackButton(true)
-                        //document.getElementById('btn3').style.pointerEvents = 'auto';
                     }
                     //this.toggleBackButton(true)
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
@@ -292,6 +294,7 @@ export class Chat extends React.Component<ChatProps, State> {
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, res.data.id)
             .then((res: any) => {
                 const messages = res.data.messages.reverse();
+                //console.log(messages)
                 const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
                 this.props.showConsole === false;
                 this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
@@ -312,7 +315,6 @@ export class Chat extends React.Component<ChatProps, State> {
                 if(messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
-                 //   document.getElementById('btn3').style.pointerEvents = 'auto';
                     this.store.dispatch<ChatActions>(
                         { type: 'Receive_Message',
                           activity: message_activities[message_activities.length-1]}
@@ -763,6 +765,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                 
 
                                 { // if input is enabled show this && or if bot is talking
+
                                     <div id="btn3" className = {backButtonClassName}>
                                     { <label
                                         className="wcbackbutton" onClick={ () => {
