@@ -73,8 +73,6 @@ export class Chat extends React.Component<ChatProps, State> {
         clicked: false
     };
 
-    private clicked: any; // status of if the back button has been clicked already
-
     private store = createStore();
 
     private botConnection: IBotConnection;
@@ -98,10 +96,6 @@ export class Chat extends React.Component<ChatProps, State> {
 
     constructor(props: ChatProps) {
         super(props);
-        //this.clicked = {disabled: false};
-        var button = this.state;
-        button.clicked = false;
-        this.setState(button);
 
         this.store.dispatch<ChatActions>({
             type: 'Set_Locale',
