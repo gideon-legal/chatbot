@@ -956,10 +956,13 @@ export class Chat extends React.Component<ChatProps, State> {
                                             state.format.logoUrl :
                                             'https://s3.amazonaws.com/com.gideon.static.dev/chatbot-header-default-v1.1.2.png'
                                         }
-                                        style={{ marginRight: '45px' }}
                                     />
-
-                                    <span>{typeof state.format.chatTitle === 'string' ? state.format.chatTitle : 'Gideon' }</span>
+                                    {
+                                        //typeof state.format.chatTitle === 'string' && state.format.chatTitle.length > 32 ? 
+                                        true ?
+                                        <span style={{ justifyContent: "flex-start", fontSize: "16px", marginLeft: "-20px" }}>{typeof state.format.chatTitle === 'string' ? state.format.chatTitle : 'hi whats up dude this is a really long title for chat bot' }</span> :
+                                        <span style={{ justifyContent: "center", fontSize: "18px", marginLeft: "63px" }}>{typeof state.format.chatTitle === 'string' ? state.format.chatTitle : 'Gideon' }</span>
+                                    }
                                     <IconButton onClick={() => this.handleHistory(true)} className="icon__button history__button" style={{ height: "auto" }}>
                                         <HistoryInline />
                                     </IconButton>
