@@ -173,6 +173,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         console.log("started new convo")
         sessionStorage.setItem('newConvo', 'true');
         sessionStorage.setItem('emptyChat', 'true');
+        sessionStorage.removeItem("msft_conversation_id");
         sessionStorage.removeItem("node_count");
         sessionStorage.removeItem('pastConvoID');
         sessionStorage.removeItem('pastConvoDate');
