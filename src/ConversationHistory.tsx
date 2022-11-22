@@ -51,7 +51,7 @@ export class ConversationHistory extends React.Component<HistoryProps, State> {
         <div key={i}>
           <ListItem onClick={() => this.handleClickConvo(conversation)} className="conversationCard">
             <div className="lato" style={{display: 'flex', width: '100%', paddingBottom: '5px'}}>
-              <div className="messageCount">{message_count} Messages</div>
+              <div className="messageCount">{message_count + lead_count} Messages</div>
               { conversationComplete &&
                 <div className="convoComplete">Complete</div>
               }
