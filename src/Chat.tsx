@@ -887,8 +887,9 @@ export class Chat extends React.Component<ChatProps, State> {
         //only happens once every reload
         if(performance.getEntriesByType('navigation')[0].type === 'reload' 
             //either waits for all msg to load or checks if convo is complete
-           && (Number(sessionStorage.getItem("original_length")) === this.store.getState().history.activities.length || sessionStorage.getItem("convoComplete") && sessionStorage.getItem("convoComplete") !== "null")
+           && (Number(sessionStorage.getItem("original_length")) === this.store.getState().history.activities.length)
            && !this.reloadMsgsCalled
+           && (!sessionStorage.getItem("convoComplete") || sessionStorage.getItem("convoComplete") === "false")
         ) {
             this.reload_messages();
             this.reloadMsgsCalled = true;
@@ -924,7 +925,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                     />
                                     {
                                         typeof state.format.chatTitle === 'string' && state.format.chatTitle.length > 45 ? 
-                                            <span style={{ fontSize: "16px", marginRight:"0px", marginLeft:"35px", textAlign:"center" }}>{typeof state.format.chatTitle === 'string' ? state.format.chatTitle : 'hi whats up dude this is a really long title for chat bot' }</span>
+                                            <span style={{ fontSize: "16px", marginRight:"0px", marginLeft:"35px", textAlign:"center" }}>{typeof state.format.chatTitle === 'string' ? state.format.chatTitle : 'Gideon' }</span>
                                             :
                                             <span style={{ fontSize: "18px", marginRight:"0px", marginLeft:"40px", textAlign:"center" }}>{typeof state.format.chatTitle === 'string' ? state.format.chatTitle : 'Gideon' }</span>
                                     }
