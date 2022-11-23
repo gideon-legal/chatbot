@@ -298,7 +298,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                     { content }
                     {/* prompt to start new convo if page refreshed */}
                     { this.newConvoPrompt &&
-                        <div className="new__convo" style={{ color:'#727272', textAlign: 'center', padding: "20px 0" }}>Do you want to start a new session?
+                        <div className="new__convo" style={{ color:'#727272', textAlign: 'center', padding: "20px 0", lineHeight: "20px" }}>Do you want to start a new session?
                             <br />
                             <a onClick={this.startNewConvo} style={{ color:'#3F6DE1', marginLeft: '5px', cursor: 'pointer', paddingTop: "20px" }}>
                                 Click here to start new
