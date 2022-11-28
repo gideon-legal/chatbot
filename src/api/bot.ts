@@ -37,7 +37,7 @@ export const conversationHistory = (
     conversationId: string,
     lastMessageId: string = null
 ): any => {
-    return axios.get(`${baseUrl}/api/v1/conversations/history?conversation_id=${conversationId}&directLine=${directLine}&limit=30&last=${lastMessageId}`);
+    return axios.get(`${baseUrl}/api/v1/conversations/history?conversation_id=${conversationId}&directLine=${directLine}&last=${lastMessageId}`);
 };
 
 export const ping = (
