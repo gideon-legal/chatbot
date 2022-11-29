@@ -219,6 +219,11 @@ export class Chat extends React.Component<ChatProps, State> {
                 }
                 break;
         }
+
+        console.log("back button status " + this.state.back_visible);
+
+        console.log("1");
+        
         this.setState({
             loading: false
         });
@@ -977,11 +982,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                         { // if input is enabled show this && or if bot is talking
                                             <div id="btn3" className = {backButtonClassName}>
                                             { 
-                                                <label style={ { 
-                                                    visibility: 
-                                                        this.state.back_visible && 
-                                                        (!sessionStorage.getItem("convoComplete") || sessionStorage.getItem("convoComplete") === 'null' || sessionStorage.getItem("convoComplete") === "false" )
-                                                    ? 'visible' : 'hidden' } }
+                                                <label 
                                                     className="wcbackbutton" onClick={() => {
                                                             this.clicked(true)
                                                             this.step(); 
