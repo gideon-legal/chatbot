@@ -219,11 +219,6 @@ export class Chat extends React.Component<ChatProps, State> {
                 }
                 break;
         }
-
-        console.log("back button status " + this.state.back_visible);
-
-        console.log("1");
-        
         this.setState({
             loading: false
         });
