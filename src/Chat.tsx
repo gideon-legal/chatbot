@@ -745,8 +745,9 @@ export class Chat extends React.Component<ChatProps, State> {
         });
 
         this.activitySubscription = botConnection.activity$.subscribe(
-            (activity: Activity) => this.handleIncomingActivity(activity),
-            (error: Error) => konsole.log('activity$ error', error)
+            () => console.log("success connection"),
+            (error: Error) => konsole.log('activity$ error', error),
+            (activity: Activity) => this.handleIncomingActivity(activity)
         );
 
         if (this.props.selectedActivity) {
