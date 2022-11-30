@@ -516,7 +516,6 @@ export class Chat extends React.Component<ChatProps, State> {
             this.setState({
                 loading: true
             });
-            console.log(this.state.loading)
         }
 
         let botConnection: any = null;
@@ -755,7 +754,7 @@ export class Chat extends React.Component<ChatProps, State> {
             console.log("intial open now")
         }
 
-        //this.getConvoList(localStorage.getItem('msft_user_id'),sessionStorage.getItem('msft_conversation_id'));
+        this.getConvoList(localStorage.getItem('msft_user_id'),sessionStorage.getItem('msft_conversation_id'));
     }
 
     componentWillUnmount() {
@@ -846,6 +845,7 @@ export class Chat extends React.Component<ChatProps, State> {
             sessionStorage.removeItem('pastConvoID');
             sessionStorage.removeItem("convoComplete");
             sessionStorage.removeItem("pastConvoDate");
+            sessionStorage.removeItem("original_length")
         }
     }
 
