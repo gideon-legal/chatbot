@@ -114,10 +114,6 @@ export class Chat extends React.Component<ChatProps, State> {
 
     constructor(props: ChatProps) {
         super(props);
-        //this.clicked = {disabled: false};
-       // var button = this.state;
-       // button.clicked = false;
-      //  this.setState(button);
 
         this.store.dispatch<ChatActions>({
             type: 'Set_Locale',
@@ -193,7 +189,9 @@ export class Chat extends React.Component<ChatProps, State> {
 
                 // if the current activity has no entities, it might be a completion node, in which case we must hide the back button
                 // checkNeedBackButton returns if the current activity corresponds to a completion node or not
-                const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)   
+                const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)  
+                //set convoComplete to true if current convo is finished
+                if(notNode === "handoff") sessionStorage.setItem("convoComplete", 'true');
                 if(notNode !== "open" && !activity.text.includes("Sorry, but that's not a valid")){
                     this.toggleBackButton(false);
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
@@ -268,10 +266,10 @@ export class Chat extends React.Component<ChatProps, State> {
         sessionStorage.setItem("node_count", new_count.toString());
     }
 
-    private deleteNodeCount = () => {
+    private deleteNodeCount = (amount: number) => {
         const curr_node = this.checkNodeCount();
         if (curr_node > 0){
-            const updated_count = curr_node - 2;
+            const updated_count = curr_node - amount;
             this.setState({
                 node_count: updated_count
             });
@@ -351,6 +349,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     });
                     //sessionStorage.setItem('newConvo','false')
                     //sessionStorage.setItem('emptyChat','false')
+                    this.deleteNodeCount(1);
             });
         }
     }
@@ -392,7 +391,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     )
                 }
 
-                sessionStorage.removeItem("node_count");
+                //sessionStorage.removeItem("node_count");
                 this.clicked(false);
 
             });
@@ -983,16 +982,12 @@ export class Chat extends React.Component<ChatProps, State> {
                                         { // if input is enabled show this && or if bot is talking
                                             <div id="btn3" className = {backButtonClassName}>
                                             { 
-                                                <label style={ { 
-                                                    visibility: 
-                                                        this.state.back_visible && 
-                                                        (!sessionStorage.getItem("convoComplete") || sessionStorage.getItem("convoComplete") === 'null' || sessionStorage.getItem("convoComplete") === "false" )
-                                                    ? 'visible' : 'hidden' } }
+                                                <label 
                                                     className="wcbackbutton" onClick={() => {
                                                             this.clicked(true)
                                                             this.step(); 
 
-                                                            this.deleteNodeCount();
+                                                            this.deleteNodeCount(2);
                                                             // var button = this.state; // temp variable in order to change state of clicked
                                                             // button.clicked = true; // changes state within variable to true
                                                             // this.setState(button); // passes updated boolean back to state

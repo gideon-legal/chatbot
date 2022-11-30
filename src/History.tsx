@@ -67,10 +67,8 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         ){
             console.log("set prompt to true")
             this.newConvoPrompt = true;
-        } 
-
+        } else if(sessionStorage.getItem("pastConvoID") && (!sessionStorage.getItem("convoComplete") || sessionStorage.getItem("convoComplete") === "null")) {
         //prompt disappears if uncompleted past convo is being viewed
-        if(sessionStorage.getItem("pastConvoID") && !sessionStorage.getItem("convoComplete") || sessionStorage.getItem("convoComplete") === "null") {
             this.newConvoPrompt = false;
         }
     }
@@ -185,6 +183,11 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         let content;
         let lastActivityIsDisclaimer = false;
         let activityDisclaimer: any;
+
+        //if convo is finished, prompt will appear
+        if(sessionStorage.getItem("convoComplete") && (!sessionStorage.getItem("pastConvoID") || sessionStorage.getItem("pastConvoID") === "null")) {
+            this.newConvoPrompt = true;
+        }
 
         if (this.props.size.width !== undefined) {
             if (this.props.format.carouselMargin === undefined) {
