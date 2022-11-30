@@ -164,6 +164,80 @@ export class Chat extends React.Component<ChatProps, State> {
         }
     }
 
+    private async handleIncomingBlankActivity(activity: Activity | null) {
+        const state = this.store.getState();
+        console.log("given activity: "+ activity)
+        console.log("in handleIncomingBlank")
+        console.log(state)
+        if(activity != null){
+            this.toggleBackButton(false);
+        switch (activity.type) {
+            case 'message':
+                console.log(activity)
+                // adding node count to check if first node, need to grey out back button
+                const curr_node_count = this.checkNodeCount();
+                if(activity.entities) {
+                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
+                    if(activity.entities[0].node_type == 'prompt' || activity.entities[0].type == 'ClientCapabilities') {
+                        this.toggleBackButton(false)
+                    } else {
+                        if( this.checkNodeCount() <= 0 ) {
+                            this.toggleBackButton(false)
+                        } else {
+                            this.toggleBackButton(true)
+                        }
+                    }
+                    if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
+                        this.addNodeCount();
+                    }
+               } else {
+                const botConnection: any = this.store.getState().connection.botConnection;
+
+
+                // if the current activity has no entities, it might be a completion node, in which case we must hide the back button
+                // checkNeedBackButton returns if the current activity corresponds to a completion node or not
+                const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)  
+                //set convoComplete to true if current convo is finished
+                if(notNode === "handoff") sessionStorage.setItem("convoComplete", 'true');
+                if(notNode !== "open" && !activity.text.includes("Sorry, but that's not a valid")){
+                    this.toggleBackButton(false);
+                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
+                } else {
+                    // open response only
+                    if( this.checkNodeCount() == 0 ) {
+                        this.toggleBackButton(false)
+                    } else {
+                        this.toggleBackButton(true)
+                    }
+                    //this.toggleBackButton(true)
+                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
+                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
+                }
+                this.addNodeCount();
+               }
+                this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
+                break;
+                
+            case 'typing':
+                console.log("typing")
+                this.toggleBackButton(false);
+                if (activity.from.id !== state.connection.user.id) {
+                    this.store.dispatch<ChatActions>({ type: 'Show_Typing', activity });
+                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
+                }
+                break;
+        }
+        this.setState({
+            loading: false
+        });
+        } else {
+            console.log("activity is null")
+
+        }
+    }
     private async handleIncomingActivity(activity: Activity) {
         const state = this.store.getState();
         const activityCopy: any = activity;
@@ -571,6 +645,8 @@ export class Chat extends React.Component<ChatProps, State> {
         const state = this.store.getState();
 
         this.connectionStatusSubscription = botConnection.connectionStatus$.subscribe((connectionStatus: any) => {
+            console.log("in connection status subscription")
+            console.log("connectionStatus: "+ connectionStatus)
             if (connectionStatus === 2) {  // wait for connection is 'OnLine' to send data to bot
 
                 const botCopy: any = botConnection;
@@ -745,9 +821,9 @@ export class Chat extends React.Component<ChatProps, State> {
         });
 
         this.activitySubscription = botConnection.activity$.subscribe(
-            () => console.log("success connection"),
-            (error: Error) => konsole.log('activity$ error', error),
-            (activity: Activity) => this.handleIncomingActivity(activity)
+            (activity: Activity | null) => this.handleIncomingBlankActivity(activity),
+            (error: Error) => console.log('activity$ error', error),
+            () => console.log("success connection")
         );
 
         if (this.props.selectedActivity) {
