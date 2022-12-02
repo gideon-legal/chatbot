@@ -164,88 +164,13 @@ export class Chat extends React.Component<ChatProps, State> {
         }
     }
 
-    private async handleIncomingBlankActivity(activity: Activity | null) {
-        const state = this.store.getState();
-        console.log("given activity: "+ activity)
-        console.log("in handleIncomingBlank")
-        console.log(state)
-        if(activity != null){
-            this.toggleBackButton(false);
-        switch (activity.type) {
-            case 'message':
-                console.log(activity)
-                // adding node count to check if first node, need to grey out back button
-                const curr_node_count = this.checkNodeCount();
-                if(activity.entities) {
-                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
-                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
-                    if(activity.entities[0].node_type == 'prompt' || activity.entities[0].type == 'ClientCapabilities') {
-                        this.toggleBackButton(false)
-                    } else {
-                        if( this.checkNodeCount() <= 0 ) {
-                            this.toggleBackButton(false)
-                        } else {
-                            this.toggleBackButton(true)
-                        }
-                    }
-                    if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
-                        this.addNodeCount();
-                    }
-               } else {
-                const botConnection: any = this.store.getState().connection.botConnection;
-
-
-                // if the current activity has no entities, it might be a completion node, in which case we must hide the back button
-                // checkNeedBackButton returns if the current activity corresponds to a completion node or not
-                const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)  
-                //set convoComplete to true if current convo is finished
-                if(notNode === "handoff") sessionStorage.setItem("convoComplete", 'true');
-                if(notNode !== "open" && !activity.text.includes("Sorry, but that's not a valid")){
-                    this.toggleBackButton(false);
-                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
-                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
-                } else {
-                    // open response only
-                    if( this.checkNodeCount() == 0 ) {
-                        this.toggleBackButton(false)
-                    } else {
-                        this.toggleBackButton(true)
-                    }
-                    //this.toggleBackButton(true)
-                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
-                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
-                }
-                this.addNodeCount();
-               }
-                this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
-                break;
-                
-            case 'typing':
-                console.log("typing")
-                this.toggleBackButton(false);
-                if (activity.from.id !== state.connection.user.id) {
-                    this.store.dispatch<ChatActions>({ type: 'Show_Typing', activity });
-                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
-                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
-                }
-                break;
-        }
-        this.setState({
-            loading: false
-        });
-        } else {
-            console.log("activity is null")
-
-        }
-    }
     private async handleIncomingActivity(activity: Activity) {
+        console.log("in activity")
         const state = this.store.getState();
         const activityCopy: any = activity;
-        console.log("handling incoming activity")
         this.toggleBackButton(false);
         switch (activity.type) {
             case 'message':
-                console.log(activity)
                 // adding node count to check if first node, need to grey out back button
                 const curr_node_count = this.checkNodeCount();
                 if(activity.entities) {
@@ -269,9 +194,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
                 // if the current activity has no entities, it might be a completion node, in which case we must hide the back button
                 // checkNeedBackButton returns if the current activity corresponds to a completion node or not
-                const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)  
-                //set convoComplete to true if current convo is finished
-                if(notNode === "handoff") sessionStorage.setItem("convoComplete", 'true');
+                const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)   
                 if(notNode !== "open" && !activity.text.includes("Sorry, but that's not a valid")){
                     this.toggleBackButton(false);
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
@@ -293,7 +216,6 @@ export class Chat extends React.Component<ChatProps, State> {
                 break;
                 
             case 'typing':
-                console.log("typing")
                 this.toggleBackButton(false);
                 if (activity.from.id !== state.connection.user.id) {
                     this.store.dispatch<ChatActions>({ type: 'Show_Typing', activity });
@@ -394,14 +316,11 @@ export class Chat extends React.Component<ChatProps, State> {
         console.log("reload_msg")
         const botConnection: any = this.store.getState().connection.botConnection;
         if(botConnection && botConnection.conversationId){
-            console.log("reloading messages and has bot connection")
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
                 .then((res: any) => {
-                    console.log("got conversation history")
                     const messages = res.data.messages.reverse();
-                    console.log(messages)
                     const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
-                    
+
                     this.props.showConsole === false;
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
@@ -435,7 +354,6 @@ export class Chat extends React.Component<ChatProps, State> {
                     //sessionStorage.setItem('emptyChat','false')
             });
         }
-        console.log("end of reloading messages")
     }
 
     //step function perfoms going back to the previous message
@@ -645,8 +563,6 @@ export class Chat extends React.Component<ChatProps, State> {
         const state = this.store.getState();
 
         this.connectionStatusSubscription = botConnection.connectionStatus$.subscribe((connectionStatus: any) => {
-            console.log("in connection status subscription")
-            console.log("connectionStatus: "+ connectionStatus)
             if (connectionStatus === 2) {  // wait for connection is 'OnLine' to send data to bot
 
                 const botCopy: any = botConnection;
@@ -764,15 +680,13 @@ export class Chat extends React.Component<ChatProps, State> {
                         .then((res: any) => {
                             const state = this.store.getState();
                             const messages = res.data.messages.reverse();
-                            console.log("messages from conversation history")
-                            console.log(messages)
+
                             if(isNew && messages.length === 0) isNew = true;
 
                             this.store.dispatch<ChatActions>({
                                 type: 'Set_Messages',
                                 activities: mapMessagesToActivities(messages, state.connection.user.id)
                             });
-                            console.log(this.props.activities)
 
                             //if(sessionStorage.getItem("convoComplete") && Boolean(sessionStorage.getItem("convoComplete"))) {
                                 this.setState({
@@ -821,10 +735,13 @@ export class Chat extends React.Component<ChatProps, State> {
         });
 
         this.activitySubscription = botConnection.activity$.subscribe(
-            (activity: Activity | null) => this.handleIncomingBlankActivity(activity),
-            (error: Error) => console.log('activity$ error', error),
-            () => console.log("success connection")
+            (activity: Activity) => this.handleIncomingActivity(activity),
+            (error: Error) => konsole.log('activity$ error', error),
         );
+
+        this.setState({
+            loading: false
+        });
 
         if (this.props.selectedActivity) {
             this.selectedActivitySubscription = this.props.selectedActivity.subscribe(activityOrID => {
@@ -923,7 +840,6 @@ export class Chat extends React.Component<ChatProps, State> {
 
     // change state of showConvoHistory to show list of convos
     private handleHistory = (bool: boolean) => {
-        console.log("handle history")
         this.getConvoList(localStorage.getItem('msft_user_id'),sessionStorage.getItem('msft_conversation_id'));
 
         this.setState({
@@ -939,18 +855,13 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private changeCurrentConversation = (convo: any) => {
-        console.log("changing current conversation")
         let currentConvoID = convo.msft_conversation_id;
         sessionStorage.setItem("pastConvoDate", convo.created_at);
         sessionStorage.setItem("convoComplete", convo.is_complete);
-        console.log("convo complete status: "+ convo.is_complete)
-        console.log("past convo date status: "+ convo.created_at)
         //viewing current convo
         if(currentConvoID === sessionStorage.getItem("msft_conversation_id")) {
-            console.log("handle history false")
             this.handleHistory(false);
         } else {
-            console.log("reloads window")
             sessionStorage.setItem("pastConvoID", currentConvoID);
             window.location.reload();
         }
@@ -984,7 +895,6 @@ export class Chat extends React.Component<ChatProps, State> {
            && ((Number(sessionStorage.getItem("original_length")) === this.store.getState().history.activities.length) || sessionStorage.getItem("convoComplete") === "true")
            && !this.reloadMsgsCalled
         ) {
-            console.log("in render, reload messages now")
             this.reload_messages();
             this.reloadMsgsCalled = true;
         }
