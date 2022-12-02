@@ -161,6 +161,7 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private async handleIncomingActivity(activity: Activity) {
+        console.log("in handle activity")
         const state = this.store.getState();
         const activityCopy: any = activity;
         this.toggleBackButton(false);
@@ -221,9 +222,9 @@ export class Chat extends React.Component<ChatProps, State> {
                 }
                 break;
         }
-        this.setState({
-            loading: false
-        });
+       // this.setState({
+       //     loading: false
+       // });
     }
 
 
@@ -735,6 +736,10 @@ export class Chat extends React.Component<ChatProps, State> {
             (activity: Activity) => this.handleIncomingActivity(activity),
             (error: Error) => konsole.log('activity$ error', error)
         );
+
+        this.setState({
+            loading: false
+        });
 
         if (this.props.selectedActivity) {
             this.selectedActivitySubscription = this.props.selectedActivity.subscribe(activityOrID => {
