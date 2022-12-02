@@ -161,6 +161,7 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private async handleIncomingActivity(activity: Activity) {
+        console.log("in activity")
         const state = this.store.getState();
         const activityCopy: any = activity;
         this.toggleBackButton(false);
@@ -189,9 +190,9 @@ export class Chat extends React.Component<ChatProps, State> {
 
                 // if the current activity has no entities, it might be a completion node, in which case we must hide the back button
                 // checkNeedBackButton returns if the current activity corresponds to a completion node or not
-                const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)  
+                const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text) 
                 //set convoComplete to true if current convo is finished
-                if(notNode === "handoff") sessionStorage.setItem("convoComplete", 'true');
+                if(notNode === "handoff") sessionStorage.setItem("convoComplete", 'true');  
                 if(notNode !== "open" && !activity.text.includes("Sorry, but that's not a valid")){
                     this.toggleBackButton(false);
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
@@ -733,8 +734,12 @@ export class Chat extends React.Component<ChatProps, State> {
 
         this.activitySubscription = botConnection.activity$.subscribe(
             (activity: Activity) => this.handleIncomingActivity(activity),
-            (error: Error) => konsole.log('activity$ error', error)
+            (error: Error) => konsole.log('activity$ error', error),
         );
+
+        this.setState({
+            loading: false
+        });
 
         if (this.props.selectedActivity) {
             this.selectedActivitySubscription = this.props.selectedActivity.subscribe(activityOrID => {
