@@ -319,6 +319,8 @@ export class Chat extends React.Component<ChatProps, State> {
                     const messages = res.data.messages.reverse();
                     const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
 
+                    console.log("const messages = ", messages);
+
                     this.props.showConsole === false;
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
@@ -886,6 +888,9 @@ export class Chat extends React.Component<ChatProps, State> {
         if(this.initialOpen) {
             open = this.initialOpen;
         }
+
+        console.log("this.reloadMsgsCalled ", this.reloadMsgsCalled)
+        console.log(Number(sessionStorage.getItem("original_length")), this.store.getState().history.activities.length );
 
         //reload msg when reloaded and waits until all previous msg appear before reload_messages is called
         //only happens once every reload
