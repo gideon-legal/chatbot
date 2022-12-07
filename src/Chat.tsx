@@ -317,6 +317,12 @@ export class Chat extends React.Component<ChatProps, State> {
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
                 .then((res: any) => {
                     const messages = res.data.messages.reverse();
+                    console.log("messages")
+                    console.log(messages)
+                    if(messages[messages.length-1].sender_type == 'bot'){
+                        console.log("removed last message")
+                        messages.pop();
+                    }
                     const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
 
                     console.log("const messages = ", messages);
@@ -324,6 +330,8 @@ export class Chat extends React.Component<ChatProps, State> {
                     this.props.showConsole === false;
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
+
+                    //if(message_activities[message_activities.length - 1].from.id === "") message_activities.pop()
 
                     this.store.dispatch<ChatActions>({
                         type: 'Set_Messages',
