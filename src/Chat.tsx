@@ -320,6 +320,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     console.log("messages")
                     console.log(messages)
                     if(messages[messages.length-1].sender_type == 'bot'){
+                        console.log("removed last message")
                         messages.pop();
                     }
                     const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
@@ -354,9 +355,9 @@ export class Chat extends React.Component<ChatProps, State> {
                         )
                     };
 
-                   //// this.setState({
-                   //     loading: false
-                  //  });
+                    this.setState({
+                        loading: false
+                    });
                     //sessionStorage.setItem('newConvo','false')
                     //sessionStorage.setItem('emptyChat','false')
                     this.deleteNodeCount(1);
