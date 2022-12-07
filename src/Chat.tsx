@@ -354,9 +354,9 @@ export class Chat extends React.Component<ChatProps, State> {
                         )
                     };
 
-                    this.setState({
-                        loading: false
-                    });
+                   //// this.setState({
+                   //     loading: false
+                  //  });
                     //sessionStorage.setItem('newConvo','false')
                     //sessionStorage.setItem('emptyChat','false')
                     this.deleteNodeCount(1);
