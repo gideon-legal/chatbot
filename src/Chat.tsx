@@ -325,6 +325,8 @@ export class Chat extends React.Component<ChatProps, State> {
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
 
+                    if(message_activities[message_activities.length - 1].from.id === "") message_activities.pop()
+
                     this.store.dispatch<ChatActions>({
                         type: 'Set_Messages',
                         activities: message_activities
