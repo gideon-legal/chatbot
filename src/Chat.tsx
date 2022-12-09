@@ -319,7 +319,8 @@ export class Chat extends React.Component<ChatProps, State> {
                     const messages = res.data.messages.reverse();
                     console.log("messages")
                     console.log(messages)
-                    if(messages[messages.length-1].sender_type == 'bot'){
+                    console.log(Number(sessionStorage.getItem("original_length")), this.store.getState().history.activities.length );
+                    if( this.store.getState().history.activities.length == messages.length && messages[messages.length-1].sender_type == 'bot'){
                         console.log("removed last message")
                         messages.pop();
                     }
