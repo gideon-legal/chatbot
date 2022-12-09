@@ -320,7 +320,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     console.log("messages")
                     console.log(messages)
                     console.log(Number(sessionStorage.getItem("original_length")), this.store.getState().history.activities.length );
-                    if((Number(sessionStorage.getItem("original_length")) != this.store.getState().history.activities.length) || this.store.getState().history.activities.length == messages.length && messages[messages.length-1].sender_type == 'bot'){
+                    if((Number(sessionStorage.getItem("original_length")) != this.store.getState().history.activities.length && messages[messages.length-1].sender_type == 'bot') || this.store.getState().history.activities.length == messages.length && messages[messages.length-1].sender_type == 'bot'){
                         console.log("removed last message")
                         messages.pop();
                     }
