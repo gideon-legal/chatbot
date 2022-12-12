@@ -322,10 +322,15 @@ export class Chat extends React.Component<ChatProps, State> {
                     console.log("messages")
                     console.log(messages)
                     console.log(Number(sessionStorage.getItem("original_length")), this.store.getState().history.activities.length );
+                    if(messages[messages.length-1].message == 'GIDEON_MESSAGE_START'){
+                        console.log("removed gideon message start")
+                        messages.pop();
+                    }
                     if((Number(sessionStorage.getItem("original_length")) != this.store.getState().history.activities.length && messages[messages.length-1].sender_type == 'bot') || this.store.getState().history.activities.length == messages.length && messages[messages.length-1].sender_type == 'bot'){
                         console.log("removed last message")
                         messages.pop();
                     }
+
                     const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
 
                     console.log("const messages = ", messages);
