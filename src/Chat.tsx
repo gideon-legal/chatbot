@@ -162,66 +162,89 @@ export class Chat extends React.Component<ChatProps, State> {
 
     private async handleIncomingActivity(activity: Activity) {
         console.log("in handle activity")
-        const state = this.store.getState();
+        console.log("activity in handle activity: ", activity)
+        console.log(this.store.getState().history.activities[this.store.getState().history.activities.length - 1])
+        console.log(this.store.getState().history.activities)
         const activityCopy: any = activity;
+        let lastActivity: any;
+        lastActivity = this.store.getState().history.activities[this.store.getState().history.activities.length - 1]
+        const state = this.store.getState();
         this.toggleBackButton(false);
-        switch (activity.type) {
-            case 'message':
-                // adding node count to check if first node, need to grey out back button
-                const curr_node_count = this.checkNodeCount();
-                if(activity.entities) {
-                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
-                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
-                    if(activity.entities[0].node_type == 'prompt' || activity.entities[0].type == 'ClientCapabilities') {
-                        this.toggleBackButton(false)
+        if(performance.getEntriesByType('navigation')[0].type !== 'reload' || (lastActivity && lastActivity.text !== activityCopy.text || lastActivity.type !== activityCopy.type && "GIDEON_MESSAGE_START" !== activityCopy.text) ){
+            switch (activity.type) {
+                case 'message':
+                    // adding node count to check if first node, need to grey out back button
+                    const curr_node_count = this.checkNodeCount();
+                    if(activity.entities) {
+                        this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+                        this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
+                        if(activity.entities[0].node_type == 'prompt' || activity.entities[0].type == 'ClientCapabilities') {
+                            this.toggleBackButton(false)
+                        } else {
+                            if( this.checkNodeCount() <= 0 ) {
+                                this.toggleBackButton(false)
+                            } else {
+                                this.toggleBackButton(true)
+                            }
+                        }
+                        if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
+                            this.addNodeCount();
+                        }
+                } else {
+                    const botConnection: any = this.store.getState().connection.botConnection;
+
+
+                    // if the current activity has no entities, it might be a completion node, in which case we must hide the back button
+                    // checkNeedBackButton returns if the current activity corresponds to a completion node or not
+                    const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)  
+                    //set convoComplete to true if current convo is finished
+                    if(notNode === "handoff") sessionStorage.setItem("convoComplete", 'true');
+                    if(notNode !== "open" && !activity.text.includes("Sorry, but that's not a valid")){
+                        this.toggleBackButton(false);
+                        this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+                        this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                     } else {
-                        if( this.checkNodeCount() <= 0 ) {
+                        // open response only
+                        if( this.checkNodeCount() == 0 ) {
                             this.toggleBackButton(false)
                         } else {
                             this.toggleBackButton(true)
                         }
+                        //this.toggleBackButton(true)
+                        this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
+                        this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
                     }
-                    if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
-                        this.addNodeCount();
-                    }
-               } else {
-                const botConnection: any = this.store.getState().connection.botConnection;
-
-
-                // if the current activity has no entities, it might be a completion node, in which case we must hide the back button
-                // checkNeedBackButton returns if the current activity corresponds to a completion node or not
-                const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)  
-                //set convoComplete to true if current convo is finished
-                if(notNode === "handoff") sessionStorage.setItem("convoComplete", 'true');
-                if(notNode !== "open" && !activity.text.includes("Sorry, but that's not a valid")){
+                    this.addNodeCount();
+                }
+                    this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
+                    break;
+                    
+                case 'typing':
                     this.toggleBackButton(false);
-                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
-                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
-                } else {
-                    // open response only
-                    if( this.checkNodeCount() == 0 ) {
-                        this.toggleBackButton(false)
-                    } else {
-                        this.toggleBackButton(true)
+                    if (activity.from.id !== state.connection.user.id) {
+                        this.store.dispatch<ChatActions>({ type: 'Show_Typing', activity });
+                        this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+                        this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                     }
-                    //this.toggleBackButton(true)
-                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
-                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
+                    break;
+            } 
+        } else if(lastActivity.text === activityCopy.text && activityCopy.entities) {
+            this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+            this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
+            if(activityCopy.entities[0].node_type == 'prompt' || activityCopy.entities[0].type == 'ClientCapabilities') {
+                this.toggleBackButton(false)
+            } else {
+                if( this.checkNodeCount() <= 0 ) {
+                    this.toggleBackButton(false)
+                } else {
+                    this.toggleBackButton(true)
                 }
+            }
+            if(activityCopy.entities[0].node_type !== 'prompt' && activityCopy.entities[0].type !== 'ClientCapabilities'){
                 this.addNodeCount();
-               }
-                this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
-                break;
-                
-            case 'typing':
-                this.toggleBackButton(false);
-                if (activity.from.id !== state.connection.user.id) {
-                    this.store.dispatch<ChatActions>({ type: 'Show_Typing', activity });
-                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
-                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
-                }
-                break;
+            }
         }
+        
        // this.setState({
        //     loading: false
        // });
@@ -322,10 +345,11 @@ export class Chat extends React.Component<ChatProps, State> {
                     console.log("messages")
                     console.log(messages)
                     console.log(Number(sessionStorage.getItem("original_length")), this.store.getState().history.activities.length );
-                    if((Number(sessionStorage.getItem("original_length")) != this.store.getState().history.activities.length && messages[messages.length-1].sender_type == 'bot') || this.store.getState().history.activities.length == messages.length && messages[messages.length-1].sender_type == 'bot'){
-                        console.log("removed last message")
-                        messages.pop();
-                    }
+                    //if((Number(sessionStorage.getItem("original_length")) != this.store.getState().history.activities.length) || this.store.getState().history.activities.length == messages.length && messages[messages.length-1].sender_type == 'bot'){
+                    // if((Number(sessionStorage.getItem("original_length")) != this.store.getState().history.activities.length && messages[messages.length-1].sender_type == 'bot') || this.store.getState().history.activities.length == messages.length && messages[messages.length-1].sender_type == 'bot'){
+                    //     console.log("removed last message")
+                    //     messages.pop();
+                    // }
                     const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
 
                     console.log("const messages = ", messages);
@@ -900,14 +924,14 @@ export class Chat extends React.Component<ChatProps, State> {
             open = this.initialOpen;
         }
 
-        console.log("this.reloadMsgsCalled ", this.reloadMsgsCalled)
-        console.log(Number(sessionStorage.getItem("original_length")), this.store.getState().history.activities.length );
+        //console.log("this.reloadMsgsCalled ", this.reloadMsgsCalled)
+        //console.log(Number(sessionStorage.getItem("original_length")), this.store.getState().history.activities.length );
 
         //reload msg when reloaded and waits until all previous msg appear before reload_messages is called
         //only happens once every reload
         if(performance.getEntriesByType('navigation')[0].type === 'reload' 
             //either waits for all msg to load or checks if convo is complete
-           && ((Number(sessionStorage.getItem("original_length")) === this.store.getState().history.activities.length && Number(sessionStorage.getItem("original_length")) !== 0) || sessionStorage.getItem("convoComplete") === "true")
+           && (((Number(sessionStorage.getItem("original_length")) === this.store.getState().history.activities.length) || Number(sessionStorage.getItem("original_length")) - this.store.getState().history.activities.length === -1 && Number(sessionStorage.getItem("original_length")) !== 0) || sessionStorage.getItem("convoComplete") === "true")
            && !this.reloadMsgsCalled
            && this.store.getState().connection.botConnection && this.store.getState().connection.botConnection.conversationId
         ) {
