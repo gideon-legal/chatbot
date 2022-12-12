@@ -313,7 +313,9 @@ export class Chat extends React.Component<ChatProps, State> {
     private reload_messages = (messageId?: string|null) => {
         console.log("reload_msg")
         const botConnection: any = this.store.getState().connection.botConnection;
+        console.log("before the if botconnection")
         if(botConnection && botConnection.conversationId){
+            console.log("after the if botconnection")
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
                 .then((res: any) => {
                     const messages = res.data.messages.reverse();
@@ -907,6 +909,7 @@ export class Chat extends React.Component<ChatProps, State> {
             //either waits for all msg to load or checks if convo is complete
            && ((Number(sessionStorage.getItem("original_length")) === this.store.getState().history.activities.length && Number(sessionStorage.getItem("original_length")) !== 0) || sessionStorage.getItem("convoComplete") === "true")
            && !this.reloadMsgsCalled
+           && this.store.getState().connection.botConnection && this.store.getState().connection.botConnection.conversationId
         ) {
             this.reload_messages();
             this.reloadMsgsCalled = true;
