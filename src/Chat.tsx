@@ -183,7 +183,7 @@ export class Chat extends React.Component<ChatProps, State> {
         console.log("alreadContains ", alreadyContains)
         if(this.store.getState().history.activities.length == 0 || performance.getEntriesByType('navigation')[0].type !== 'reload' || 
             //(lastActivity && lastActivity.text !== activityCopy.text || lastActivity.type !== activityCopy.type && "GIDEON_MESSAGE_START" !== activityCopy.text) ){
-            (lastActivity && lastActivity.text !== activityCopy.text && "GIDEON_MESSAGE_START" !== activityCopy.text) && !alreadyContains ||
+            !alreadyContains ||
             (lastActivity && lastActivity.text === activityCopy.text && lastActivity.type !== activityCopy.type && "GIDEON_MESSAGE_START" !== activityCopy.text)){
             console.log('inside if statement')
             switch (activity.type) {
