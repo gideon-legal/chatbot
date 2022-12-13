@@ -168,9 +168,24 @@ export class Chat extends React.Component<ChatProps, State> {
         const activityCopy: any = activity;
         let lastActivity: any;
         lastActivity = this.store.getState().history.activities[this.store.getState().history.activities.length - 1]
+        let secondLastActivity: any;
+        secondLastActivity = this.store.getState().history.activities[this.store.getState().history.activities.length - 2]
         const state = this.store.getState();
         this.toggleBackButton(false);
-        if(performance.getEntriesByType('navigation')[0].type !== 'reload' || (lastActivity && lastActivity.text !== activityCopy.text || lastActivity.type !== activityCopy.type && "GIDEON_MESSAGE_START" !== activityCopy.text) ){
+        let alreadyContains = false;
+        //checking if history.activities contains same text and message type as incoming activity
+        let i: any;
+        for(i of this.store.getState().history.activities){
+            if(i.text === activityCopy.text && i.type !== activityCopy.type && "GIDEON_MESSAGE_START" !== activityCopy.text){
+                alreadyContains = true;
+            }
+        }
+        console.log("alreadContains ", alreadyContains)
+        if(performance.getEntriesByType('navigation')[0].type !== 'reload' || 
+            //(lastActivity && lastActivity.text !== activityCopy.text || lastActivity.type !== activityCopy.type && "GIDEON_MESSAGE_START" !== activityCopy.text) ){
+            (lastActivity && lastActivity.text !== activityCopy.text && "GIDEON_MESSAGE_START" !== activityCopy.text) && !alreadyContains ||
+            (lastActivity && lastActivity.text === activityCopy.text && lastActivity.type !== activityCopy.type && "GIDEON_MESSAGE_START" !== activityCopy.text)){
+            console.log('inside if statement')
             switch (activity.type) {
                 case 'message':
                     // adding node count to check if first node, need to grey out back button
@@ -229,6 +244,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     break;
             } 
         } else if(lastActivity.text === activityCopy.text && activityCopy.entities) {
+            console.log('else if statement')
             this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
             this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
             if(activityCopy.entities[0].node_type == 'prompt' || activityCopy.entities[0].type == 'ClientCapabilities') {
