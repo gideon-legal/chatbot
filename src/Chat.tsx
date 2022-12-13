@@ -176,7 +176,7 @@ export class Chat extends React.Component<ChatProps, State> {
         //checking if history.activities contains same text and message type as incoming activity
         let i: any;
         for(i of this.store.getState().history.activities){
-            if(i.text === activityCopy.text && i.type !== activityCopy.type && "GIDEON_MESSAGE_START" !== activityCopy.text){
+            if(i.text === activityCopy.text && i.type === activityCopy.type && "GIDEON_MESSAGE_START" !== activityCopy.text){
                 alreadyContains = true;
             }
         }
