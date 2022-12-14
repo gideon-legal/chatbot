@@ -177,14 +177,13 @@ export class Chat extends React.Component<ChatProps, State> {
                         this.toggleBackButton(false)
                     } else {
                         if( curr_node_count == 1 ) {
-                            this.toggleBackButton(false)
+                            //this.toggleBackButton(false);
+                            this.clicked(true);
                         } else {
                             this.toggleBackButton(true)
+                            this.clicked(false);
                         }
                     }
-                    // if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
-                    //     this.addNodeCount();
-                    // }
                } else {
                 const botConnection: any = this.store.getState().connection.botConnection;
 
@@ -201,15 +200,16 @@ export class Chat extends React.Component<ChatProps, State> {
                 } else {
                     // open response only
                     if( curr_node_count == 1 ) {
-                        this.toggleBackButton(false)
+                        //this.toggleBackButton(false)
+                        this.clicked(true);
                     } else {
                         this.toggleBackButton(true)
+                        this.clicked(false);
                     }
                     //this.toggleBackButton(true)
                     this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                     this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
                 }
-                //this.addNodeCount();
                }
                 this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
                 break;
@@ -223,9 +223,6 @@ export class Chat extends React.Component<ChatProps, State> {
                 }
                 break;
         }
-       // this.setState({
-       //     loading: false
-       // });
     }
 
 
@@ -294,12 +291,14 @@ export class Chat extends React.Component<ChatProps, State> {
         return this.state.node_count;
     }
 
+
     private checkActivitiesLength = () => {
         const curr_node_count = this.store.getState().history.activities.length;
         if ( curr_node_count == 1 ) {
-            this.toggleBackButton(false)
+            //this.toggleBackButton(false)
+            this.clicked(true);
         } else {
-            this.toggleBackButton(true)
+            this.clicked(false);
         }
         console.log("current node count = " + curr_node_count)
     }
@@ -423,7 +422,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 }
 
                 //sessionStorage.removeItem("node_count");
-                this.clicked(false);
+
                 this.checkActivitiesLength();
             });
         })
@@ -1024,13 +1023,6 @@ export class Chat extends React.Component<ChatProps, State> {
                                                     className="wcbackbutton" onClick={() => {
                                                             this.clicked(true)
                                                             this.step(); 
-
-                                                            this.checkActivitiesLength();
-                                                            //this.deleteNodeCount(2);
-                                                            // var button = this.state; // temp variable in order to change state of clicked
-                                                            // button.clicked = true; // changes state within variable to true
-                                                            // this.setState(button); // passes updated boolean back to state
-                                                        
                                                     }}>
 
                                                    <label style={{cursor: 'pointer'}}>
