@@ -243,22 +243,12 @@ export class Chat extends React.Component<ChatProps, State> {
                     }
                     break;
             } 
-        } else if(lastActivity.text === activityCopy.text && activityCopy.entities) {
+        } else if(activityCopy.from.id !== localStorage.getItem("msft_user_id")) {
             console.log('else if statement')
-            this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
-            this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
-            if(activityCopy.entities[0].node_type == 'prompt' || activityCopy.entities[0].type == 'ClientCapabilities') {
-                this.toggleBackButton(false)
-            } else {
-                if( this.checkNodeCount() <= 0 ) {
-                    this.toggleBackButton(false)
-                } else {
-                    this.toggleBackButton(true)
-                }
-            }
-            if(activityCopy.entities[0].node_type !== 'prompt' && activityCopy.entities[0].type !== 'ClientCapabilities'){
-                this.addNodeCount();
-            }
+            console.log('activityCopy.from.id !== localStorage.getItem("msft_user_id"')
+            this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
+        } else {
+            console.log("else statement")
         }
         
        // this.setState({
