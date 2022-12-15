@@ -253,6 +253,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     type: 'Set_Messages',
                     activities: activitiesCopy
                 });
+                this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
             }
         } else {
             console.log("else statement")
