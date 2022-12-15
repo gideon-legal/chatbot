@@ -168,16 +168,16 @@ export class Chat extends React.Component<ChatProps, State> {
         const activityCopy: any = activity;
         let lastActivity: any;
         lastActivity = this.store.getState().history.activities[this.store.getState().history.activities.length - 1]
-        let secondLastActivity: any;
-        secondLastActivity = this.store.getState().history.activities[this.store.getState().history.activities.length - 2]
         const state = this.store.getState();
         this.toggleBackButton(false);
         let alreadyContains = false;
         //checking if history.activities contains same text and message type as incoming activity
         let i: any;
+        let duplicate: any;
         for(i of this.store.getState().history.activities){
             if(i.text === activityCopy.text && i.type === activityCopy.type && "GIDEON_MESSAGE_START" !== activityCopy.text){
                 alreadyContains = true;
+                duplicate = i;
             }
         }
         console.log("alreadContains ", alreadyContains)
@@ -245,8 +245,15 @@ export class Chat extends React.Component<ChatProps, State> {
             } 
         } else if(activityCopy.from.id !== localStorage.getItem("msft_user_id")) {
             console.log('else if statement')
-            console.log('activityCopy.from.id !== localStorage.getItem("msft_user_id"')
-            this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
+            //this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
+            if(alreadyContains){
+                let activitiesCopy = this.store.getState().history.activities.filter(activity => activity !== duplicate);
+                console.log("filter duplicates out: ", activitiesCopy )
+                this.store.dispatch<ChatActions>({
+                    type: 'Set_Messages',
+                    activities: activitiesCopy
+                });
+            }
         } else {
             console.log("else statement")
         }
