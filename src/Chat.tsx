@@ -168,16 +168,16 @@ export class Chat extends React.Component<ChatProps, State> {
         const activityCopy: any = activity;
         let lastActivity: any;
         lastActivity = this.store.getState().history.activities[this.store.getState().history.activities.length - 1]
-        let secondLastActivity: any;
-        secondLastActivity = this.store.getState().history.activities[this.store.getState().history.activities.length - 2]
         const state = this.store.getState();
         this.toggleBackButton(false);
         let alreadyContains = false;
         //checking if history.activities contains same text and message type as incoming activity
         let i: any;
+        let duplicate: any;
         for(i of this.store.getState().history.activities){
             if(i.text === activityCopy.text && i.type === activityCopy.type && "GIDEON_MESSAGE_START" !== activityCopy.text){
                 alreadyContains = true;
+                duplicate = i;
             }
         }
         console.log("alreadContains ", alreadyContains)
@@ -189,21 +189,20 @@ export class Chat extends React.Component<ChatProps, State> {
             switch (activity.type) {
                 case 'message':
                     // adding node count to check if first node, need to grey out back button
-                    const curr_node_count = this.checkNodeCount();
+                    const curr_node_count =  this.store.getState().history.activities.length;
                     if(activity.entities) {
                         this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                         this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                         if(activity.entities[0].node_type == 'prompt' || activity.entities[0].type == 'ClientCapabilities') {
                             this.toggleBackButton(false)
                         } else {
-                            if( this.checkNodeCount() <= 0 ) {
-                                this.toggleBackButton(false)
+                            if( curr_node_count == 1 ) {
+                            //this.toggleBackButton(false);
+                                this.clicked(true);
                             } else {
                                 this.toggleBackButton(true)
+                                this.clicked(false);
                             }
-                        }
-                        if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
-                            this.addNodeCount();
                         }
                 } else {
                     const botConnection: any = this.store.getState().connection.botConnection;
@@ -220,16 +219,17 @@ export class Chat extends React.Component<ChatProps, State> {
                         this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                     } else {
                         // open response only
-                        if( this.checkNodeCount() == 0 ) {
-                            this.toggleBackButton(false)
+                        if( curr_node_count == 1 ) {
+                           // this.toggleBackButton(false)
+                           this.clicked(true)
                         } else {
                             this.toggleBackButton(true)
+                            this.clicked(false)
                         }
                         //this.toggleBackButton(true)
                         this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                         this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
                     }
-                    this.addNodeCount();
                 }
                     this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
                     break;
@@ -245,8 +245,16 @@ export class Chat extends React.Component<ChatProps, State> {
             } 
         } else if(activityCopy.from.id !== localStorage.getItem("msft_user_id")) {
             console.log('else if statement')
-            console.log('activityCopy.from.id !== localStorage.getItem("msft_user_id"')
-            this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
+            //this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
+            if(alreadyContains){
+                let activitiesCopy = this.store.getState().history.activities.filter(activity => activity !== duplicate);
+                console.log("filter duplicates out: ", activitiesCopy )
+                this.store.dispatch<ChatActions>({
+                    type: 'Set_Messages',
+                    activities: activitiesCopy
+                });
+                this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
+            }
         } else {
             console.log("else statement")
         }
@@ -322,6 +330,16 @@ export class Chat extends React.Component<ChatProps, State> {
         return this.state.node_count;
     }
 
+    private checkActivitiesLength = () => {
+        const curr_node_count = this.store.getState().history.activities.length;
+        if ( curr_node_count == 1 ) {
+            this.clicked(true)
+        } else {
+            this.clicked(false)
+        }
+        console.log("current node count = " + curr_node_count)
+    }
+
     private clicked = (show: boolean) => {
         //this.toggleBackButton(false);
         //document.getElementById('btn1').style.pointerEvents = 'none';
@@ -356,7 +374,24 @@ export class Chat extends React.Component<ChatProps, State> {
                     //     console.log("removed last message")
                     //     messages.pop();
                     // }
-                    const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
+                    //filter messages to not include duplicates, check sender type = 1, only 1 per sender type = 1, node progress id
+                    var checked_nodes: any[] = []
+                    var messages_copy: any[] = []
+                    let m: any;
+                    for(m of messages){
+                        console.log(m)
+                        if(m.sender_type == "bot" && !checked_nodes.includes(m.node_progress_id) && m.node_progress_id != null){
+                            //console.log("in if push")
+                            checked_nodes.push(m.node_progress_id)
+                            messages_copy.push(m)
+                        } else if (m.sender_type == "chatbot_user" || m.node_progress_id == null){
+                           // console.log("in else push")
+                            messages_copy.push(m)
+                        }
+                    }
+                    console.log(messages_copy)
+                    console.log(checked_nodes)
+                    const message_activities = mapMessagesToActivities(messages_copy, this.store.getState().connection.user.id)
 
                     console.log("const messages = ", messages);
 
@@ -391,9 +426,8 @@ export class Chat extends React.Component<ChatProps, State> {
                     this.setState({
                         loading: false
                     });
-                    //sessionStorage.setItem('newConvo','false')
-                    //sessionStorage.setItem('emptyChat','false')
-                    this.deleteNodeCount(1);
+                    
+                   this.checkActivitiesLength();
             });
         }
     }
@@ -436,8 +470,8 @@ export class Chat extends React.Component<ChatProps, State> {
                 }
 
                 //sessionStorage.removeItem("node_count");
-                this.clicked(false);
-
+               // this.clicked(false);
+               this.checkActivitiesLength();
             });
         })
         .catch((err: any) => {
@@ -538,11 +572,11 @@ export class Chat extends React.Component<ChatProps, State> {
         this.setSize();
         const msftUserId = window.localStorage.getItem('msft_user_id');
 
-        if(sessionStorage.getItem("node_count")) {
-            this.setState({
-                node_count: Number(sessionStorage.getItem("node_count"))
-            });
-        }
+        //if(sessionStorage.getItem("node_count")) {
+        //    this.setState({
+        //        node_count: Number(sessionStorage.getItem("node_count"))
+         //   });
+        //}
 
         // initially always set to true
         let reloaded = performance.getEntriesByType('navigation')[0].type === 'reload' ? true : false;
@@ -1039,7 +1073,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                                             this.clicked(true)
                                                             this.step(); 
 
-                                                            this.deleteNodeCount(2);
+                                                           // this.deleteNodeCount(2);
                                                             // var button = this.state; // temp variable in order to change state of clicked
                                                             // button.clicked = true; // changes state within variable to true
                                                             // this.setState(button); // passes updated boolean back to state
