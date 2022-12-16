@@ -196,17 +196,14 @@ export class Chat extends React.Component<ChatProps, State> {
                         if(activity.entities[0].node_type == 'prompt' || activity.entities[0].type == 'ClientCapabilities') {
                             this.toggleBackButton(false)
                         } else {
-                            if( curr_node_count == 1) {
-                               // this.toggleBackButton(false)
-                               this.clicked(true)
+                            if( curr_node_count == 1 ) {
+                            //this.toggleBackButton(false);
+                                this.clicked(true);
                             } else {
-                               // this.toggleBackButton(true)
-                               this.clicked(false)
+                                this.toggleBackButton(true)
+                                this.clicked(false);
                             }
                         }
-                     //   if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
-                    //        this.addNodeCount();
-                    //    }
                 } else {
                     const botConnection: any = this.store.getState().connection.botConnection;
 
@@ -226,14 +223,13 @@ export class Chat extends React.Component<ChatProps, State> {
                            // this.toggleBackButton(false)
                            this.clicked(true)
                         } else {
-                           // this.toggleBackButton(true)
+                            this.toggleBackButton(true)
                             this.clicked(false)
                         }
                         //this.toggleBackButton(true)
                         this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                         this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
                     }
-                    this.addNodeCount();
                 }
                     this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
                     break;
@@ -430,9 +426,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     this.setState({
                         loading: false
                     });
-                    //sessionStorage.setItem('newConvo','false')
-                    //sessionStorage.setItem('emptyChat','false')
-                   // this.deleteNodeCount(1);
+                    
                    this.checkActivitiesLength();
             });
         }
@@ -478,7 +472,6 @@ export class Chat extends React.Component<ChatProps, State> {
                 //sessionStorage.removeItem("node_count");
                // this.clicked(false);
                this.checkActivitiesLength();
-
             });
         })
         .catch((err: any) => {
