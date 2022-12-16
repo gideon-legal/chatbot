@@ -384,11 +384,11 @@ export class Chat extends React.Component<ChatProps, State> {
                     let m: any;
                     for(m of messages){
                         console.log(m)
-                        if(m.sender_type == "bot" && !checked_nodes.includes(m.node_progress_id)){
+                        if(m.sender_type == "bot" && !checked_nodes.includes(m.node_progress_id) && m.node_progress_id != null){
                             //console.log("in if push")
                             checked_nodes.push(m.node_progress_id)
                             messages_copy.push(m)
-                        } else if (m.sender_type == "chatbot_user"){
+                        } else if (m.sender_type == "chatbot_user" || m.node_progress_id == null){
                            // console.log("in else push")
                             messages_copy.push(m)
                         }
