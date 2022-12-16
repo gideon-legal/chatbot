@@ -174,10 +174,12 @@ export class Chat extends React.Component<ChatProps, State> {
         //checking if history.activities contains same text and message type as incoming activity
         let i: any;
         let duplicate: any;
+        let checked_ids: any[] = []
         for(i of this.store.getState().history.activities){
-            if(i.text === activityCopy.text && i.type === activityCopy.type && "GIDEON_MESSAGE_START" !== activityCopy.text){
+            if(i.text === activityCopy.text && i.type === activityCopy.type && "GIDEON_MESSAGE_START" !== activityCopy.text && !checked_ids.includes(i.text)){
                 alreadyContains = true;
                 duplicate = i;
+                checked_ids.push(i.text)
             }
         }
         console.log("alreadContains ", alreadyContains)
