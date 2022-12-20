@@ -249,8 +249,53 @@ export class Chat extends React.Component<ChatProps, State> {
             console.log('else if statement')
             //this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
             if(alreadyContains){
+                const curr_node_count =  this.store.getState().history.activities.length;
                 let activitiesCopy = this.store.getState().history.activities.filter(activity => activity !== duplicate);
                 console.log("filter duplicates out: ", activitiesCopy )
+                let currActivity = this.store.getState().history.activities[this.store.getState().history.activities.length-2]
+                console.log("current activity")
+                console.log(currActivity)
+                if(currActivity.type == "message"){
+                    if(currActivity.entities.length > 0){
+                        this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+                        this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
+                            if((currActivity.entities[0].node_type && currActivity.entities[0].node_type == 'prompt' )|| currActivity.entities[0].type == 'ClientCapabilities') {
+                                this.toggleBackButton(false)
+                            } else {
+                            if( curr_node_count == 1 ) {
+                            //this.toggleBackButton(false);
+                                this.clicked(true);
+                            } else {
+                                this.toggleBackButton(true)
+                                this.clicked(false);
+                            }
+                        }
+                    } else {
+                        //not entities
+                        const botConnection: any = this.store.getState().connection.botConnection;
+                        const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, currActivity.text)  
+                    //set convoComplete to true if current convo is finished
+                    if(notNode === "handoff") sessionStorage.setItem("convoComplete", 'true');
+                    if(notNode !== "open" && !currActivity.text.includes("Sorry, but that's not a valid")){
+                        this.toggleBackButton(false);
+                        this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+                        this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
+                    } else {
+                        // open response only
+                        if( curr_node_count == 1 ) {
+                           // this.toggleBackButton(false)
+                           this.clicked(true)
+                        } else {
+                            this.toggleBackButton(true)
+                            this.clicked(false)
+                        }
+                        //this.toggleBackButton(true)
+                        this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
+                        this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
+                    }
+                    }
+
+                }
                 this.store.dispatch<ChatActions>({
                     type: 'Set_Messages',
                     activities: activitiesCopy
