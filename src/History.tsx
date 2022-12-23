@@ -57,6 +57,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         // - page was refreshed
         // - chat wasn't empty before the page refresh
         // - not a new convo being started
+        console.log("set prompt to false - 2")
         this.newConvoPrompt = false;
         
         if(performance.getEntriesByType('navigation')[0].type === 'reload' 
@@ -69,6 +70,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
             this.newConvoPrompt = true;
         } else if(sessionStorage.getItem("pastConvoID") && (!sessionStorage.getItem("convoComplete") || sessionStorage.getItem("convoComplete") === "null")) {
         //prompt disappears if uncompleted past convo is being viewed
+        console.log("set prompt to false - 1")
             this.newConvoPrompt = false;
         }
     }
@@ -186,6 +188,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
 
         //if convo is finished, prompt will appear
         if(sessionStorage.getItem("convoComplete") && (!sessionStorage.getItem("pastConvoID") || sessionStorage.getItem("pastConvoID") === "null")) {
+            console.log("set new convo prompt to true")
             this.newConvoPrompt = true;
         }
 
@@ -268,9 +271,11 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                     //prompt disappears once user interacts with it
                     if(reloaded && activities[activities.length - 1].from.id === localStorage.getItem("msft_user_id") && !Number.isInteger(Number(activities[activities.length - 1].id))){    
                         this.newConvoPrompt = false;
+                        console.log("set prompt to false - 3")
                     //prompt disappears after back button pressed
                     } else if(Number(sessionStorage.getItem("original_length")) - 1 > activities.length && this.newConvoPrompt){
                         this.newConvoPrompt = false;
+                        console.log("set prompt to false - 4")
                     }
                 }
             }
