@@ -64,7 +64,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
             && (!sessionStorage.getItem('newConvo') || sessionStorage.getItem('newConvo') !== 'true')
             && (!sessionStorage.getItem('emptyChat') || sessionStorage.getItem('emptyChat') !== 'true')
             && sessionStorage.getItem('original_length')
-            && !sessionStorage.getItem("pastConvoID")
+           // && !sessionStorage.getItem("pastConvoID")
         ){
             console.log("set prompt to true")
             this.newConvoPrompt = true;
