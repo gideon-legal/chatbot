@@ -252,7 +252,14 @@ export class Chat extends React.Component<ChatProps, State> {
                 const curr_node_count =  this.store.getState().history.activities.length;
                 let activitiesCopy = this.store.getState().history.activities.filter(activity => activity !== duplicate);
                 console.log("filter duplicates out: ", activitiesCopy )
+                //add case when creating currActivity, if -2 is gideon message start, stick with -1
                 let currActivity = this.store.getState().history.activities[this.store.getState().history.activities.length-2]
+                if(currActivity.type == "message"){
+                    if(currActivity.text == "GIDEON_MESSAGE_START"){
+                        console.log("match")
+                        currActivity = this.store.getState().history.activities[this.store.getState().history.activities.length-1]
+                    }
+                }
                 console.log("current activity")
                 console.log(currActivity)
                 if(currActivity.type == "message"){
