@@ -302,6 +302,13 @@ export class Chat extends React.Component<ChatProps, State> {
                     }
                     }
 
+                } else {
+                    this.toggleBackButton(false);
+                    if (activity.from.id !== state.connection.user.id) {
+                        this.store.dispatch<ChatActions>({ type: 'Show_Typing', activity });
+                        this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+                        this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
+                    }
                 }
                 this.store.dispatch<ChatActions>({
                     type: 'Set_Messages',
