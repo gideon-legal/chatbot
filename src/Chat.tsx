@@ -250,6 +250,7 @@ export class Chat extends React.Component<ChatProps, State> {
             //this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
             if(alreadyContains){
                 const curr_node_count =  this.store.getState().history.activities.length;
+                console.log("original w/ duplicates:  ", this.store.getState().history.activities)
                 let activitiesCopy = this.store.getState().history.activities.filter(activity => activity !== duplicate);
                 console.log("filter duplicates out: ", activitiesCopy )
                 //add case when creating currActivity, if -2 is gideon message start, stick with -1
@@ -263,7 +264,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 console.log("current activity")
                 console.log(currActivity)
                 if(currActivity.type == "message"){
-                    if(currActivity.entities.length > 0){
+                    if(currActivity.entities && currActivity.entities.length > 0){
                         this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                         this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                             if((currActivity.entities[0].node_type && currActivity.entities[0].node_type == 'prompt' )|| currActivity.entities[0].type == 'ClientCapabilities') {
@@ -301,6 +302,11 @@ export class Chat extends React.Component<ChatProps, State> {
                         this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
                     }
                     }
+                    this.store.dispatch<ChatActions>({
+                        type: 'Set_Messages',
+                        activities: activitiesCopy
+                    });
+                    this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
 
                 } else {
                     this.toggleBackButton(false);
@@ -310,11 +316,6 @@ export class Chat extends React.Component<ChatProps, State> {
                         this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                     }
                 }
-                this.store.dispatch<ChatActions>({
-                    type: 'Set_Messages',
-                    activities: activitiesCopy
-                });
-                this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
             }
         } else {
             console.log("else statement")
