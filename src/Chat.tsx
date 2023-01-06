@@ -251,7 +251,40 @@ export class Chat extends React.Component<ChatProps, State> {
             if(alreadyContains){
                 const curr_node_count =  this.store.getState().history.activities.length;
                 console.log("original w/ duplicates:  ", this.store.getState().history.activities)
-                let activitiesCopy = this.store.getState().history.activities.filter(activity => activity !== duplicate);
+                let activitiesCopy = this.store.getState().history.activities
+                // need to check if -1 and -2 are same text, remove, else keep
+                if(this.store.getState().history.activities.length >= 2){
+                    let checkLast = activitiesCopy.slice(-2)
+                    console.log(checkLast)
+                    let checkText = ""
+                    let checkId = 0
+                    let dup = false
+                    let checked_text: any[] = []
+                    let checked_id: any[] = []
+                    for(i of checkLast){
+                        if(checkText == "" && i.type == 'message'){
+                            console.log('here')
+                            checkText = i.text
+                            checkId = i.id
+                        } else if(i.id != checkId && i.type == 'typing' && i.text == checkText ){
+                            dup = true
+                        }  
+                    }
+                    console.log("dup: " + dup)
+                    //if dup = true, remove -2 from array
+                    
+                    //need to only filter out duplicate when -1 (typing) text is same as -2 text (message), remove  -2?
+                    if(dup == true){
+                        activitiesCopy.splice(activitiesCopy.length-2,1)
+                        console.log(activitiesCopy)
+
+                    }
+
+                //need diferent method to filter 
+                
+                }
+                
+
                 console.log("filter duplicates out: ", activitiesCopy )
                 //add case when creating currActivity, if -2 is gideon message start, stick with -1
                 let currActivity = this.store.getState().history.activities[this.store.getState().history.activities.length-2]
@@ -264,7 +297,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 console.log("current activity")
                 console.log(currActivity)
                 if(currActivity.type == "message"){
-                    if(currActivity.entities && currActivity.entities.length > 0){
+                    if(currActivity.entities){
                         this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                         this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                             if((currActivity.entities[0].node_type && currActivity.entities[0].node_type == 'prompt' )|| currActivity.entities[0].type == 'ClientCapabilities') {
@@ -309,6 +342,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
 
                 } else {
+                    console.log("else typing case")
                     this.toggleBackButton(false);
                     if (activity.from.id !== state.connection.user.id) {
                         this.store.dispatch<ChatActions>({ type: 'Show_Typing', activity });
