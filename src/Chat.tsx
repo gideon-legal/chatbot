@@ -287,10 +287,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
                 console.log("filter duplicates out: ", activitiesCopy )
                 //add case when creating currActivity, if -2 is gideon message start, stick with -1
-                let currActivity = this.store.getState().history.activities[this.store.getState().history.activities.length-1]
-                if(this.store.getState().history.activities.length >= 2){
-                    currActivity = this.store.getState().history.activities[this.store.getState().history.activities.length-2]
-                }
+                let currActivity = this.store.getState().history.activities[this.store.getState().history.activities.length-2]
                 if(currActivity.type == "message"){
                     if(currActivity.text == "GIDEON_MESSAGE_START"){
                         console.log("match")
@@ -300,7 +297,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 console.log("current activity")
                 console.log(currActivity)
                 if(currActivity.type == "message"){
-                    if(currActivity.entities && currActivity.entities.length >= 1){
+                    if(currActivity.entities){
                         this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                         this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                             if((currActivity.entities[0].node_type && currActivity.entities[0].node_type == 'prompt' )|| currActivity.entities[0].type == 'ClientCapabilities') {
