@@ -224,7 +224,10 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
     }
 
     getDateText = () => {
-        return this.state.date.format(dateFormatWithTime);
+      //need to convert to include label
+      const d = new Date(Date.now())
+      const timezone = d.toLocaleDateString("en-US", { day: '2-digit', timeZoneName: 'short'}).split(',')[1]
+      return this.state.date.format(dateFormatWithTime) + timezone;
     }
 
     validateSelection = () => {
