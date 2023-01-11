@@ -40,7 +40,7 @@ export interface SchedulerState {
 }
 
 export const dateFormat = 'MMMM D, YYYY';
-export const dateFormatWithTime = 'MMMM D, YYYY hh:mmA Z';
+export const dateFormatWithTime = 'MMMM D, YYYY hh:mmA';
 export const dateFormatWithJustTime = 'MMMM D, YYYY hh:mmA';
 
 const appointmentBuffer = 30; // minutes
