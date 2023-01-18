@@ -79,7 +79,7 @@ export class Chat extends React.Component<ChatProps, State> {
         clicked: false,
         back_visible: false,
         orginalBodyClass: document.body.className,
-        node_count: -1,
+        node_count: 0,
         showConvoHistory: false,
         pastConversations: [] as any,
         messages: [] as any,
@@ -185,14 +185,23 @@ export class Chat extends React.Component<ChatProps, State> {
             switch (activity.type) {
                 case 'message':
                     // adding node count to check if first node, need to grey out back button
+
+                    const buttonCheck = this.checkNodeCount();
+
                     const curr_node_count =  this.store.getState().history.activities.length;
                     if(activity.entities) {
+
+                        if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
+                            this.addNodeCount();
+                            console.log( "nodecount 1 " + this.checkNodeCount());
+                        }
+
                         this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                         this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                         if(activity.entities[0].node_type == 'prompt' || activity.entities[0].type == 'ClientCapabilities') {
                             this.toggleBackButton(false)
                         } else {
-                            if( curr_node_count == 1 ) {
+                            if( buttonCheck == 1 ) {
                             //this.toggleBackButton(false);
                                 this.clicked(true);
                             } else {
@@ -215,7 +224,9 @@ export class Chat extends React.Component<ChatProps, State> {
                         this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                     } else {
                         // open response only
-                        if( curr_node_count == 1 ) {
+                        this.addNodeCount();
+                        console.log( "nodecount 3 " + this.checkNodeCount());
+                        if( curr_node_count  == 1 ) {
                            // this.toggleBackButton(false)
                            this.clicked(true)
                         } else {
@@ -226,6 +237,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                         this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
                     }
+                    console.log( "nodecount 2 " + this.checkNodeCount());
                 }
                     this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
                     break;
@@ -243,6 +255,7 @@ export class Chat extends React.Component<ChatProps, State> {
             //this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
             if(alreadyContains){
                 const curr_node_count =  this.store.getState().history.activities.length;
+                const buttonCheck = this.checkNodeCount();
                 // need to check if -1 and -2 are same text, remove, else keep
                 let activitiesCopy = this.store.getState().history.activities
                 // need to check if -1 and -2 are same text, remove, else keep
@@ -279,6 +292,9 @@ export class Chat extends React.Component<ChatProps, State> {
                 console.log("current activity")
                 console.log(currActivity)
                 if(currActivity.type == "message"){
+
+                    //const buttonCheck = this.checkNodeCount();
+
                     if(currActivity.entities && currActivity.entities.length >= 1){
                         this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                         this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
@@ -286,7 +302,7 @@ export class Chat extends React.Component<ChatProps, State> {
                             if((currActivity.entities[0].node_type && currActivity.entities[0].node_type == 'prompt' )|| currActivity.entities[0].type == 'ClientCapabilities') {
                                 this.toggleBackButton(false)
                             } else {
-                              if( curr_node_count == 1 ) {
+                              if( curr_node_count  == 1 ) {
                                 this.clicked(true);
                               } else {
                                 this.toggleBackButton(true)
@@ -294,7 +310,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                }
                             }
                         } else {
-                            if( curr_node_count == 1 ) {
+                            if( curr_node_count  == 1 ) {
                                 this.clicked(true);
                             } else {
                                 this.toggleBackButton(true)
@@ -311,6 +327,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                         this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                     } else {
+                        
                         // open response only
                         if( curr_node_count == 1 ) {
                            this.clicked(true)
@@ -348,7 +365,7 @@ export class Chat extends React.Component<ChatProps, State> {
                             this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                         } else {
                           // open response only
-                           if( curr_node_count == 1 ) {
+                           if( buttonCheck == 1 ) {
                                this.clicked(true)
                             } else {
                                this.toggleBackButton(true)
@@ -463,6 +480,13 @@ export class Chat extends React.Component<ChatProps, State> {
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
                 .then((res: any) => {
                     const messages = res.data.messages.reverse();
+
+                if(sessionStorage.getItem("node_count")) {
+                    this.setState({
+                    node_count: ((Number(sessionStorage.getItem("node_count"))) - 1)
+                    });
+                }
+                    
                    
                     //filter messages to not include duplicates, check sender type = 1, only 1 per sender type = 1, node progress id
                     var checked_nodes: any[] = []
