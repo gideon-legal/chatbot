@@ -1166,7 +1166,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                                             this.clicked(true)
                                                             this.step(); 
 
-                                                           // this.deleteNodeCount(2);
+                                                            this.deleteNodeCount(1);
                                                             // var button = this.state; // temp variable in order to change state of clicked
                                                             // button.clicked = true; // changes state within variable to true
                                                             // this.setState(button); // passes updated boolean back to state
