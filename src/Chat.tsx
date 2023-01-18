@@ -79,7 +79,7 @@ export class Chat extends React.Component<ChatProps, State> {
         clicked: false,
         back_visible: false,
         orginalBodyClass: document.body.className,
-        node_count: 0,
+        node_count: -1,
         showConvoHistory: false,
         pastConversations: [] as any,
         messages: [] as any,
@@ -451,7 +451,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
     private checkActivitiesLength = () => {
         const curr_node_count = this.store.getState().history.activities.length;
-        if ( curr_node_count == 1 ) {
+        if ( curr_node_count == 1 || this.checkNodeCount() == 0) {
             this.clicked(true)
         } else {
             this.clicked(false)
