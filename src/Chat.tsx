@@ -456,6 +456,9 @@ export class Chat extends React.Component<ChatProps, State> {
         } else {
             this.clicked(false)
         }
+        if (this.checkNodeCount() == 0 ) {
+            this.toggleBackButton( false );
+        }
     }
 
     private clicked = (show: boolean) => {
