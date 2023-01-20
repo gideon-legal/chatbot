@@ -201,7 +201,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         if(activity.entities[0].node_type == 'prompt' || activity.entities[0].type == 'ClientCapabilities') {
                             this.toggleBackButton(false)
                         } else {
-                            if( buttonCheck == 1 ) {
+                            if( buttonCheck == 0 ) {
                             //this.toggleBackButton(false);
                                 this.clicked(true);
                             } else {
@@ -365,7 +365,7 @@ export class Chat extends React.Component<ChatProps, State> {
                             this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                         } else {
                           // open response only
-                           if( buttonCheck == 1 ) {
+                           if( buttonCheck == 0 ) {
                                this.clicked(true)
                             } else {
                                this.toggleBackButton(true)
