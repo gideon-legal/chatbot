@@ -483,6 +483,9 @@ export class Chat extends React.Component<ChatProps, State> {
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
                 .then((res: any) => {
                     const messages = res.data.messages.reverse();
+                    console.log("switching convos 2")
+                    console.log(res.data)
+                    
 
                 if(sessionStorage.getItem("node_count")) {
                     this.setState({
@@ -858,6 +861,17 @@ export class Chat extends React.Component<ChatProps, State> {
                         .then((res: any) => {
                             const state = this.store.getState();
                             const messages = res.data.messages.reverse();
+                            console.log("switching convos?")
+                            console.log(res.data)
+                            if(res.data.messages.length == 0){
+                                //disable back button test
+                                this.setState({
+                                    node_count: 0
+                                });
+                                this.state.node_count = 0;
+                                sessionStorage.setItem("node_count", "0");
+                                this.toggleBackButton(false);
+                            }
 
                             if(isNew && messages.length === 0) isNew = true;
 
