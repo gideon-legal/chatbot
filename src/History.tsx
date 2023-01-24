@@ -455,7 +455,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                 nodeType = activityActions.actions[0].type;
             }
 
-            if (nodeType === 'date' || nodeType === 'handoff' || nodeType === 'file' || nodeType === 'imBack' || nodeType === 'contact' || nodeType === 'address' || nodeType === 'disclaimer') {
+            if (nodeType === 'date' || nodeType === 'handoff' || nodeType === 'esign' || nodeType === 'file' || nodeType === 'imBack' || nodeType === 'contact' || nodeType === 'address' || nodeType === 'disclaimer') {
                 let lastMessageClass = ' ';
                 if (this.props.format.fullscreen && !this.props.inputEnabled) {
                     lastMessageClass += 'wc-fullscreen-last-message';

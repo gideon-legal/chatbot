@@ -229,6 +229,6 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
           return (
                 <EsignCard{ ...props } activity={activityCopy.entities[0]} />
           );
-      }
+        }
     }
 }
