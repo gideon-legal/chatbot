@@ -4,7 +4,9 @@ import * as React from 'react';
 import { NodeHeader } from './nodes/containers/NodeHeader';
 import { ChatState } from './Store';
 import { ChatActions, sendMessage } from './Store';
+import { connect } from 'react-redux';
 
+//will most likely need read only card too for after signing
 export interface Node {
     node_type: string;
     document: any;
@@ -42,13 +44,68 @@ class Esign extends React.Component<EsignProps, EsignState> {
             formattedMessage: ''
 
         }
+
+        //handleKeyDown here etc
+    }
+  
+    /** Gets document to view and sign */
+    getDocument = () => {
+
     }
 
+    /** Validates inputted signature */
+    validateSignature = () => {
+
+    }
+
+    /** For submit button for signature */
+    clickToSubmitSignature(){
+
+    }
+
+    /** for skipping signature signing */
+    clickSignLater() {
+
+    }
+
+    //screen 1: message + button to sign
+    //screen 2: document viewable + signature box
+
+    render() {
+
+        
+
+        return (
+            <div className={`gd-date-picker withTime gideon__node`}>
+                <NodeHeader
+                header="Esign Document"
+                />
+               
+            </div>
+        );
+
+    }
 } 
 
-//export const EsignCard = connect(
- //   (state: ChatState) => ({
-
- //   })
-
-//)(Esign);
+export const EsignCard = connect(
+    (state: ChatState) => {
+        return {
+            locale: state.format.locale,
+            user: state.connection.user,
+            conversationId: state.connection.botConnection.conversationId
+        }
+    }, {
+        sendMessage
+    },
+     (stateProps: any, dispatchProps: any, ownProps: any): EsignProps => {
+        return {
+            // from stateProps
+            node: ownProps.node,
+            // from dispatchProps
+            sendMessage: (text: string) => dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),
+            gid: ownProps.gid,
+            directLine: ownProps.directLine,
+            conversationId: stateProps.conversationId
+        }
+    }
+)(Esign);
