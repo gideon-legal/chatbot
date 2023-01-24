@@ -29,6 +29,7 @@ export interface EsignState {
     signature: string;
     signatureError: string;
     formattedMessage: string;
+    phase: string;
 
 }
 
@@ -41,7 +42,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
             file: '',
             signature: '',
             signatureError: '',
-            formattedMessage: ''
+            formattedMessage: '',
+            phase: ''
 
         }
 
@@ -68,18 +70,45 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     }
 
+    renderDocument = () => {
+
+        return (
+            <div className='esign-inner-container'>
+                <section className="document-box">
+
+                </section>
+                
+
+
+             <div>
+            <button type="button" className="gideon-submit-button">
+                Signatue
+            </button>
+          </div>
+          <div>
+            <button type="button" className="gideon-submit-button">
+                Sign Later
+            </button>
+          </div>
+            </div>
+        )
+
+    }
+
     //screen 1: message + button to sign
     //screen 2: document viewable + signature box
 
     render() {
-
+    
         
 
         return (
-            <div className={`gd-date-picker withTime gideon__node`}>
+            <div className="esign__card gideon__node">
                 <NodeHeader
                 header="Esign Document"
+                
                 />
+                { this.renderDocument()}
                
             </div>
         );
