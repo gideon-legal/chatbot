@@ -1978,6 +1978,21 @@ $lato: Lato, sans-serif;
         box-shadow: 2px 2px 4px 0px $c_shadow;
     }
 
+    .gideon-submit-button-white {
+        background-color: #ffffff;
+        border: 1px solid #3F6DE1;
+        border-radius: 3px !important;
+        color:#3F6DE1;
+        min-height: 32px;
+        height: auto;
+        width: 100%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: center;
+        box-shadow: 2px 2px 4px 0px $c_shadow;
+    }
+
     .gideon-submit-button:hover {
         background-color: #fff;
         border-color: #3F6DE1;
