@@ -20,6 +20,7 @@ interface EsignProps {
     directLine?: DirectLineOptions
     gid: string;
     conversationId: string;
+  //  document: string;
 
 
 }
@@ -30,6 +31,7 @@ export interface EsignState {
     signatureError: string;
     formattedMessage: string;
     phase: string;
+    hoveredFile: number;
 
 }
 
@@ -43,7 +45,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
             signature: '',
             signatureError: '',
             formattedMessage: '',
-            phase: ''
+            phase: '',
+            hoveredFile: null
 
         }
 
@@ -74,8 +77,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
     renderSigningIcon = () => {
         return (
             <div className='signature-image-box'>
-                <svg width="306" height="125" viewBox="0 0 406 125" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="304.875" height="124.464" transform="translate(0.696411 0.25)" fill="#F8F8F8"/>
+                <svg viewBox="0 0 406 125" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="404.875" height="124.464" transform="translate(0.696411 0.25)" fill="#F8F8F8"/>
 <rect x="181.491" y="75.2646" width="20.1335" height="12.5461" fill="url(#pattern0)"/>
 <path d="M203.191 83.3196C203.79 83.0942 204.843 82.6219 204.844 82.6219C205.955 82.0662 206.535 80.8565 207.232 79.6293C207.968 78.3315 210.269 77.8088 211.764 77.4092C212.876 77.1125 214.02 76.7438 215.16 76.4995C217.412 76.0172 218.975 75.4635 218.777 73.2998C218.625 71.6642 218 73.0307 215.941 72.6425C214.675 72.4043 212.583 73.0811 211.561 73.5911C209.815 74.4617 208.301 72.2543 206.535 73.1074C204.925 73.8851 204.106 73.8777 202.352 73.3973C201.625 73.1989 201.3 72.9883 200.601 73.1571C198.137 73.7532 195.012 74.5081 193.229 76.0939C192.774 76.4975 190.079 80.8908 190.634 80.9783C192.088 81.2077 193.203 80.7657 194.176 79.9059C194.641 79.4941 194.971 78.9902 195.369 78.5354C197.626 75.9519 200.585 83.4171 201.239 83.6143C202.027 83.8511 202.614 83.5362 203.191 83.3196Z" fill="#ED9B88"/>
 <path d="M186.988 84.9128C187.076 85.2781 188.149 85.6925 188.676 85.9987C189.507 86.4797 191.776 87.5696 192.669 87.281C193.698 86.9446 192.567 85.7834 191.85 85.2505C191.191 84.7614 190.299 84.0785 189.089 84.0092C188.32 83.9655 186.899 84.5333 186.988 84.9128Z" fill="#ED9B88"/>
@@ -267,27 +270,41 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     renderDocument = () => {
 
-        return (
+        let documentSection = (
             <div className='esign-inner-container'>
-                <section className="document-box">
+            <section className="document-box">
 
-                </section>
-                
+            </section>
+            
 
 
-             <div>
-            <button type="button" className="gideon-submit-button">
-                Review & Sign
-            </button>
-          </div>
-          <div>
-            <button type="button" className="gideon-submit-button-white">
-                Sign Later
-            </button>
-          </div>
-            </div>
+          {"put signature box here + submit button"}
+          
+        </div>
         )
 
+        //display document if present
+        if (this.state.file != ""){
+            documentSection = (
+                <div className="uploaded-files-container">
+                    <div className="listed-file" onMouseEnter={() => this.setState({ hoveredFile: this.state.file })} onMouseLeave={() => this.setState({ hoveredFile: null })}>
+                    <div className="uploaded-file-name">{"file to sign"}</div>
+                    </div>
+
+                </div>
+            )
+        }
+
+        return documentSection
+    }
+
+    handleSign(e: React.MouseEvent<HTMLButtonElement>){
+        {this.renderDocument()}
+
+    }
+
+    handleSkip(e: React.MouseEvent<HTMLButtonElement>){
+        this.props.sendMessage('Skip Signature');
     }
 
     //screen 1: message + button to sign
@@ -296,18 +313,32 @@ class Esign extends React.Component<EsignProps, EsignState> {
     render() {
        //need to add if case for when to show renderSigningIcon vs renderDocument
         
+       //for now focus on clicking link of document + downloading it
 
-        return (
-            <div className="esign__card gideon__node">
-                <NodeHeader
-                header="Esign Document"
-                
-                />
-                { this.renderSigningIcon()}
-                { this.renderDocument()}
-               
+       return (
+        <div className="esign__card gideon__node">
+            <NodeHeader
+            header="Esign Document"
+            
+            />
+           
+            { this.renderSigningIcon()}
+            <div>
+                text here
             </div>
-        );
+            
+            <div>
+              <button type="button" className="gideon-submit-button" onClick={e => this.handleSign(e)}>
+                     Review & Sign
+              </button>
+            </div>
+            <div>
+                <button type="button" className="gideon-submit-button-white" onClick={e => this.handleSkip(e)}>
+                     Sign Later
+                </button>
+            </div>
+        </div>
+    );
 
     }
 } 
@@ -330,7 +361,8 @@ export const EsignCard = connect(
             sendMessage: (text: string) => dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),
             gid: ownProps.gid,
             directLine: ownProps.directLine,
-            conversationId: stateProps.conversationId
+            conversationId: stateProps.conversationId,
+           
         }
     }
 )(Esign);
