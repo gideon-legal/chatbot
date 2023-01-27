@@ -32,6 +32,8 @@ export interface EsignState {
     formattedMessage: string;
     phase: string;
     hoveredFile: number;
+    handoff_message: string;
+    willSubmit: boolean;
 
 }
 
@@ -46,7 +48,9 @@ class Esign extends React.Component<EsignProps, EsignState> {
             signatureError: '',
             formattedMessage: '',
             phase: '',
-            hoveredFile: null
+            hoveredFile: null,
+            handoff_message: "",
+            willSubmit: false
 
         }
 
@@ -65,11 +69,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     /** For submit button for signature */
     clickToSubmitSignature(){
-
-    }
-
-    /** for skipping signature signing */
-    clickSignLater() {
 
     }
 
@@ -269,48 +268,80 @@ class Esign extends React.Component<EsignProps, EsignState> {
     }
 
     renderDocument = () => {
-
-        let documentSection = (
-            <div className='esign-inner-container'>
-            <section className="document-box">
-
-            </section>
-            
-
-
-          {"put signature box here + submit button"}
-          
-        </div>
-        )
-
         //display document if present
-        if (this.state.file != ""){
-            documentSection = (
-                <div className="uploaded-files-container">
+             let documentSection = (
+                <div>
+                    <div className="uploaded-files-container">
                     <div className="listed-file" onMouseEnter={() => this.setState({ hoveredFile: this.state.file })} onMouseLeave={() => this.setState({ hoveredFile: null })}>
                     <div className="uploaded-file-name">{"file to sign"}</div>
                     </div>
 
                 </div>
-            )
-        }
+                <div className="signature-box-area">
+                    put signature box + submit button here
 
+                    Full NAME
+
+                    <div>
+                        <input className="esign-input-box" type="text" id="signature"></input>
+                    </div>
+                    <div className="submit-area">
+                        <button  className="gideon-submit-button"> Submit </button>
+                    </div>
+
+                 </div>
+                </div>
+                
+            )
         return documentSection
     }
 
     handleSign(e: React.MouseEvent<HTMLButtonElement>){
-        {this.renderDocument()}
-
+        this.setState({
+            willSubmit: true
+        })
     }
 
     handleSkip(e: React.MouseEvent<HTMLButtonElement>){
         this.props.sendMessage('Skip Signature');
     }
 
+    renderStartingScreen() {
+        return (
+            <div className="esign__card gideon__node">
+                <NodeHeader
+                header="Esign Document"
+                
+                />
+               <div id="document_area">
+               { this.renderSigningIcon()}
+               <div className="esign-message-handoff">
+                    Place holder {this.state.handoff_message}
+                </div>
+    
+               </div> 
+                <div>
+                  <button type="button" className="gideon-submit-button" id="sign_btn" onClick={e => this.handleSign(e)}>
+                         Review & Sign
+                  </button>
+                </div>
+                <div>
+                    <button type="button" className="gideon-submit-button-white" onClick={e => this.handleSkip(e)}>
+                         Sign Later
+                    </button>
+                </div>
+            </div>
+        );
+
+    }
+
+
+
     //screen 1: message + button to sign
     //screen 2: document viewable + signature box
 
     render() {
+        const {willSubmit} = this.state;
        //need to add if case for when to show renderSigningIcon vs renderDocument
         
        //for now focus on clicking link of document + downloading it
@@ -319,24 +350,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
         <div className="esign__card gideon__node">
             <NodeHeader
             header="Esign Document"
-            
             />
-           
-            { this.renderSigningIcon()}
-            <div>
-                text here
-            </div>
-            
-            <div>
-              <button type="button" className="gideon-submit-button" onClick={e => this.handleSign(e)}>
-                     Review & Sign
-              </button>
-            </div>
-            <div>
-                <button type="button" className="gideon-submit-button-white" onClick={e => this.handleSkip(e)}>
-                     Sign Later
-                </button>
-            </div>
+            {willSubmit == false && this.renderStartingScreen()}
+            {willSubmit == true && this.renderDocument()}
+
         </div>
     );
 
