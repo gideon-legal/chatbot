@@ -278,9 +278,14 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
                 </div>
                 <div className="signature-box-area">
-                    put signature box + submit button here
 
-                    Full NAME
+                    <div className='esign-black-text'>
+                       Type in Full Name to Create Signature (black)
+                    </div>
+                    <div className='esign-grey-text'>
+                    Full NAME (grey)
+
+                    </div>
 
                     <div>
                         <input className="esign-input-box" type="text" id="signature"></input>
@@ -309,10 +314,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
     renderStartingScreen() {
         return (
             <div className="esign__card gideon__node">
-                <NodeHeader
-                header="Esign Document"
-                
-                />
                <div id="document_area">
                { this.renderSigningIcon()}
                <div className="esign-message-handoff">
