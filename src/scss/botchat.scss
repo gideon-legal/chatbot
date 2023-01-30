@@ -2233,25 +2233,25 @@ $lato: Lato, sans-serif;
     
     .esign-input-box {
         
-        height: auto;
+        height: 53px;
         width: 100%;
         white-space: normal;
         overflow-wrap: break-word;
         padding: 18px;
+        text-align: center;
+        min-height: 32px;
+        overflow-wrap: break-word;
         
         box-sizing: border-box;
     
-        
         //width: 511px;
         //height: 50px;
         background: #FEFEFE;
         border: 1px solid #DCDCDC;
+        margin-bottom: 5px;
     }
     
     .esign-grey-text {
-        
-       
-    
         font-family: 'Lato';
         font-style: normal;
         font-weight: 600;
@@ -2264,12 +2264,10 @@ $lato: Lato, sans-serif;
         text-align: center;
     
         color: #727272 !important;
+        margin-bottom: 5px;
     }
     
     .esign-black-text{
-        
-        
-    
         font-family: 'Lato';
         font-style: normal;
         font-weight: 600;
@@ -2282,5 +2280,6 @@ $lato: Lato, sans-serif;
         text-align: center;
     
         color: #000000 !important;
+        margin-bottom: 5px;
     
     }

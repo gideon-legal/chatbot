@@ -280,10 +280,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <div className="signature-box-area">
 
                     <div className='esign-black-text'>
-                       Type in Full Name to Create Signature (black)
+                       Type in Full Name to Create Signature
                     </div>
                     <div className='esign-grey-text'>
-                    Full NAME (grey)
+                    FULL NAME
 
                     </div>
 
@@ -291,7 +291,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         <input className="esign-input-box" type="text" id="signature"></input>
                     </div>
                     <div className="submit-area">
-                        <button  className="gideon-submit-button"> Submit </button>
+                        <button  className="gideon-submit-button"> SIGN </button>
                     </div>
 
                  </div>
