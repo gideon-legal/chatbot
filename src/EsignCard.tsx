@@ -28,7 +28,7 @@ interface EsignProps {
 export interface EsignState {
     file: any;
     signature: string;
-    signatureError: string;
+    signError: string;
     formattedMessage: string;
     phase: string;
     hoveredFile: number;
@@ -45,7 +45,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         this.state = {
             file: '',
             signature: '',
-            signatureError: '',
+            signError: '',
             formattedMessage: '',
             phase: '',
             hoveredFile: null,
@@ -64,11 +64,28 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     /** Validates inputted signature */
     validateSignature = () => {
+        let validated = true;
+        let signError;
+
+        if(this.state.signature == ''){
+            signError = 'Please enter signature'
+            validated = false
+        }
+
+        this.setState({
+            ...this.state,
+            signError
+        })
+
+        return validated;
 
     }
 
     /** For submit button for signature */
-    clickToSubmitSignature(){
+    clickToSubmitSignature(e: React.MouseEvent<HTMLButtonElement>){
+        if(!this.validateSignature()) { return;}
+
+        //need to send to api so it can be used to populate document
 
     }
 
@@ -291,7 +308,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         <input className="esign-input-box" type="text" id="signature"></input>
                     </div>
                     <div className="submit-area">
-                        <button  className="gideon-submit-button"> SIGN </button>
+                        <button  className="gideon-submit-button" onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
                     </div>
 
                  </div>
