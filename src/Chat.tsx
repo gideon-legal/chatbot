@@ -544,9 +544,11 @@ export class Chat extends React.Component<ChatProps, State> {
                     // entities[0].node_type === 'prompt' || activity.entities[0].type === 'ClientCapabilities'
                     
                     console.log("test")
+                    console.log("this.store.getState().history " + this.store.getState().history);
+                    console.log("this.store.getState(). " + this.store.getState());
 
                     let i : any;
-                    for(i of this.store.getState().history.activities){
+                    for(i of messages){
                         if ( i.entities[0].node_type === 'prompt' || i.entities[0].node_type === 'ClientCapabilities')
                         this.addNodeCount();
                     }
