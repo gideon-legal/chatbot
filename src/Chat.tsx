@@ -452,6 +452,7 @@ export class Chat extends React.Component<ChatProps, State> {
             node_count: new_count
         });
         sessionStorage.setItem("node_count", new_count.toString());
+        console.log("updated node count")
     }
 
     private deleteNodeCount = (amount: number) => {
@@ -544,13 +545,16 @@ export class Chat extends React.Component<ChatProps, State> {
                     // entities[0].node_type === 'prompt' || activity.entities[0].type === 'ClientCapabilities'
                     
                     console.log("test")
-                    console.log("this.store.getState().history " + this.store.getState().history);
-                    console.log("this.store.getState(). " + this.store.getState());
+                    console.log(this.store.getState().history);
+                    console.log(this.store.getState());
 
                     let i : any;
                     for(i of messages){
-                        if ( i.entities[0].node_type === 'prompt' || i.entities[0].node_type === 'ClientCapabilities')
-                        this.addNodeCount();
+                        if ( i.entities[0].node_type !== 'prompt' && i.entities[0].node_type !== 'ClientCapabilities'){
+                            console.log("hit if")
+                            this.addNodeCount();
+
+                        }
                     }
                     
                     sessionStorage.setItem("node_count", this.state.node_count.toString() );
