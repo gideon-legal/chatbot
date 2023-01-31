@@ -211,7 +211,7 @@ export class Chat extends React.Component<ChatProps, State> {
                             console.log("toggle false 5")
                             this.toggleBackButton(false)
                         } else {
-                            if( buttonCheck == 0 ) {
+                            if( buttonCheck <= 0 ) {
                             //this.toggleBackButton(false);
                                 this.clicked(true);
                             } else {
@@ -244,7 +244,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     } else {
                         // open response only
                         this.addNodeCount();
-                        if( buttonCheck  == 0 ) {
+                        if( buttonCheck  <= 0 ) {
                            // this.toggleBackButton(false)
                            this.clicked(true)
                         } else {
@@ -326,7 +326,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                 this.toggleBackButton(false)
                                 console.log("toggle false 7")
                             } else {
-                              if( buttonCheck == 0 ) {
+                              if( buttonCheck <= 0 ) {
                                 this.clicked(true);
                               } else {
                                 this.toggleBackButton(true)
@@ -335,7 +335,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                }
                             }
                         } else {
-                            if( buttonCheck  == 0 ) {
+                            if( buttonCheck  <= 0 ) {
                                 this.clicked(true);
                             } else {
                                 console.log("toggle true 8")
@@ -356,7 +356,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     } else {
                         
                         // open response only
-                        if( buttonCheck == 0 ) {
+                        if( buttonCheck <= 0 ) {
                            this.clicked(true)
                         } else {
                             this.toggleBackButton(true)
@@ -392,7 +392,7 @@ export class Chat extends React.Component<ChatProps, State> {
                             this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
                         } else {
                           // open response only
-                           if( buttonCheck == 0 ) {
+                           if( buttonCheck <= 0 ) {
                                this.clicked(true)
                             } else {
                                this.toggleBackButton(true)
@@ -485,7 +485,7 @@ export class Chat extends React.Component<ChatProps, State> {
         const curr_node_count = this.checkNodeCount();
         console.log(curr_node_count);
         // const test = ( curr_node_count - this.checkNodeCount() )
-        if ( curr_node_count == 0) {
+        if ( curr_node_count <= 0) {
             console.log("clicked");
             this.clicked(true);
         } else {
@@ -493,7 +493,7 @@ export class Chat extends React.Component<ChatProps, State> {
             this.toggleBackButton(true);
             this.clicked(false)
         }
-        if (curr_node_count == 0 ) {
+        if (curr_node_count <= 0 ) {
             console.log("toggle false 2")
             this.toggleBackButton( false );
         }
@@ -546,6 +546,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     let i : any;
                     for(i of messages){
                         if(i.entities){
+                            console.log("hit entities")
                             if ( i.entities[0].node_type !== 'prompt' && i.entities[0].node_type !== 'ClientCapabilities'){
                                 console.log("hit if")
                                 this.addNodeCount();
