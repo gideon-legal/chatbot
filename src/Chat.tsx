@@ -207,7 +207,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
                         this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                         this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
-                        if(activity.entities[0].node_type === 'prompt' || activity.entities[0].type === 'ClientCapabilities') {
+                        if(activity.entities[0].node_type !== 'prompt' || activity.entities[0].type !== 'ClientCapabilities') {
                             console.log("toggle false 5")
                             this.toggleBackButton(false)
                         } else {
@@ -491,7 +491,7 @@ export class Chat extends React.Component<ChatProps, State> {
             this.clicked(true);
         } else {
             console.log("click");
-           // this.toggleBackButton(true);
+            this.toggleBackButton(true);
             this.clicked(false)
         }
         if (curr_node_count <= 0 ) {
@@ -527,19 +527,11 @@ export class Chat extends React.Component<ChatProps, State> {
                     
 
                     this.setState({
-                        node_count: 0
+                        node_count: -1
                     });
 
                     console.log("after reload " + this.state.node_count);
 
-                // if(sessionStorage.getItem("node_count")) {
-                //     this.setState({
-                //     node_count: (Number(sessionStorage.getItem("node_count")) - 1)
-                //     });
-                //     console.log("after reload " + this.state.node_count);
-                // }
-                    // entities[0].node_type === 'prompt' || activity.entities[0].type === 'ClientCapabilities'
-                    
                     console.log("test")
                     console.log(this.store.getState().history);
                     console.log(this.store.getState());
