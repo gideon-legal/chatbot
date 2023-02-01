@@ -538,13 +538,20 @@ export class Chat extends React.Component<ChatProps, State> {
 
                     let i : any;
                     for(i of messages){
-                        if(i.entities){
-                            console.log("hit entities")
-                            if ( i.entities[0].node_type !== 'prompt' && i.entities[0].node_type !== 'ClientCapabilities'){
-                                console.log("hit if")
-                                this.addNodeCount();
-    
+                        if(i.sender_type === 'bot'){
+                            if(i.entities){
+                                console.log("hit entities")
+                                if ( i.entities[0].node_type !== 'prompt' && i.entities[0].node_type !== 'ClientCapabilities'){
+                                    console.log("hit if")
+                                    this.addNodeCount();
+        
+                                }
+                            } else {
+                                console.log("hit not entities")
+                                //prompr, number, opne response etc
+                                this.addNodeCount()
                             }
+
                         }
                     }
                     
