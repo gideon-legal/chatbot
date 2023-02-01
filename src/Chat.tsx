@@ -527,7 +527,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     
 
                     this.setState({
-                        node_count: -1
+                        node_count: -2
                     });
 
                     console.log("after reload " + this.state.node_count);
