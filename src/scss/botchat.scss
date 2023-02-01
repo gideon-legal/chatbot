@@ -2002,6 +2002,8 @@ $lato: Lato, sans-serif;
         padding: 18px;
         text-align: center;
         box-shadow: 2px 2px 4px 0px $c_shadow;
+        margin-top: 5px;
+
     }
 
     .gideon-submit-button:hover {
@@ -2202,17 +2204,9 @@ $lato: Lato, sans-serif;
     }
     
     .esign-message-handoff {
-        position: absolute;
-        width: 452px;
-        height: 22px;
-        left: 39px;
-        top: 351px;
-    
+        
         font-family: 'Lato';
         font-style: normal;
-        font-weight: 500;
-        font-size: 18px;
-        line-height: 22px;
         /* identical to box height */
        text-align: center;
        letter-spacing: 0.04em;

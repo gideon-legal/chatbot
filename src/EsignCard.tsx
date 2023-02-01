@@ -20,7 +20,7 @@ interface EsignProps {
     directLine?: DirectLineOptions
     gid: string;
     conversationId: string;
-  //  document: string;
+    document: string;
 
 
 }
@@ -43,7 +43,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         super(props);
 
         this.state = {
-            file: '',
+            file: this.props.document,
             signature: '',
             signError: '',
             formattedMessage: '',
@@ -289,8 +289,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
              let documentSection = (
                 <div>
                     <div className="uploaded-files-container">
-                    <div className="listed-file" onMouseEnter={() => this.setState({ hoveredFile: this.state.file })} onMouseLeave={() => this.setState({ hoveredFile: null })}>
-                    <div className="uploaded-file-name">{"file to sign"}</div>
+                    <div className="uploaded-file-name-readonly-link">
+                      <a target="_blank" href={this.state.file}>{"file to sign"}</a>
                     </div>
 
                 </div>
@@ -389,6 +389,8 @@ export const EsignCard = connect(
         sendMessage
     },
      (stateProps: any, dispatchProps: any, ownProps: any): EsignProps => {
+        console.log(stateProps)
+        console.log(ownProps)
         return {
             // from stateProps
             node: ownProps.node,
@@ -397,6 +399,7 @@ export const EsignCard = connect(
             gid: ownProps.gid,
             directLine: ownProps.directLine,
             conversationId: stateProps.conversationId,
+            document: ownProps.activity.pdf_link
            
         }
     }
