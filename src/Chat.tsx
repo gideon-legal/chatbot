@@ -168,7 +168,6 @@ export class Chat extends React.Component<ChatProps, State> {
         let lastActivity: any;
         lastActivity = this.store.getState().history.activities[this.store.getState().history.activities.length - 1]
         const state = this.store.getState();
-        console.log("toggle false 4")
         this.toggleBackButton(false);
         let alreadyContains = false;
         //checking if history.activities contains same text and message type as incoming activity
@@ -237,7 +236,6 @@ export class Chat extends React.Component<ChatProps, State> {
                     //set convoComplete to true if current convo is finished
                     if(notNode === "handoff") sessionStorage.setItem("convoComplete", 'true');
                     if(notNode !== "open" && !activity.text.includes("Sorry, but that's not a valid")){
-                        console.log("toggle false 6")
                         this.toggleBackButton(false);
                         this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                         this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
@@ -248,7 +246,6 @@ export class Chat extends React.Component<ChatProps, State> {
                            // this.toggleBackButton(false)
                            this.clicked(true)
                         } else {
-                            console.log("toggle true 6")
                             this.toggleBackButton(true)
                             this.clicked(false)
                         }
@@ -324,13 +321,11 @@ export class Chat extends React.Component<ChatProps, State> {
                         if(currActivity.entities[0].node_type || currActivity.entities[0].type ){
                             if((currActivity.entities[0].node_type && currActivity.entities[0].node_type == 'prompt' )|| currActivity.entities[0].type == 'ClientCapabilities') {
                                 this.toggleBackButton(false)
-                                console.log("toggle false 7")
                             } else {
                               if( buttonCheck <= 0 ) {
                                 this.clicked(true);
                               } else {
                                 this.toggleBackButton(true)
-                                console.log("toggle true 7")
                                 this.clicked(false);
                                }
                             }
@@ -338,7 +333,6 @@ export class Chat extends React.Component<ChatProps, State> {
                             if( buttonCheck  <= 0 ) {
                                 this.clicked(true);
                             } else {
-                                console.log("toggle true 8")
                                 this.toggleBackButton(true)
                                 this.clicked(false);
                             }
@@ -349,7 +343,6 @@ export class Chat extends React.Component<ChatProps, State> {
                     //set convoComplete to true if current convo is finished
                     if(notNode === "handoff") sessionStorage.setItem("convoComplete", 'true');
                     if(notNode !== "open" && !currActivity.text.includes("Sorry, but that's not a valid")){
-                        console.log("toggle false 8")
                         this.toggleBackButton(false);
                         this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                         this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
@@ -452,7 +445,6 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private deleteNodeCount = (amount: number) => {
-        console.log("deleting Node count")
         const curr_node = this.state.node_count;
 
         if (curr_node > 0){
@@ -463,7 +455,6 @@ export class Chat extends React.Component<ChatProps, State> {
             this.state.node_count = updated_count;
             sessionStorage.setItem("node_count", updated_count.toString());
             this.toggleBackButton(true);
-            console.log("toggle true")
         } 
         const updated_count = this.state.node_count;
         if (updated_count <= 0) {
@@ -473,7 +464,6 @@ export class Chat extends React.Component<ChatProps, State> {
             this.state.node_count = 0;
             sessionStorage.setItem("node_count", "0");
             this.toggleBackButton(false);
-            console.log("toggle false")
         }
     }
 
@@ -522,9 +512,6 @@ export class Chat extends React.Component<ChatProps, State> {
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
                 .then((res: any) => {
                     const messages = res.data.messages.reverse();
-                    console.log("switching convos 2")
-                    console.log(res.data)
-                    
 
                     this.setState({
                         node_count: -1
@@ -600,7 +587,6 @@ export class Chat extends React.Component<ChatProps, State> {
 
                     // have to resend receive_message for input enabled nodes
                     if(messages.length > 0 && messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
-                        console.log("toggle true 2")
                         this.toggleBackButton(true)
                         this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
                         this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
