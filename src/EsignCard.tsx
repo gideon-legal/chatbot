@@ -291,6 +291,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                     <div className="uploaded-files-container">
                     <div className="uploaded-file-name-readonly-link">
                       <a target="_blank" href={this.state.file}>{"file to sign"}</a>
+                     
                     </div>
 
                 </div>
@@ -399,7 +400,7 @@ export const EsignCard = connect(
             gid: ownProps.gid,
             directLine: ownProps.directLine,
             conversationId: stateProps.conversationId,
-            document: ownProps.activity.pdf_link
+            document: ownProps.activity.pdf_link[0]
            
         }
     }
