@@ -7,6 +7,7 @@ import { ChatActions, sendMessage } from './Store';
 import { connect } from 'react-redux';
 
 import { EsignNode, EsignPopup } from './assets/icons/EsignIcons';
+import { sendSignature } from './api/bot';
 //will most likely need read only card too for after signing
 export interface Node {
     node_type: string;
@@ -35,6 +36,7 @@ export interface EsignState {
     hoveredFile: number;
     handoff_message: string;
     willSubmit: boolean;
+    signedfile: any;
 
 }
 
@@ -51,7 +53,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
             phase: '',
             hoveredFile: null,
             handoff_message: "",
-            willSubmit: false
+            willSubmit: false,
+            signedfile: ''
 
         }
 
@@ -90,7 +93,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
         //need to send to api so it can be used to populate document
         console.log("obtained signature")
         console.log(this.state.signature)
-
+        //send to api and wait to receive signed pdf link, set to this.state.signedfile
+        //sendSignature(this.props.gid, this.props.conversationId, this.state.signature)
     }
 
     onChangeSignature(event: React.ChangeEvent<HTMLInputElement>) {

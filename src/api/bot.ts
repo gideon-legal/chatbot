@@ -91,3 +91,14 @@ export const conversationList = (
     return axios.get(`${baseUrl}/api/v1/conversations/list?user_id=${user_id}&convo_id=${convo_id}`);
 }
 
+//sends signature from esign card to populate document, expects signed document in return?
+export const sendSignature = (
+    baseUrl: string,
+    directLine: string,
+    conversationId: string,
+    signature: string
+): any => {
+   // return axios.get(`${baseUrl}/api/v1/`)
+
+}
+
