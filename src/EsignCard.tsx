@@ -156,24 +156,23 @@ class Esign extends React.Component<EsignProps, EsignState> {
     //initial starting screen, should be popup, for now is treated as node
     renderStartingScreen() {
         return (
-            <div className="esign__card gideon__node">
-               <div id="document_area">
-                    <EsignNode />
-               <div className="esign-message-handoff">
-                    Place holder {this.state.handoff_message}
-                </div>
-    
-               </div> 
-                <div>
-                  <button type="button" className="gideon-submit-button" id="sign_btn" onClick={e => this.handleSign(e)}>
-                         Review & Sign
-                  </button>
-                </div>
-                <div>
+            <div>
+                <div className="esign__card esign__node">
+                    <div id="document_area">
+                        <EsignNode />
+                        <div className="esign-message-handoff">
+                            Place holder {this.state.handoff_message}
+                        </div>
+                    </div>
+                </div> 
+                <button type="button" className="gideon-submit-button" id="sign_btn" onClick={e => this.handleSign(e)}>
+                     Review & Sign
+                </button>
+                {/* <div>
                     <button type="button" className="gideon-submit-button-white" onClick={e => this.handleSkip(e)}>
                          Sign Later
                     </button>
-                </div>
+                </div> */}
             </div>
         );
 
