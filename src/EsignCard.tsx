@@ -55,6 +55,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         }
 
         //handleKeyDown here etc
+        this.onChangeSignature = this.onChangeSignature.bind(this)
     }
   
     /** Gets document to view and sign */
@@ -86,8 +87,20 @@ class Esign extends React.Component<EsignProps, EsignState> {
         if(!this.validateSignature()) { return;}
 
         //need to send to api so it can be used to populate document
+        console.log("obtained signature")
+        console.log(this.state.signature)
 
     }
+
+    onChangeSignature(event: React.ChangeEvent<HTMLInputElement>) {
+        this.setState({
+            ...this.state,
+            signature: event.target.value
+        })
+        console.log("changed signature")
+        console.log(this.state.signature)
+    }
+
 
     //switch from signing icon to document box when done loading
     renderSigningIcon = () => {
@@ -284,6 +297,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         )
     }
 
+    // prototype for displaying document + signing it
     renderDocument = () => {
         //display document if present
              let documentSection = (
@@ -306,7 +320,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                     </div>
 
                     <div>
-                        <input className="esign-input-box" type="text" id="signature"></input>
+                        <input className="esign-input-box" type="text" value={this.state.signature} onChange={this.onChangeSignature} id="signature"></input>
                     </div>
                     <div className="submit-area">
                         <button  className="gideon-submit-button" onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
@@ -329,6 +343,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         this.props.sendMessage('Skip Signature');
     }
 
+    //initial starting screen, should be popup, for now is treated as node
     renderStartingScreen() {
         return (
             <div className="esign__card gideon__node">
@@ -351,6 +366,11 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 </div>
             </div>
         );
+
+    }
+
+    //For when the sign button leads to small modal to sign
+    renderSignatureModal() {
 
     }
 
