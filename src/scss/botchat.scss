@@ -917,6 +917,7 @@ $lato: Lato, sans-serif;
             padding: 5px 0px 0px 0px;
         }
 
+
         .gideon__node {
             background-color: white;
             color: $gideon-black;
@@ -975,7 +976,8 @@ $lato: Lato, sans-serif;
               color: white;
             }
           }
-
+        
+        
 
         //
         // NODE-SPECIFIC STYLING
@@ -995,6 +997,10 @@ $lato: Lato, sans-serif;
             height: 245px;  // should be about 5 options
         }
       }
+
+    .wc-message-esign {
+        width: 100% !important;
+    }
 
     .required {
         color: #FF002E
@@ -2203,6 +2209,7 @@ $lato: Lato, sans-serif;
         margin: auto;
     }
     
+
     .esign-message-handoff {
         
         font-family: 'Lato';
