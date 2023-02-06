@@ -395,3 +395,27 @@ export class EsignPopup extends React.Component<{}, {}> {
 }
 
 
+
+export class EsignCheckMark extends React.Component<{}, {}> {
+    render() {
+        return <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+        <g filter="url(#filter0_d_4510_9558)">
+        <circle cx="19.9631" cy="16.1115" r="13.8889" fill="#4FD739"/>
+        </g>
+        <path d="M17.1852 19.9721L13.3241 16.111L12.0093 17.4165L17.1852 22.5924L28.2963 11.4813L26.9908 10.1758L17.1852 19.9721Z" fill="white"/>
+        <defs>
+        <filter id="filter0_d_4510_9558" x="0.0742188" y="0.222656" width="39.7778" height="39.7773" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+        <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+        <feOffset dy="4"/>
+        <feGaussianBlur stdDeviation="3"/>
+        <feComposite in2="hardAlpha" operator="out"/>
+        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_4510_9558"/>
+        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_4510_9558" result="shape"/>
+        </filter>
+        </defs>
+        </svg>
+    }
+}
+
