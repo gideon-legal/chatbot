@@ -158,11 +158,11 @@ class Esign extends React.Component<EsignProps, EsignState> {
         return (
             <div>
                 <div className="esign__card esign__node">
-                    <div id="document_area">
+                    <div className="document_area">
                         <EsignNode />
-                        <div className="esign-message-handoff">
+                    </div>
+                    <div className="esign-message-handoff">
                             Place holder {this.state.handoff_message}
-                        </div>
                     </div>
                 </div> 
                 <button type="button" className="gideon-submit-button" id="sign_btn" onClick={e => this.handleSign(e)}>
