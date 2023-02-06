@@ -37,6 +37,7 @@ export interface EsignState {
     handoff_message: string;
     willSubmit: boolean;
     signedfile: any;
+    completedDoc: boolean;
 
 }
 
@@ -54,7 +55,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
             hoveredFile: null,
             handoff_message: "",
             willSubmit: false,
-            signedfile: ''
+            signedfile: '',
+            completedDoc: false
 
         }
 
@@ -94,7 +96,13 @@ class Esign extends React.Component<EsignProps, EsignState> {
         console.log("obtained signature")
         console.log(this.state.signature)
         //send to api and wait to receive signed pdf link, set to this.state.signedfile
-        //sendSignature(this.props.gid, this.props.conversationId, this.state.signature)
+        sendSignature(this.props.gid, this.props.conversationId, this.state.signature)
+        //once document is confirmed and received, set to this.state.signedfile, set completedDoc to true
+        this.setState({
+            ...this.state,
+            completedDoc: true
+        })
+        //send signal to move on from node?
     }
 
     onChangeSignature(event: React.ChangeEvent<HTMLInputElement>) {
@@ -183,13 +191,32 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     }
 
+    //rendered when signed document is returned, can view document and then exit out?
+    renderCompletedDoc() {
+        //display document if present
+        let documentSection = (
+            <div>
+                <div className="uploaded-files-container">
+                <div className="uploaded-file-name-readonly-link">
+                  <a target="_blank" href={this.state.signedfile}>{"signed file"}</a>
+                 
+                </div>
+
+            </div>
+            
+            </div>
+            
+        )
+    return documentSection
+    }
+
 
 
     //screen 1: message + button to sign
     //screen 2: document viewable + signature box
 
     render() {
-        const {willSubmit} = this.state;
+        const {willSubmit, completedDoc} = this.state;
        //need to add if case for when to show renderSigningIcon vs renderDocument
         
        //for now focus on clicking link of document + downloading it
@@ -200,7 +227,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
             header="Esign Document"
             />
             {willSubmit == false && this.renderStartingScreen()}
-            {willSubmit == true && this.renderDocument()}
+            {willSubmit == true && completedDoc == false && this.renderDocument()}
+            {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
 
         </div>
     );
