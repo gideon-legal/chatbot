@@ -224,13 +224,19 @@ class Esign extends React.Component<EsignProps, EsignState> {
        //for now focus on clicking link of document + downloading it
 
        return (
-        <div className="esign__card gideon__node">
+        <div className="modal">
+            <div className="modal-content">
+            <div className="esign__card gideon__node">
             <NodeHeader
             header="Esign Document"
             />
             {willSubmit == false && this.renderStartingScreen()}
             {willSubmit == true && completedDoc == false && this.renderDocument()}
             {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
+
+        </div>
+
+            </div>
 
         </div>
     );
