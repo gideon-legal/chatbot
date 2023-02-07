@@ -38,6 +38,7 @@ export interface EsignState {
     willSubmit: boolean;
     signedfile: any;
     completedDoc: boolean;
+    validated: boolean;
 
 }
 
@@ -56,7 +57,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
             handoff_message: "",
             willSubmit: false,
             signedfile: '',
-            completedDoc: false
+            completedDoc: false,
+            validated: false
 
         }
 
@@ -64,11 +66,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
         this.onChangeSignature = this.onChangeSignature.bind(this)
     }
   
-    /** Gets document to view and sign */
-    getDocument = () => {
-
-    }
-
     /** Validates inputted signature */
     validateSignature = () => {
         let validated = true;
@@ -81,6 +78,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
         this.setState({
             ...this.state,
+            validated: validated,
             signError
         })
 
