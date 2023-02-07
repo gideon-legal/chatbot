@@ -40,6 +40,7 @@ export interface EsignState {
     signedfile: any;
     completedDoc: boolean;
     validated: boolean;
+    isPopup: boolean;
 
 }
 
@@ -59,7 +60,9 @@ class Esign extends React.Component<EsignProps, EsignState> {
             willSubmit: false,
             signedfile: '',
             completedDoc: false,
-            validated: false
+            validated: false,
+            isPopup: true
+
 
         }
 
@@ -99,7 +102,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
         //once document is confirmed and received, set to this.state.signedfile, set completedDoc to true
         this.setState({
             ...this.state,
-            completedDoc: true
+            completedDoc: true,
+            isPopup: false
         })
         //send signal to move on from node?
     }
@@ -212,20 +216,33 @@ class Esign extends React.Component<EsignProps, EsignState> {
     return documentSection
     }
 
-
-
-    //screen 1: message + button to sign
-    //screen 2: document viewable + signature box
-
-    render() {
+    renderPopup(){
         const {willSubmit, completedDoc} = this.state;
-       //need to add if case for when to show renderSigningIcon vs renderDocument
-        
-       //for now focus on clicking link of document + downloading it
+        return (
+            <div className="modal">
+                <div className="modal-content">
+                <div className="esign__card gideon__node">
+                <NodeHeader
+                header="Esign Document"
+                />
+                {willSubmit == false && this.renderStartingScreen()}
+                {willSubmit == true && completedDoc == false && this.renderDocument()}
+                {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
+    
+            </div>
+    
+                </div>
+    
+            </div>
+        );
 
-       return (
-        <div className="modal">
-            <div className="modal-content">
+
+    }
+
+    renderNode(){
+        const {willSubmit, completedDoc} = this.state;
+
+        return (
             <div className="esign__card gideon__node">
             <NodeHeader
             header="Esign Document"
@@ -235,10 +252,26 @@ class Esign extends React.Component<EsignProps, EsignState> {
             {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
 
         </div>
+        )
+    }
 
-            </div>
 
+
+    //screen 1: message + button to sign
+    //screen 2: document viewable + signature box
+
+    render() {
+        const {willSubmit, completedDoc, isPopup} = this.state;
+       //need to add if case for when to show renderSigningIcon vs renderDocument
+        
+       //need if statement to determine if using popup or node version
+
+       return (
+        <div>
+            {isPopup == true && this.renderPopup()}
+           {isPopup == false && this.renderNode()}
         </div>
+        
     );
 
     }
