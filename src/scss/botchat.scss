@@ -2227,6 +2227,7 @@ $lato: Lato, sans-serif;
     
        /* Gideon/Primary text */
        color: #262626;
+       padding: 15px 0px 15px 0px;
     }
     
     .signature-box-area {
@@ -2294,9 +2295,13 @@ $lato: Lato, sans-serif;
 
     .esign-checkmark{
         position: absolute;
-        left: 81.17%;
-        right: 14.12%;
-        top: 45.3%;
-        bottom: 51.72%;
+        right: 23px;
+        top: 55px;
 
+        &__disabled {
+            visibility: hidden;
+            position: absolute;
+            right: 23px;
+            top: 55px;
+        }
     }

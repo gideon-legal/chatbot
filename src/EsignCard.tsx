@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 
 import { EsignNode, EsignPopup, EsignCheckMark } from './assets/icons/EsignIcons';
 import { sendSignature } from './api/bot';
+import { Hidden } from '@material-ui/core';
 //will most likely need read only card too for after signing
 export interface Node {
     node_type: string;
@@ -94,7 +95,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         console.log("obtained signature")
         console.log(this.state.signature)
         //send to api and wait to receive signed pdf link, set to this.state.signedfile
-        sendSignature(this.props.gid, this.props.conversationId, this.state.signature)
+        // sendSignature(this.props.gid, this.props.conversationId, this.state.signature)
         //once document is confirmed and received, set to this.state.signedfile, set completedDoc to true
         this.setState({
             ...this.state,
@@ -164,8 +165,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
         return (
             <div>
                 <div className="esign__card esign__node">
-                    <div className="esign-checkmark" >
-                    <EsignCheckMark />
+                    <div className= {this.state.validated ? "esign-checkmark" : "esign-checkmark"}>
+                         <EsignCheckMark />
                     </div>
                     <div className="document_area">
                         <EsignNode />
