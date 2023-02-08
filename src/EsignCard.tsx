@@ -126,7 +126,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                     <div className="uploaded-files-container">
                     <div className="uploaded-file-name-readonly-link">
                       {/*<a target="_blank" href={this.state.file}>{"file to sign"}</a>*/}
-                      <iframe src={this.state.file} width="100%" height="500px"></iframe>
+                      <iframe src={`${this.state.file}#toolbar=0`} width="100%" height="500px"></iframe>
                      
                     </div>
 
