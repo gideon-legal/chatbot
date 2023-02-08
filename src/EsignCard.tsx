@@ -24,7 +24,7 @@ interface EsignProps {
     gid: string;
     conversationId: string;
     document: string;
-
+    docx: string;
 
 }
 
@@ -93,12 +93,21 @@ class Esign extends React.Component<EsignProps, EsignState> {
     /** For submit button for signature */
     clickToSubmitSignature(e: React.MouseEvent<HTMLButtonElement>){
         if(!this.validateSignature()) { return;}
+        
 
         //need to send to api so it can be used to populate document
+        console.log("hey everybody!!!!!!!")
+        console.log(this.props.docx)
         console.log("obtained signature")
         console.log(this.state.signature)
         //send to api and wait to receive signed pdf link, set to this.state.signedfile
-        // sendSignature(this.props.gid, this.props.conversationId, this.state.signature)
+        sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx)
+        .then((res: any) => {
+            this.setState({
+                ...this.state,
+                signedfile: res.data.link
+            })
+        })
         //once document is confirmed and received, set to this.state.signedfile, set completedDoc to true
         this.setState({
             ...this.state,
@@ -320,8 +329,7 @@ export const EsignCard = connect(
             gid: ownProps.gid,
             directLine: ownProps.directLine,
             conversationId: stateProps.conversationId,
-            document: ownProps.activity.pdf_link[0]
-           
-        }
+            document: ownProps.activity.pdf_link.pdf_link[0],
+            docx: ownProps.activity.pdf_link.docx_link[0]        }
     }
 )(Esign);

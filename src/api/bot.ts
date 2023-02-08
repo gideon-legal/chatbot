@@ -96,9 +96,14 @@ export const sendSignature = (
     baseUrl: string,
     directLine: string,
     conversationId: string,
-    signature: string
+    signature: string,
+    document: string
 ): any => {
-   // return axios.get(`${baseUrl}/api/v1/`)
+   return axios.post(`${baseUrl}/api/v1/bot/esign`, {
+       link: document,
+       signature: signature
+   })
+
 
 }
 
