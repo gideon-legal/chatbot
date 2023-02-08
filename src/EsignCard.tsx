@@ -125,7 +125,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <div>
                     <div className="uploaded-files-container">
                     <div className="uploaded-file-name-readonly-link">
-                      <a target="_blank" href={this.state.file}>{"file to sign"}</a>
+                      {/*<a target="_blank" href={this.state.file}>{"file to sign"}</a>*/}
+                      <iframe src={this.state.file} width="100%" height="500px"></iframe>
                      
                     </div>
 
@@ -156,12 +157,15 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     handleSign(e: React.MouseEvent<HTMLButtonElement>){
         this.setState({
-            willSubmit: true
+            willSubmit: true,
+            isPopup: true
         })
     }
 
     handleSkip(e: React.MouseEvent<HTMLButtonElement>){
-        this.props.sendMessage('Skip Signature');
+        this.setState({
+            isPopup: false
+        })
     }
 
     //initial starting screen, should be popup, for now is treated as node
@@ -182,11 +186,11 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <button type="button" className="gideon-submit-button" id="sign_btn" onClick={e => this.handleSign(e)}>
                      Review & Sign
                 </button>
-                {/* <div>
-                    <button type="button" className="gideon-submit-button-white" onClick={e => this.handleSkip(e)}>
+                 <div>
+                    <button type="button" className={ this.state.isPopup ? "gideon-submit-button-white" : ""} onClick={e => this.handleSkip(e)}>
                          Sign Later
                     </button>
-                </div> */}
+                </div> 
             </div>
         );
 
@@ -194,6 +198,24 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     //For when the sign button leads to small modal to sign
     renderSignatureModal() {
+        <div className="signature-box-area">
+
+        <div className='esign-black-text'>
+           Type in Full Name to Create Signature
+        </div>
+        <div className='esign-grey-text'>
+        FULL NAME
+
+        </div>
+
+        <div>
+            <input className="esign-input-box" type="text" value={this.state.signature} onChange={this.onChangeSignature} id="signature"></input>
+        </div>
+        <div className="submit-area">
+            <button  className="gideon-submit-button" onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
+        </div>
+
+     </div>
 
     }
 
