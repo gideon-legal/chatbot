@@ -173,7 +173,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         return (
             <div>
                 <div className="esign__card esign__node">
-                    <div className= {this.state.validated ? "esign-checkmark" : "esign-checkmark"}>
+                <div className= {this.state.validated && !this.state.isPopup ? "esign-checkmark" : "esign-checkmark__disabled"}>
                          <EsignCheckMark />
                     </div>
                     <div className="document_area">
@@ -187,7 +187,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                      Review & Sign
                 </button>
                  <div>
-                    <button type="button" className={ this.state.isPopup ? "gideon-submit-button-white" : ""} onClick={e => this.handleSkip(e)}>
+                    <button type="button" className={ this.state.isPopup ? "gideon-submit-button-white" : "gideon-submit-button-white__disabled"} onClick={e => this.handleSkip(e)}>
                          Sign Later
                     </button>
                 </div> 
