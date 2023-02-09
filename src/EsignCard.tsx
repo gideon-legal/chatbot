@@ -25,6 +25,7 @@ interface EsignProps {
     conversationId: string;
     document: string;
     docx: string;
+    prompt: string;
 
 }
 
@@ -68,6 +69,27 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
         //handleKeyDown here etc
         this.onChangeSignature = this.onChangeSignature.bind(this)
+    }
+
+    handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>){
+        console.log("hit enter")
+        if (e.key === 'Enter' && this.validateSignature()){
+            console.log("hit if case enter")
+            sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx)
+            .then((res: any) => {
+                this.setState({
+                    ...this.state,
+                    signedfile: res.data.link
+                })
+            })
+            //once document is confirmed and received, set to this.state.signedfile, set completedDoc to true
+            this.setState({
+                ...this.state,
+                completedDoc: true,
+                isPopup: false
+            })
+            document.removeEventListener('keypress', this.handleKeyDown.bind(this))
+        }
     }
   
     /** Validates inputted signature */
@@ -114,7 +136,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
             completedDoc: true,
             isPopup: false
         })
-        //send signal to move on from node?
+        //send signal to move on from node? - need readonly version of card
     }
 
     onChangeSignature(event: React.ChangeEvent<HTMLInputElement>) {
@@ -132,14 +154,13 @@ class Esign extends React.Component<EsignProps, EsignState> {
         //display document if present
              let documentSection = (
                 <div>
-                    <div className="uploaded-files-container">
-                    <div className="uploaded-file-name-readonly-link">
+                    
                       {/*<a target="_blank" href={this.state.file}>{"file to sign"}</a>*/}
-                      <iframe src={`${this.state.file}#toolbar=0`} width="100%" height="500px"></iframe>
+                      <iframe className="esign-document-display" src={`${this.state.file}#toolbar=0`} ></iframe>
                      
-                    </div>
+                    
 
-                </div>
+               
                 <div className="signature-box-area">
 
                     <div className='esign-black-text'>
@@ -219,7 +240,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
             </div>
 
         <div>
-           <input className="esign-input-box" type="text" value={this.state.signature} onChange={this.onChangeSignature} id="signature"></input>
+           <input className="esign-input-box" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
         </div>
        <div className="submit-area">
               <button  className="gideon-submit-button" onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
@@ -322,6 +343,7 @@ export const EsignCard = connect(
      (stateProps: any, dispatchProps: any, ownProps: any): EsignProps => {
         console.log(stateProps)
         console.log(ownProps)
+        console.log(dispatchProps)
         return {
             // from stateProps
             node: ownProps.node,
@@ -331,6 +353,8 @@ export const EsignCard = connect(
             directLine: ownProps.directLine,
             conversationId: stateProps.conversationId,
             document: ownProps.activity.pdf_link.pdf_link[0],
-            docx: ownProps.activity.pdf_link.docx_link[0]        }
+            docx: ownProps.activity.pdf_link.docx_link[0],
+            prompt: ownProps.text    
+        }
     }
 )(Esign);

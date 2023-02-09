@@ -2334,3 +2334,12 @@ $lato: Lato, sans-serif;
         border: 1px solid #888;
         width: 50%; 
       }
+
+      .esign-document-display {
+        width: 100%;
+        height: 500px;
+
+        @include mobile {
+            width: 100%
+        }
+      }
