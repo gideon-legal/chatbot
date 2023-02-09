@@ -207,25 +207,26 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     //For when the sign button leads to small modal to sign
     renderSignatureModal() {
-        <div className="signature-box-area">
+        <div className="signature-modal">
+            <div className="signature-box-area">
 
-        <div className='esign-black-text'>
-           Type in Full Name to Create Signature
-        </div>
-        <div className='esign-grey-text'>
-        FULL NAME
+            <div className='esign-black-text'>
+               Type in Full Name to Create Signature
+            </div>
+            <div className='esign-grey-text'>
+               FULL NAME
 
-        </div>
+            </div>
 
         <div>
-            <input className="esign-input-box" type="text" value={this.state.signature} onChange={this.onChangeSignature} id="signature"></input>
+           <input className="esign-input-box" type="text" value={this.state.signature} onChange={this.onChangeSignature} id="signature"></input>
         </div>
-        <div className="submit-area">
-            <button  className="gideon-submit-button" onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
+       <div className="submit-area">
+              <button  className="gideon-submit-button" onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
         </div>
 
-     </div>
-
+       </div>
+       </div>
     }
 
     //rendered when signed document is returned, can view document and then exit out?
@@ -254,7 +255,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <div className="modal-content">
                 <div className="esign__card gideon__node">
                 <NodeHeader
-                header="Esign Document"
+                header="Signature"
                 />
                 {willSubmit == false && this.renderStartingScreen()}
                 {willSubmit == true && completedDoc == false && this.renderDocument()}
