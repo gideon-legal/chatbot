@@ -314,7 +314,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         return (
             <div className="esign__card gideon__node">
             <NodeHeader
-            header="Esign Document"
+            header="Signature"
             />
             {willSubmit == false && this.renderStartingScreen()}
             {willSubmit == true && completedDoc == false && this.renderDocument()}
