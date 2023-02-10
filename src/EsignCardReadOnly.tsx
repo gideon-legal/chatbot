@@ -36,7 +36,11 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
 
     render() {
         return (
-            <div>
+            <div className="esign__card gideon__node">
+                <div>
+                <NodeHeader
+                  header="Signature"
+                />
                 <div className="uploaded-files-container">
                 <div className="uploaded-file-name-readonly-link">
                 {this.props.files.map((file: any) => (
@@ -44,11 +48,9 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                       <a target="_blank" href={file.url}>{"signed document"}</a>
                     </div>
                 ))}
-                 
                 </div>
-
             </div>
-            
+                </div>
             </div>
         )
     }

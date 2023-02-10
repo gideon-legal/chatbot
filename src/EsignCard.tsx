@@ -136,8 +136,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 ...this.state,
                 signedfile: res.data.link
             })
-        })
-        //once document is confirmed and received, set to this.state.signedfile, set completedDoc to true
+            //once document is confirmed and received, set to this.state.signedfile, set completedDoc to true
         //send signal to move on from node? - need readonly version of card
         const files = []
         files.push({name: 'signed_document.docx', url: this.state.signedfile})
@@ -147,10 +146,13 @@ class Esign extends React.Component<EsignProps, EsignState> {
             isPopup: false,
             files: files
         })
+        console.log("files array")
+        console.log(files)
+        console.log("signed file")
+        console.log(this.state.signedfile)
         this.props.addFilesToState(this.props.index, files)
-       // this.props.sendMessage(JSON.stringify(this.state.signedfile))
-
-
+        this.props.sendMessage(JSON.stringify(this.state.signedfile))
+        })
     }
 
     onChangeSignature(event: React.ChangeEvent<HTMLInputElement>) {
@@ -312,7 +314,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         return (
             <div className="esign__card gideon__node">
             <NodeHeader
-            header="Esign Document"
+            header="Signature"
             />
             {willSubmit == false && this.renderStartingScreen()}
             {willSubmit == true && completedDoc == false && this.renderDocument()}
