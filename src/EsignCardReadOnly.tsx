@@ -18,12 +18,16 @@ export interface Node {
 }
 
 export interface EsignCardReadOnlyProps {
-    files: Array<{ name: string, url: string}>;
+    files: Array<{ name: string, url: string }>;
 }
 
-export class EsignCardReadOnly extends React.Component<EsignCardReadOnly, {}> {
-    constructor(props: EsignCardReadOnly) {
+export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {}> {
+    constructor(props: EsignCardReadOnlyProps) {
         super(props);
+
+        console.log("check files")
+        console.log(this.props.files)
+
 
         this.state = {
           showDisclaimer: false
@@ -35,7 +39,11 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnly, {}> {
             <div>
                 <div className="uploaded-files-container">
                 <div className="uploaded-file-name-readonly-link">
-                  {/*<a target="_blank" href={}>{"signed file"}</a>*/}
+                {this.props.files.map((file: any) => (
+                    <div className="uploaded-file-name-readonly-link">
+                      <a target="_blank" href={file.url}>{"signed document"}</a>
+                    </div>
+                ))}
                  
                 </div>
 

@@ -3,12 +3,14 @@ import * as moment from 'moment';
 import * as React from 'react';
 import { NodeHeader } from './nodes/containers/NodeHeader';
 import { ChatState } from './Store';
-import { ChatActions, sendMessage } from './Store';
+import { ChatActions, sendMessage, sendFiles } from './Store';
 import { connect } from 'react-redux';
 
 import { EsignNode, EsignPopup, EsignCheckMark } from './assets/icons/EsignIcons';
 import { sendSignature } from './api/bot';
 import { Hidden } from '@material-ui/core';
+import { any } from 'bluebird';
+import { FileslistFormatter } from 'tslint/lib/formatters';
 //will most likely need read only card too for after signing
 export interface Node {
     node_type: string;
@@ -20,12 +22,15 @@ export interface Node {
 interface EsignProps {
     node: Node;
     sendMessage: (inputText: string) => void;
+    sendFiles: (files: FileList) => void;
     directLine?: DirectLineOptions
     gid: string;
     conversationId: string;
     document: string;
     docx: string;
     prompt: string;
+    addFilesToState: (index: number, files: Array<{ name: string, url: string }>) => void;
+    index: number;
 
 }
 
@@ -42,6 +47,7 @@ export interface EsignState {
     completedDoc: boolean;
     validated: boolean;
     isPopup: boolean;
+    files: any
 
 }
 
@@ -62,7 +68,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
             signedfile: '',
             completedDoc: false,
             validated: false,
-            isPopup: true
+            isPopup: true,
+            files: []
 
 
         }
@@ -131,12 +138,19 @@ class Esign extends React.Component<EsignProps, EsignState> {
             })
         })
         //once document is confirmed and received, set to this.state.signedfile, set completedDoc to true
+        //send signal to move on from node? - need readonly version of card
+        const files = []
+        files.push({name: 'signed_document.docx', url: this.state.signedfile})
         this.setState({
             ...this.state,
             completedDoc: true,
-            isPopup: false
+            isPopup: false,
+            files: files
         })
-        //send signal to move on from node? - need readonly version of card
+        this.props.addFilesToState(this.props.index, files)
+       // this.props.sendMessage(JSON.stringify(this.state.signedfile))
+
+
     }
 
     onChangeSignature(event: React.ChangeEvent<HTMLInputElement>) {
@@ -156,7 +170,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <div>
                     
                       {/*<a target="_blank" href={this.state.file}>{"file to sign"}</a>*/}
-                      <iframe className="esign-document-display" src={`${this.state.file}#toolbar=0`} ></iframe>
+                      <iframe className="esign-document-display" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} ></iframe>
                      
                     
 
@@ -210,7 +224,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         <EsignNode />
                     </div>
                     <div className="esign-message-handoff">
-                            Place holder {this.state.handoff_message}
+                            {/*Place holder {this.state.handoff_message}*/}
                     </div>
                 </div> 
                 <button type="button" className="gideon-submit-button" id="sign_btn" onClick={e => this.handleSign(e)}>
@@ -338,7 +352,8 @@ export const EsignCard = connect(
             conversationId: state.connection.botConnection.conversationId
         }
     }, {
-        sendMessage
+        sendMessage,
+        sendFiles
     },
      (stateProps: any, dispatchProps: any, ownProps: any): EsignProps => {
         console.log(stateProps)
@@ -349,12 +364,15 @@ export const EsignCard = connect(
             node: ownProps.node,
             // from dispatchProps
             sendMessage: (text: string) => dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),
+            sendFiles: (files: FileList) => dispatchProps.sendFiles(files, stateProps.user, stateProps.locale),
             gid: ownProps.gid,
             directLine: ownProps.directLine,
             conversationId: stateProps.conversationId,
             document: ownProps.activity.pdf_link.pdf_link[0],
             docx: ownProps.activity.pdf_link.docx_link[0],
-            prompt: ownProps.text    
+            prompt: ownProps.text,
+            addFilesToState: ownProps.addFilesToState,
+            index: ownProps.index
         }
     }
 )(Esign);

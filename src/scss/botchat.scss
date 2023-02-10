@@ -2338,8 +2338,10 @@ $lato: Lato, sans-serif;
       .esign-document-display {
         width: 100%;
         height: 500px;
+        
 
         @include mobile {
-            width: 100%
+            width: 100%;
+            height: 100%;
         }
       }
