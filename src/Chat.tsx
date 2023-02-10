@@ -164,7 +164,6 @@ export class Chat extends React.Component<ChatProps, State> {
 
     private async handleIncomingActivity(activity: Activity) {
         const activityCopy: any = activity;
-       
         let lastActivity: any;
         lastActivity = this.store.getState().history.activities[this.store.getState().history.activities.length - 1]
         const state = this.store.getState();
@@ -235,6 +234,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)  
                     //set convoComplete to true if current convo is finished
                     if(notNode === "handoff") sessionStorage.setItem("convoComplete", 'true');
+                    if(notNode === "esign") sessionStorage.setItem("convoComplete", 'true');
                     if(notNode !== "open" && !activity.text.includes("Sorry, but that's not a valid")){
                         this.toggleBackButton(false);
                         this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
@@ -342,6 +342,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, currActivity.text)  
                     //set convoComplete to true if current convo is finished
                     if(notNode === "handoff") sessionStorage.setItem("convoComplete", 'true');
+                    if(notNode === "esign") sessionStorage.setItem("convoComplete", 'true');
                     if(notNode !== "open" && !currActivity.text.includes("Sorry, but that's not a valid")){
                         this.toggleBackButton(false);
                         this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
@@ -379,6 +380,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)  
                         //set convoComplete to true if current convo is finished
                         if(notNode === "handoff") sessionStorage.setItem("convoComplete", 'true');
+                        if(notNode === "esign") sessionStorage.setItem("convoComplete", 'true');
                         if(notNode !== "open" && !activity.text.includes("Sorry, but that's not a valid")){
                             this.toggleBackButton(false);
                             this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});

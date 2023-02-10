@@ -13,6 +13,7 @@ import { FormattedText } from './FormattedText';
 import { MultipleChoiceCard } from './MultipleChoiceCard';
 import { SchedulerCard } from './SchedulerCard';
 import { FormatState, SizeState } from './Store';
+import { EsignCard} from './EsignCard';
 
 const Attachments = (props: {
     attachments: Attachment[],
@@ -224,6 +225,10 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
             return (
                   <DisclaimerCard { ...props } activity={activityCopy} />
             );
+        } else if (type === 'esign') {
+          return (
+                <EsignCard{ ...props } activity={activityCopy.entities[0]} />
+          );
         }
     }
 }
