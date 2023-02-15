@@ -47,7 +47,8 @@ export interface EsignState {
     completedDoc: boolean;
     validated: boolean;
     isPopup: boolean;
-    files: any
+    files: any;
+    isDocument: boolean;
 
 }
 
@@ -69,7 +70,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
             completedDoc: false,
             validated: false,
             isPopup: true,
-            files: []
+            files: [],
+            isDocument: false
 
 
         }
@@ -164,8 +166,32 @@ class Esign extends React.Component<EsignProps, EsignState> {
         console.log(this.state.signature)
     }
 
+    //full screen
+    renderLargerPdf = () => {
+        let pdfView = (
+            <div className= "esign_fullwindow">
+                <div className= "esign_topbar">
+                    <div className= "esign-topbar-buttons">
+                    <button  className="gideon-download-button" > DOWNLOAD </button>
+                    <button  className="gideon-submit-button" onClick={e => this.clickToSubmitSignature(e)}> SIGN NOW </button>
+
+                    </div>
+                
+
+                </div>
+
+                <iframe className="esign-document-display" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} ></iframe>
+                     
+
+
+            </div>
+        )
+        return pdfView
+    }
+
 
     // prototype for displaying document + signing it
+    // download and sign now buttons
     renderDocument = () => {
         //display document if present
              let documentSection = (
@@ -204,7 +230,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
     handleSign(e: React.MouseEvent<HTMLButtonElement>){
         this.setState({
             willSubmit: true,
-            isPopup: true
+            isPopup: true,
+            isDocument: true
         })
     }
 
@@ -266,6 +293,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
        </div>
     }
 
+
+
     //rendered when signed document is returned, can view document and then exit out?
     renderCompletedDoc() {
         //display document if present
@@ -295,7 +324,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 header="Signature"
                 />
                 {willSubmit == false && this.renderStartingScreen()}
-                {willSubmit == true && completedDoc == false && this.renderDocument()}
+                {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
                 {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
     
             </div>
@@ -317,10 +346,21 @@ class Esign extends React.Component<EsignProps, EsignState> {
             header="Signature"
             />
             {willSubmit == false && this.renderStartingScreen()}
-            {willSubmit == true && completedDoc == false && this.renderDocument()}
+            {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
             {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
 
         </div>
+        )
+    }
+
+    renderFullscreen(){
+        const {willSubmit, completedDoc} = this.state;
+
+        return (
+            <div className='esign_fullwindow'>
+                {willSubmit == true && completedDoc == false && this.renderLargerPdf()}
+
+            </div>
         )
     }
 
@@ -330,13 +370,14 @@ class Esign extends React.Component<EsignProps, EsignState> {
     //screen 2: document viewable + signature box
 
     render() {
-        const {willSubmit, completedDoc, isPopup} = this.state;
+        const {willSubmit, completedDoc, isPopup, isDocument} = this.state;
        //need to add if case for when to show renderSigningIcon vs renderDocument
         
        //need if statement to determine if using popup or node version
 
        return (
         <div>
+            {isDocument == true && this.renderFullscreen()}
             {isPopup == true && this.renderPopup()}
            {isPopup == false && this.renderNode()}
         </div>
