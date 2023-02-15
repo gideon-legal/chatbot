@@ -2333,6 +2333,12 @@ $lato: Lato, sans-serif;
         padding: 20px;
         border: 1px solid #888;
         width: 50%; 
+
+        @include mobile {
+            width: 70%;
+            padding: 100% 20px 100% 20px;
+        }
+
       }
 
       .esign-document-display {
