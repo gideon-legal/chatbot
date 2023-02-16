@@ -2343,7 +2343,10 @@ $lato: Lato, sans-serif;
 
       .esign-document-display {
         width: 100%;
-        height: 500px;
+        height: 2000px;
+        left: 402px;
+        top: 249px;
+        background: #E9E9E9;
         
 
         @include mobile {
@@ -2353,25 +2356,118 @@ $lato: Lato, sans-serif;
       }
 
       .esign_fullwindow {
+         /* Stay in place */
+        z-index: 9999; /* Sit on top */
+        position: fixed; /* Stay in place */
+        z-index: 9999; /* Sit on top */
+        left: 50%;
+        top: 10%;
+        width: 100%; /* Full width */
         height: 100%;
-        position: absolute;
+        transform: translate(-50%, -50%);
+        background-color: rgb(0,0,0); 
+        background-color: rgba(0,0,0,0.4);
+        
+       
+        width: 100%; /* Full width */
       }
 
       .esign_topbar {
         position: absolute;
-        width: 1920px;
-        height: 124px;
-        left: 0px;
-        top: 0px;
-
+        box-sizing: border-box;
+        color: #fff;
+        top: 40%;
+        height: 120px;
+        width: 100%;
         background: rgba(254, 254, 254, 0.9);
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
-        backdrop-filter: blur(5px);
+        backdrop-filter: blur(5px); 
+        font-weight: 500;
+        left: 0;
+        letter-spacing: 0.5px;
+        position: absolute;
+        right: 0;
+        z-index: 99999;
+        display: flex;
+        line-height: 1.2em;
+        font-family: $lato;
+        $logo-size: 42px;
+        border-bottom: 0;
+       
 
-      }
+        @include mobileAndTablet {
+            max-width: $chatWidthMobile;
+        }
+
+        span {
+            font-size: 18px;
+            vertical-align: middle;
+            margin-left: 18px;
+            margin-right: 18px;
+            display: inline-flex;
+            flex-grow: 1;
+            justify-content: center;
+            align-items: center;
+        }  
+    }
+
+      
 
       .esign-topbar-buttons {
         margin: 0 auto;
-        display: inline;
-        
+        display: inline-block;
+
+      }
+
+      .gideon-download-button1 {
+       position: absolute;
+       right: 200px;
+      width: 158.47px;
+      top: 36px;
+       height: 52px;
+       background-color: #fff;
+        border: 1px solid #3F6DE1;
+        border-radius: 3px !important;
+        color: #3F6DE1;
+        min-height: 32px;
+        //height: auto;
+        white-space: normal;
+        overflow-wrap: break-word;
+        //padding: 18px;
+        text-align: center;
+        box-shadow: 2px 2px 4px 0px $c_shadow;
+        display: inline-block;
+      }
+
+      .gideon-download-button2 {
+        position: absolute;
+        right: 10px;
+        top: 36px;
+       width: 160.47px;
+        height: 52px;
+        background-color: #3F6DE1;
+         border: 1px solid #3F6DE1;
+         border-radius: 3px !important;
+         color: #ffffff;
+         min-height: 32px;
+         //height: auto;
+         white-space: normal;
+         overflow-wrap: break-word;
+         //padding: 18px;
+         text-align: center;
+         box-shadow: 2px 2px 4px 0px $c_shadow;
+         display: inline-block;
+       }
+
+      .fullview{
+        display: block;
+
+      }
+
+      .pdfholder{
+        position: absolute;
+        top: 510px;
+        width: 100%;
+        background: #E9E9E9;
+
       }

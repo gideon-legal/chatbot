@@ -169,22 +169,28 @@ class Esign extends React.Component<EsignProps, EsignState> {
     //full screen
     renderLargerPdf = () => {
         let pdfView = (
-            <div className= "esign_fullwindow">
-                <div className= "esign_topbar">
+            <div className="fullview">
+                 <div className= "esign_topbar">
                     <div className= "esign-topbar-buttons">
-                    <button  className="gideon-download-button" > DOWNLOAD </button>
-                    <button  className="gideon-submit-button" onClick={e => this.clickToSubmitSignature(e)}> SIGN NOW </button>
+                    <button  className="gideon-download-button1" > DOWNLOAD </button>
+                    <button  className="gideon-download-button2" onClick={e => this.clickToSubmitSignature(e)}> SIGN NOW </button>
 
                     </div>
-                
+                </div>
+                <div className="pdfholder">
+                <iframe className="esign-document-display" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} ></iframe>
 
                 </div>
 
-                <iframe className="esign-document-display" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} ></iframe>
+            </div>
+            
+               
+                
+               
                      
 
 
-            </div>
+           
         )
         return pdfView
     }
@@ -378,8 +384,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
        return (
         <div>
             {isDocument == true && this.renderFullscreen()}
-            {isPopup == true && this.renderPopup()}
-           {isPopup == false && this.renderNode()}
+            {isPopup == true && isDocument == false && this.renderPopup()}
+           {isPopup == false && isDocument == false && this.renderNode()}
         </div>
         
     );
