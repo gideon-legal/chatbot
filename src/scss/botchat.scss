@@ -2323,6 +2323,8 @@ $lato: Lato, sans-serif;
         
         @include mobile {
             width: 150%;
+            z-index: 0;
+
         }
       }
       
