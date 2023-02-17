@@ -178,14 +178,14 @@ class Esign extends React.Component<EsignProps, EsignState> {
                      <div className= "esign_topbar">
                         <div className= "esign-topbar-buttons">
                         {/*<button  className="gideon-download-button1" > DOWNLOAD </button>*/}
-                        <button  className="gideon-download-button2" onClick={e => this.handleSignModal(e)}> SIGN </button>
+                        <button  className="gideon-download-button2" onClick={e => this.handleSignModalMobile(e)}> SIGN </button>
     
                         </div>
                     </div>
                     <div className="pdfholder">
                     <iframe className="esign-document-display" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} ></iframe>
-                    <div>
-                        {/*this.renderSignatureModal()*/}
+                    <div >
+                        {this.renderSignatureMobile()}
     
                     </div>
     
@@ -275,6 +275,12 @@ class Esign extends React.Component<EsignProps, EsignState> {
         })
     }
 
+    handleSignModalMobile(e: React.MouseEvent<HTMLButtonElement>){
+        this.setState({
+            isSignature: true,
+        })
+    }
+
     //initial starting screen, should be popup, for now is treated as node
     renderStartingScreen() {
         return (
@@ -310,31 +316,57 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <div className="modal-content">
                 <div className="signature-box-area">
 
-<div className='esign-black-text'>
-   Type in Full Name to Create Signature
-</div>
-<div className='esign-grey-text'>
-   FULL NAME
+                <div className='esign-black-text'>
+                    Type in Full Name to Create Signature
+                </div>
+               <div className='esign-grey-text'>
+                 FULL NAME
 
-</div>
+                 </div>
 
-<div>
-<input className="esign-input-box" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
-</div>
-<div className="submit-area">
-  <button  className="gideon-submit-button" onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
-</div>
+             <div>
+              <input className="esign-input-box" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
+            </div>
+           <div className="submit-area">
+              <button  className="gideon-submit-button" onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
+           </div>
 
-</div>
-
-                    
+           </div>   
                 </div>
                  
 
             </div>
-           
         )
+        return sig
+      
+    }
 
+    renderSignatureMobile() {
+        let sig = (
+            
+                
+                <div className="signature-box-area">
+
+                <div className='esign-black-text'>
+                    Type in Full Name to Create Signature
+                </div>
+               <div className='esign-grey-text'>
+                 FULL NAME
+
+                 </div>
+
+             <div>
+              <input className="esign-input-box" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
+            </div>
+           <div className="submit-area">
+              <button  className="gideon-submit-button" onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
+           </div>
+
+           </div>   
+               
+                 
+
+        )
         return sig
       
     }
