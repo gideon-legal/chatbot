@@ -2359,9 +2359,9 @@ $lato: Lato, sans-serif;
 
       .esign_fullwindow {
          /* Stay in place */
-        z-index: 9999; /* Sit on top */
+        z-index: 3; /* Sit on top */
         position: fixed; /* Stay in place */
-        z-index: 9999; /* Sit on top */
+        z-index: 3; /* Sit on top */
         left: 50%;
         top: 10%;
         width: 100%; /* Full width */

@@ -49,6 +49,7 @@ export interface EsignState {
     isPopup: boolean;
     files: any;
     isDocument: boolean;
+    isSignature: boolean;
 
 }
 
@@ -71,7 +72,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
             validated: false,
             isPopup: true,
             files: [],
-            isDocument: false
+            isDocument: false,
+            isSignature: false
 
 
         }
@@ -173,7 +175,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                  <div className= "esign_topbar">
                     <div className= "esign-topbar-buttons">
                     {/*<button  className="gideon-download-button1" > DOWNLOAD </button>*/}
-                    <button  className="gideon-download-button2" onClick={e => this.clickToSubmitSignature(e)}> SIGN NOW </button>
+                    <button  className="gideon-download-button2" onClick={e => this.handleSignModal(e)}> SIGN NOW </button>
 
                     </div>
                 </div>
@@ -251,6 +253,13 @@ class Esign extends React.Component<EsignProps, EsignState> {
         })
     }
 
+    handleSignModal(e: React.MouseEvent<HTMLButtonElement>){
+        this.setState({
+            isSignature: true,
+            isPopup: true
+        })
+    }
+
     //initial starting screen, should be popup, for now is treated as node
     renderStartingScreen() {
         return (
@@ -283,7 +292,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
     renderSignatureModal() {
         let sig = (
             <div className="modal">
-                 <div className="signature-box-area">
+                <div className="modal-content">
+                <div className="signature-box-area">
 
 <div className='esign-black-text'>
    Type in Full Name to Create Signature
@@ -301,6 +311,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
 </div>
 
 </div>
+
+                    
+                </div>
+                 
 
             </div>
            
@@ -332,7 +346,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
     }
 
     renderPopup(){
-        const {willSubmit, completedDoc} = this.state;
+        const {willSubmit, completedDoc, isSignature} = this.state;
         return (
             <div className="modal">
                 <div className="modal-content">
@@ -343,6 +357,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 {willSubmit == false && this.renderStartingScreen()}
                 {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
                 {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
+                {/*isSignature == true && this.renderSignatureModal()*/}
     
             </div>
     
@@ -387,7 +402,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
     //screen 2: document viewable + signature box
 
     render() {
-        const {willSubmit, completedDoc, isPopup, isDocument} = this.state;
+        const {willSubmit, completedDoc, isPopup, isDocument, isSignature} = this.state;
        //need to add if case for when to show renderSigningIcon vs renderDocument
         
        //need if statement to determine if using popup or node version
@@ -397,6 +412,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
             {isDocument == true && this.renderFullscreen()}
             {isPopup == true && isDocument == false && this.renderPopup()}
            {isPopup == false && isDocument == false && this.renderNode()}
+           {isSignature == true && this.renderSignatureModal()}
         </div>
         
     );
