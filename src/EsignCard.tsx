@@ -5,7 +5,7 @@ import { NodeHeader } from './nodes/containers/NodeHeader';
 import { ChatState } from './Store';
 import { ChatActions, sendMessage, sendFiles } from './Store';
 import { connect } from 'react-redux';
-
+import { isMobile } from 'react-device-detect';
 import { EsignNode, EsignPopup, EsignCheckMark } from './assets/icons/EsignIcons';
 import { sendSignature } from './api/bot';
 import { Hidden } from '@material-ui/core';
@@ -170,35 +170,50 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     //full screen
     renderLargerPdf = () => {
-        let pdfView = (
-            <div className="fullview">
-                 <div className= "esign_topbar">
-                    <div className= "esign-topbar-buttons">
-                    {/*<button  className="gideon-download-button1" > DOWNLOAD </button>*/}
-                    <button  className="gideon-download-button2" onClick={e => this.handleSignModal(e)}> SIGN NOW </button>
-
+        console.log(isMobile)
+        if(isMobile == true){
+            //mobile view
+            let pdfView = (
+                <div className="fullview">
+                     <div className= "esign_topbar">
+                        <div className= "esign-topbar-buttons">
+                        {/*<button  className="gideon-download-button1" > DOWNLOAD </button>*/}
+                        <button  className="gideon-download-button2" onClick={e => this.handleSignModal(e)}> SIGN </button>
+    
+                        </div>
                     </div>
-                </div>
-                <div className="pdfholder">
-                <iframe className="esign-document-display" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} ></iframe>
-                <div>
-                    {/*this.renderSignatureModal()*/}
+                    <div className="pdfholder">
+                    <iframe className="esign-document-display" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} ></iframe>
+                    <div>
+                        {/*this.renderSignatureModal()*/}
+    
+                    </div>
+    
+                    </div>
+    
+                </div>   
+            )
+            return pdfView
 
-                </div>
+        } else {
+            let pdfView = (
+                <div className="fullview">
+                     <div className= "esign_topbar">
+                        <div className= "esign-topbar-buttons">
+                        {/*<button  className="gideon-download-button1" > DOWNLOAD </button>*/}
+                        <button  className="gideon-download-button2" onClick={e => this.handleSignModal(e)}> SIGN NOW </button>
+    
+                        </div>
+                    </div>
+                    <div className="pdfholder">
+                    <iframe className="esign-document-display" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} ></iframe>
+                    </div>
+    
+                </div>   
+            )
+            return pdfView
 
-                </div>
-
-            </div>
-            
-               
-                
-               
-                     
-
-
-           
-        )
-        return pdfView
+        } 
     }
 
 
