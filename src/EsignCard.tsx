@@ -172,13 +172,17 @@ class Esign extends React.Component<EsignProps, EsignState> {
             <div className="fullview">
                  <div className= "esign_topbar">
                     <div className= "esign-topbar-buttons">
-                    <button  className="gideon-download-button1" > DOWNLOAD </button>
+                    {/*<button  className="gideon-download-button1" > DOWNLOAD </button>*/}
                     <button  className="gideon-download-button2" onClick={e => this.clickToSubmitSignature(e)}> SIGN NOW </button>
 
                     </div>
                 </div>
                 <div className="pdfholder">
                 <iframe className="esign-document-display" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} ></iframe>
+                <div>
+                    {/*this.renderSignatureModal()*/}
+
+                </div>
 
                 </div>
 
@@ -277,26 +281,33 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     //For when the sign button leads to small modal to sign
     renderSignatureModal() {
-        <div className="signature-modal">
-            <div className="signature-box-area">
+        let sig = (
+            <div className="modal">
+                 <div className="signature-box-area">
 
-            <div className='esign-black-text'>
-               Type in Full Name to Create Signature
+<div className='esign-black-text'>
+   Type in Full Name to Create Signature
+</div>
+<div className='esign-grey-text'>
+   FULL NAME
+
+</div>
+
+<div>
+<input className="esign-input-box" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
+</div>
+<div className="submit-area">
+  <button  className="gideon-submit-button" onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
+</div>
+
+</div>
+
             </div>
-            <div className='esign-grey-text'>
-               FULL NAME
+           
+        )
 
-            </div>
-
-        <div>
-           <input className="esign-input-box" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
-        </div>
-       <div className="submit-area">
-              <button  className="gideon-submit-button" onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
-        </div>
-
-       </div>
-       </div>
+        return sig
+      
     }
 
 
