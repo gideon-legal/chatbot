@@ -183,7 +183,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         </div>
                     </div>
                     <div className="pdfholder">
-                    <iframe className="esign-document-display" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} ></iframe>
+                    <iframe className="esign-document-display" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} height="100%" width="100%"></iframe>
                     <div >
                         {this.renderSignatureMobile()}
     
