@@ -2470,4 +2470,15 @@ $lato: Lato, sans-serif;
         width: 101%;
         background: #E9E9E9;
         right: -2px;
+
+        @include mobileAndTablet {
+            height: 63%;
+            top: 330px;
+        }
+      }
+
+      .mobileview {
+        background: #E9E9E9;
+
+
       }
