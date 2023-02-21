@@ -2327,6 +2327,23 @@ $lato: Lato, sans-serif;
             z-index: 1;
         }
       }
+
+      .modal-signature {
+        position: fixed; /* Stay in place */
+        height: 100%;
+        z-index: 5; /* Sit on top */
+        left: 50%;
+        top: 50%;
+        width: 100%; /* Full width */
+        transform: translate(-50%, -50%);
+        background-color: rgb(0,0,0); 
+        background-color: rgba(0,0,0,0.4);
+        
+        @include mobile {
+            width: 150%;
+            z-index: 1;
+        }
+      }
       
       /* Modal Content/Box */
       .modal-content {

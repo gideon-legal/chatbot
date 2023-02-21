@@ -312,7 +312,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
     //For when the sign button leads to small modal to sign
     renderSignatureModal() {
         let sig = (
-            <div className="modal">
+            <div className="modal-signature">
                 <div className="modal-content">
                 <div className="signature-box-area">
 
