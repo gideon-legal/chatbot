@@ -2414,6 +2414,7 @@ $lato: Lato, sans-serif;
 
         @include mobileAndTablet {
             max-width: $chatWidthMobile;
+            height: 12%;
         }
 
         span {
@@ -2489,8 +2490,8 @@ $lato: Lato, sans-serif;
         right: -2px;
 
         @include mobileAndTablet {
-            height: 63%;
-           
+            height: 100%;
+           top: 49%;
         }
       }
 
