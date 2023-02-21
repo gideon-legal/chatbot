@@ -5,7 +5,7 @@ import { NodeHeader } from './nodes/containers/NodeHeader';
 import { ChatState } from './Store';
 import { ChatActions, sendMessage, sendFiles } from './Store';
 import { connect } from 'react-redux';
-
+import { isMobile } from 'react-device-detect';
 import { EsignNode, EsignPopup, EsignCheckMark } from './assets/icons/EsignIcons';
 import { sendSignature } from './api/bot';
 import { Hidden } from '@material-ui/core';
@@ -47,7 +47,9 @@ export interface EsignState {
     completedDoc: boolean;
     validated: boolean;
     isPopup: boolean;
-    files: any
+    files: any;
+    isDocument: boolean;
+    isSignature: boolean;
 
 }
 
@@ -69,7 +71,9 @@ class Esign extends React.Component<EsignProps, EsignState> {
             completedDoc: false,
             validated: false,
             isPopup: true,
-            files: []
+            files: [],
+            isDocument: false,
+            isSignature: false
 
 
         }
@@ -164,8 +168,57 @@ class Esign extends React.Component<EsignProps, EsignState> {
         console.log(this.state.signature)
     }
 
+    //full screen
+    renderLargerPdf = () => {
+        console.log(isMobile)
+        if(isMobile == true){
+            //mobile view
+            let pdfView = (
+                <div className="fullview">
+                     <div className= "esign_topbar">
+                        <div className= "esign-topbar-buttons">
+                        {/*<button  className="gideon-download-button1" > DOWNLOAD </button>*/}
+                        <button  className="gideon-download-button2" onClick={e => this.handleSignModalMobile(e)}> SIGN </button>
+    
+                        </div>
+                    </div>
+                    <div className="pdfholder">
+                    <iframe className="esign-document-display" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} height="100%" width="100%"></iframe>
+                    <div className="mobileview" >
+                        {this.renderSignatureMobile()}
+    
+                    </div>
+    
+                    </div>
+    
+                </div>   
+            )
+            return pdfView
+
+        } else {
+            let pdfView = (
+                <div className="fullview">
+                     <div className= "esign_topbar">
+                        <div className= "esign-topbar-buttons">
+                        {/*<button  className="gideon-download-button1" > DOWNLOAD </button>*/}
+                        <button  className="gideon-download-button2" onClick={e => this.handleSignModal(e)}> SIGN NOW </button>
+    
+                        </div>
+                    </div>
+                    <div className="pdfholder">
+                    <iframe className="esign-document-display" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150` } height="100%" width="100%" ></iframe>
+                    </div>
+    
+                </div>   
+            )
+            return pdfView
+
+        } 
+    }
+
 
     // prototype for displaying document + signing it
+    // download and sign now buttons
     renderDocument = () => {
         //display document if present
              let documentSection = (
@@ -204,13 +257,27 @@ class Esign extends React.Component<EsignProps, EsignState> {
     handleSign(e: React.MouseEvent<HTMLButtonElement>){
         this.setState({
             willSubmit: true,
-            isPopup: true
+            isPopup: true,
+            isDocument: true
         })
     }
 
     handleSkip(e: React.MouseEvent<HTMLButtonElement>){
         this.setState({
             isPopup: false
+        })
+    }
+
+    handleSignModal(e: React.MouseEvent<HTMLButtonElement>){
+        this.setState({
+            isSignature: true,
+            isPopup: true
+        })
+    }
+
+    handleSignModalMobile(e: React.MouseEvent<HTMLButtonElement>){
+        this.setState({
+            isSignature: true,
         })
     }
 
@@ -244,27 +311,67 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     //For when the sign button leads to small modal to sign
     renderSignatureModal() {
-        <div className="signature-modal">
-            <div className="signature-box-area">
+        let sig = (
+            <div className="modal-signature">
+                <div className="modal-content">
+                <div className="signature-box-area">
 
-            <div className='esign-black-text'>
-               Type in Full Name to Create Signature
+                <div className='esign-black-text'>
+                    Type in Full Name to Create Signature
+                </div>
+               <div className='esign-grey-text'>
+                 FULL NAME
+
+                 </div>
+
+             <div>
+              <input className="esign-input-box" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
             </div>
-            <div className='esign-grey-text'>
-               FULL NAME
-
-            </div>
-
-        <div>
-           <input className="esign-input-box" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
-        </div>
-       <div className="submit-area">
+           <div className="submit-area">
               <button  className="gideon-submit-button" onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
-        </div>
+           </div>
 
-       </div>
-       </div>
+           </div>   
+                </div>
+                 
+
+            </div>
+        )
+        return sig
+      
     }
+
+    renderSignatureMobile() {
+        let sig = (
+            
+                
+                <div className="signature-box-area">
+
+                <div className='esign-black-text'>
+                    Type in Full Name to Create Signature
+                </div>
+               <div className='esign-grey-text'>
+                 FULL NAME
+
+                 </div>
+
+             <div>
+              <input className="esign-input-box" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
+            </div>
+           <div className="submit-area">
+              <button  className="gideon-submit-button" onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
+           </div>
+
+           </div>   
+               
+                 
+
+        )
+        return sig
+      
+    }
+
+
 
     //rendered when signed document is returned, can view document and then exit out?
     renderCompletedDoc() {
@@ -286,7 +393,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
     }
 
     renderPopup(){
-        const {willSubmit, completedDoc} = this.state;
+        const {willSubmit, completedDoc, isSignature} = this.state;
         return (
             <div className="modal">
                 <div className="modal-content">
@@ -295,8 +402,9 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 header="Signature"
                 />
                 {willSubmit == false && this.renderStartingScreen()}
-                {willSubmit == true && completedDoc == false && this.renderDocument()}
+                {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
                 {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
+                {/*isSignature == true && this.renderSignatureModal()*/}
     
             </div>
     
@@ -317,10 +425,21 @@ class Esign extends React.Component<EsignProps, EsignState> {
             header="Signature"
             />
             {willSubmit == false && this.renderStartingScreen()}
-            {willSubmit == true && completedDoc == false && this.renderDocument()}
+            {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
             {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
 
         </div>
+        )
+    }
+
+    renderFullscreen(){
+        const {willSubmit, completedDoc} = this.state;
+
+        return (
+            <div className='esign_fullwindow'>
+                {willSubmit == true && completedDoc == false && this.renderLargerPdf()}
+
+            </div>
         )
     }
 
@@ -330,15 +449,17 @@ class Esign extends React.Component<EsignProps, EsignState> {
     //screen 2: document viewable + signature box
 
     render() {
-        const {willSubmit, completedDoc, isPopup} = this.state;
+        const {willSubmit, completedDoc, isPopup, isDocument, isSignature} = this.state;
        //need to add if case for when to show renderSigningIcon vs renderDocument
         
        //need if statement to determine if using popup or node version
 
        return (
         <div>
-            {isPopup == true && this.renderPopup()}
-           {isPopup == false && this.renderNode()}
+            {isDocument == true && this.renderFullscreen()}
+            {isPopup == true && isDocument == false && this.renderPopup()}
+           {isPopup == false && isDocument == false && this.renderNode()}
+           {isSignature == true && this.renderSignatureModal()}
         </div>
         
     );

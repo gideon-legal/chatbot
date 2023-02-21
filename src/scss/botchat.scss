@@ -113,7 +113,7 @@ $lato: Lato, sans-serif;
         position: absolute;
         right: 0;
         top: 0;
-        z-index: 1;
+        z-index: 3;
         max-width: $chatWidth;
         display: flex;
         line-height: 1.2em;
@@ -123,6 +123,7 @@ $lato: Lato, sans-serif;
 
         @include mobileAndTablet {
             max-width: $chatWidthMobile;
+            z-index: 2;
         }
 
         span {
@@ -2313,7 +2314,7 @@ $lato: Lato, sans-serif;
     //testing modal/popup
     .modal {
         position: fixed; /* Stay in place */
-        z-index: 9999; /* Sit on top */
+        z-index: 5; /* Sit on top */
         left: 50%;
         top: 50%;
         width: 100%; /* Full width */
@@ -2323,6 +2324,24 @@ $lato: Lato, sans-serif;
         
         @include mobile {
             width: 150%;
+            z-index: 1;
+        }
+      }
+
+      .modal-signature {
+        position: fixed; /* Stay in place */
+        height: 100%;
+        z-index: 5; /* Sit on top */
+        left: 50%;
+        top: 50%;
+        width: 100%; /* Full width */
+        transform: translate(-50%, -50%);
+        background-color: rgb(0,0,0); 
+        background-color: rgba(0,0,0,0.4);
+        
+        @include mobile {
+            width: 150%;
+            z-index: 1;
         }
       }
       
@@ -2333,15 +2352,150 @@ $lato: Lato, sans-serif;
         padding: 20px;
         border: 1px solid #888;
         width: 50%; 
+
+        @include mobile {
+            width: 70%;
+            padding: 100% 20px 100% 20px;
+        }
+
       }
 
       .esign-document-display {
         width: 100%;
-        height: 500px;
+        height: 2000px;
+        left: 402px;
+        top: 249px;
+        background: #E9E9E9;
         
 
         @include mobile {
             width: 100%;
             height: 100%;
         }
+      }
+
+      .esign_fullwindow {
+         /* Stay in place */
+        z-index: 3; /* Sit on top */
+        position: fixed; /* Stay in place */
+        z-index: 3; /* Sit on top */
+        left: 50%;
+        top: 10%;
+        width: 100%; /* Full width */
+        height: 100%;
+        transform: translate(-50%, -50%);
+        background-color: rgb(159,159,159); 
+        
+       
+        width: 100%; /* Full width */
+      }
+
+      .esign_topbar {
+        box-sizing: border-box;
+        color: #fff;
+        top: 37%;
+        height: 80px;
+        width: 100%;
+        background: rgba(254, 254, 254, 1);
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(5px); 
+        font-weight: 500;
+        left: 0;
+        letter-spacing: 0.5px;
+        position: absolute;
+        right: 0;
+        z-index: 99999;
+        display: flex;
+        line-height: 1.2em;
+        font-family: $lato;
+        $logo-size: 42px;
+        border-bottom: 0;
+       
+
+        @include mobileAndTablet {
+            max-width: $chatWidthMobile;
+        }
+
+        span {
+            font-size: 18px;
+            vertical-align: middle;
+            margin-left: 18px;
+            margin-right: 18px;
+            display: inline-flex;
+            flex-grow: 1;
+            justify-content: center;
+            align-items: center;
+        }  
+    }
+
+      
+
+      .esign-topbar-buttons {
+        margin: 0 auto;
+        display: inline-block;
+
+      }
+
+      .gideon-download-button1 {
+       position: absolute;
+       right: 200px;
+      width: 158.47px;
+      top: 36px;
+       height: 52px;
+       background-color: #fff;
+        border: 1px solid #3F6DE1;
+        border-radius: 3px !important;
+        color: #3F6DE1;
+        min-height: 32px;
+        //height: auto;
+        white-space: normal;
+        overflow-wrap: break-word;
+        //padding: 18px;
+        text-align: center;
+        box-shadow: 2px 2px 4px 0px $c_shadow;
+        display: inline-block;
+      }
+
+      .gideon-download-button2 {
+        position: absolute;
+        right: 10px;
+        top: 35px;
+       width: 130px;
+        //height: 52px;
+        background-color: #3F6DE1;
+         border: 1px solid #3F6DE1;
+         border-radius: 3px !important;
+         color: #ffffff;
+         min-height: 32px;
+         //height: auto;
+         white-space: normal;
+         overflow-wrap: break-word;
+         //padding: 18px;
+         text-align: center;
+         box-shadow: 2px 2px 4px 0px $c_shadow;
+         display: inline-block;
+       }
+
+      .fullview{
+        display: block;
+
+      }
+
+      .pdfholder{
+        position: absolute;
+        top: 440px;
+        width: 101%;
+        background: #E9E9E9;
+        right: -2px;
+
+        @include mobileAndTablet {
+            height: 63%;
+            top: 330px;
+        }
+      }
+
+      .mobileview {
+        background: #E9E9E9;
+
+
       }
