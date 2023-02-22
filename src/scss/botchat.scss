@@ -2362,7 +2362,6 @@ $lato: Lato, sans-serif;
 
       .esign-document-display {
         width: 100%;
-        height: 2000px;
         left: 402px;
         top: 249px;
         background: #E9E9E9;
@@ -2481,7 +2480,7 @@ $lato: Lato, sans-serif;
          display: inline-block;
 
          @include mobile {
-            top: 37%
+            top: 35%
          }
        }
       .fullview{
@@ -2493,6 +2492,7 @@ $lato: Lato, sans-serif;
         position: absolute;
         top: 46%;
         width: 101%;
+        height: 95%;
         background: #E9E9E9;
         right: -2px;
 
@@ -2509,7 +2509,7 @@ $lato: Lato, sans-serif;
         width: 101%;
         background: #E9E9E9;
         right: -2px;
-        overflow: auto;
+        //overflow: auto;
 
         @include mobileAndTablet {
             height: 200%;
