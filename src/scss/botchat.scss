@@ -2479,8 +2479,11 @@ $lato: Lato, sans-serif;
          text-align: center;
          box-shadow: 2px 2px 4px 0px $c_shadow;
          display: inline-block;
-       }
 
+         @include mobile {
+            top: 37%
+         }
+       }
       .fullview{
         display: block;
 
@@ -2496,6 +2499,7 @@ $lato: Lato, sans-serif;
         @include mobileAndTablet {
             height: 100%;
            top: 49%;
+           width: 100%;
         }
       }
 
@@ -2505,9 +2509,11 @@ $lato: Lato, sans-serif;
         width: 101%;
         background: #E9E9E9;
         right: -2px;
+        overflow: auto;
 
         @include mobileAndTablet {
             height: 200%;
+            width: 100%;
            
         }
       }
@@ -2521,7 +2527,8 @@ $lato: Lato, sans-serif;
 
         @include mobileAndTablet {
             height: 64%;
-            top: 42%
+            top: 42%;
+            width: 100%;
            
         }
       }
