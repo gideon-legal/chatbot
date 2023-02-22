@@ -170,6 +170,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     //full screen
     renderLargerPdf = () => {
+        console.log("mobile check: ")
         console.log(isMobile)
         if(isMobile == true){
             if(this.state.isSignature == true) {
