@@ -2495,8 +2495,22 @@ $lato: Lato, sans-serif;
         }
       }
 
+      .pdfholder-mobile-full{
+        position: absolute;
+        top: 46%;
+        width: 101%;
+        background: #E9E9E9;
+        right: -2px;
+
+        @include mobileAndTablet {
+            height: 200%;
+           
+        }
+      }
+
       .mobileview {
         background: #E9E9E9;
+        height: 100%;
 
 
       }
