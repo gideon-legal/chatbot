@@ -2384,10 +2384,14 @@ $lato: Lato, sans-serif;
         width: 100%; /* Full width */
         height: 100%;
         transform: translate(-50%, -50%);
-        background-color: rgb(159,159,159); 
+        background-color:  #E9E9E9;
         
        
         width: 100%; /* Full width */
+
+        @include mobile {
+            width: 101%;
+        }
       }
 
       .esign_topbar {
@@ -2414,7 +2418,7 @@ $lato: Lato, sans-serif;
 
         @include mobileAndTablet {
             max-width: $chatWidthMobile;
-            height: 12%;
+            //height: 12%;
         }
 
         span {
@@ -2516,8 +2520,8 @@ $lato: Lato, sans-serif;
         right: -2px;
 
         @include mobileAndTablet {
-            height: 63%;
-            top: 40%
+            height: 64%;
+            top: 42%
            
         }
       }
