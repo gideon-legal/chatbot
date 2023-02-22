@@ -179,7 +179,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <div className="fullview">
                     
                     <div className="pdfholder-notop">
-                    <iframe className="esign-document-display"  frameBorder="0" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} height="100%" width="100%" scrolling='no'></iframe>
+                    <iframe className="esign-document-display"  frameBorder="0" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} height="100%" width="100%" scrolling='yes'></iframe>
                     <div className="mobileview" >
                         {this.renderSignatureMobile()}
     
@@ -203,7 +203,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         </div>
                     </div>
                     <div className="pdfholder-mobile-full">
-                    <iframe className="esign-document-display" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} height="100%" width="100%" frameBorder="0" scrolling='no'></iframe>
+                    <iframe className="esign-document-display" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} height="100%" width="100%" frameBorder="0" scrolling='yes'></iframe>
                    
     
                     </div>
