@@ -2384,17 +2384,21 @@ $lato: Lato, sans-serif;
         width: 100%; /* Full width */
         height: 100%;
         transform: translate(-50%, -50%);
-        background-color: rgb(159,159,159); 
+        background-color:  #E9E9E9;
         
        
         width: 100%; /* Full width */
+
+        @include mobile {
+            width: 101%;
+        }
       }
 
       .esign_topbar {
         box-sizing: border-box;
         color: #fff;
         top: 37%;
-        height: 80px;
+        height: 9%;
         width: 100%;
         background: rgba(254, 254, 254, 1);
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
@@ -2414,6 +2418,7 @@ $lato: Lato, sans-serif;
 
         @include mobileAndTablet {
             max-width: $chatWidthMobile;
+            //height: 12%;
         }
 
         span {
@@ -2459,7 +2464,7 @@ $lato: Lato, sans-serif;
       .gideon-download-button2 {
         position: absolute;
         right: 10px;
-        top: 35px;
+        top: 38%;
        width: 130px;
         //height: 52px;
         background-color: #3F6DE1;
@@ -2483,19 +2488,47 @@ $lato: Lato, sans-serif;
 
       .pdfholder{
         position: absolute;
-        top: 440px;
+        top: 46%;
         width: 101%;
         background: #E9E9E9;
         right: -2px;
 
         @include mobileAndTablet {
-            height: 63%;
-            top: 330px;
+            height: 100%;
+           top: 49%;
+        }
+      }
+
+      .pdfholder-mobile-full{
+        position: absolute;
+        top: 46%;
+        width: 101%;
+        background: #E9E9E9;
+        right: -2px;
+
+        @include mobileAndTablet {
+            height: 200%;
+           
+        }
+      }
+
+      .pdfholder-notop{
+        position: absolute;
+        top: 46%;
+        width: 101%;
+        background: #E9E9E9;
+        right: -2px;
+
+        @include mobileAndTablet {
+            height: 64%;
+            top: 42%
+           
         }
       }
 
       .mobileview {
         background: #E9E9E9;
+        height: 100%;
 
 
       }
