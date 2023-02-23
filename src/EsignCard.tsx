@@ -225,6 +225,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                     </div>
                     <div className="pdfholder">
                     <iframe className="esign-document-display" src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } height="100%" width="100%" scrolling='yes' ></iframe>
+                    {this.renderSignatureMobile()}
                     </div>
     
                 </div>   
@@ -318,9 +319,9 @@ class Esign extends React.Component<EsignProps, EsignState> {
                      Review & Sign
                 </button>
                  <div>
-                    <button type="button" className={ this.state.isPopup ? "gideon-submit-button-white" : "gideon-submit-button-white__disabled"} onClick={e => this.handleSkip(e)}>
+                    {/*<button type="button" className={ this.state.isPopup ? "gideon-submit-button-white" : "gideon-submit-button-white__disabled"} onClick={e => this.handleSkip(e)}>
                          Sign Later
-                    </button>
+        </button>*/}
                 </div> 
             </div>
         );
