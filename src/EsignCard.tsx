@@ -204,7 +204,9 @@ class Esign extends React.Component<EsignProps, EsignState> {
                     </div>
                     <div className="pdfholder-mobile-full">
                     <iframe className="esign-document-display" src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } height="100%" width="100%" frameBorder="0" scrolling='auto'></iframe>
-                   
+                    <div id="sign-area">
+                    {this.renderSignatureMobile()}
+                    </div>
     
                     </div>
     
@@ -219,13 +221,15 @@ class Esign extends React.Component<EsignProps, EsignState> {
                      <div className= "esign_topbar">
                         {/*<div className= "esign-topbar-buttons">*/}
                         {/*<button  className="gideon-download-button1" > DOWNLOAD </button>*/}
-                        <button  className="gideon-download-button2" onClick={e => this.handleSignModal(e)}> SIGN NOW </button>
+                        <button  className="gideon-download-button2" onClick={e => this.scrollToElement()}> SIGN NOW </button>
     
                         {/*</div>*/}
                     </div>
                     <div className="pdfholder">
                     <iframe className="esign-document-display" src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } height="100%" width="100%" scrolling='yes' ></iframe>
+                    <div id="sign-area">
                     {this.renderSignatureMobile()}
+                    </div>
                     </div>
     
                 </div>   
@@ -292,12 +296,18 @@ class Esign extends React.Component<EsignProps, EsignState> {
             isSignature: true,
             isPopup: true
         })
+
     }
 
     handleSignModalMobile(e: React.MouseEvent<HTMLButtonElement>){
         this.setState({
             isSignature: true,
         })
+    }
+
+    scrollToElement(){
+        var scrollTo = document.getElementById("sign-area");
+        scrollTo.scrollIntoView({behavior:'smooth',block:'start'})
     }
 
     //initial starting screen, should be popup, for now is treated as node

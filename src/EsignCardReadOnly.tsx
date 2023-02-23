@@ -39,8 +39,14 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
             <div className="esign__card gideon__node">
                 <div>
                 <NodeHeader
-                  header="Signature"
+                  header="Signature Completed"
                 />
+                <div className="esign-checkmark" >
+                         <EsignCheckMark />
+                    </div>
+                    <div className="document_area">
+                        <EsignNode />
+                    </div>
                 <div className="uploaded-files-container">
                 <div className="uploaded-file-name-readonly-link">
                 {this.props.files.map((file: any) => (
