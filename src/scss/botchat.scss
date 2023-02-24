@@ -2313,17 +2313,19 @@ $lato: Lato, sans-serif;
 
     //testing modal/popup
     .modal-desktop {
+        flex: 1;
         display: flex;
         position: fixed; /* Stay in place */
         z-index: 5; /* Sit on top */
         //left: 50%;
-        margin-top: $headerTotalHeight + $actionsHeight;
-        //top: 35%;
-        width: 150%; /* Full width */
-        transform: translate(-50%, -50%);
+        margin-top: $headerTotalHeight;
+        top: 17%;
+        //width: 150%; /* Full width */
+        height: 75%;
+        transform: translate(-10%, -10%);
         //background-color: rgb(0,0,0); 
         //background-color: rgba(0,0,0,0.4);
-        top: $headerTotalHeight + $actionsHeight;
+       // top: 25%;
            // transform: translateY(-$actionsHeight);
         
         @include mobile {
@@ -2336,7 +2338,7 @@ $lato: Lato, sans-serif;
         z-index: 5; /* Sit on top */
         left: 50%;
         top: 50%;
-        width: 100%; /* Full width */
+        width: 150%; /* Full width */
         transform: translate(-50%, -50%);
         //background-color: rgb(0,0,0); 
         //background-color: rgba(0,0,0,0.4);
@@ -2353,7 +2355,7 @@ $lato: Lato, sans-serif;
         z-index: 5; /* Sit on top */
         left: 50%;
         top: 50%;
-        width: 100%; /* Full width */
+        width: $chatWidth; /* Full width */
         transform: translate(-50%, -50%);
         background-color: rgb(0,0,0); 
         background-color: rgba(0,0,0,0.4);
