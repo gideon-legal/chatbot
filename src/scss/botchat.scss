@@ -2317,7 +2317,7 @@ $lato: Lato, sans-serif;
         display: flex;
         position: fixed; /* Stay in place */
         z-index: 5; /* Sit on top */
-        //left: 50%;
+       // left: 85%;
         margin-top: $headerTotalHeight;
         top: 17%;
         //width: 150%; /* Full width */
@@ -2332,13 +2332,22 @@ $lato: Lato, sans-serif;
             width: 150%;
             z-index: 1;
         }
+
+        &-fullscreen {
+            top: 10%;
+            height: 188%;
+        }
+
+        &-fullheight {
+            height: 188%;
+        }
       }
     .modal {
         position: fixed; /* Stay in place */
         z-index: 5; /* Sit on top */
         left: 50%;
         top: 50%;
-        width: 150%; /* Full width */
+        width: 100%; /* Full width */
         transform: translate(-50%, -50%);
         //background-color: rgb(0,0,0); 
         //background-color: rgba(0,0,0,0.4);
