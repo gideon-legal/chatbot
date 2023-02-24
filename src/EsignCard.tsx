@@ -424,7 +424,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
     renderPopup(){
         const {willSubmit, completedDoc, isSignature} = this.state;
         return (
-            <div className="modal">
+            <div className="modal-desktop">
                 <div className="modal-content">
                 <div className="esign__card gideon__node">
                 <NodeHeader

@@ -2312,6 +2312,25 @@ $lato: Lato, sans-serif;
     }
 
     //testing modal/popup
+    .modal-desktop {
+        display: flex;
+        position: fixed; /* Stay in place */
+        z-index: 5; /* Sit on top */
+        //left: 50%;
+        margin-top: $headerTotalHeight + $actionsHeight;
+        //top: 35%;
+        width: 150%; /* Full width */
+        transform: translate(-50%, -50%);
+        //background-color: rgb(0,0,0); 
+        //background-color: rgba(0,0,0,0.4);
+        top: $headerTotalHeight + $actionsHeight;
+           // transform: translateY(-$actionsHeight);
+        
+        @include mobile {
+            width: 150%;
+            z-index: 1;
+        }
+      }
     .modal {
         position: fixed; /* Stay in place */
         z-index: 5; /* Sit on top */
@@ -2319,8 +2338,8 @@ $lato: Lato, sans-serif;
         top: 50%;
         width: 100%; /* Full width */
         transform: translate(-50%, -50%);
-        background-color: rgb(0,0,0); 
-        background-color: rgba(0,0,0,0.4);
+        //background-color: rgb(0,0,0); 
+        //background-color: rgba(0,0,0,0.4);
         
         @include mobile {
             width: 150%;
@@ -2350,8 +2369,9 @@ $lato: Lato, sans-serif;
         background-color: #fefefe;
         margin: 15% auto; 
         padding: 20px;
-        border: 1px solid #888;
-        width: 50%; 
+       // border: 1px solid #888;
+        width: $chatWidth;  
+        height: 100%;
 
         @include mobile {
             width: 70%;
@@ -2510,11 +2530,11 @@ $lato: Lato, sans-serif;
         width: 101%;
         background: #E9E9E9;
         right: -4px;
-        //overflow: auto;
+        overflow: auto;
 
         @include mobileAndTablet {
-            height: 100%;
-            width: 85%;
+            height: 85%;
+            width: 100%;
          
            
         }
