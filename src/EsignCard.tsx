@@ -31,6 +31,8 @@ interface EsignProps {
     prompt: string;
     addFilesToState: (index: number, files: Array<{ name: string, url: string }>) => void;
     index: number;
+    fullheight: boolean;
+    fullscreen: boolean;
 
 }
 
@@ -50,6 +52,8 @@ export interface EsignState {
     files: any;
     isDocument: boolean;
     isSignature: boolean;
+    isFullscreen: boolean;
+    isFullHeight: boolean;
 
 }
 
@@ -73,7 +77,9 @@ class Esign extends React.Component<EsignProps, EsignState> {
             isPopup: true,
             files: [],
             isDocument: false,
-            isSignature: false
+            isSignature: false,
+            isFullscreen: this.props.fullscreen,
+            isFullHeight: this.props.fullheight
 
 
         }
@@ -422,9 +428,46 @@ class Esign extends React.Component<EsignProps, EsignState> {
     }
 
     renderPopup(){
-        const {willSubmit, completedDoc, isSignature} = this.state;
-        return (
-            <div className="modal-desktop">
+        const {willSubmit, completedDoc, isSignature, isFullHeight, isFullscreen} = this.state;
+            //normal screen
+            let esignPopup = (
+                <div className="modal-normal">
+                <div className="modal-content">
+                <div className="esign__card gideon__node">
+                <NodeHeader
+                header="Signature"
+                />
+                {willSubmit == false && this.renderStartingScreen()}
+                {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
+                {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
+                {/*isSignature == true && this.renderSignatureModal()*/}
+            </div>
+                </div>
+            </div>
+
+            )
+        if(isFullHeight == true){
+            //fullscreen css
+            esignPopup = (
+                <div className="modal-fullheight">
+                <div className="modal-content">
+                <div className="esign__card gideon__node">
+                <NodeHeader
+                header="Signature"
+                />
+                {willSubmit == false && this.renderStartingScreen()}
+                {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
+                {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
+                {/*isSignature == true && this.renderSignatureModal()*/}
+            </div>
+                </div>
+            </div>
+            )
+        }
+        if(isFullscreen == true){
+            //fullheight css
+            esignPopup = (
+                <div className="modal-fullscreen">
                 <div className="modal-content">
                 <div className="esign__card gideon__node">
                 <NodeHeader
@@ -436,13 +479,11 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 {/*isSignature == true && this.renderSignatureModal()*/}
     
             </div>
-    
                 </div>
-    
             </div>
-        );
-
-
+            )
+        }
+        return esignPopup;
     }
 
     renderNode(){
@@ -524,7 +565,9 @@ export const EsignCard = connect(
             docx: ownProps.activity.pdf_link.docx_link[0],
             prompt: ownProps.text,
             addFilesToState: ownProps.addFilesToState,
-            index: ownProps.index
+            index: ownProps.index,
+            fullheight: ownProps.format.full_height,
+            fullscreen: ownProps.format.fullscreen
         }
     }
 )(Esign);

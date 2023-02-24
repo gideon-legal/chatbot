@@ -2312,7 +2312,7 @@ $lato: Lato, sans-serif;
     }
 
     //testing modal/popup
-    .modal-desktop {
+    .modal-normal {
         flex: 1;
         display: flex;
         position: fixed; /* Stay in place */
@@ -2342,6 +2342,69 @@ $lato: Lato, sans-serif;
             height: 188%;
         }
       }
+
+      .modal-fullscreen{
+        flex: 1;
+        display: flex;
+        position: fixed; /* Stay in place */
+        z-index: 5; /* Sit on top */
+       // left: 85%;
+        margin-top: $headerTotalHeight;
+        top: 10%;
+        //width: 100%; /* Full width */
+        height: 188%;
+        transform: translate(-10%, -10%);
+        //background-color: rgb(0,0,0); 
+        //background-color: rgba(0,0,0,0.4);
+       // top: 25%;
+           // transform: translateY(-$actionsHeight);
+        
+        @include mobile {
+            width: 150%;
+            z-index: 1;
+        }
+
+        &-fullscreen {
+            top: 10%;
+            height: 188%;
+        }
+
+        &-fullheight {
+            height: 188%;
+        }
+      }
+
+      .modal-fullheight {
+        flex: 1;
+        display: flex;
+        position: fixed; /* Stay in place */
+        z-index: 5; /* Sit on top */
+       // left: 85%;
+        margin-top: $headerTotalHeight;
+        top: 10%;
+        //width: 150%; /* Full width */
+        height: 188%;
+        transform: translate(-10%, -10%);
+        //background-color: rgb(0,0,0); 
+        //background-color: rgba(0,0,0,0.4);
+       // top: 25%;
+           // transform: translateY(-$actionsHeight);
+        
+        @include mobile {
+            width: 150%;
+            z-index: 1;
+        }
+
+        &-fullscreen {
+            top: 10%;
+            height: 188%;
+        }
+
+        &-fullheight {
+            height: 188%;
+        }
+      }  
+
     .modal {
         position: fixed; /* Stay in place */
         z-index: 5; /* Sit on top */
