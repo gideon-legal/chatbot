@@ -34,6 +34,7 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
         };
     }
 
+    //change list view to button
     render() {
         return (
             <div className="esign__card gideon__node">
@@ -46,6 +47,12 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                     </div>
                     <div className="document_area">
                         <EsignNode />
+                    </div>
+                    <div>
+                        Congrats! - bold
+                    </div>
+                    <div>
+                        Please downlaod your completed.....smaller text
                     </div>
                 <div className="uploaded-files-container">
                 <div className="uploaded-file-name-readonly-link">

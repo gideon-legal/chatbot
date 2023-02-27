@@ -328,11 +328,15 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         <EsignNode />
                     </div>
                     <div className="esign-message-handoff">
-                            {/*Place holder {this.state.handoff_message}*/}
+                           You're almost done! - bold
+                    </div>
+                    <div>
+                        {/*message line two*/}
+                        To start working with *name here*, please click on the button below to sign your representation agreement - smaller text
                     </div>
                 </div> 
                 <button type="button" className="gideon-submit-button" id="sign_btn" onClick={e => this.handleSign(e)}>
-                     Review & Sign
+                     Review & Sign Now
                 </button>
                  <div>
                     {/*<button type="button" className={ this.state.isPopup ? "gideon-submit-button-white" : "gideon-submit-button-white__disabled"} onClick={e => this.handleSkip(e)}>
