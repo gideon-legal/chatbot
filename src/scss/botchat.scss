@@ -2314,20 +2314,42 @@ $lato: Lato, sans-serif;
     //testing modal/popup
     .modal-normal {
         flex: 1;
-       // display: flex;
-       justify-content: center;
+        display: block;
+        right: $rightWeight + 14px;
+        bottom: $floatingBottom + $floatingHeight + 20px;
+        border-radius: 8px;
+        width: ($chatWidth)-11;
+        max-width: 80vw;
+        height: calc(80vh - #{$bottom} - 20px);
+        //display: flex;
+       //justify-content: center;
         position: fixed; /* Stay in place */
         z-index: 2; /* Sit on top */
        // left: 85%;
-        margin-top: 50px;
-        top: 17%;
-        width: ($chatWidth)-11; /* Full width */
-        height: 75%;
-        transform: translate(-10%, -9%);
+        margin-top: 5%;
+        top: ($headerTotalHeight)+100;
+       // top: 14%;
+        //width: ($chatWidth)-11; /* Full width */
+        //height: 75%;
+       // transform: translate(-10%, -9%);
         //background-color: rgb(0,0,0); 
         //background-color: rgba(0,0,0,0.4);
        // top: 25%;
            // transform: translateY(-$actionsHeight);
+
+           @include mobileAndTablet {
+            border-radius: 0;
+            width: 100vw;
+
+            // need to be !important because this is being set inline for element
+            height: 100% !important;
+            right: 0 !important;
+            top: 0 !important;
+            bottom: 0 !important;
+
+            left: 0;
+            min-width: 100%;
+        }
         
         @include mobile {
             width: 150%;
