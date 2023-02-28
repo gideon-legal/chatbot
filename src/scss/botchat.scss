@@ -2315,14 +2315,15 @@ $lato: Lato, sans-serif;
     .modal-normal {
         flex: 1;
        // display: flex;
+       justify-content: center;
         position: fixed; /* Stay in place */
         z-index: 2; /* Sit on top */
        // left: 85%;
         margin-top: 50px;
         top: 17%;
-        width: 28%; /* Full width */
+        width: ($chatWidth)-11; /* Full width */
         height: 75%;
-        transform: translate(-11%, -9%);
+        transform: translate(-10%, -9%);
         //background-color: rgb(0,0,0); 
         //background-color: rgba(0,0,0,0.4);
        // top: 25%;
@@ -2444,7 +2445,7 @@ $lato: Lato, sans-serif;
         margin: 15% auto; 
         padding: 20px;
        // border: 1px solid #888;
-        width: ($chatWidth)-1;  
+       // width: ($chatWidth)-1;  
         height: 100%;
 
         @include mobile {
@@ -2634,4 +2635,8 @@ $lato: Lato, sans-serif;
         height: 100%;
 
 
+      }
+
+      .presign_area {
+        width: 50%;
       }

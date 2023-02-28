@@ -324,7 +324,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <div className= {this.state.validated && !this.state.isPopup ? "esign-checkmark" : "esign-checkmark__disabled"}>
                          <EsignCheckMark />
                     </div>
-                    <div className="document_area">
+                    <div className="presign_area">
                         <EsignPreSign />
                     </div>
                     <div className="esign-message-handoff">
