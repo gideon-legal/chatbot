@@ -48,18 +48,19 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                     <div className="document_area">
                         <EsignNode />
                     </div>
-                    <div>
-                        Congrats! - bold
+                    <div className='esign-message-handoff-big2'>
+                        Congrats! 
                     </div>
-                    <div>
-                        Please downlaod your completed.....smaller text
+                    <div className="esign-message-handoff-small2">
+                        Please download your completed representation agreement below. A member of our team will be in touch 
+                        to advise you on your next steps. Thank you!
                     </div>
                 <div className="uploaded-files-container">
                 <div className="uploaded-file-name-readonly-link">
                 {this.props.files.map((file: any) => (
-                    <div className="uploaded-file-name-readonly-link">
-                      <a target="_blank" href={file.url}>{"signed document"}</a>
-                    </div>
+                    
+                      <a className="gideon-submit-button" target="_blank" href={file.url}>{"Download Document"}</a>
+                   
                 ))}
                 </div>
             </div>

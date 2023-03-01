@@ -320,12 +320,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
     renderStartingScreen() {
         return (
             <div>
+                 
                 <div className="esign__card esign__node">
                 <div className= {this.state.validated && !this.state.isPopup ? "esign-checkmark" : "esign-checkmark__disabled"}>
                          <EsignCheckMark />
-                    </div>
-                    <div className="presign_area">
-                        <EsignPreSign />
                     </div>
                     <div className="esign-message-handoff-big">
                            You're almost done! 
@@ -437,9 +435,12 @@ class Esign extends React.Component<EsignProps, EsignState> {
             let esignPopup = (
                 <div className="modal-normal">
                 <div className="modal-content">
+                <div className="presign_area">
+                        <EsignPreSign />
+                </div>
                 <div className="esign__card gideon__node">
                 
-                {willSubmit == false && this.renderStartingScreen()}
+                {willSubmit == false &&  this.renderStartingScreen()}
                 {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
                 {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
                 {/*isSignature == true && this.renderSignatureModal()*/}
