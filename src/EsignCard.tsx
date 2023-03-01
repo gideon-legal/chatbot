@@ -6,7 +6,7 @@ import { ChatState } from './Store';
 import { ChatActions, sendMessage, sendFiles } from './Store';
 import { connect } from 'react-redux';
 import { isMobile } from 'react-device-detect';
-import { EsignNode, EsignPopup, EsignCheckMark } from './assets/icons/EsignIcons';
+import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign, EsignPen } from './assets/icons/EsignIcons';
 import { sendSignature } from './api/bot';
 import { Hidden } from '@material-ui/core';
 import { any } from 'bluebird';
@@ -31,6 +31,8 @@ interface EsignProps {
     prompt: string;
     addFilesToState: (index: number, files: Array<{ name: string, url: string }>) => void;
     index: number;
+    fullheight: boolean;
+    fullscreen: boolean;
 
 }
 
@@ -50,6 +52,8 @@ export interface EsignState {
     files: any;
     isDocument: boolean;
     isSignature: boolean;
+    isFullscreen: boolean;
+    isFullHeight: boolean;
 
 }
 
@@ -73,7 +77,9 @@ class Esign extends React.Component<EsignProps, EsignState> {
             isPopup: true,
             files: [],
             isDocument: false,
-            isSignature: false
+            isSignature: false,
+            isFullscreen: this.props.fullscreen,
+            isFullHeight: this.props.fullheight
 
 
         }
@@ -179,7 +185,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <div className="fullview">
                     
                     <div className="pdfholder-notop">
-                    <iframe className="esign-document-display"  frameBorder="0" src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } height="100%" width="100%" scrolling='auto'></iframe>
+                    <iframe className="esign-document-display" src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } 
+                    height="100%" width="100%" scrolling='auto'></iframe>
                     <div className="mobileview" >
                         {this.renderSignatureMobile()}
     
@@ -198,13 +205,17 @@ class Esign extends React.Component<EsignProps, EsignState> {
                      <div className= "esign_topbar">
                         <div className= "esign-topbar-buttons">
                         {/*<button  className="gideon-download-button1" > DOWNLOAD </button>*/}
-                        <button  className="gideon-download-button2" onClick={e => this.handleSignModalMobile(e)}> SIGN </button>
+                        <button  className="gideon-download-button2" onClick={e => this.scrollToElement()}> SIGN NOW </button>
     
                         </div>
                     </div>
                     <div className="pdfholder-mobile-full">
-                    <iframe className="esign-document-display" src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } height="100%" width="100%" frameBorder="0" scrolling='auto'></iframe>
-                   
+                    <iframe className="esign-document-display" 
+                    src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } height="100%" width="100%" 
+                    scrolling='auto'></iframe>
+                    <div id="sign-area">
+                    {this.renderSignatureMobile()}
+                    </div>
     
                     </div>
     
@@ -219,12 +230,16 @@ class Esign extends React.Component<EsignProps, EsignState> {
                      <div className= "esign_topbar">
                         {/*<div className= "esign-topbar-buttons">*/}
                         {/*<button  className="gideon-download-button1" > DOWNLOAD </button>*/}
-                        <button  className="gideon-download-button2" onClick={e => this.handleSignModal(e)}> SIGN NOW </button>
+                        <button  className="gideon-download-button2" onClick={e => this.scrollToElement()}> SIGN NOW </button>
     
                         {/*</div>*/}
                     </div>
                     <div className="pdfholder">
-                    <iframe className="esign-document-display" src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } height="100%" width="100%" scrolling='yes' ></iframe>
+                    <iframe className="esign-document-display" src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } 
+                    height="100%" width="100%" scrolling='yes' ></iframe>
+                    <div id="sign-area">
+                    {this.renderSignatureMobile()}
+                    </div>
                     </div>
     
                 </div>   
@@ -291,6 +306,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
             isSignature: true,
             isPopup: true
         })
+
     }
 
     handleSignModalMobile(e: React.MouseEvent<HTMLButtonElement>){
@@ -299,28 +315,34 @@ class Esign extends React.Component<EsignProps, EsignState> {
         })
     }
 
+    scrollToElement(){
+        var scrollTo = document.getElementById("sign-area");
+        scrollTo.scrollIntoView({behavior:'smooth',block:'start'})
+    }
+
     //initial starting screen, should be popup, for now is treated as node
     renderStartingScreen() {
         return (
             <div>
+                 
                 <div className="esign__card esign__node">
                 <div className= {this.state.validated && !this.state.isPopup ? "esign-checkmark" : "esign-checkmark__disabled"}>
                          <EsignCheckMark />
                     </div>
-                    <div className="document_area">
-                        <EsignNode />
+                    <div className="esign-message-handoff-big">
+                           You're almost done! 
                     </div>
-                    <div className="esign-message-handoff">
-                            {/*Place holder {this.state.handoff_message}*/}
+                    <div className="esign-message-handoff-small">
+                        To start working with McCune Law Group, please click on the button below to sign your representation agreement
                     </div>
                 </div> 
                 <button type="button" className="gideon-submit-button" id="sign_btn" onClick={e => this.handleSign(e)}>
-                     Review & Sign
+                     <EsignPen/> Review & Sign Now
                 </button>
                  <div>
-                    <button type="button" className={ this.state.isPopup ? "gideon-submit-button-white" : "gideon-submit-button-white__disabled"} onClick={e => this.handleSkip(e)}>
+                    {/*<button type="button" className={ this.state.isPopup ? "gideon-submit-button-white" : "gideon-submit-button-white__disabled"} onClick={e => this.handleSkip(e)}>
                          Sign Later
-                    </button>
+        </button>*/}
                 </div> 
             </div>
         );
@@ -342,7 +364,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
                  </div>
 
-             <div>
+             <div className="submit-area">
               <input className="esign-input-box" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
             </div>
            <div className="submit-area">
@@ -373,7 +395,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
                  </div>
 
-             <div>
+             <div className="submit-area">
               <input className="esign-input-box" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
             </div>
            <div className="submit-area">
@@ -411,27 +433,81 @@ class Esign extends React.Component<EsignProps, EsignState> {
     }
 
     renderPopup(){
-        const {willSubmit, completedDoc, isSignature} = this.state;
-        return (
-            <div className="modal">
+        const {willSubmit, completedDoc, isSignature, isFullHeight, isFullscreen} = this.state;
+            //normal screen
+            let esignPopup = (
+                <div className="modal-normal">
                 <div className="modal-content">
+                <div className="presign_area">
+                        <EsignPreSign />
+                </div>
                 <div className="esign__card gideon__node">
-                <NodeHeader
-                header="Signature"
-                />
+                
+                {willSubmit == false &&  this.renderStartingScreen()}
+                {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
+                {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
+                {/*isSignature == true && this.renderSignatureModal()*/}
+            </div>
+                </div>
+            </div>
+
+            )
+        if(isFullHeight == true){
+            //fullscreen css
+            esignPopup = (
+                <div className="modal-fullheight">
+                <div className="modal-content">
+                <div className="presign_area">
+                        <EsignPreSign />
+                </div>
+                <div className="esign__card gideon__node">
+                {willSubmit == false && this.renderStartingScreen()}
+                {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
+                {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
+                {/*isSignature == true && this.renderSignatureModal()*/}
+            </div>
+                </div>
+            </div>
+            )
+        }
+        if(isFullscreen == true){
+            //fullheight css
+            esignPopup = (
+                <div className="modal-fullscreen">
+                <div className="modal-content">
+                <div className="presign_area">
+                        <EsignPreSign />
+                </div>
+                <div className="esign__card gideon__node">
                 {willSubmit == false && this.renderStartingScreen()}
                 {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
                 {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
                 {/*isSignature == true && this.renderSignatureModal()*/}
     
             </div>
-    
                 </div>
-    
             </div>
-        );
+            )
+        }
+        if(isMobile == true){
+            esignPopup = (
+                <div className="modal">
+                <div className="modal-content-mobile">
+                <div className="presign_area">
+                        <EsignPreSign />
+                </div>
+                <div className="esign__card gideon__node">
+                {willSubmit == false && this.renderStartingScreen()}
+                {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
+                {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
+                {/*isSignature == true && this.renderSignatureModal()*/}
+            </div>
+                </div>
+            </div>
+            )
 
-
+        }
+        return esignPopup;
     }
 
     renderNode(){
@@ -513,7 +589,9 @@ export const EsignCard = connect(
             docx: ownProps.activity.pdf_link.docx_link[0],
             prompt: ownProps.text,
             addFilesToState: ownProps.addFilesToState,
-            index: ownProps.index
+            index: ownProps.index,
+            fullheight: ownProps.format.full_height,
+            fullscreen: ownProps.format.fullscreen
         }
     }
 )(Esign);

@@ -34,23 +34,38 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
         };
     }
 
+    //change list view to button
     render() {
         return (
+            <div className="modal-normal">
+            <div className="modal-content">
             <div className="esign__card gideon__node">
                 <div>
-                <NodeHeader
-                  header="Signature"
-                />
-                <div className="uploaded-files-container">
-                <div className="uploaded-file-name-readonly-link">
-                {this.props.files.map((file: any) => (
-                    <div className="uploaded-file-name-readonly-link">
-                      <a target="_blank" href={file.url}>{"signed document"}</a>
+                
+                    <div className="document_area">
+                        <EsignNode />
                     </div>
+                    <div className='esign-message-handoff-big2'>
+                        Congrats! 
+                    </div>
+                    <div className="esign-message-handoff-small2">
+                        Please download your completed representation agreement below. A member of our team will be in touch 
+                        to advise you on your next steps. Thank you!
+                    </div>
+                <div className="uploaded-files-container">
+                <div >
+                {this.props.files.map((file: any) => (
+                    
+                      <a className="gideon-submit-button-download" target="_blank" href={file.url}>{"Download Document"}</a>
+                   
                 ))}
                 </div>
             </div>
                 </div>
+            </div>
+
+            </div>
+           
             </div>
         )
     }

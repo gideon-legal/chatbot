@@ -235,6 +235,8 @@ export class Chat extends React.Component<ChatProps, State> {
                     //set convoComplete to true if current convo is finished
                     if(notNode === "handoff") sessionStorage.setItem("convoComplete", 'true');
                     if(notNode === "esign") sessionStorage.setItem("convoComplete", 'true');
+                    if(notNode === "handoff") this.toggleBackButton(false);
+                    if(notNode === "esign") this.toggleBackButton(false);
                     if(notNode !== "open" && !activity.text.includes("Sorry, but that's not a valid")){
                         this.toggleBackButton(false);
                         this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
