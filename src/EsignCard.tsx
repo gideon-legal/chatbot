@@ -205,7 +205,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                      <div className= "esign_topbar">
                         <div className= "esign-topbar-buttons">
                         {/*<button  className="gideon-download-button1" > DOWNLOAD </button>*/}
-                        <button  className="gideon-download-button2" onClick={e => this.handleSignModalMobile(e)}> SIGN </button>
+                        <button  className="gideon-download-button2" onClick={e => this.scrollToElement()}> SIGN NOW </button>
     
                         </div>
                     </div>

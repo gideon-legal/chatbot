@@ -56,7 +56,7 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                 <div >
                 {this.props.files.map((file: any) => (
                     
-                      <a className="gideon-submit-button" target="_blank" href={file.url}>{"Download Document"}</a>
+                      <a className="gideon-submit-button-download" target="_blank" href={file.url}>{"Download Document"}</a>
                    
                 ))}
                 </div>
