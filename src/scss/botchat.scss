@@ -2318,7 +2318,7 @@ $lato: Lato, sans-serif;
         right: $rightWeight + 14px;
         bottom: $floatingBottom + $floatingHeight + 20px;
         border-radius: 8px;
-        width: ($chatWidth)-11;
+        width: $chatWidth;
         max-width: 80vw;
         height: calc(80vh - #{$bottom} - 20px);
         //display: flex;
@@ -2326,8 +2326,8 @@ $lato: Lato, sans-serif;
         position: fixed; /* Stay in place */
         z-index: 2; /* Sit on top */
        // left: 85%;
-        margin-top: 5%;
-        top: ($headerTotalHeight)+100;
+        //margin-top: 5%;
+        //top: ($headerTotalHeight)+100;
        // top: 14%;
         //width: ($chatWidth)-11; /* Full width */
         //height: 75%;
@@ -2464,8 +2464,8 @@ $lato: Lato, sans-serif;
       /* Modal Content/Box */
       .modal-content {
         background-color: #fefefe;
-        margin: 15% auto; 
-        padding: 20px;
+        //margin: 15% auto; 
+        //padding: 20px;
        // border: 1px solid #888;
        // width: ($chatWidth)-1;  
         height: 100%;
