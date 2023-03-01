@@ -2234,6 +2234,39 @@ $lato: Lato, sans-serif;
        color: #262626;
        padding: 15px 0px 15px 0px;
     }
+
+    .esign-message-handoff-big {
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 800;
+        font-size: xx-large;
+        line-height: 40px;
+        /* or 89% */
+
+        text-align: center;
+        letter-spacing: 0.04em;
+
+        /* Gideon/Primary text */
+
+       color: #262626;
+       padding: 15px 0px 15px 0px;
+    }
+
+    .esign-message-handoff-small{
+        
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 500;
+        font-size: medium;
+        line-height: 29px;
+        text-align: center;
+        letter-spacing: 0.03em;
+    
+       /* Gideon/Primary text */
+       color: #262626;
+       padding: 15px 0px 15px 0px;
+    }
+    
     
     .signature-box-area {
         text-align: center !important;

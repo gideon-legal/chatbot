@@ -327,12 +327,12 @@ class Esign extends React.Component<EsignProps, EsignState> {
                     <div className="presign_area">
                         <EsignPreSign />
                     </div>
-                    <div className="esign-message-handoff">
-                           You're almost done! - bold
+                    <div className="esign-message-handoff-big">
+                           You're almost done! 
                     </div>
-                    <div>
+                    <div className="esign-message-handoff-small">
                         {/*message line two*/}
-                        To start working with *name here*, please click on the button below to sign your representation agreement - smaller text
+                        To start working with McCune Law Group, please click on the button below to sign your representation agreement
                     </div>
                 </div> 
                 <button type="button" className="gideon-submit-button" id="sign_btn" onClick={e => this.handleSign(e)}>
@@ -438,9 +438,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <div className="modal-normal">
                 <div className="modal-content">
                 <div className="esign__card gideon__node">
-                <NodeHeader
-                header="Signature"
-                />
+                
                 {willSubmit == false && this.renderStartingScreen()}
                 {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
                 {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
