@@ -2762,9 +2762,17 @@ $lato: Lato, sans-serif;
       }
 
       .uploaded-files-container {
+        margin-top: 10%;
         display: flex;
         justify-content: center;
         align-items: center;
+      }
 
+      .document_area{
+        margin-top: 10%;
+      }
 
+      .submit-area{
+        width: 25%;
+        justify-content: right;
       }

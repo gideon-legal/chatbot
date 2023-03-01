@@ -364,7 +364,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
                  </div>
 
-             <div>
+             <div className="submit-area">
               <input className="esign-input-box" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
             </div>
            <div className="submit-area">
@@ -395,7 +395,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
                  </div>
 
-             <div>
+             <div className="submit-area">
               <input className="esign-input-box" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
             </div>
            <div className="submit-area">
