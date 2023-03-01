@@ -37,14 +37,11 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
     //change list view to button
     render() {
         return (
+            <div className="modal-normal">
+            <div className="modal-content">
             <div className="esign__card gideon__node">
                 <div>
-                <NodeHeader
-                  header="Signature Completed"
-                />
-                <div className="esign-checkmark" >
-                         <EsignCheckMark />
-                    </div>
+                
                     <div className="document_area">
                         <EsignNode />
                     </div>
@@ -56,7 +53,7 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                         to advise you on your next steps. Thank you!
                     </div>
                 <div className="uploaded-files-container">
-                <div className="uploaded-file-name-readonly-link">
+                <div >
                 {this.props.files.map((file: any) => (
                     
                       <a className="gideon-submit-button" target="_blank" href={file.url}>{"Download Document"}</a>
@@ -65,6 +62,10 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                 </div>
             </div>
                 </div>
+            </div>
+
+            </div>
+           
             </div>
         )
     }

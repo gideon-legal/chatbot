@@ -6,7 +6,7 @@ import { ChatState } from './Store';
 import { ChatActions, sendMessage, sendFiles } from './Store';
 import { connect } from 'react-redux';
 import { isMobile } from 'react-device-detect';
-import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign } from './assets/icons/EsignIcons';
+import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign, EsignPen } from './assets/icons/EsignIcons';
 import { sendSignature } from './api/bot';
 import { Hidden } from '@material-ui/core';
 import { any } from 'bluebird';
@@ -185,7 +185,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <div className="fullview">
                     
                     <div className="pdfholder-notop">
-                    <iframe className="esign-document-display"  frameBorder="0" src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } height="100%" width="100%" scrolling='auto'></iframe>
+                    <iframe className="esign-document-display" src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } 
+                    height="100%" width="100%" scrolling='auto'></iframe>
                     <div className="mobileview" >
                         {this.renderSignatureMobile()}
     
@@ -209,7 +210,9 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         </div>
                     </div>
                     <div className="pdfholder-mobile-full">
-                    <iframe className="esign-document-display" src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } height="100%" width="100%" frameBorder="0" scrolling='auto'></iframe>
+                    <iframe className="esign-document-display" 
+                    src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } height="100%" width="100%" 
+                    scrolling='auto'></iframe>
                     <div id="sign-area">
                     {this.renderSignatureMobile()}
                     </div>
@@ -232,7 +235,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         {/*</div>*/}
                     </div>
                     <div className="pdfholder">
-                    <iframe className="esign-document-display" src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } height="100%" width="100%" scrolling='yes' ></iframe>
+                    <iframe className="esign-document-display" src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } 
+                    height="100%" width="100%" scrolling='yes' ></iframe>
                     <div id="sign-area">
                     {this.renderSignatureMobile()}
                     </div>
@@ -329,12 +333,11 @@ class Esign extends React.Component<EsignProps, EsignState> {
                            You're almost done! 
                     </div>
                     <div className="esign-message-handoff-small">
-                        {/*message line two*/}
                         To start working with McCune Law Group, please click on the button below to sign your representation agreement
                     </div>
                 </div> 
                 <button type="button" className="gideon-submit-button" id="sign_btn" onClick={e => this.handleSign(e)}>
-                     Review & Sign Now
+                     <EsignPen/> Review & Sign Now
                 </button>
                  <div>
                     {/*<button type="button" className={ this.state.isPopup ? "gideon-submit-button-white" : "gideon-submit-button-white__disabled"} onClick={e => this.handleSkip(e)}>
@@ -454,10 +457,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
             esignPopup = (
                 <div className="modal-fullheight">
                 <div className="modal-content">
+                <div className="presign_area">
+                        <EsignPreSign />
+                </div>
                 <div className="esign__card gideon__node">
-                <NodeHeader
-                header="Signature"
-                />
                 {willSubmit == false && this.renderStartingScreen()}
                 {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
                 {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
@@ -472,10 +475,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
             esignPopup = (
                 <div className="modal-fullscreen">
                 <div className="modal-content">
+                <div className="presign_area">
+                        <EsignPreSign />
+                </div>
                 <div className="esign__card gideon__node">
-                <NodeHeader
-                header="Signature"
-                />
                 {willSubmit == false && this.renderStartingScreen()}
                 {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
                 {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
@@ -485,6 +488,24 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 </div>
             </div>
             )
+        }
+        if(isMobile == true){
+            esignPopup = (
+                <div className="modal">
+                <div className="modal-content-mobile">
+                <div className="presign_area">
+                        <EsignPreSign />
+                </div>
+                <div className="esign__card gideon__node">
+                {willSubmit == false && this.renderStartingScreen()}
+                {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
+                {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
+                {/*isSignature == true && this.renderSignatureModal()*/}
+            </div>
+                </div>
+            </div>
+            )
+
         }
         return esignPopup;
     }

@@ -2542,6 +2542,21 @@ $lato: Lato, sans-serif;
 
       }
 
+      .modal-content-mobile{
+        background-color: #fefefe;
+        margin: 15% auto; 
+        padding: 20px;
+        border: 1px solid #888;
+       // width: ($chatWidth)-1;  
+        //height: 100%;
+
+        @include mobile {
+            width: 70%;
+            padding: 100% 20px 100% 20px;
+        }
+
+      }
+
       .esign-document-display {
         width: 100%;
         left: 402px;
