@@ -2008,7 +2008,7 @@ $lato: Lato, sans-serif;
         background-color: #3F6DE1;
         border: 1px solid #3F6DE1;
         border-radius: 3px !important;
-        color: #ffffff;
+        color: #ffffff !important;
         min-height: 32px;
         height: auto;
         width: 100%;
@@ -2765,6 +2765,7 @@ $lato: Lato, sans-serif;
         display: flex;
         justify-content: center;
         align-items: center;
+        width: 100%;
       }
 
       .document_area{
