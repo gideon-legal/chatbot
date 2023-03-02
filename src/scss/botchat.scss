@@ -2781,13 +2781,17 @@ $lato: Lato, sans-serif;
       }
 
       .submit-area{
-        width: 25%;
-        justify-content: right;
+        width: 100%;
+        justify-content: space-between;
         align-items: center;
-        display: inline;
+        display: flex;
       }
 
       .sign-area{
         //position: absolute;
         bottom: 0;
+      }
+
+      .button-area{
+        width: 25%;
       }
