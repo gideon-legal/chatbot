@@ -428,7 +428,7 @@ export class EsignPen extends React.Component<{}, {}> {
 
 export class EsignPreSign extends React.Component<{}, {}> {
     render() {
-        return <svg width="200%" height="100%" viewBox="0 50 530 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        return <svg width="200%" height="100%" viewBox="0 50 530 190" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="531" height="351" fill="url(#paint0_linear_5523_4145)" fill-opacity="0.4"/>
         <mask id="mask0_5523_4145"  maskUnits="userSpaceOnUse" x="0" y="0" width="531" height="351">
         <rect width="530.528" height="351" fill="#FBFBFB"/>
