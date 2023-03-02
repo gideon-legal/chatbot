@@ -2004,6 +2004,7 @@ $lato: Lato, sans-serif;
     }
 
     .gideon-submit-button-download {
+        text-decoration:none;
         background-color: #3F6DE1;
         border: 1px solid #3F6DE1;
         border-radius: 3px !important;
@@ -2016,7 +2017,6 @@ $lato: Lato, sans-serif;
         padding: 18px;
         text-align: center;
         box-shadow: 2px 2px 4px 0px $c_shadow;
-        text-decoration:none;
     }
 
     .gideon-submit-button-white {

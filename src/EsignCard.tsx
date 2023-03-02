@@ -235,8 +235,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         {/*</div>*/}
                     </div>
                     <div className="pdfholder">
-                    <iframe className="esign-document-display" src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } 
-                    height="100%" width="100%" scrolling='yes' ></iframe>
+                    <iframe className="esign-document-display"  frameBorder="0" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} height="100%" width="100%" scrolling='yes'></iframe>
                     <div id="sign-area">
                     {this.renderSignatureMobile()}
                     </div>
