@@ -2317,7 +2317,15 @@ $lato: Lato, sans-serif;
     
     
     .signature-box-area {
+        bottom: 0;
         text-align: center !important;
+        background: #E9E9E9;
+       // position: fixed;
+        //bottom: 0;
+        position: absolute;
+        display: flex;
+        //flex-grow: 0;
+       // flex-shrink: 0;
         height: auto;
             width: 100%;
             white-space: normal;
@@ -2775,4 +2783,11 @@ $lato: Lato, sans-serif;
       .submit-area{
         width: 25%;
         justify-content: right;
+        align-items: center;
+        display: inline;
+      }
+
+      .sign-area{
+        //position: absolute;
+        bottom: 0;
       }
