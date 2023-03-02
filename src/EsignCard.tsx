@@ -142,14 +142,15 @@ class Esign extends React.Component<EsignProps, EsignState> {
         //send to api and wait to receive signed pdf link, set to this.state.signedfile
         sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx)
         .then((res: any) => {
+            console.log(res.data)
             this.setState({
                 ...this.state,
-                signedfile: res.data.link
+                signedfile: res.data.pdf_link
             })
             //once document is confirmed and received, set to this.state.signedfile, set completedDoc to true
         //send signal to move on from node? - need readonly version of card
         const files = []
-        files.push({name: 'signed_document.docx', url: this.state.signedfile})
+        files.push({name: 'signed_document.pdf', url: this.state.signedfile})
         this.setState({
             ...this.state,
             completedDoc: true,
