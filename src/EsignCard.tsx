@@ -187,7 +187,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                     
                     <div className="pdfholder-notop">
                     <iframe className="esign-document-display" src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } 
-                    height="85%" width="100%" scrolling='auto'></iframe>
+                    height="90%" width="100%" scrolling='auto'></iframe>
                     <div className="mobileview" >
                         {this.renderSignatureMobile()}
     
@@ -384,7 +384,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
              <div className="submit-area">
               <input className="esign-input-box" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
               <div className="button-area">
-              <button  className="gideon-submit-button" onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
+              <button  className="gideon-submit-button" style={{paddingBottom: "5px", width: "80%",  }} onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
               </div>
             </div>
            
