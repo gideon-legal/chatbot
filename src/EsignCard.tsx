@@ -384,7 +384,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
              <div className="submit-area">
               <input className="esign-input-box" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
               <div className="button-area">
-              <button  className="gideon-submit-button" onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
+              <button  className="gideon-submit-button" style={{paddingBottom: "5px", width: "80%",  }} onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
               </div>
             </div>
            
