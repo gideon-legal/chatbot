@@ -2337,7 +2337,7 @@ $lato: Lato, sans-serif;
     .esign-input-box {
         
         height: 53px;
-        width: 75%;
+        width: 100%;
         white-space: normal;
         overflow-wrap: break-word;
         padding: 18px;
@@ -2377,7 +2377,7 @@ $lato: Lato, sans-serif;
         font-size: 14px;
         line-height: 17px;
         /* identical to box height */
-    
+        padding-left: 15px;
         display: flex;
         align-items: center;
         text-align: center;
