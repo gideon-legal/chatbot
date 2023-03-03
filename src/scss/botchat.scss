@@ -2330,14 +2330,14 @@ $lato: Lato, sans-serif;
             width: 100%;
             white-space: normal;
             overflow-wrap: break-word;
-        padding: 18px 18px 18px 0px;
+       // padding: 18px 18px 18px 0px;
     
     }
     
     .esign-input-box {
         
         height: 53px;
-        width: 100%;
+        width: 80%;
         white-space: normal;
         overflow-wrap: break-word;
         padding: 18px;
@@ -2352,6 +2352,7 @@ $lato: Lato, sans-serif;
         background: #FEFEFE;
         border: 1px solid #DCDCDC;
         margin-bottom: 5px;
+        margin-left: 10%;
     }
     
     .esign-grey-text {
@@ -2585,7 +2586,7 @@ $lato: Lato, sans-serif;
         left: 402px;
         top: 249px;
         background: #E9E9E9;
-        height: 88%;
+        height: 100%;
         
 
         @include mobile {

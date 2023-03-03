@@ -131,6 +131,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     /** For submit button for signature */
     clickToSubmitSignature(e: React.MouseEvent<HTMLButtonElement>){
+        //disable button
+        let sign_btn = document.getElementById("sign-btn");
+        console.log(sign_btn)
+        sign_btn.setAttribute("disabled", "true");
         if(!this.validateSignature()) { return;}
         
 
@@ -372,19 +376,18 @@ class Esign extends React.Component<EsignProps, EsignState> {
       
     }
 
+    //Displays signature at bottom of screen when viewing pdf
     renderSignatureMobile() {
         let sig = (
             
                 
                 <footer className="signature-box-area">
 
-                <div className='esign-black-text'>
-                    Type in Full Name to Create Signature
-                </div>
+                
              <div className="submit-area">
-              <input className="esign-input-box" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
+              <input className="esign-input-box" placeholder="Type in Full Name to Create Signature" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
               <div className="button-area">
-              <button  className="gideon-submit-button" style={{paddingBottom: "5px", width: "80%",  }} onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
+              <button  id="sign-btn" className="gideon-submit-button" style={{width: "80%" }} onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
               </div>
             </div>
            
