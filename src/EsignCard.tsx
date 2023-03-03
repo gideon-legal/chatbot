@@ -430,7 +430,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
             esignPopup = (
                 <div className="modal-fullscreen">
                 <div className="modal-content">
-                <div className="presign_area">
+                <div className="presign_area_full">
                         <EsignPreSign />
                 </div>
                 <div className="esign__card gideon__node">

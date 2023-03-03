@@ -2372,7 +2372,7 @@ $lato: Lato, sans-serif;
         //height: 50px;
         background: #FEFEFE;
         border: 1px solid #DCDCDC;
-        margin-bottom: 5px;
+        //margin-bottom: 5px;
         margin-left: 10%;
     }
     
@@ -2487,6 +2487,7 @@ $lato: Lato, sans-serif;
         top: 10%;
         //width: 100%; /* Full width */
         height: 188%;
+        width: 242vw;
         transform: translate(-10%, -10%);
         //background-color: rgb(0,0,0); 
         //background-color: rgba(0,0,0,0.4);
@@ -2581,6 +2582,22 @@ $lato: Lato, sans-serif;
        // border: 1px solid #888;
        // width: ($chatWidth)-1;  
         height: 100%;
+
+        @include mobile {
+            width: 70%;
+            padding: 100% 20px 100% 20px;
+        }
+
+      }
+
+      .modal-content-full {
+        background-color: #fefefe;
+        //margin: 15% auto; 
+        //padding: 20px;
+       // border: 1px solid #888;
+        width: $chatWidth;  
+        height: 100%;
+        
 
         @include mobile {
             width: 70%;
