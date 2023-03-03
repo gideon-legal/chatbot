@@ -134,7 +134,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         //disable button
         let sign_btn = document.getElementById("sign-btn");
         console.log(sign_btn)
-        sign_btn.setAttribute("class", "gideon-submit-button-disabled");
+        sign_btn.setAttribute("class", "gideon-submit-button-sign-disabled");
         if(!this.validateSignature()) { return;}
         
 

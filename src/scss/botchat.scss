@@ -2003,6 +2003,26 @@ $lato: Lato, sans-serif;
         box-shadow: 2px 2px 4px 0px $c_shadow;
     }
 
+    .gideon-submit-button-sign-disabled {
+        background-color: #B5B5B5 !important;
+        color: white !important;
+        border-radius: 3px !important;
+        min-height: 32px;
+        height: auto;
+        width: 100%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: center;
+        box-shadow: 2px 2px 4px 0px $c_shadow;
+    }
+
+    .gideon-submit-button-sign-disabled:hover {
+        background-color: #B5B5B5 !important;
+        cursor: not-allowed !important;
+        color: white !important;
+    }
+
     .gideon-submit-button-download {
         text-decoration:none;
         background-color: #3F6DE1;
