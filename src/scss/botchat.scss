@@ -2326,7 +2326,7 @@ $lato: Lato, sans-serif;
         display: flex;
         //flex-grow: 0;
        // flex-shrink: 0;
-        height: auto;
+       // height: 5%;
             width: 100%;
             white-space: normal;
             overflow-wrap: break-word;
@@ -2585,6 +2585,7 @@ $lato: Lato, sans-serif;
         left: 402px;
         top: 249px;
         background: #E9E9E9;
+        height: 100%;
         
 
         @include mobile {
@@ -2713,7 +2714,7 @@ $lato: Lato, sans-serif;
         top: 46%;
         width: 101%;
         height: 95%;
-        background: #E9E9E9;
+        //background: #E9E9E9;
         right: -2px;
         overflow: auto;
 
@@ -2790,6 +2791,7 @@ $lato: Lato, sans-serif;
       .sign-area{
         //position: absolute;
         bottom: 0;
+       // margin-top: 10%;
       }
 
       .button-area{
