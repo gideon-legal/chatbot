@@ -247,41 +247,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
         } 
     }
 
-
-    // prototype for displaying document + signing it
-    // download and sign now buttons
-    renderDocument = () => {
-        //display document if present
-             let documentSection = (
-                <div>
-                    
-                      {/*<a target="_blank" href={this.state.file}>{"file to sign"}</a>*/}
-                      <iframe className="esign-document-display" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} ></iframe>
-                     
-                    
-
-               
-                <footer className="signature-box-area">
-
-                    <div className='esign-black-text'>
-                       Type in Full Name to Create Signature
-                    </div>
-                    
-
-                    <div>
-                        <input className="esign-input-box" type="text" value={this.state.signature} onChange={this.onChangeSignature} id="signature"></input>
-                    </div>
-                    <div className="submit-area">
-                        <button  className="gideon-submit-button" onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
-                    </div>
-
-                 </footer>
-                </div>
-                
-            )
-        return documentSection
-    }
-
     handleSign(e: React.MouseEvent<HTMLButtonElement>){
         this.setState({
             willSubmit: true,
@@ -447,7 +412,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
             esignPopup = (
                 <div className="modal-fullheight">
                 <div className="modal-content">
-                <div className="presign_area">
+                <div className="presign_area_full">
                         <EsignPreSign />
                 </div>
                 <div className="esign__card gideon__node">
@@ -534,10 +499,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     render() {
         const {willSubmit, completedDoc, isPopup, isDocument, isSignature} = this.state;
-       //need to add if case for when to show renderSigningIcon vs renderDocument
-        
-       //need if statement to determine if using popup or node version
-
        return (
         <div>
             {isDocument == true && this.renderFullscreen()}
