@@ -54,6 +54,7 @@ export interface EsignState {
     isSignature: boolean;
     isFullscreen: boolean;
     isFullHeight: boolean;
+    loading: boolean;
 
 }
 
@@ -79,7 +80,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
             isDocument: false,
             isSignature: false,
             isFullscreen: this.props.fullscreen,
-            isFullHeight: this.props.fullheight
+            isFullHeight: this.props.fullheight,
+            loading: false
 
 
         }
@@ -129,12 +131,32 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     }
 
+    renderLoading(){
+         console.log("in loading")
+         return (
+            <div className='loading_esign'>
+                <div id="loading-bar-spinner" className="spinner"><div className="spinner-icon"></div></div>
+            </div>
+         )
+    }
+
     /** For submit button for signature */
     clickToSubmitSignature(e: React.MouseEvent<HTMLButtonElement>){
         //disable button
+        this.setState({
+            ...this.state,
+            loading: true
+        })
+        console.log("loading")
+        console.log(this.state.loading)
+        this.renderLoading()
+        let loading_div = document.createElement("div")
+        loading_div.setAttribute("class", "loading_esign")
+
         let sign_btn = document.getElementById("sign-btn");
         console.log(sign_btn)
         sign_btn.setAttribute("class", "gideon-submit-button-sign-disabled");
+        document.getElementById("fullpdf").appendChild(loading_div)
         if(!this.validateSignature()) { return;}
         
 
@@ -159,7 +181,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
             ...this.state,
             completedDoc: true,
             isPopup: false,
-            files: files
+            files: files,
+            loading: false
         })
         console.log("files array")
         console.log(files)
@@ -190,7 +213,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <div className="fullview">
                     
                     <div className="pdfholder-notop">
-                    <iframe className="esign-document-display" src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } 
+                    <iframe id="pdf-js-viewer" className="esign-document-display" src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } 
                     height="90%" width="100%" scrolling='auto'></iframe>
                     <div className="mobileview" >
                         {this.renderSignatureMobile()}
@@ -231,8 +254,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
             }
         } else {
             let pdfView = (
-                <div className="fullview">
-                    
+                <div className="fullview" id="fullpdf">
                     <div className="pdfholder">
                     <iframe className="esign-document-display"  frameBorder="0" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} height="84%" width="100%" scrolling='yes'></iframe>
                     <div className="sign-area">
@@ -429,7 +451,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
             //fullheight css
             esignPopup = (
                 <div className="modal-fullscreen">
-                <div className="modal-content">
+                <div className="modal-content-full">
                 <div className="presign_area_full">
                         <EsignPreSign />
                 </div>
@@ -482,10 +504,11 @@ class Esign extends React.Component<EsignProps, EsignState> {
     }
 
     renderFullscreen(){
-        const {willSubmit, completedDoc} = this.state;
+        const {willSubmit, completedDoc, loading} = this.state;
 
         return (
             <div className='esign_fullwindow'>
+                {loading == true && <div id="loading-bar-spinner" className="spinner"><div className="spinner-icon"></div></div>}
                 {willSubmit == true && completedDoc == false && this.renderLargerPdf()}
 
             </div>
