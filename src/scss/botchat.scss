@@ -2318,6 +2318,11 @@ $lato: Lato, sans-serif;
        /* Gideon/Primary text */
        color: #262626;
        padding: 15px 0px 15px 0px;
+
+       @include mobile {
+        padding-bottom: 50px;
+        padding-top: 50px
+       }
     }
 
     .esign-message-handoff-small2{
@@ -2451,7 +2456,7 @@ $lato: Lato, sans-serif;
            @include mobileAndTablet {
             border-radius: 0;
             width: 100vw;
-
+            background-color: white;
             // need to be !important because this is being set inline for element
             height: 100% !important;
             right: 0 !important;
@@ -2463,6 +2468,7 @@ $lato: Lato, sans-serif;
         }
         
         @include mobile {
+            background-color: white;
             width: 150%;
             z-index: 1;
         }
@@ -2585,7 +2591,8 @@ $lato: Lato, sans-serif;
 
         @include mobile {
             width: 100%;
-            padding: 100% 20px 100% 20px;
+            height: 10%;
+            background-color: white;
         }
 
       }
@@ -2616,7 +2623,7 @@ $lato: Lato, sans-serif;
 
         @include mobile {
             width: 100%;
-           padding: 100% 20px 100% 20px;
+          
         }
 
       }
@@ -2808,6 +2815,10 @@ $lato: Lato, sans-serif;
         width: 50%;
         padding: 0px 0px 0px 0px !important;
         height: 60%; 
+
+        @include mobile {
+            height: 400%;
+        }
       }
 
       .presign_area_full {
