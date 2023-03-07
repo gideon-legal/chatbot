@@ -152,11 +152,13 @@ class Esign extends React.Component<EsignProps, EsignState> {
         this.renderLoading()
         let loading_div = document.createElement("div")
         loading_div.setAttribute("class", "loading_esign")
+        let loader_wheel = document.createElement("div")
+        loader_wheel.setAttribute("class", "loaderwheel_esign")
 
         let sign_btn = document.getElementById("sign-btn");
         console.log(sign_btn)
         sign_btn.setAttribute("class", "gideon-submit-button-sign-disabled");
-        document.getElementById("fullpdf").appendChild(loading_div)
+        document.getElementById("pdfarea").appendChild(loading_div).appendChild(loader_wheel)
         if(!this.validateSignature()) { return;}
         
 
@@ -255,7 +257,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         } else {
             let pdfView = (
                 <div className="fullview" id="fullpdf">
-                    <div className="pdfholder">
+                    <div className="pdfholder" id="pdfarea">
                     <iframe className="esign-document-display"  frameBorder="0" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} height="84%" width="100%" scrolling='yes'></iframe>
                     <div className="sign-area">
                     {this.renderSignatureMobile()}
@@ -508,7 +510,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
         return (
             <div className='esign_fullwindow'>
-                {loading == true && <div id="loading-bar-spinner" className="spinner"><div className="spinner-icon"></div></div>}
                 {willSubmit == true && completedDoc == false && this.renderLargerPdf()}
 
             </div>
