@@ -6,11 +6,16 @@ import { ChatState } from './Store';
 import { ChatActions, sendMessage, sendFiles } from './Store';
 import { connect } from 'react-redux';
 import { isMobile } from 'react-device-detect';
-import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign, EsignPen } from './assets/icons/EsignIcons';
+import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign, EsignPen, EsignPreSignFull } from './assets/icons/EsignIcons';
 import { sendSignature } from './api/bot';
 import { Hidden } from '@material-ui/core';
 import { any } from 'bluebird';
 import { FileslistFormatter } from 'tslint/lib/formatters';
+//import { pdfjs, Document } from 'react-pdf';
+//pdfjs.GlobalWorkerOptions.workerSrc = `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/build/pdf.worker.js`;
+
+
+
 //will most likely need read only card too for after signing
 export interface Node {
     node_type: string;
@@ -55,6 +60,8 @@ export interface EsignState {
     isFullscreen: boolean;
     isFullHeight: boolean;
     loading: boolean;
+    initials: string;
+    isModal: boolean;
 
 }
 
@@ -81,7 +88,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
             isSignature: false,
             isFullscreen: this.props.fullscreen,
             isFullHeight: this.props.fullheight,
-            loading: false
+            loading: false,
+            initials: '',
+            isModal: false //for switching between pdf viewer and signing modal on mobile
+            
 
 
         }
@@ -94,7 +104,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         console.log("hit enter")
         if (e.key === 'Enter' && this.validateSignature()){
             console.log("hit if case enter")
-            sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx)
+            sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx,this.state.initials)
             .then((res: any) => {
                 this.setState({
                     ...this.state,
@@ -168,7 +178,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         console.log("obtained signature")
         console.log(this.state.signature)
         //send to api and wait to receive signed pdf link, set to this.state.signedfile
-        sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx)
+        sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx, this.state.initials)
         .then((res: any) => {
             console.log(res.data)
             this.setState({
@@ -204,8 +214,22 @@ class Esign extends React.Component<EsignProps, EsignState> {
         console.log(this.state.signature)
     }
 
+    /*handlePdf() {
+        let loadingPdf = pdfjs.getDocument(encodeURI(this.state.file))
+       loadingPdf.promise.then(function(pdf){
+        pdf.getPage(1).then(function(page)  {
+            console.log('page loaded')
+            
+
+            
+        })
+       })
+
+    }*/
+
     //full screen
     renderLargerPdf = () => {
+       //this.handlePdf()
         console.log("mobile check: ")
         console.log(isMobile)
         if(isMobile == true){
@@ -240,9 +264,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         </div>
                     </div>
                     <div className="pdfholder-mobile-full">
-                    <iframe className="esign-document-display" 
-                    src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } height="100%" width="100%" 
-                    scrolling='auto'></iframe>
+                   
                     <div id="sign-area">
                     {this.renderSignatureMobile()}
                     </div>
@@ -258,6 +280,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
             let pdfView = (
                 <div className="fullview" id="fullpdf">
                     <div className="pdfholder" id="pdfarea">
+                    {/*<Document file={{url: this.state.file}} onLoadError={(error) => console.log("inside error", error)}></Document> testing of react-pdf*/}
                     <iframe className="esign-document-display"  frameBorder="0" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} height="84%" width="100%" scrolling='yes'></iframe>
                     <div className="sign-area">
                     {this.renderSignatureMobile()}
@@ -296,6 +319,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
     handleSignModalMobile(e: React.MouseEvent<HTMLButtonElement>){
         this.setState({
             isSignature: true,
+            isModal: true
         })
     }
 
@@ -306,6 +330,33 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     //initial starting screen, should be popup, for now is treated as node
     renderStartingScreen() {
+        //need special styling for fullscreen
+        if(this.state.isFullscreen ==  true){
+            return (
+                <div>
+                <div className="esign__card esign__node">
+                <div className= {this.state.validated && !this.state.isPopup ? "esign-checkmark" : "esign-checkmark__disabled"}>
+                         <EsignCheckMark />
+                    </div>
+                    <div className="esign-message-handoff-big">
+                           You're almost done! 
+                    </div>
+                    <div className="esign-message-handoff-small">
+                        To start working with McCune Law Group, please click on the button below to sign your representation agreement
+                    </div>
+                </div> 
+                <button type="button" className="gideon-submit-button" id="sign_btn" onClick={e => this.handleSign(e)}>
+                     <EsignPen/> Review & Sign Now
+                </button>
+                 <div>
+                    {/*<button type="button" className={ this.state.isPopup ? "gideon-submit-button-white" : "gideon-submit-button-white__disabled"} onClick={e => this.handleSkip(e)}>
+                         Sign Later
+        </button>*/}
+                </div> 
+            </div>
+
+            );
+        }
         return (
             <div>
                  
@@ -390,27 +441,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
       
     }
 
-
-
-    //rendered when signed document is returned, can view document and then exit out?
-    renderCompletedDoc() {
-        //display document if present
-        let documentSection = (
-            <div>
-                <div className="uploaded-files-container">
-                <div className="uploaded-file-name-readonly-link">
-                  <a target="_blank" href={this.state.signedfile}>{"signed file"}</a>
-                 
-                </div>
-
-            </div>
-            
-            </div>
-            
-        )
-    return documentSection
-    }
-
     renderPopup(){
         const {willSubmit, completedDoc, isSignature, isFullHeight, isFullscreen} = this.state;
             //normal screen
@@ -424,7 +454,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 
                 {willSubmit == false &&  this.renderStartingScreen()}
                 {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
-                {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
+                {/*willSubmit == true && completedDoc == true && this.renderCompletedDoc() */}
                 {/*isSignature == true && this.renderSignatureModal()*/}
             </div>
                 </div>
@@ -442,7 +472,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <div className="esign__card gideon__node">
                 {willSubmit == false && this.renderStartingScreen()}
                 {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
-                {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
+                {/*willSubmit == true && completedDoc == true && this.renderCompletedDoc() */}
                 {/*isSignature == true && this.renderSignatureModal()*/}
             </div>
                 </div>
@@ -455,12 +485,12 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <div className="modal-fullscreen">
                 <div className="modal-content-full">
                 <div className="presign_area_full">
-                        <EsignPreSign />
+                        <EsignPreSignFull />
                 </div>
                 <div className="esign__card gideon__node">
                 {willSubmit == false && this.renderStartingScreen()}
                 {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
-                {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
+                {/*willSubmit == true && completedDoc == true && this.renderCompletedDoc() */}
                 {/*isSignature == true && this.renderSignatureModal()*/}
     
             </div>
@@ -470,7 +500,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         }
         if(isMobile == true){
             esignPopup = (
-                <div className="modal">
+                <div className="modal-normal">
                 <div className="modal-content-mobile">
                 <div className="presign_area">
                         <EsignPreSign />
@@ -478,7 +508,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <div className="esign__card gideon__node">
                 {willSubmit == false && this.renderStartingScreen()}
                 {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
-                {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
+                {/*willSubmit == true && completedDoc == true && this.renderCompletedDoc() */}
                 {/*isSignature == true && this.renderSignatureModal()*/}
             </div>
                 </div>
@@ -499,7 +529,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
             />
             {willSubmit == false && this.renderStartingScreen()}
             {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
-            {willSubmit == true && completedDoc == true && this.renderCompletedDoc() }
+            {/*willSubmit == true && completedDoc == true && this.renderCompletedDoc() */}
 
         </div>
         )
