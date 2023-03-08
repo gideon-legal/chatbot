@@ -11,7 +11,7 @@ import { sendSignature } from './api/bot';
 import { Hidden } from '@material-ui/core';
 import { any } from 'bluebird';
 import { FileslistFormatter } from 'tslint/lib/formatters';
-//import { pdfjs, Document } from 'react-pdf';
+//import { pdfjs, Document, Page } from 'react-pdf';
 //pdfjs.GlobalWorkerOptions.workerSrc = `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/build/pdf.worker.js`;
 
 
@@ -291,8 +291,13 @@ class Esign extends React.Component<EsignProps, EsignState> {
             let pdfView = (
                 <div className="fullview" id="fullpdf">
                     <div className="pdfholder" id="pdfarea">
-                    {/*<Document file={{url: this.state.file}} onLoadError={(error) => console.log("inside error", error)}></Document> testing of react-pdf*/}
-                    <iframe className="esign-document-display"  frameBorder="0" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} height="84%" width="100%" scrolling='yes'></iframe>
+                        {/*<div  className='esign-document-holder'>
+                        <Document file={{url: this.state.file}} onLoadError={(error) => console.log("inside error", error)}>
+                        <Page pageNumber={1} className="esign-document-display"></Page>
+                         </Document>
+                        </div>*/}
+                    {<iframe className="esign-document-display"  frameBorder="0" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} 
+                    height="84%" width="100%" scrolling='yes'></iframe>}
                     <div className="sign-area">
                     {this.renderSignatureMobile()}
                     </div>
@@ -327,12 +332,28 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     }
 
-    //for clicking the Add Your Signature
+    //for clicking the Add Your Signature on mobile
     handleSignModalMobile(e: React.MouseEvent<HTMLButtonElement>){
         this.setState({
             isSignature: true,
             isModal: true
         })
+        let signModal = (
+            <div>
+                {this.state.isModal == true && this.renderMobileSigningModal()}
+            </div>
+        )
+    }
+
+    //to render new mobile modal for signature and initials and backbutton
+    renderMobileSigningModal(){
+        return (
+            <div>
+                mobile modal here
+            </div>
+        )
+        
+
     }
 
 
@@ -592,6 +613,7 @@ export const EsignCard = connect(
         sendFiles
     },
      (stateProps: any, dispatchProps: any, ownProps: any): EsignProps => {
+        console.log("props:")
         console.log(stateProps)
         console.log(ownProps)
         console.log(dispatchProps)
