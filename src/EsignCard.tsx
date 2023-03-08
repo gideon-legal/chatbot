@@ -6,7 +6,7 @@ import { ChatState } from './Store';
 import { ChatActions, sendMessage, sendFiles } from './Store';
 import { connect } from 'react-redux';
 import { isMobile } from 'react-device-detect';
-import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign, EsignPen, EsignPreSignFull } from './assets/icons/EsignIcons';
+import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign, EsignPen } from './assets/icons/EsignIcons';
 import { sendSignature } from './api/bot';
 import { Hidden } from '@material-ui/core';
 import { any } from 'bluebird';
@@ -493,25 +493,25 @@ class Esign extends React.Component<EsignProps, EsignState> {
             </div>
             )
         }
-        if(isFullscreen == true){
-            //fullheight css
-            esignPopup = (
-                <div className="modal-fullscreen">
-                <div className="modal-content-full">
-                <div className="presign_area_full">
-                        <EsignPreSignFull />
-                </div>
-                <div className="esign__card gideon__node">
-                {willSubmit == false && this.renderStartingScreen()}
-                {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
-                {/*willSubmit == true && completedDoc == true && this.renderCompletedDoc() */}
-                {/*isSignature == true && this.renderSignatureModal()*/}
+        // if(isFullscreen == true){
+        //     //fullheight css
+        //     esignPopup = (
+        //         <div className="modal-fullscreen">
+        //         <div className="modal-content-full">
+        //         <div className="presign_area_full">
+        //                 <EsignPreSignFull />
+        //         </div>
+        //         <div className="esign__card gideon__node">
+        //         {willSubmit == false && this.renderStartingScreen()}
+        //         {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
+        //         {/*willSubmit == true && completedDoc == true && this.renderCompletedDoc() */}
+        //         {/*isSignature == true && this.renderSignatureModal()*/}
     
-            </div>
-                </div>
-            </div>
-            )
-        }
+        //     </div>
+        //         </div>
+        //     </div>
+        //     )
+        // }
         if(isMobile == true){
             esignPopup = (
                 <div className="modal-normal">
