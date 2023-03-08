@@ -98,6 +98,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
         //handleKeyDown here etc
         this.onChangeSignature = this.onChangeSignature.bind(this)
+        this.onChangeInitials = this.onChangeInitials.bind(this)
+
     }
 
     handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>){
@@ -212,6 +214,15 @@ class Esign extends React.Component<EsignProps, EsignState> {
         })
         console.log("changed signature")
         console.log(this.state.signature)
+    }
+
+    onChangeInitials(event: React.ChangeEvent<HTMLInputElement>) {
+        this.setState({
+            ...this.state,
+            initials: event.target.value
+        })
+        console.log("changed intials")
+        console.log(this.state.initials)
     }
 
     /*handlePdf() {
