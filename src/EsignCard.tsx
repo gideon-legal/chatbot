@@ -327,12 +327,14 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     }
 
+    //for clicking the Add Your Signature
     handleSignModalMobile(e: React.MouseEvent<HTMLButtonElement>){
         this.setState({
             isSignature: true,
             isModal: true
         })
     }
+
 
     scrollToElement(){
         var scrollTo = document.getElementById("sign-area");
@@ -436,7 +438,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
                 
              <div className="submit-area">
-             <input className="esign-initial-box" placeholder="Initial Here" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeInitials} id="initial"></input>
+             <input className="esign-initial-box" placeholder="Initial Here" type="text" value={this.state.initials} onKeyPress={this.handleKeyDown} onChange={this.onChangeInitials} id="initial"></input>
               <input className="esign-input-box" placeholder="Type in Full Name to Create Signature" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
               <div className="button-area">
               <button  id="sign-btn" className="gideon-submit-button" style={{width: "80%" }} onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>

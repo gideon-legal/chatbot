@@ -103,7 +103,8 @@ export const sendSignature = (
    return axios.post(`${baseUrl}/api/v1/bot/esign`, {
        link: document,
        signature: signature,
-       msft_conversation_id: conversationId
+       msft_conversation_id: conversationId,
+       initials: initials
    })
 
 
