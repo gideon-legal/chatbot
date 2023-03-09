@@ -2031,12 +2031,14 @@ $lato: Lato, sans-serif;
         color: #ffffff !important;
         min-height: 32px;
         height: auto;
-        width: 100%;
+        width: 70%;
         white-space: normal;
         overflow-wrap: break-word;
         padding: 18px;
         text-align: center;
         box-shadow: 2px 2px 4px 0px $c_shadow;
+        position: absolute;
+        left: 13%;
     }
 
     .gideon-submit-button-white {
