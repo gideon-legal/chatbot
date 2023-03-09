@@ -11,8 +11,9 @@ import { sendSignature } from './api/bot';
 import { Hidden } from '@material-ui/core';
 import { any } from 'bluebird';
 import { FileslistFormatter } from 'tslint/lib/formatters';
-//import { pdfjs, Document, Page } from 'react-pdf';
-//pdfjs.GlobalWorkerOptions.workerSrc = `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/build/pdf.worker.js`;
+import { pdfjs, Document, Page} from 'react-pdf';
+import { PDFDocumentProxy } from 'pdfjs-dist/types/src/display/api' //or node_modules/@types/react-pdf/node_modules/pdfjs-dist/types/src/display/api
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/build/pdf.worker.js`;
 
 
 
@@ -62,6 +63,7 @@ export interface EsignState {
     loading: boolean;
     initials: string;
     isModal: boolean;
+    numPages: number;
 
 }
 
@@ -90,7 +92,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
             isFullHeight: this.props.fullheight,
             loading: false,
             initials: '',
-            isModal: false //for switching between pdf viewer and signing modal on mobile
+            isModal: false, //for switching between pdf viewer and signing modal on mobile,
+            numPages: 0
             
 
 
@@ -225,22 +228,26 @@ class Esign extends React.Component<EsignProps, EsignState> {
         console.log(this.state.initials)
     }
 
-    /*handlePdf() {
-        let loadingPdf = pdfjs.getDocument(encodeURI(this.state.file))
-       loadingPdf.promise.then(function(pdf){
-        pdf.getPage(1).then(function(page)  {
-            console.log('page loaded')
-            
+    
+    //Handles getting the number of page numbers needed to display the pdf
+    onDocumentLoad(pdf: any){
+        console.log("in document load")
+        console.log(pdf)
+        this.setNumPages(pdf.numPages) 
+    }
 
-            
+    //Handles setting the number of page numbers of the pdf
+    setNumPages(numPages: any){
+        console.log("setting numpages")
+        console.log(numPages)
+        this.setState({
+           numPages: numPages
         })
-       })
+       
+        
+    }
 
-    }*/
-
-    //full screen
     renderLargerPdf = () => {
-       //this.handlePdf()
         console.log("mobile check: ")
         console.log(isMobile)
         if(isMobile == true){
@@ -250,8 +257,14 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <div className="fullview">
                     
                     <div className="pdfholder-notop">
-                    <iframe id="pdf-js-viewer" className="esign-document-display" src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } 
-                    height="90%" width="100%" scrolling='auto'></iframe>
+                    {<div  className='esign-document-holder'>
+                        <Document file={this.state.file} onLoadSuccess={pdf => this.onDocumentLoad(pdf)} >
+                             {
+                             Array.apply(null, Array(this.state.numPages)).map(( x: any, i: number)=>i+1).map((page: number) => <Page pageNumber={page} className="esign-document-display2"></Page>)}
+                         </Document>
+                        </div>}
+                    {/*<iframe id="pdf-js-viewer" className="esign-document-display" src={"https://drive.google.com/viewerng/viewer?embedded=true&url="+encodeURIComponent(this.state.file) } 
+                    height="90%" width="100%" scrolling='auto'></iframe>*/}
                     <div className="mobileview" >
                         {this.renderSignatureMobile()}
     
@@ -267,7 +280,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                  //mobile view
             let pdfView = (
                 <div className="fullview">
-                     <div className= "esign_topbar">
+                     <div className= "pdfholder-notop">
                         <div className= "esign-topbar-buttons">
                         {/*<button  className="gideon-download-button1" > DOWNLOAD </button>*/}
                         <button  className="gideon-download-button2" onClick={e => this.scrollToElement()}> SIGN NOW </button>
@@ -291,13 +304,14 @@ class Esign extends React.Component<EsignProps, EsignState> {
             let pdfView = (
                 <div className="fullview" id="fullpdf">
                     <div className="pdfholder" id="pdfarea">
-                        {/*<div  className='esign-document-holder'>
-                        <Document file={{url: this.state.file}} onLoadError={(error) => console.log("inside error", error)}>
-                        <Page pageNumber={1} className="esign-document-display"></Page>
+                        {<div  className='esign-document-holder'>
+                        <Document file={this.state.file} onLoadSuccess={pdf => this.onDocumentLoad(pdf)} >
+                             {
+                             Array.apply(null, Array(this.state.numPages)).map(( x: any, i: number)=>i+1).map((page: number) => <Page pageNumber={page} className="esign-document-display2"></Page>)}
                          </Document>
-                        </div>*/}
-                    {<iframe className="esign-document-display"  frameBorder="0" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} 
-                    height="84%" width="100%" scrolling='yes'></iframe>}
+                        </div>}
+                    {/*<iframe className="esign-document-display"  frameBorder="0" src={`${this.state.file}#toolbar=0&#FitH&#zoom=150`} 
+                    height="84%" width="100%" scrolling='yes'></iframe>*/}
                     <div className="sign-area">
                     {this.renderSignatureMobile()}
                     </div>

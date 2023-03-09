@@ -2353,7 +2353,7 @@ $lato: Lato, sans-serif;
     .signature-box-area {
         bottom: 0;
         text-align: center !important;
-        background: #E9E9E9;
+        background: #FEFEFE !important;
        // position: fixed;
         //bottom: 0;
         position: absolute;
@@ -2387,7 +2387,7 @@ $lato: Lato, sans-serif;
     
         //width: 511px;
         //height: 50px;
-        background: #FEFEFE;
+        background: #F4F4F4;
         border: 1px solid #DCDCDC;
         //margin-bottom: 5px;
         //margin-left: 2%;
@@ -2409,7 +2409,7 @@ $lato: Lato, sans-serif;
     
         //width: 511px;
         //height: 50px;
-        background: #FEFEFE;
+        background: #F4F4F4;
         border: 1px solid #DCDCDC;
         //margin-bottom: 5px;
         margin-left: 3%;
@@ -2677,6 +2677,38 @@ $lato: Lato, sans-serif;
         }
       }
 
+      .esign-document-display2 {
+        width: 100%;
+        left: 402px;
+        //top: 249px;
+        background: #E9E9E9;
+        height: 100%;
+        margin-bottom: 1%;
+        text-decoration: none;
+        
+
+        @include mobileAndTablet {
+            width: 100%;
+            height: 100%;
+        }
+      }
+
+      .esign-document-holder {
+        width: 100%;
+        left: 402px;
+        top: 249px;
+        background: #E9E9E9;
+        height: 100%;
+        overflow: scroll;
+        
+
+        @include mobileAndTablet {
+            width: 100%;
+            height: 100%;
+        }
+
+      }
+
       .esign_fullwindow {
          /* Stay in place */
         z-index: 3; /* Sit on top */
@@ -2857,7 +2889,7 @@ $lato: Lato, sans-serif;
         //width: 50%;
         padding: 0px 0px 0px 0px !important;
         height: 20%; 
-        background-size: 50% 100%;
+       // background-size: 50% 100%;
       }
 
       .uploaded-files-container {
