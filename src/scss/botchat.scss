@@ -2700,6 +2700,8 @@ $lato: Lato, sans-serif;
         height: 100%;
         margin-bottom: 1%;
         text-decoration: none;
+        //margin: 0 auto;
+        //zoom: 75%;
         //zoom: 0.9%;
         
 
@@ -2981,8 +2983,4 @@ $lato: Lato, sans-serif;
         100% { transform: rotate(360deg); }
       }
 
-      .react-pdf__Page__canvas {
-        margin: 0 auto;
-        width: 80% !important;
-        height: 100% !important;
-    }
+   

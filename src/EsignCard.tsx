@@ -286,7 +286,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                     {<div  className='esign-document-holder'>
                         <Document file={this.state.file} onLoadSuccess={pdf => this.onDocumentLoad(pdf)} >
                              {
-                             Array.apply(null, Array(this.state.numPages)).map(( x: any, i: number)=>i+1).map((page: number) => <Page pageNumber={page} className="esign-document-display-mobile"></Page>)}
+                             Array.apply(null, Array(this.state.numPages)).map(( x: any, i: number)=>i+1).map((page: number) => <Page pageNumber={page} scale={0.6} className="esign-document-display-mobile"></Page>)}
                          </Document>
                         </div>}
                    
