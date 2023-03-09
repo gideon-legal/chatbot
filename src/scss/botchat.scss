@@ -2747,6 +2747,7 @@ $lato: Lato, sans-serif;
 
         @include mobileAndTablet {
             width: 101%;
+            background-color: white;
         }
       }
 
@@ -2840,9 +2841,13 @@ $lato: Lato, sans-serif;
             top: 35%
          }
        }
+
       .fullview{
         display: block;
 
+        @include mobile {
+            height: 140%;
+        }
       }
 
       .pdfholder{
@@ -2986,9 +2991,15 @@ $lato: Lato, sans-serif;
       }
 
       .test{
-        background-color: #262626;
+        background-color: #ffffff;
         width: 100%;
         height: 100%;
       }
 
+      .mobile-modal{
+        width: 100%;
+        height: 40%;
+        padding: 20px;
+        margin-top: 120%;
+      }
    
