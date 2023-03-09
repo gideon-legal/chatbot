@@ -424,7 +424,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
             <div className="modal-signature">
                 <div className="modal-content">
                 <div className="signature-box-area">
-
                 <div className='esign-black-text'>
                     Type in Full Name to Create Signature
                 </div>
@@ -452,28 +451,34 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     //Displays signature at bottom of screen when viewing pdf
     renderSignatureMobile() {
-        let sig = (
-            
-                
+
+        if ( isMobile ) {
+            let sig = (
                 <footer className="signature-box-area">
+                <div className="submit-area">
+                    <div className="button-area">
+                        <button  id="sign-btn" className="gideon-submit-button" style={{width: "100%", marginBottom: "5%" }} onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
+                    </div>
+                </div>
+               </footer>   
+            )
+            return sig;
+        }
 
-                
-             <div className="submit-area">
-             <input className="esign-initial-box" placeholder="Initial Here" type="text" value={this.state.initials} onKeyPress={this.handleKeyDown} onChange={this.onChangeInitials} id="initial"></input>
-              <input className="esign-input-box" placeholder="Type in Full Name to Create Signature" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
-              <div className="button-area">
-              <button  id="sign-btn" className="gideon-submit-button" style={{width: "80%" }} onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
-              </div>
+        else {
+        let sig = (
+            <footer className="signature-box-area">
+            <div className="submit-area">
+                <input className="esign-initial-box" placeholder="Initial Here" type="text" value={this.state.initials} onKeyPress={this.handleKeyDown} onChange={this.onChangeInitials} id="initial"></input>
+                <input className="esign-input-box" placeholder="Type in Full Name to Create Signature" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
+                <div className="button-area">
+                    <button  id="sign-btn" className="gideon-submit-button" style={{width: "80%" }} onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
+                </div>
             </div>
-           
-
            </footer>   
-               
-                 
-
         )
         return sig
-      
+        }
     }
 
     renderPopup(){
