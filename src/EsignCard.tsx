@@ -281,13 +281,14 @@ class Esign extends React.Component<EsignProps, EsignState> {
             let pdfView = (
                 <div className="fullview">
                      <div className= "pdfholder-notop">
-                        <div className= "esign-topbar-buttons">
-                        {/*<button  className="gideon-download-button1" > DOWNLOAD </button>*/}
-                        <button  className="gideon-download-button2" onClick={e => this.scrollToElement()}> SIGN NOW </button>
-    
-                        </div>
                     </div>
                     <div className="pdfholder-mobile-full">
+                    {<div  className='esign-document-holder'>
+                        <Document file={this.state.file} onLoadSuccess={pdf => this.onDocumentLoad(pdf)} >
+                             {
+                             Array.apply(null, Array(this.state.numPages)).map(( x: any, i: number)=>i+1).map((page: number) => <Page pageNumber={page} className="esign-document-display-mobile"></Page>)}
+                         </Document>
+                        </div>}
                    
                     <div id="sign-area">
                     {this.renderSignatureMobile()}

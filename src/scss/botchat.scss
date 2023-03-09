@@ -2693,6 +2693,22 @@ $lato: Lato, sans-serif;
         }
       }
 
+      .esign-document-display-mobile {
+        width: 70%;
+        //top: 249px;
+        background: #E9E9E9;
+        height: 100%;
+        margin-bottom: 1%;
+        text-decoration: none;
+        //zoom: 0.9%;
+        
+
+        @include mobileAndTablet {
+            width: 70%;
+            height: 100%;
+        }
+      }
+
       .esign-document-holder {
         width: 100%;
         left: 402px;
@@ -2705,6 +2721,7 @@ $lato: Lato, sans-serif;
         @include mobileAndTablet {
             width: 100%;
             height: 100%;
+            top: 0;
         }
 
       }
@@ -2963,3 +2980,9 @@ $lato: Lato, sans-serif;
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
       }
+
+      .react-pdf__Page__canvas {
+        margin: 0 auto;
+        width: 80% !important;
+        height: 100% !important;
+    }
