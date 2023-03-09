@@ -251,7 +251,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         console.log("mobile check: ")
         console.log(isMobile)
         if(isMobile == true){
-            if(this.state.isSignature == true) {
+            if(this.state.isSignature == true && this.state.isModal == false) {
                  //mobile view
             let pdfView = (
                 <div className="fullview">
@@ -286,7 +286,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
                     {<div  className='esign-document-holder'>
                         <Document file={this.state.file} onLoadSuccess={pdf => this.onDocumentLoad(pdf)} >
                              {
-                             Array.apply(null, Array(this.state.numPages)).map(( x: any, i: number)=>i+1).map((page: number) => <Page pageNumber={page} scale={0.6} className="esign-document-display-mobile"></Page>)}
+                             Array.apply(null, Array(this.state.numPages)).map(( x: any, i: number)=>i+1).map((page: number) => 
+                             <Page pageNumber={page}  className="esign-document-display-mobile"></Page>)}
                          </Document>
                         </div>}
                    
@@ -349,26 +350,23 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     //for clicking the Add Your Signature on mobile
     handleSignModalMobile(e: React.MouseEvent<HTMLButtonElement>){
+        console.log("setting isModal true")
         this.setState({
             isSignature: true,
             isModal: true
         })
-        let signModal = (
-            <div>
-                {this.state.isModal == true && this.renderMobileSigningModal()}
-            </div>
-        )
+        
     }
 
     //to render new mobile modal for signature and initials and backbutton
     renderMobileSigningModal(){
+        console.log("in new modal")
         return (
-            <div>
+            <div className='fullview'>
+                 <div className='test'>
                 mobile modal here
-            </div>
-        )
-        
-
+            </div> 
+            </div>)
     }
 
 
@@ -472,7 +470,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <footer className="signature-box-area">
                 <div className="submit-area">
                     <div className="button-area">
-                        <button  id="sign-btn" className="gideon-submit-button" style={{width: "100%", marginBottom: "5%" }} onClick={e => this.clickToSubmitSignature(e)}> SIGN </button>
+                        <button  id="sign-btn" className="gideon-submit-button" style={{width: "100%", marginBottom: "5%" }} onClick={e => this.handleSignModalMobile(e)}> SIGN </button>
                     </div>
                 </div>
                </footer>   
@@ -591,11 +589,12 @@ class Esign extends React.Component<EsignProps, EsignState> {
     }
 
     renderFullscreen(){
-        const {willSubmit, completedDoc, loading} = this.state;
+        const {willSubmit, completedDoc, loading, isModal} = this.state;
 
         return (
             <div className='esign_fullwindow'>
-                {willSubmit == true && completedDoc == false && this.renderLargerPdf()}
+                {willSubmit == true && completedDoc == false && isModal == false && this.renderLargerPdf()}
+                {isModal == true && this.renderMobileSigningModal()}
 
             </div>
         )
@@ -607,7 +606,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
     //screen 2: document viewable + signature box
 
     render() {
-        const {willSubmit, completedDoc, isPopup, isDocument, isSignature} = this.state;
+        const {willSubmit, completedDoc, isPopup, isDocument, isSignature, isModal} = this.state;
        return (
         <div>
             {isDocument == true && this.renderFullscreen()}
