@@ -64,6 +64,9 @@ export interface EsignState {
     initials: string;
     isModal: boolean;
     numPages: number;
+    hasBank: boolean;
+    bankNum: string;
+    isNext: boolean;
 
 }
 
@@ -94,6 +97,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
             initials: '',
             isModal: false, //for switching between pdf viewer and signing modal on mobile,
             numPages: 0,
+            hasBank: true, //for aditional input field
+            bankNum: '',
+            isNext: false,
+
             
 
 
@@ -235,6 +242,16 @@ class Esign extends React.Component<EsignProps, EsignState> {
         })
         console.log("changed intials")
         console.log(this.state.initials)
+    }
+
+    onChangeBankAccount(event: React.ChangeEvent<HTMLInputElement>) {
+        this.setState({
+            ...this.state,
+            bankNum: event.target.value
+        })
+        console.log("changed bank")
+        console.log(this.state.bankNum)
+
     }
 
     
@@ -410,6 +427,21 @@ class Esign extends React.Component<EsignProps, EsignState> {
         scrollTo.scrollIntoView({behavior:'smooth',block:'start'})
     }
 
+    //determines if input areas for 
+    toggleBankInput(){
+
+    }
+
+    //submits bank number, for non mobile takes to other sticky footer area
+    submitBankNumber(e: React.MouseEvent<HTMLButtonElement>){
+        this.setState({
+            isNext: true
+            
+        })
+
+
+    }
+
     //initial starting screen, should be popup, for now is treated as node
     renderStartingScreen() {
         //need special styling for fullscreen
@@ -499,33 +531,49 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     //Displays signature at bottom of screen when viewing pdf
     renderSignatureMobile() {
-
-        if ( isMobile ) {
+        console.log(this.state.hasBank)
+        console.log(this.state.isNext)
+        if(this.state.hasBank == true && this.state.isNext == false){
+            let sig = (
+                <footer className="signature-box-area">
+            <div className="submit-area">
+                <input className="esign-input-box" placeholder="Bank Number" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeBankAccount} id="signature"></input>
+                <div className="button-area">
+                    <button  id="sign-btn" className="gideon-submit-button" style={{width: "80%" }} onClick={e => this.submitBankNumber(e)}> Next  </button>
+                </div>
+            </div>
+           </footer> 
+            )
+            return sig
+        } else {
+            if ( isMobile ) {
+                let sig = (
+                    <footer className="signature-box-area">
+                    <div className="submit-area">
+                        <div className="button-area">
+                            <button  id="sign-btn" className="gideon-submit-button" style={{width: "100%", marginBottom: "5%" }} onClick={e => this.handleSignModalMobile(e)}> SIGN </button>
+                        </div>
+                    </div>
+                   </footer>   
+                )
+                return sig;
+            }
+    
+            else {
             let sig = (
                 <footer className="signature-box-area">
                 <div className="submit-area">
+                    <input className="esign-initial-box" placeholder="Your Initials" type="text" value={this.state.initials} onKeyPress={this.handleKeyDown} onChange={this.onChangeInitials} id="initial"></input>
+                    <input className="esign-input-box" placeholder="Type in Full Name to Create Signature" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
                     <div className="button-area">
-                        <button  id="sign-btn" className="gideon-submit-button" style={{width: "100%", marginBottom: "5%" }} onClick={e => this.handleSignModalMobile(e)}> SIGN </button>
+                        <button  id="sign-btn" className="gideon-submit-button" style={{width: "80%" }} onClick={e => this.clickToSubmitSignature(e)}> Sign Now  </button>
                     </div>
                 </div>
                </footer>   
             )
-            return sig;
-        }
+            return sig
+            }
 
-        else {
-        let sig = (
-            <footer className="signature-box-area">
-            <div className="submit-area">
-                <input className="esign-initial-box" placeholder="Your Initials" type="text" value={this.state.initials} onKeyPress={this.handleKeyDown} onChange={this.onChangeInitials} id="initial"></input>
-                <input className="esign-input-box" placeholder="Type in Full Name to Create Signature" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
-                <div className="button-area">
-                    <button  id="sign-btn" className="gideon-submit-button" style={{width: "80%" }} onClick={e => this.clickToSubmitSignature(e)}> Sign Now  </button>
-                </div>
-            </div>
-           </footer>   
-        )
-        return sig
         }
     }
 
@@ -633,6 +681,22 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
             </div>
         )
+    }
+
+    //for desktop bank stickyfooter
+    renderBankFooter(){
+        let footer = (
+            <footer className="signature-box-area">
+            <div className="submit-area">
+                <input className="esign-input-box" placeholder="Bank Number" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeBankAccount} id="signature"></input>
+                <div className="button-area">
+                    <button  id="sign-btn" className="gideon-submit-button" style={{width: "80%" }} onClick={e => this.submitBankNumber}> Next  </button>
+                </div>
+            </div>
+           </footer>   
+        )
+        return footer
+
     }
 
 
