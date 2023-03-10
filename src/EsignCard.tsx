@@ -450,7 +450,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                            You're almost done! 
                     </div>
                     <div className="esign-message-handoff-small">
-                        To start working with McCune Law Group, please click on the button below to sign your representation agreement
+                        To start working with McCune Law Group, please click on the button below to sign your representation agreement.
                     </div>
                 </div> 
                 <button type="button" className="gideon-submit-button" id="sign_btn" onClick={e => this.handleSign(e)}>
