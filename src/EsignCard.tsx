@@ -372,8 +372,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
         console.log("in new modal")
         return (
             <div className='fullview'>
-                <div className='test'>
-                <div className="mobile-modal" id="mobile-modal">
+                <div className='test' id="mobile-modal">
+                <div className="mobile-modal" >
                 <label style={{cursor: 'pointer'}} onClick={ e => this.toggleGoBack(e)}>
                         <div style={{display: 'flex', alignItems: 'center', paddingBottom: '15px'}}>
                             <svg width="94" height="56" viewBox="0 0 94 56" fill="none" xmlns="http://www.w3.org/2000/svg">
