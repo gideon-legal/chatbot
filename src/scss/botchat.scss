@@ -2003,6 +2003,22 @@ $lato: Lato, sans-serif;
         box-shadow: 2px 2px 4px 0px $c_shadow;
     }
 
+    .gideon-submit-button-modal {
+        background-color: #3F6DE1;
+        border: 1px solid #3F6DE1;
+        border-radius: 3px !important;
+        color: #ffffff;
+        min-height: 32px;
+        height: auto;
+        width: 100%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: center;
+        box-shadow: 2px 2px 4px 0px $c_shadow;
+        display: block;
+    }
+
     .gideon-submit-button-sign-disabled {
         background-color: #B5B5B5 !important;
         color: white !important;
@@ -2031,12 +2047,14 @@ $lato: Lato, sans-serif;
         color: #ffffff !important;
         min-height: 32px;
         height: auto;
-        width: 100%;
+        width: 70%;
         white-space: normal;
         overflow-wrap: break-word;
         padding: 18px;
         text-align: center;
         box-shadow: 2px 2px 4px 0px $c_shadow;
+        position: absolute;
+        left: 13%;
     }
 
     .gideon-submit-button-white {
@@ -2392,6 +2410,30 @@ $lato: Lato, sans-serif;
         //margin-bottom: 5px;
         //margin-left: 2%;
     }
+
+    .esign-input-box-modal {
+        
+        height: 53px;
+        width: 100%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: left;
+        min-height: 32px;
+        overflow-wrap: break-word;
+        outline: none;
+        display: block;
+        margin-top: 5%;
+        
+        box-sizing: border-box;
+    
+        //width: 511px;
+        //height: 50px;
+        background: #F4F4F4;
+        border: 1px solid #DCDCDC;
+        //margin-bottom: 5px;
+        //margin-left: 2%;
+    }
     
     .esign-initial-box {
         
@@ -2701,7 +2743,7 @@ $lato: Lato, sans-serif;
         margin-bottom: 1%;
         text-decoration: none;
         //margin: 0 auto;
-        //zoom: 75%;
+        zoom: 75%;
         //zoom: 0.9%;
         
 
@@ -2745,6 +2787,7 @@ $lato: Lato, sans-serif;
 
         @include mobileAndTablet {
             width: 101%;
+            background-color: white;
         }
       }
 
@@ -2838,9 +2881,13 @@ $lato: Lato, sans-serif;
             top: 35%
          }
        }
+
       .fullview{
         display: block;
 
+        @include mobile {
+            height: 140%;
+        }
       }
 
       .pdfholder{
@@ -2950,6 +2997,17 @@ $lato: Lato, sans-serif;
         }
       }
 
+      .button-area-modal{
+        width: 20%;
+        //padding: 18px;
+        min-height: 32px;
+        margin-top: 5%;
+        
+        @include mobile {
+            width: 100%;
+        }
+      }
+
       .loading_esign{
         position: fixed;
         top: 46%;
@@ -2984,9 +3042,27 @@ $lato: Lato, sans-serif;
       }
 
       .test{
-        background-color: #262626;
+        background-color: #ffffff;
         width: 100%;
         height: 100%;
       }
 
+      .mobile-modal{
+        width: 100%;
+        height: 40%;
+        padding: 20px;
+        margin-top: 120%;
+      }
+
+      .esign-modal-text{
+        display: block;
+        color: #000000;
+        text-align: left;
+        font-style: normal;
+        font-weight: 500;
+        font-size: medium;
+        line-height: 19px;
+        letter-spacing: 0.03em;
+
+      }
    
