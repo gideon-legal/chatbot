@@ -2333,7 +2333,7 @@ $lato: Lato, sans-serif;
         font-style: normal;
         font-weight: 500;
         font-size: medium;
-        line-height: 29px;
+        line-height: 19px;
         text-align: center;
         letter-spacing: 0.03em;
     
@@ -2343,7 +2343,7 @@ $lato: Lato, sans-serif;
 
        @include mobileAndTablet {
         padding-bottom: 30px;
-        padding-top: 50px
+       // padding-top: 50px
        }
     }
 
@@ -2724,7 +2724,7 @@ $lato: Lato, sans-serif;
         left: 30%;
         //top: 249px;
         background: #E9E9E9;
-        height: 85%;
+        height: 100%;
         margin-bottom: 1%;
         text-decoration: none;
         
@@ -2758,7 +2758,7 @@ $lato: Lato, sans-serif;
         left: 402px;
         top: 249px;
         background: #E9E9E9;
-        height: 89%;
+        height: 85%;
         overflow: scroll;
         overflow-x: hidden;
         
