@@ -2997,6 +2997,17 @@ $lato: Lato, sans-serif;
         }
       }
 
+      .button-area-modal{
+        width: 20%;
+        //padding: 18px;
+        min-height: 32px;
+        margin-top: 5%;
+        
+        @include mobile {
+            width: 100%;
+        }
+      }
+
       .loading_esign{
         position: fixed;
         top: 46%;
@@ -3041,5 +3052,17 @@ $lato: Lato, sans-serif;
         height: 40%;
         padding: 20px;
         margin-top: 120%;
+      }
+
+      .esign-modal-text{
+        display: block;
+        color: #000000;
+        text-align: left;
+        font-style: normal;
+        font-weight: 500;
+        font-size: medium;
+        line-height: 19px;
+        letter-spacing: 0.03em;
+
       }
    
