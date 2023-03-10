@@ -2003,6 +2003,22 @@ $lato: Lato, sans-serif;
         box-shadow: 2px 2px 4px 0px $c_shadow;
     }
 
+    .gideon-submit-button-modal {
+        background-color: #3F6DE1;
+        border: 1px solid #3F6DE1;
+        border-radius: 3px !important;
+        color: #ffffff;
+        min-height: 32px;
+        height: auto;
+        width: 100%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: center;
+        box-shadow: 2px 2px 4px 0px $c_shadow;
+        display: block;
+    }
+
     .gideon-submit-button-sign-disabled {
         background-color: #B5B5B5 !important;
         color: white !important;
@@ -2394,6 +2410,30 @@ $lato: Lato, sans-serif;
         //margin-bottom: 5px;
         //margin-left: 2%;
     }
+
+    .esign-input-box-modal {
+        
+        height: 53px;
+        width: 100%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: left;
+        min-height: 32px;
+        overflow-wrap: break-word;
+        outline: none;
+        display: block;
+        margin-top: 5%;
+        
+        box-sizing: border-box;
+    
+        //width: 511px;
+        //height: 50px;
+        background: #F4F4F4;
+        border: 1px solid #DCDCDC;
+        //margin-bottom: 5px;
+        //margin-left: 2%;
+    }
     
     .esign-initial-box {
         
@@ -2703,7 +2743,7 @@ $lato: Lato, sans-serif;
         margin-bottom: 1%;
         text-decoration: none;
         //margin: 0 auto;
-        //zoom: 75%;
+        zoom: 75%;
         //zoom: 0.9%;
         
 
