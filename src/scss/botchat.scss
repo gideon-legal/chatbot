@@ -2003,12 +2003,11 @@ $lato: Lato, sans-serif;
         box-shadow: 2px 2px 4px 0px $c_shadow;
     }
 
-    .gideon-submit-button-download {
-        text-decoration:none;
+    .gideon-submit-button-modal {
         background-color: #3F6DE1;
         border: 1px solid #3F6DE1;
         border-radius: 3px !important;
-        color: #ffffff !important;
+        color: #ffffff;
         min-height: 32px;
         height: auto;
         width: 100%;
@@ -2017,6 +2016,45 @@ $lato: Lato, sans-serif;
         padding: 18px;
         text-align: center;
         box-shadow: 2px 2px 4px 0px $c_shadow;
+        display: block;
+    }
+
+    .gideon-submit-button-sign-disabled {
+        background-color: #B5B5B5 !important;
+        color: white !important;
+        border-radius: 3px !important;
+        min-height: 32px;
+        height: auto;
+        width: 100%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: center;
+        box-shadow: 2px 2px 4px 0px $c_shadow;
+    }
+
+    .gideon-submit-button-sign-disabled:hover {
+        background-color: #B5B5B5 !important;
+        cursor: not-allowed !important;
+        color: white !important;
+    }
+
+    .gideon-submit-button-download {
+        text-decoration:none;
+        background-color: #3F6DE1;
+        border: 1px solid #3F6DE1;
+        border-radius: 3px !important;
+        color: #ffffff !important;
+        min-height: 32px;
+        height: auto;
+        width: 70%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: center;
+        box-shadow: 2px 2px 4px 0px $c_shadow;
+        position: absolute;
+        left: 13%;
     }
 
     .gideon-submit-button-white {
@@ -2282,7 +2320,11 @@ $lato: Lato, sans-serif;
         /* Gideon/Primary text */
 
        color: #262626;
-       padding: 15px 0px 15px 0px;
+    //padding: 15px 0px 15px 0px;
+
+    @include mobileAndTablet{
+        padding: 20px 0px 15px 0px;
+    }
     }
 
     .esign-message-handoff-small{
@@ -2291,13 +2333,18 @@ $lato: Lato, sans-serif;
         font-style: normal;
         font-weight: 500;
         font-size: medium;
-        line-height: 29px;
+        line-height: 19px;
         text-align: center;
         letter-spacing: 0.03em;
     
        /* Gideon/Primary text */
        color: #262626;
        padding: 15px 0px 15px 0px;
+
+       @include mobileAndTablet {
+        padding-bottom: 30px;
+       // padding-top: 50px
+       }
     }
 
     .esign-message-handoff-small2{
@@ -2306,46 +2353,111 @@ $lato: Lato, sans-serif;
         font-style: normal;
         font-weight: 500;
         font-size: medium;
-        line-height: 29px;
+        line-height: 19px;
         text-align: center;
         letter-spacing: 0.03em;
     
        /* Gideon/Primary text */
        color: #262626;
        padding: 15px 0px 15px 0px;
+
+       @include mobileAndTablet {
+        padding-bottom: 50px;
+        padding-top: 50px
+       }
     }
     
     
     .signature-box-area {
+        bottom: 0;
         text-align: center !important;
-        height: auto;
+        background: #FEFEFE !important;
+       // position: fixed;
+        //bottom: 0;
+        position: absolute;
+        display: flex;
+        //flex-grow: 0;
+       // flex-shrink: 0;
+       // height: 5%;
             width: 100%;
             white-space: normal;
             overflow-wrap: break-word;
-            padding: 18px;
-    
+       // padding: 18px 18px 18px 0px;
+        
+       @include mobile {
+        background-color: white;
+       }
     }
     
     .esign-input-box {
         
         height: 53px;
-        width: 100%;
+        width: 68%;
         white-space: normal;
         overflow-wrap: break-word;
         padding: 18px;
         text-align: center;
         min-height: 32px;
         overflow-wrap: break-word;
+        outline: none;
+        text-align: left;
+        box-sizing: border-box;
+    
+        //width: 511px;
+        //height: 50px;
+        background: #F4F4F4;
+        border: 1px solid #DCDCDC;
+        //margin-bottom: 5px;
+        //margin-left: 2%;
+    }
+
+    .esign-input-box-modal {
+        
+        height: 53px;
+        width: 100%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: left;
+        min-height: 32px;
+        overflow-wrap: break-word;
+        outline: none;
+        display: block;
+        margin-top: 5%;
         
         box-sizing: border-box;
     
         //width: 511px;
         //height: 50px;
-        background: #FEFEFE;
+        background: #F4F4F4;
         border: 1px solid #DCDCDC;
-        margin-bottom: 5px;
+        //margin-bottom: 5px;
+        //margin-left: 2%;
     }
     
+    .esign-initial-box {
+        
+        height: 53px;
+        width: 13%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: center;
+        min-height: 32px;
+        overflow-wrap: break-word;
+        outline: none;
+        text-align: left;
+        box-sizing: border-box;
+    
+        //width: 511px;
+        //height: 50px;
+        background: #F4F4F4;
+        border: 1px solid #DCDCDC;
+        //margin-bottom: 5px;
+        margin-left: 3%;
+        margin-right: 2%
+    }
+
     .esign-grey-text {
         font-family: 'Lato';
         font-style: normal;
@@ -2369,7 +2481,7 @@ $lato: Lato, sans-serif;
         font-size: 14px;
         line-height: 17px;
         /* identical to box height */
-    
+        padding-left: 15px;
         display: flex;
         align-items: center;
         text-align: center;
@@ -2421,7 +2533,7 @@ $lato: Lato, sans-serif;
            @include mobileAndTablet {
             border-radius: 0;
             width: 100vw;
-
+            background-color: white;
             // need to be !important because this is being set inline for element
             height: 100% !important;
             right: 0 !important;
@@ -2432,7 +2544,8 @@ $lato: Lato, sans-serif;
             min-width: 100%;
         }
         
-        @include mobile {
+        @include mobileAndTablet {
+            background-color: white;
             width: 150%;
             z-index: 1;
         }
@@ -2451,19 +2564,21 @@ $lato: Lato, sans-serif;
         flex: 1;
         display: flex;
         position: fixed; /* Stay in place */
-        z-index: 5; /* Sit on top */
+        z-index: 1; /* Sit on top */
        // left: 85%;
         margin-top: $headerTotalHeight;
-        top: 10%;
-        //width: 100%; /* Full width */
+        top: 19%;
+        width: 165%; /* Full width */
         height: 188%;
+        left: 50%;
+        //width: 242vw;
         transform: translate(-10%, -10%);
         //background-color: rgb(0,0,0); 
         //background-color: rgba(0,0,0,0.4);
        // top: 25%;
            // transform: translateY(-$actionsHeight);
         
-        @include mobile {
+        @include mobileAndTablet {
             width: 150%;
             z-index: 1;
         }
@@ -2482,19 +2597,20 @@ $lato: Lato, sans-serif;
         flex: 1;
         display: flex;
         position: fixed; /* Stay in place */
-        z-index: 5; /* Sit on top */
+        z-index: 1; /* Sit on top */
        // left: 85%;
         margin-top: $headerTotalHeight;
-        top: 10%;
+        top: 15%;
         //width: 150%; /* Full width */
         height: 188%;
         transform: translate(-10%, -10%);
+        width: $chatWidth;
         //background-color: rgb(0,0,0); 
         //background-color: rgba(0,0,0,0.4);
        // top: 25%;
            // transform: translateY(-$actionsHeight);
         
-        @include mobile {
+        @include mobileAndTablet {
             width: 150%;
             z-index: 1;
         }
@@ -2519,7 +2635,7 @@ $lato: Lato, sans-serif;
         //background-color: rgb(0,0,0); 
         //background-color: rgba(0,0,0,0.4);
         
-        @include mobile {
+        @include mobileAndTablet {
             width: 150%;
             z-index: 1;
         }
@@ -2536,7 +2652,7 @@ $lato: Lato, sans-serif;
         background-color: rgb(0,0,0); 
         background-color: rgba(0,0,0,0.4);
         
-        @include mobile {
+        @include mobileAndTablet {
             width: 150%;
             z-index: 1;
         }
@@ -2551,8 +2667,25 @@ $lato: Lato, sans-serif;
        // width: ($chatWidth)-1;  
         height: 100%;
 
-        @include mobile {
-            width: 70%;
+        @include mobileAndTablet {
+            width: 100%;
+            height: 10%;
+            background-color: white;
+        }
+
+      }
+
+      .modal-content-full {
+        background-color: #fefefe;
+        //margin: 15% auto; 
+        //padding: 20px;
+       // border: 1px solid #888;
+        width: 80%;  
+        height: 100%;
+        
+
+        @include mobileAndTablet {
+            width: 100%;
             padding: 100% 20px 100% 20px;
         }
 
@@ -2561,13 +2694,13 @@ $lato: Lato, sans-serif;
       .modal-content-mobile{
         background-color: #fefefe;
         margin: 15% auto; 
-        padding: 20px;
-        border: 1px solid #888;
+        padding: 0px 0px 20px 0px;
        // width: ($chatWidth)-1;  
         //height: 100%;
 
-        @include mobile {
-           padding: 100% 20px 100% 20px;
+        @include mobileAndTablet {
+            width: 100%;
+          
         }
 
       }
@@ -2577,12 +2710,65 @@ $lato: Lato, sans-serif;
         left: 402px;
         top: 249px;
         background: #E9E9E9;
+        height: 100%;
         
 
-        @include mobile {
+        @include mobileAndTablet {
             width: 100%;
             height: 100%;
         }
+      }
+
+      .esign-document-display2 {
+        width: 100%;
+        left: 30%;
+        //top: 249px;
+        background: #E9E9E9;
+        height: 100%;
+        margin-bottom: 1%;
+        text-decoration: none;
+        
+
+        @include mobileAndTablet {
+            width: 100%;
+            height: 100%;
+        }
+      }
+
+      .esign-document-display-mobile {
+        width: 70%;
+        //top: 249px;
+        background: #E9E9E9;
+        height: 100%;
+        margin-bottom: 1%;
+        text-decoration: none;
+        //margin: 0 auto;
+        zoom: 75%;
+        //zoom: 0.9%;
+        
+
+        @include mobileAndTablet {
+            width: 70%;
+            height: 100%;
+        }
+      }
+
+      .esign-document-holder {
+        width: 100%;
+        left: 402px;
+        top: 249px;
+        background: #E9E9E9;
+        height: 85%;
+        overflow: scroll;
+        overflow-x: hidden;
+        
+
+        @include mobileAndTablet {
+            width: 100%;
+            height: 100%;
+            top: 0;
+        }
+
       }
 
       .esign_fullwindow {
@@ -2600,8 +2786,9 @@ $lato: Lato, sans-serif;
        
         width: 100%; /* Full width */
 
-        @include mobile {
+        @include mobileAndTablet {
             width: 101%;
+            background-color: white;
         }
       }
 
@@ -2695,9 +2882,13 @@ $lato: Lato, sans-serif;
             top: 35%
          }
        }
+
       .fullview{
         display: block;
 
+        @include mobile {
+            height: 140%;
+        }
       }
 
       .pdfholder{
@@ -2705,30 +2896,28 @@ $lato: Lato, sans-serif;
         top: 46%;
         width: 101%;
         height: 95%;
-        background: #E9E9E9;
+        //background: #E9E9E9;
         right: -2px;
         overflow: auto;
+        background-color: #E9E9E9;
 
         @include mobileAndTablet {
             height: 100%;
            top: 49%;
-           width: 100%;
+           width: 101%;
         }
       }
 
       .pdfholder-mobile-full{
         position: absolute;
-        top: 46%;
+        top: 40%;
         width: 101%;
         background: #E9E9E9;
         right: -4px;
         overflow: auto;
 
         @include mobileAndTablet {
-            height: 85%;
-            width: 100%;
-         
-           
+            height: 100%;
         }
       }
 
@@ -2741,7 +2930,7 @@ $lato: Lato, sans-serif;
 
         @include mobileAndTablet {
             height: 64%;
-            top: 42%;
+            top: 35%;
             width: 100%;
            
         }
@@ -2758,6 +2947,17 @@ $lato: Lato, sans-serif;
         width: 50%;
         padding: 0px 0px 0px 0px !important;
         height: 60%; 
+
+        @include mobile {
+            height: 400%;
+        }
+      }
+
+      .presign_area_full {
+        //width: 50%;
+        padding: 0px 0px 0px 0px !important;
+        height: 20%; 
+       // background-size: 50% 100%;
       }
 
       .uploaded-files-container {
@@ -2769,10 +2969,125 @@ $lato: Lato, sans-serif;
       }
 
       .document_area{
-        margin-top: 10%;
+        margin-top: 5%;
+
+        @include mobileAndTablet{
+            margin-top: 20%;
+        }
       }
 
       .submit-area{
-        width: 25%;
-        justify-content: right;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        display: flex;
       }
+
+      .sign-area{
+        //position: absolute;
+        bottom: 0;
+       // margin-top: 10%;
+      }
+
+      .button-area{
+        width: 20%;
+        padding: 18px;
+        min-height: 32px;
+        
+        @include mobile {
+            width: 100%;
+            padding: 18px 20px 0px 18px;
+        }
+      }
+
+      .button-area-modal{
+        width: 20%;
+        //padding: 18px;
+        min-height: 32px;
+        margin-top: 5%;
+        
+        @include mobile {
+            width: 100%;
+        }
+      }
+
+      .loading_esign{
+        position: fixed;
+        top: 46%;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 30;
+        height: 100%;
+        background-color: #979999;
+        opacity: 0.5;
+       
+      }
+
+      .loaderwheel_esign{
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+        z-index: 30;
+        background-color: #979999;
+        left: 50%;
+        position: absolute;
+        top: 30%
+
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      .loaderwheel_esign_mobile{
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+        z-index: 30;
+        background-color: #979999;
+        //left: 50%;
+        position: absolute;
+        top: 30%;
+        right: 34%
+
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      .test{
+        background-color: #ffffff;
+        width: 100%;
+        height: 100%;
+      }
+
+      .mobile-modal{
+        width: 100%;
+        height: 40%;
+        padding: 20px;
+        margin-top: 70%;
+      }
+
+      .esign-modal-text{
+        display: block;
+        font-family: 'Lato';
+        color: #000000;
+        text-align: left;
+        font-style: normal;
+        font-weight: 600;
+        font-size: medium;
+        line-height: 19px;
+        letter-spacing: 0.03em;
+
+      }
+   
