@@ -93,7 +93,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
             loading: false,
             initials: '',
             isModal: false, //for switching between pdf viewer and signing modal on mobile,
-            numPages: 0
+            numPages: 0,
             
 
 
@@ -365,7 +365,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
             <div className='fullview'>
                 <div className='test'>
                 <div className="mobile-modal">
-                <label style={{cursor: 'pointer'}}>
+                <label style={{cursor: 'pointer'}} onClick={ e => this.toggleGoBack(e)}>
                         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                             <svg width="94" height="56" viewBox="0 0 94 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect x="1" y="1" width="92" height="54" rx="1" fill = "#F8F8F8" stroke="#F8F8F8" stroke-width="2"/>
@@ -385,6 +385,14 @@ class Esign extends React.Component<EsignProps, EsignState> {
             </div>
                 </div> 
             </div>)
+    }
+
+    //handles toogling back button, which in turn triggers switching back to pdf viewer
+    toggleGoBack(e: React.MouseEvent<HTMLLabelElement>){
+        this.setState({
+            isModal: false,
+            isSignature: false,
+        })
     }
 
 
