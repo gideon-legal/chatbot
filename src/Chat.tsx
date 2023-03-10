@@ -518,7 +518,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     const messages = res.data.messages.reverse();
 
                     this.setState({
-                        node_count: -1
+                        node_count: 0
                     });
 
                     console.log("after reload " + this.state.node_count);
