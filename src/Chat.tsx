@@ -272,6 +272,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     
                 case 'typing':
                     console.log("toggle false -typing")
+                    is_handoff = true
                     //this.toggleBackButton(false);
                     this.clicked(true);
                     if (activity.from.id !== state.connection.user.id) {
