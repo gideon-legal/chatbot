@@ -2908,14 +2908,14 @@ $lato: Lato, sans-serif;
 
       .pdfholder-mobile-full{
         position: absolute;
-        top: 46%;
+        top: 40%;
         width: 101%;
         background: #E9E9E9;
         right: -4px;
         overflow: auto;
 
         @include mobileAndTablet {
-            height: 95%;
+            height: 100%;
         }
       }
 
@@ -2928,7 +2928,7 @@ $lato: Lato, sans-serif;
 
         @include mobileAndTablet {
             height: 64%;
-            top: 42%;
+            top: 35%;
             width: 100%;
            
         }
@@ -2994,6 +2994,7 @@ $lato: Lato, sans-serif;
         
         @include mobile {
             width: 100%;
+            padding: 18px 20px 0px 18px;
         }
       }
 
