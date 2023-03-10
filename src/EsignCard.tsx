@@ -139,7 +139,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         this.setState({
             ...this.state,
             validated: validated,
-            signError
+            signError: signError
         })
 
         return validated;
@@ -168,12 +168,20 @@ class Esign extends React.Component<EsignProps, EsignState> {
         let loading_div = document.createElement("div")
         loading_div.setAttribute("class", "loading_esign")
         let loader_wheel = document.createElement("div")
-        loader_wheel.setAttribute("class", "loaderwheel_esign")
+        if(this.state.isModal == true){
+            loader_wheel.setAttribute("class", "loaderwheel_esign_mobile")
+            let sign_btn = document.getElementById("sign-btn");
+            console.log(sign_btn)
+            sign_btn.setAttribute("class", "gideon-submit-button-sign-disabled");
+            document.getElementById("mobile-modal").appendChild(loading_div).appendChild(loader_wheel)
+        } else {
+            loader_wheel.setAttribute("class", "loaderwheel_esign")
 
-        let sign_btn = document.getElementById("sign-btn");
-        console.log(sign_btn)
-        sign_btn.setAttribute("class", "gideon-submit-button-sign-disabled");
-        document.getElementById("pdfarea").appendChild(loading_div).appendChild(loader_wheel)
+           let sign_btn = document.getElementById("sign-btn");
+           console.log(sign_btn)
+           sign_btn.setAttribute("class", "gideon-submit-button-sign-disabled");
+           document.getElementById("pdfarea").appendChild(loading_div).appendChild(loader_wheel)
+        }
         if(!this.validateSignature()) { return;}
         
 
@@ -199,7 +207,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
             completedDoc: true,
             isPopup: false,
             files: files,
-            loading: false
+            loading: false,
+            isModal: false
         })
         console.log("files array")
         console.log(files)
@@ -364,7 +373,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         return (
             <div className='fullview'>
                 <div className='test'>
-                <div className="mobile-modal">
+                <div className="mobile-modal" id="mobile-modal">
                 <label style={{cursor: 'pointer'}} onClick={ e => this.toggleGoBack(e)}>
                         <div style={{display: 'flex', alignItems: 'center', paddingBottom: '15px'}}>
                             <svg width="94" height="56" viewBox="0 0 94 56" fill="none" xmlns="http://www.w3.org/2000/svg">
