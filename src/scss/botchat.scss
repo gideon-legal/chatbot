@@ -2738,19 +2738,19 @@ $lato: Lato, sans-serif;
       }
 
       .esign-document-display-mobile {
-        width: 70%;
+        width: $chatWidthMobile;
         //top: 249px;
         background: #E9E9E9;
         height: 100%;
         margin-bottom: 1%;
         text-decoration: none;
         //margin: 0 auto;
-        zoom: 75%;
+        zoom: 65%;
         //zoom: 0.9%;
         
 
         @include mobileAndTablet {
-            width: 70%;
+           // width: 70%;
             height: 100%;
         }
       }
