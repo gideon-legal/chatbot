@@ -610,6 +610,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
     renderPopup(){
         const {willSubmit, completedDoc, isSignature, isFullHeight, isFullscreen} = this.state;
             //normal screen
+            document.getElementById('btn3').style.display = "none";
             let esignPopup = (
                 <div className="modal-normal">
                 <div className="modal-content">
