@@ -537,7 +537,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
             let sig = (
                 <footer className="signature-box-area">
             <div className="submit-area">
-                <input className="esign-input-box" placeholder="Bank Number" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeBankAccount} id="signature"></input>
+                <input className="esign-input-box" placeholder="Bank Account Number" style= {{width: "100%", marginLeft:"25px" }} type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeBankAccount} id="signature"></input>
                 <div className="button-area">
                     <button  id="sign-btn" className="gideon-submit-button" style={{width: "80%" }} onClick={e => this.submitBankNumber(e)}> Next  </button>
                 </div>
