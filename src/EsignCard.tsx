@@ -39,6 +39,7 @@ interface EsignProps {
     index: number;
     fullheight: boolean;
     fullscreen: boolean;
+    accountNum: boolean;
 
 }
 
@@ -64,6 +65,9 @@ export interface EsignState {
     initials: string;
     isModal: boolean;
     numPages: number;
+    hasBank: boolean;
+    bankNum: string;
+    isNext: boolean;
 
 }
 
@@ -94,6 +98,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
             initials: '',
             isModal: false, //for switching between pdf viewer and signing modal on mobile,
             numPages: 0,
+            hasBank: this.props.accountNum, //for aditional input field, passed from props
+            bankNum: '',
+            isNext: false,
+
             
 
 
@@ -102,6 +110,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         //handleKeyDown here etc
         this.onChangeSignature = this.onChangeSignature.bind(this)
         this.onChangeInitials = this.onChangeInitials.bind(this)
+        this.onChangeBankAccount = this.onChangeBankAccount.bind(this)
 
     }
 
@@ -109,7 +118,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         console.log("hit enter")
         if (e.key === 'Enter' && this.validateSignature()){
             console.log("hit if case enter")
-            sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx,this.state.initials)
+            sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx,this.state.initials, this.state.bankNum)
             .then((res: any) => {
                 this.setState({
                     ...this.state,
@@ -158,65 +167,68 @@ class Esign extends React.Component<EsignProps, EsignState> {
     /** For submit button for signature */
     clickToSubmitSignature(e: React.MouseEvent<HTMLButtonElement>){
         //disable button
-        this.setState({
-            ...this.state,
-            loading: true
-        })
-        console.log("loading")
-        console.log(this.state.loading)
-        this.renderLoading()
-        let loading_div = document.createElement("div")
-        loading_div.setAttribute("class", "loading_esign")
-        let loader_wheel = document.createElement("div")
-        if(this.state.isModal == true){
-            loader_wheel.setAttribute("class", "loaderwheel_esign_mobile")
-            let sign_btn = document.getElementById("sign-btn");
-            console.log(sign_btn)
-            sign_btn.setAttribute("class", "gideon-submit-button-sign-disabled");
-            document.getElementById("mobile-modal").appendChild(loading_div).appendChild(loader_wheel)
-        } else {
-            loader_wheel.setAttribute("class", "loaderwheel_esign")
-
-           let sign_btn = document.getElementById("sign-btn");
-           console.log(sign_btn)
-           sign_btn.setAttribute("class", "gideon-submit-button-sign-disabled");
-           document.getElementById("pdfarea").appendChild(loading_div).appendChild(loader_wheel)
-        }
-        if(!this.validateSignature()) { return;}
-        
-
-        //need to send to api so it can be used to populate document
-        console.log("hey everybody!!!!!!!")
-        console.log(this.props.docx)
-        console.log("obtained signature")
-        console.log(this.state.signature)
-        //send to api and wait to receive signed pdf link, set to this.state.signedfile
-        sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx, this.state.initials)
-        .then((res: any) => {
-            console.log(res.data)
+        if(this.state.signature != ''){
             this.setState({
                 ...this.state,
-                signedfile: res.data.pdf_link
+                loading: true
             })
-            //once document is confirmed and received, set to this.state.signedfile, set completedDoc to true
-        //send signal to move on from node? - need readonly version of card
-        const files = []
-        files.push({name: 'signed_document.pdf', url: this.state.signedfile})
-        this.setState({
-            ...this.state,
-            completedDoc: true,
-            isPopup: false,
-            files: files,
-            loading: false,
-            isModal: false
-        })
-        console.log("files array")
-        console.log(files)
-        console.log("signed file")
-        console.log(this.state.signedfile)
-        this.props.addFilesToState(this.props.index, files)
-        this.props.sendMessage(JSON.stringify(this.state.signedfile))
-        })
+            console.log("loading")
+            console.log(this.state.loading)
+            this.renderLoading()
+            let loading_div = document.createElement("div")
+            loading_div.setAttribute("class", "loading_esign")
+            let loader_wheel = document.createElement("div")
+            if(this.state.isModal == true){
+                loader_wheel.setAttribute("class", "loaderwheel_esign_mobile")
+                let sign_btn = document.getElementById("sign-btn");
+                console.log(sign_btn)
+                sign_btn.setAttribute("class", "gideon-submit-button-sign-disabled");
+                document.getElementById("mobile-modal").appendChild(loading_div).appendChild(loader_wheel)
+            } else {
+                loader_wheel.setAttribute("class", "loaderwheel_esign")
+    
+               let sign_btn = document.getElementById("sign-btn");
+               console.log(sign_btn)
+               sign_btn.setAttribute("class", "gideon-submit-button-sign-disabled");
+               document.getElementById("pdfarea").appendChild(loading_div).appendChild(loader_wheel)
+            }
+            if(!this.validateSignature()) { return;}
+            
+    
+            //need to send to api so it can be used to populate document
+            console.log("hey everybody!!!!!!!")
+            console.log(this.props.docx)
+            console.log("obtained signature")
+            console.log(this.state.signature)
+            //send to api and wait to receive signed pdf link, set to this.state.signedfile
+            sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx, this.state.initials, this.state.bankNum)
+            .then((res: any) => {
+                console.log(res.data)
+                this.setState({
+                    ...this.state,
+                    signedfile: res.data.pdf_link
+                })
+                //once document is confirmed and received, set to this.state.signedfile, set completedDoc to true
+            //send signal to move on from node? - need readonly version of card
+            const files = []
+            files.push({name: 'signed_document.pdf', url: this.state.signedfile})
+            this.setState({
+                ...this.state,
+                completedDoc: true,
+                isPopup: false,
+                files: files,
+                loading: false,
+                isModal: false
+            })
+            console.log("files array")
+            console.log(files)
+            console.log("signed file")
+            console.log(this.state.signedfile)
+            this.props.addFilesToState(this.props.index, files)
+            this.props.sendMessage(JSON.stringify(this.state.signedfile))
+            })
+
+        }
     }
 
     onChangeSignature(event: React.ChangeEvent<HTMLInputElement>) {
@@ -235,6 +247,16 @@ class Esign extends React.Component<EsignProps, EsignState> {
         })
         console.log("changed intials")
         console.log(this.state.initials)
+    }
+
+    onChangeBankAccount(event: React.ChangeEvent<HTMLInputElement>) {
+        this.setState({
+            ...this.state,
+            bankNum: event.target.value
+        })
+        console.log("changed bank")
+        console.log(this.state.bankNum)
+
     }
 
     
@@ -367,6 +389,22 @@ class Esign extends React.Component<EsignProps, EsignState> {
         
     }
 
+    //checks if bank input is needed on mobile modal and populates it
+    checkNeedBankModal(){
+        if(this.state.hasBank == true){
+            let bankArea = (
+                <div className='esign-bank-area'>
+                    <text className='esign-modal-text'> Add Your Account Information</text>
+                    <text className='bank-text-small'> Please provide the last 4 digits of your bank account number.</text>
+                    <input className="esign-input-box-modal" maxLength={4} placeholder="Account Number" type="text" value={this.state.bankNum} onKeyPress={this.handleKeyDown} 
+                onChange={this.onChangeBankAccount} id="bank"></input>
+                </div>
+            )
+            return bankArea
+        }
+
+    }
+
     //to render new mobile modal for signature and initials and backbutton
     renderMobileSigningModal(){
         console.log("in new modal")
@@ -385,6 +423,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
                             </svg>
                         </div>
                 </label>
+                    <div >
+                        area for optional bank area
+                        {this.checkNeedBankModal()}
+                    </div>
                     <div className='esign-modal-text'> Add Your Signature </div>
                     <input className="esign-input-box-modal" placeholder="Your Initials" type="text" value={this.state.initials} onKeyPress={this.handleKeyDown} onChange={this.onChangeInitials} id="initial"></input>
                     <input className="esign-input-box-modal" placeholder="Your Full Name" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
@@ -408,6 +450,22 @@ class Esign extends React.Component<EsignProps, EsignState> {
     scrollToElement(){
         var scrollTo = document.getElementById("sign-area");
         scrollTo.scrollIntoView({behavior:'smooth',block:'start'})
+    }
+
+    //determines if input areas for 
+    toggleBankInput(){
+
+    }
+
+    //submits bank number, for non mobile takes to other sticky footer area
+    submitBankNumber(e: React.MouseEvent<HTMLButtonElement>){
+        if(this.state.bankNum != ''){
+            this.setState({
+                isNext: true
+                
+            })
+
+        }
     }
 
     //initial starting screen, should be popup, for now is treated as node
@@ -499,39 +557,69 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     //Displays signature at bottom of screen when viewing pdf
     renderSignatureMobile() {
-
-        if ( isMobile ) {
+        console.log('hasBank:')
+        console.log(this.state.hasBank)
+        console.log(this.state.isNext)
+        console.log("isMobile:")
+        console.log(isMobile)
+        if(this.state.hasBank == true && this.state.isNext == false && isMobile == false){
             let sig = (
                 <footer className="signature-box-area">
-                <div className="submit-area">
-                    <div className="button-area">
-                        <button  id="sign-btn" className="gideon-submit-button" style={{width: "100%", marginBottom: "5%" }} onClick={e => this.handleSignModalMobile(e)}> SIGN </button>
+            <div className="submit-area2">
+                <div className = "esign-black-text" style={{ display: "block"}}> <br></br>
+                    Account Number
+                </div>
+                <div className='submit-area'>
+                <input className="esign-input-box" maxLength={4} placeholder="Bank Account Number" style= {{width: "100%", marginLeft:"25px" }} type="text" value={this.state.bankNum} onKeyPress={this.handleKeyDown} onChange={this.onChangeBankAccount} id="signature"></input>
+                <div className="button-area">
+                    <button  id="sign-btn" className="gideon-submit-button" style={{width: "80%" }} onClick={e => this.submitBankNumber(e)}> Next  </button>
+                </div>
+                </div>
+            </div>
+           </footer> 
+            )
+            return sig
+        } else {
+            if ( isMobile ) {
+                let sig = (
+                    <footer className="signature-box-area">
+                    <div className="submit-area">
+                        <div className="button-area">
+                            <button  id="sign-btn" className="gideon-submit-button" style={{width: "100%", marginBottom: "5%" }} onClick={e => this.handleSignModalMobile(e)}> SIGN </button>
+                        </div>
                     </div>
+                   </footer>   
+                )
+                return sig;
+            }
+    
+            else {
+            let sig = (
+                <footer className="signature-box-area">
+                <div className="submit-area2">
+                <div className = "esign-black-text" style={{ display: "block"}}> <br></br>
+                    Add Your Signature
+                </div>
+                <div className='submit-area'> 
+                <input className="esign-initial-box" placeholder="Your Initials" type="text" value={this.state.initials} onKeyPress={this.handleKeyDown} onChange={this.onChangeInitials} id="initial"></input>
+                    <input className="esign-input-box" placeholder="Type in Full Name to Create Signature" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
+                    <div className="button-area">
+                        <button  id="sign-btn" className="gideon-submit-button" style={{width: "80%" }} onClick={e => this.clickToSubmitSignature(e)}> Sign Now  </button>
+                    </div>
+                </div>
                 </div>
                </footer>   
             )
-            return sig;
-        }
+            return sig
+            }
 
-        else {
-        let sig = (
-            <footer className="signature-box-area">
-            <div className="submit-area">
-                <input className="esign-initial-box" placeholder="Your Initials" type="text" value={this.state.initials} onKeyPress={this.handleKeyDown} onChange={this.onChangeInitials} id="initial"></input>
-                <input className="esign-input-box" placeholder="Type in Full Name to Create Signature" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
-                <div className="button-area">
-                    <button  id="sign-btn" className="gideon-submit-button" style={{width: "80%" }} onClick={e => this.clickToSubmitSignature(e)}> Sign Now  </button>
-                </div>
-            </div>
-           </footer>   
-        )
-        return sig
         }
     }
 
     renderPopup(){
         const {willSubmit, completedDoc, isSignature, isFullHeight, isFullscreen} = this.state;
             //normal screen
+            document.getElementById('btn3').style.display = "none";
             let esignPopup = (
                 <div className="modal-normal">
                 <div className="modal-content">
@@ -635,8 +723,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
         )
     }
 
-
-
     //screen 1: message + button to sign
     //screen 2: document viewable + signature box
 
@@ -686,7 +772,8 @@ export const EsignCard = connect(
             addFilesToState: ownProps.addFilesToState,
             index: ownProps.index,
             fullheight: ownProps.format.full_height,
-            fullscreen: ownProps.format.fullscreen
+            fullscreen: ownProps.format.fullscreen,
+            accountNum: ownProps.activity.pdf_link.account_num
         }
     }
 )(Esign);

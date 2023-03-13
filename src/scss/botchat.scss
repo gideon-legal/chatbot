@@ -2482,12 +2482,13 @@ $lato: Lato, sans-serif;
         line-height: 17px;
         /* identical to box height */
         padding-left: 15px;
-        display: flex;
+        display: block;
         align-items: center;
-        text-align: center;
-    
+        text-align: left;
         color: #000000 !important;
         margin-bottom: 5px;
+        display: block;
+        margin-left: 1%;
     
     }
 
@@ -2727,6 +2728,7 @@ $lato: Lato, sans-serif;
         height: 100%;
         margin-bottom: 1%;
         text-decoration: none;
+        font-family: none !important;
         
 
         @include mobileAndTablet {
@@ -2736,19 +2738,19 @@ $lato: Lato, sans-serif;
       }
 
       .esign-document-display-mobile {
-        width: 70%;
+        width: $chatWidthMobile;
         //top: 249px;
         background: #E9E9E9;
         height: 100%;
         margin-bottom: 1%;
         text-decoration: none;
         //margin: 0 auto;
-        zoom: 75%;
+        zoom: 65%;
         //zoom: 0.9%;
         
 
         @include mobileAndTablet {
-            width: 70%;
+           // width: 70%;
             height: 100%;
         }
       }
@@ -2983,6 +2985,14 @@ $lato: Lato, sans-serif;
         display: flex;
       }
 
+      .submit-area2{
+        width: 100%;
+        justify-content: space-between;
+
+        //align-items: center;
+       // display: flex;
+      }
+
       .sign-area{
         //position: absolute;
         bottom: 0;
@@ -2993,6 +3003,7 @@ $lato: Lato, sans-serif;
         width: 20%;
         padding: 18px;
         min-height: 32px;
+        display: flex;
         
         @include mobile {
             width: 100%;
@@ -3088,6 +3099,37 @@ $lato: Lato, sans-serif;
         font-size: medium;
         line-height: 19px;
         letter-spacing: 0.03em;
+
+      }
+
+      .esign-bank-area {
+        margin-top: 1%;
+        margin-bottom: 10%;
+      }
+
+      .bank-text-big {
+        display: block;
+        font-family: 'Lato';
+        color: #000000;
+        text-align: left;
+        font-style: normal;
+        font-weight: 600;
+        font-size: medium;
+        line-height: 19px;
+        letter-spacing: 0.03em;
+      }
+
+      .bank-text-small {
+        display: block;
+        font-family: 'Lato';
+        color: #000000;
+        text-align: left;
+        font-style: normal;
+        font-weight: 400;
+        font-size: small;
+        line-height: 19px;
+        margin-top: 1%;
+        white-space: nowrap;
 
       }
    
