@@ -3093,7 +3093,7 @@ $lato: Lato, sans-serif;
       }
 
       .esign-bank-area {
-        margin-top: 10%;
+        margin-top: 1%;
         margin-bottom: 10%;
       }
 
@@ -3115,10 +3115,11 @@ $lato: Lato, sans-serif;
         color: #000000;
         text-align: left;
         font-style: normal;
-        font-weight: 600;
+        font-weight: 400;
         font-size: small;
         line-height: 19px;
-        letter-spacing: 0.03em;
+        margin-top: 1%;
+        white-space: nowrap;
 
       }
    

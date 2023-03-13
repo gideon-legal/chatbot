@@ -110,6 +110,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         //handleKeyDown here etc
         this.onChangeSignature = this.onChangeSignature.bind(this)
         this.onChangeInitials = this.onChangeInitials.bind(this)
+        this.onChangeBankAccount = this.onChangeBankAccount.bind(this)
 
     }
 
@@ -392,7 +393,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <div className='esign-bank-area'>
                     <text className='esign-modal-text'> Add Your Account Information</text>
                     <text className='bank-text-small'> Please provide the last 4 digits of your bank account number.</text>
-                    <input className="esign-input-box-modal" placeholder="Account Number" type="text" value={this.state.bankNum} onKeyPress={this.handleKeyDown} 
+                    <input className="esign-input-box-modal" pattern="\d{4}" placeholder="Account Number" type="string" value={this.state.bankNum} onKeyPress={this.handleKeyDown} 
                 onChange={this.onChangeBankAccount} id="bank"></input>
                 </div>
             )
@@ -711,24 +712,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
             </div>
         )
     }
-
-    //for desktop bank stickyfooter
-    renderBankFooter(){
-        let footer = (
-            <footer className="signature-box-area">
-            <div className="submit-area">
-                <input className="esign-input-box" placeholder="Bank Number" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeBankAccount} id="signature"></input>
-                <div className="button-area">
-                    <button  id="sign-btn" className="gideon-submit-button" style={{width: "80%" }} onClick={e => this.submitBankNumber}> Next  </button>
-                </div>
-            </div>
-           </footer>   
-        )
-        return footer
-
-    }
-
-
 
     //screen 1: message + button to sign
     //screen 2: document viewable + signature box
