@@ -167,65 +167,68 @@ class Esign extends React.Component<EsignProps, EsignState> {
     /** For submit button for signature */
     clickToSubmitSignature(e: React.MouseEvent<HTMLButtonElement>){
         //disable button
-        this.setState({
-            ...this.state,
-            loading: true
-        })
-        console.log("loading")
-        console.log(this.state.loading)
-        this.renderLoading()
-        let loading_div = document.createElement("div")
-        loading_div.setAttribute("class", "loading_esign")
-        let loader_wheel = document.createElement("div")
-        if(this.state.isModal == true){
-            loader_wheel.setAttribute("class", "loaderwheel_esign_mobile")
-            let sign_btn = document.getElementById("sign-btn");
-            console.log(sign_btn)
-            sign_btn.setAttribute("class", "gideon-submit-button-sign-disabled");
-            document.getElementById("mobile-modal").appendChild(loading_div).appendChild(loader_wheel)
-        } else {
-            loader_wheel.setAttribute("class", "loaderwheel_esign")
-
-           let sign_btn = document.getElementById("sign-btn");
-           console.log(sign_btn)
-           sign_btn.setAttribute("class", "gideon-submit-button-sign-disabled");
-           document.getElementById("pdfarea").appendChild(loading_div).appendChild(loader_wheel)
-        }
-        if(!this.validateSignature()) { return;}
-        
-
-        //need to send to api so it can be used to populate document
-        console.log("hey everybody!!!!!!!")
-        console.log(this.props.docx)
-        console.log("obtained signature")
-        console.log(this.state.signature)
-        //send to api and wait to receive signed pdf link, set to this.state.signedfile
-        sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx, this.state.initials, this.state.bankNum)
-        .then((res: any) => {
-            console.log(res.data)
+        if(this.state.signature != ''){
             this.setState({
                 ...this.state,
-                signedfile: res.data.pdf_link
+                loading: true
             })
-            //once document is confirmed and received, set to this.state.signedfile, set completedDoc to true
-        //send signal to move on from node? - need readonly version of card
-        const files = []
-        files.push({name: 'signed_document.pdf', url: this.state.signedfile})
-        this.setState({
-            ...this.state,
-            completedDoc: true,
-            isPopup: false,
-            files: files,
-            loading: false,
-            isModal: false
-        })
-        console.log("files array")
-        console.log(files)
-        console.log("signed file")
-        console.log(this.state.signedfile)
-        this.props.addFilesToState(this.props.index, files)
-        this.props.sendMessage(JSON.stringify(this.state.signedfile))
-        })
+            console.log("loading")
+            console.log(this.state.loading)
+            this.renderLoading()
+            let loading_div = document.createElement("div")
+            loading_div.setAttribute("class", "loading_esign")
+            let loader_wheel = document.createElement("div")
+            if(this.state.isModal == true){
+                loader_wheel.setAttribute("class", "loaderwheel_esign_mobile")
+                let sign_btn = document.getElementById("sign-btn");
+                console.log(sign_btn)
+                sign_btn.setAttribute("class", "gideon-submit-button-sign-disabled");
+                document.getElementById("mobile-modal").appendChild(loading_div).appendChild(loader_wheel)
+            } else {
+                loader_wheel.setAttribute("class", "loaderwheel_esign")
+    
+               let sign_btn = document.getElementById("sign-btn");
+               console.log(sign_btn)
+               sign_btn.setAttribute("class", "gideon-submit-button-sign-disabled");
+               document.getElementById("pdfarea").appendChild(loading_div).appendChild(loader_wheel)
+            }
+            if(!this.validateSignature()) { return;}
+            
+    
+            //need to send to api so it can be used to populate document
+            console.log("hey everybody!!!!!!!")
+            console.log(this.props.docx)
+            console.log("obtained signature")
+            console.log(this.state.signature)
+            //send to api and wait to receive signed pdf link, set to this.state.signedfile
+            sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx, this.state.initials, this.state.bankNum)
+            .then((res: any) => {
+                console.log(res.data)
+                this.setState({
+                    ...this.state,
+                    signedfile: res.data.pdf_link
+                })
+                //once document is confirmed and received, set to this.state.signedfile, set completedDoc to true
+            //send signal to move on from node? - need readonly version of card
+            const files = []
+            files.push({name: 'signed_document.pdf', url: this.state.signedfile})
+            this.setState({
+                ...this.state,
+                completedDoc: true,
+                isPopup: false,
+                files: files,
+                loading: false,
+                isModal: false
+            })
+            console.log("files array")
+            console.log(files)
+            console.log("signed file")
+            console.log(this.state.signedfile)
+            this.props.addFilesToState(this.props.index, files)
+            this.props.sendMessage(JSON.stringify(this.state.signedfile))
+            })
+
+        }
     }
 
     onChangeSignature(event: React.ChangeEvent<HTMLInputElement>) {
@@ -456,12 +459,13 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     //submits bank number, for non mobile takes to other sticky footer area
     submitBankNumber(e: React.MouseEvent<HTMLButtonElement>){
-        this.setState({
-            isNext: true
-            
-        })
+        if(this.state.bankNum != ''){
+            this.setState({
+                isNext: true
+                
+            })
 
-
+        }
     }
 
     //initial starting screen, should be popup, for now is treated as node
