@@ -2727,6 +2727,7 @@ $lato: Lato, sans-serif;
         height: 100%;
         margin-bottom: 1%;
         text-decoration: none;
+        font-family: none !important;
         
 
         @include mobileAndTablet {
@@ -3088,6 +3089,13 @@ $lato: Lato, sans-serif;
         font-size: medium;
         line-height: 19px;
         letter-spacing: 0.03em;
+
+      }
+
+      .esign-bank-area {
+        margin-top: 10%;
+        margin-bottom: 10%;
+        
 
       }
    

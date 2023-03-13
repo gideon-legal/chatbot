@@ -384,6 +384,20 @@ class Esign extends React.Component<EsignProps, EsignState> {
         
     }
 
+    //checks if bank input is needed on mobile modal and populates it
+    checkNeedBankModal(){
+        if(this.state.hasBank == true){
+            let bankArea = (
+                <div className='esign-bank-area'>
+                    <input className="esign-input-box-modal" placeholder="Your Bank Account" type="text" value={this.state.bankNum} onKeyPress={this.handleKeyDown} 
+                onChange={this.onChangeBankAccount} id="bank"></input>
+                </div>
+            )
+            return bankArea
+        }
+
+    }
+
     //to render new mobile modal for signature and initials and backbutton
     renderMobileSigningModal(){
         console.log("in new modal")
@@ -402,6 +416,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
                             </svg>
                         </div>
                 </label>
+                    <div >
+                        area for optional bank area
+                        {this.checkNeedBankModal()}
+                    </div>
                     <div className='esign-modal-text'> Add Your Signature </div>
                     <input className="esign-input-box-modal" placeholder="Your Initials" type="text" value={this.state.initials} onKeyPress={this.handleKeyDown} onChange={this.onChangeInitials} id="initial"></input>
                     <input className="esign-input-box-modal" placeholder="Your Full Name" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
@@ -533,7 +551,9 @@ class Esign extends React.Component<EsignProps, EsignState> {
     renderSignatureMobile() {
         console.log(this.state.hasBank)
         console.log(this.state.isNext)
-        if(this.state.hasBank == true && this.state.isNext == false){
+        console.log("isMobile:")
+        console.log(isMobile)
+        if(this.state.hasBank == true && this.state.isNext == false && isMobile == false){
             let sig = (
                 <footer className="signature-box-area">
             <div className="submit-area">
