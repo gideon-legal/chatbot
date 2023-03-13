@@ -39,6 +39,7 @@ interface EsignProps {
     index: number;
     fullheight: boolean;
     fullscreen: boolean;
+    accountNum: boolean;
 
 }
 
@@ -97,7 +98,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
             initials: '',
             isModal: false, //for switching between pdf viewer and signing modal on mobile,
             numPages: 0,
-            hasBank: true, //for aditional input field
+            hasBank: this.props.accountNum, //for aditional input field, passed from props
             bankNum: '',
             isNext: false,
 
@@ -389,7 +390,9 @@ class Esign extends React.Component<EsignProps, EsignState> {
         if(this.state.hasBank == true){
             let bankArea = (
                 <div className='esign-bank-area'>
-                    <input className="esign-input-box-modal" placeholder="Your Bank Account" type="text" value={this.state.bankNum} onKeyPress={this.handleKeyDown} 
+                    <text className='esign-modal-text'> Add Your Account Information</text>
+                    <text className='bank-text-small'> Please provide the last 4 digits of your bank account number.</text>
+                    <input className="esign-input-box-modal" placeholder="Account Number" type="text" value={this.state.bankNum} onKeyPress={this.handleKeyDown} 
                 onChange={this.onChangeBankAccount} id="bank"></input>
                 </div>
             )
@@ -549,6 +552,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     //Displays signature at bottom of screen when viewing pdf
     renderSignatureMobile() {
+        console.log('hasBank:')
         console.log(this.state.hasBank)
         console.log(this.state.isNext)
         console.log("isMobile:")
@@ -770,7 +774,8 @@ export const EsignCard = connect(
             addFilesToState: ownProps.addFilesToState,
             index: ownProps.index,
             fullheight: ownProps.format.full_height,
-            fullscreen: ownProps.format.fullscreen
+            fullscreen: ownProps.format.fullscreen,
+            accountNum: ownProps.activity.pdf_link.account_num
         }
     }
 )(Esign);
