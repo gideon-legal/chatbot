@@ -2482,12 +2482,13 @@ $lato: Lato, sans-serif;
         line-height: 17px;
         /* identical to box height */
         padding-left: 15px;
-        display: flex;
+        display: block;
         align-items: center;
-        text-align: center;
+        text-align: left;
     
         color: #000000 !important;
         margin-bottom: 5px;
+        display: block;
     
     }
 
@@ -2981,7 +2982,14 @@ $lato: Lato, sans-serif;
         width: 100%;
         justify-content: space-between;
         align-items: center;
-        display: inline-block;
+        display: flex;
+      }
+
+      .submit-area2{
+        width: 100%;
+        justify-content: space-between;
+        //align-items: center;
+       // display: flex;
       }
 
       .sign-area{
@@ -2994,6 +3002,7 @@ $lato: Lato, sans-serif;
         width: 20%;
         padding: 18px;
         min-height: 32px;
+        display: flex;
         
         @include mobile {
             width: 100%;

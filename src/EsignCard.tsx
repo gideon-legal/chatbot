@@ -118,7 +118,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         console.log("hit enter")
         if (e.key === 'Enter' && this.validateSignature()){
             console.log("hit if case enter")
-            sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx,this.state.initials)
+            sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx,this.state.initials, this.state.bankNum)
             .then((res: any) => {
                 this.setState({
                     ...this.state,
@@ -200,7 +200,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         console.log("obtained signature")
         console.log(this.state.signature)
         //send to api and wait to receive signed pdf link, set to this.state.signedfile
-        sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx, this.state.initials)
+        sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx, this.state.initials, this.state.bankNum)
         .then((res: any) => {
             console.log(res.data)
             this.setState({
@@ -393,7 +393,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <div className='esign-bank-area'>
                     <text className='esign-modal-text'> Add Your Account Information</text>
                     <text className='bank-text-small'> Please provide the last 4 digits of your bank account number.</text>
-                    <input className="esign-input-box-modal" pattern="\d{4}" placeholder="Account Number" type="string" value={this.state.bankNum} onKeyPress={this.handleKeyDown} 
+                    <input className="esign-input-box-modal" maxLength={4} placeholder="Account Number" type="text" value={this.state.bankNum} onKeyPress={this.handleKeyDown} 
                 onChange={this.onChangeBankAccount} id="bank"></input>
                 </div>
             )
@@ -561,12 +561,12 @@ class Esign extends React.Component<EsignProps, EsignState> {
         if(this.state.hasBank == true && this.state.isNext == false && isMobile == false){
             let sig = (
                 <footer className="signature-box-area">
-            <div className="submit-area">
+            <div className="submit-area2">
                 <div className = "esign-black-text" style={{ display: "block"}}> <br></br>
                     Account Number
                 </div>
-                <div>
-                <input className="esign-input-box" placeholder="Bank Account Number" style= {{width: "100%", marginLeft:"25px" }} type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeBankAccount} id="signature"></input>
+                <div className='submit-area'>
+                <input className="esign-input-box" maxLength={4} placeholder="Bank Account Number" style= {{width: "100%", marginLeft:"25px" }} type="text" value={this.state.bankNum} onKeyPress={this.handleKeyDown} onChange={this.onChangeBankAccount} id="signature"></input>
                 <div className="button-area">
                     <button  id="sign-btn" className="gideon-submit-button" style={{width: "80%" }} onClick={e => this.submitBankNumber(e)}> Next  </button>
                 </div>

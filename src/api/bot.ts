@@ -98,13 +98,16 @@ export const sendSignature = (
     conversationId: string,
     signature: string,
     document: string,
-    initials: string
+    initials: string,
+    account_num: string
 ): any => {
    return axios.post(`${baseUrl}/api/v1/bot/esign`, {
        link: document,
        signature: signature,
        msft_conversation_id: conversationId,
-       initials: initials
+       initials: initials,
+       account_num: account_num
+
    })
 
 
