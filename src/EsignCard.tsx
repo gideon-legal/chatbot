@@ -592,12 +592,17 @@ class Esign extends React.Component<EsignProps, EsignState> {
             else {
             let sig = (
                 <footer className="signature-box-area">
-                <div className="submit-area">
-                    <input className="esign-initial-box" placeholder="Your Initials" type="text" value={this.state.initials} onKeyPress={this.handleKeyDown} onChange={this.onChangeInitials} id="initial"></input>
+                <div className="submit-area2">
+                <div className = "esign-black-text" style={{ display: "block"}}> <br></br>
+                    Add Your Signature
+                </div>
+                <div className='submit-area'> 
+                <input className="esign-initial-box" placeholder="Your Initials" type="text" value={this.state.initials} onKeyPress={this.handleKeyDown} onChange={this.onChangeInitials} id="initial"></input>
                     <input className="esign-input-box" placeholder="Type in Full Name to Create Signature" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
                     <div className="button-area">
                         <button  id="sign-btn" className="gideon-submit-button" style={{width: "80%" }} onClick={e => this.clickToSubmitSignature(e)}> Sign Now  </button>
                     </div>
+                </div>
                 </div>
                </footer>   
             )
