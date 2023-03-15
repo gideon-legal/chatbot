@@ -112,7 +112,7 @@
         position: absolute;
         right: 0;
         top: 0;
-        z-index: 1;
+        z-index: 3;
         max-width: $chatWidth;
         display: flex;
         line-height: 1.2em;
@@ -121,6 +121,7 @@
 
         @include mobileAndTablet {
             max-width: $chatWidthMobile;
+            z-index: 2;
         }
 
         span {
@@ -915,6 +916,14 @@
             padding: 5px 0px 0px 0px;
         }
 
+        .esign__node {
+            background-color: white;
+            width: 100% ;
+            color: $gideon-black;
+            padding: none;
+        }
+
+
         .gideon__node {
             background-color: white;
             color: $gideon-black;
@@ -973,7 +982,8 @@
               color: white;
             }
           }
-
+        
+        
 
         //
         // NODE-SPECIFIC STYLING
@@ -993,6 +1003,10 @@
             height: 245px;  // should be about 5 options
         }
       }
+
+    .wc-message-esign {
+        width: 100% !important;
+    }
 
     .required {
         color: #FF002E
@@ -1938,6 +1952,17 @@
         object-fit: contain;
     }
 
+    .gideon-image-center {
+        min-height: 32px;
+        height: auto;
+        width: 100%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: center;
+
+    }
+
     .gideon-submit-button {
         background-color: #3F6DE1;
         border: 1px solid #3F6DE1;
@@ -1953,7 +1978,114 @@
         box-shadow: 2px 2px 4px 0px $c_shadow;
     }
 
+    .gideon-submit-button-presign {
+        background-color: #3F6DE1;
+        border: 1px solid #3F6DE1;
+        border-radius: 3px !important;
+        color: #ffffff;
+        min-height: 32px;
+        height: auto;
+        width: 100%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: center;
+        font-size: 22px !important;
+        box-shadow: 2px 2px 4px 0px $c_shadow;
+
+        @media (min-height: 924px) {
+            margin-top: 40px;
+        }
+
+    }
+
+    .gideon-submit-button-modal {
+        background-color: #3F6DE1;
+        border: 1px solid #3F6DE1;
+        border-radius: 3px !important;
+        color: #ffffff;
+        min-height: 32px;
+        height: auto;
+        width: 100%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: center;
+        box-shadow: 2px 2px 4px 0px $c_shadow;
+        display: block;
+    }
+
+    .gideon-submit-button-sign-disabled {
+        background-color: #B5B5B5 !important;
+        color: white !important;
+        border-radius: 3px !important;
+        min-height: 32px;
+        height: auto;
+        width: 100%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: center;
+        box-shadow: 2px 2px 4px 0px $c_shadow;
+    }
+
+    .gideon-submit-button-sign-disabled:hover {
+        background-color: #B5B5B5 !important;
+        cursor: not-allowed !important;
+        color: white !important;
+    }
+
+    .gideon-submit-button-download {
+        text-decoration:none;
+        background-color: #3F6DE1;
+        border: 1px solid #3F6DE1;
+        border-radius: 3px !important;
+        color: #ffffff !important;
+        min-height: 32px;
+        height: auto;
+        width: 70%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: center;
+        box-shadow: 2px 2px 4px 0px $c_shadow;
+        position: absolute;
+        left: 13%;
+        font-size: 22px !important;
+
+        @media (min-height: 924px) {
+            margin-top: 40px;
+        }
+    }
+
+    .gideon-submit-button-white {
+        background-color: #ffffff !important;
+        border: 1px solid  #3F6DE1 !important;
+        border-radius: 3px !important;
+        color:#3F6DE1 !important;
+        min-height: 32px;
+        height: auto;
+        width: 100%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: center;
+        box-shadow: 2px 2px 4px 0px $c_shadow;
+        margin-top: 5px;
+
+        &__disabled {
+            visibility: hidden;
+        }
+
+    }
+
     .gideon-submit-button:hover {
+        background-color: #fff;
+        border-color: #3F6DE1;
+        color: #3F6DE1;
+    }
+
+    .gideon-submit-button-presign:hover {
         background-color: #fff;
         border-color: #3F6DE1;
         color: #3F6DE1;
@@ -1976,3 +2108,1138 @@
         cursor: not-allowed !important;
         color: white !important;
     }
+
+    .history-header {
+        background-color: white;
+        border-bottom: 1.35px solid $gideon-border-gray;
+        color: $gideon-black;
+        font-weight: 700;
+        padding: 20px;
+
+        svg {
+            margin-top: 0;
+        }
+
+        span {
+            margin-left: 5px;
+            justify-content: flex-start;
+        }
+
+        .back__button path {
+            fill: $gideon-black !important;
+        }
+    }
+
+    .icon__button  {
+        border: 0px !important;
+        background-color: transparent !important;
+        padding: 0 !important;
+
+        path {
+            fill: white !important;
+        } 
+
+        :hover {
+            background-color: none !important;
+
+            path {
+                fill: #444444 !important;
+            }
+        }      
+    }
+
+    .history__button {
+        svg {
+            margin-top: 0;
+            padding: 2px;
+        }
+    }
+
+    .conversation__history {
+        span {
+            color: $gideon-gray;
+        }
+    } 
+
+    .conversationCard {
+        width: 100%;
+        color: $gideon-gray;
+        font-size: 14px;
+        padding: 15px 25px !important;
+        cursor: pointer;
+        flex-direction: column;
+        align-items: stretch;
+        border-bottom: 1.35px solid $gideon-border-gray;
+    
+        &:hover {
+          background-color: $gideon-hover-blue;
+        }
+    
+        .messageCount {
+          color: $gideon-black;
+          font-size: 17px;
+          font-weight: 400;
+          margin-bottom: 3px;
+          font-family: $lato;
+        }
+    
+        .messageTime {
+          color: $gideon-black;
+          font-size: 17px;
+          font-weight: 400;
+          font-family: $lato;
+        }
+    
+        .displayMessage {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          margin-top: 8px;
+          font-family: $lato;
+        }
+
+        .convoComplete {
+            background-color: $gideon-dark-blue;
+            padding: 2px 8px;
+            margin-left: 20px;
+            border-radius: 3px;
+            color: white;
+            font-family: $lato;
+        }
+
+        span, div {
+            font-family: $lato;
+        }
+    }
+
+    // same styling from lead profile conversationsController
+    .leadDetail__conversation {
+        &__messages {
+          padding: 12px 15px 0;
+          margin-right: 5px;
+          overflow: auto;
+        }
+      
+        &__message__wrap {
+          height: auto;
+          width: auto;
+          margin: 0 auto 12px;
+          align-items: center;
+          display: flex;
+          font-size: 14px;
+          position: relative;
+          word-wrap: break-word;
+      
+          > div {
+            border-bottom-left-radius: 14px;
+            border-bottom-right-radius: 14px;
+            display: inline-block;
+            height: 100%;
+            align-items: center;
+            display: flex;
+            height: auto;
+            padding: 16px 12px;
+          }
+      
+          &--chatbot_user > div {
+            background: $gideon-dark-blue;
+            color: white;
+            text-align: left;
+            border-radius: 3px 3px 0px 3px;
+            align-self: flex-end;
+            margin-left: auto;
+            display: block;
+          }
+      
+          &--bot > div {
+            background: $gideon-history-grey;
+            color: $gideon-black;
+            border-radius: 3px 3px 3px 0px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+      
+            > p > img {
+              max-width: 350px;
+            }
+          }
+      
+          span {
+            display: block;
+            word-break: break-word;
+          }
+        }
+      }
+
+      .signature-image-box {
+        min-height: 32px;
+        height: auto;
+        width: 100%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: center;
+        display: block;
+        margin: auto;
+    }
+    
+
+    .esign-message-handoff {
+        
+        font-family: 'Lato';
+        font-style: normal;
+        /* identical to box height */
+       text-align: center;
+       letter-spacing: 0.04em;
+    
+       /* Gideon/Primary text */
+       color: #262626;
+       padding: 15px 0px 15px 0px;
+    }
+
+    .esign-message-handoff-big {
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 800;
+        font-size: xx-large;
+        line-height: 40px;
+        /* or 89% */
+
+        text-align: center;
+        letter-spacing: 0.04em;
+
+        /* Gideon/Primary text */
+
+       color: #262626;
+       padding: 15px 0px 15px 0px;
+
+       @include mobileAndTablet{
+        padding: 20px 0px 15px 0px;
+    }
+    }
+
+    .esign-message-handoff-big2 {
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 800;
+        font-size: xx-large;
+        line-height: 40px;
+        /* or 89% */
+
+        text-align: center;
+        letter-spacing: 0.04em;
+
+        /* Gideon/Primary text */
+
+       color: #262626;
+        padding: 15px 0px 15px 0px;
+
+    @include mobileAndTablet{
+        padding: 20px 0px 15px 0px;
+    }
+    }
+
+    .esign-message-handoff-small{
+        
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 500;
+        font-size: medium;
+        line-height: 19px;
+        text-align: center;
+        letter-spacing: 0.03em;
+    
+       /* Gideon/Primary text */
+       color: #262626;
+       padding: 15px 0px 15px 0px;
+
+       @include mobileAndTablet {
+        padding-bottom: 30px;
+        padding-top: 50px
+       }
+    }
+
+    .esign-message-handoff-small2{
+        
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 500;
+        font-size: medium;
+        line-height: 19px;
+        text-align: center;
+        letter-spacing: 0.03em;
+    
+       /* Gideon/Primary text */
+       color: #262626;
+       padding: 15px 0px 15px 0px;
+
+       @include mobileAndTablet {
+        padding-bottom: 30px;
+        padding-top: 50px
+       }
+    }
+    
+    
+    .signature-box-area {
+        bottom: 0;
+        text-align: center !important;
+        background: #FEFEFE !important;
+       // position: fixed;
+        //bottom: 0;
+        position: absolute;
+        display: flex;
+        //flex-grow: 0;
+       // flex-shrink: 0;
+       // height: 5%;
+            width: 100%;
+            white-space: normal;
+            overflow-wrap: break-word;
+       // padding: 18px 18px 18px 0px;
+        
+       @include mobile {
+        background-color: white;
+       }
+    }
+    
+    .esign-input-box {
+        
+        height: 53px;
+        width: 68%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: center;
+        min-height: 32px;
+        overflow-wrap: break-word;
+        outline: none;
+        text-align: left;
+        box-sizing: border-box;
+    
+        //width: 511px;
+        //height: 50px;
+        background: #F4F4F4;
+        border: 1px solid #DCDCDC;
+        //margin-bottom: 5px;
+        //margin-left: 2%;
+    }
+
+    .esign-input-box-bank {
+        
+        height: 53px;
+        width: 68%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: center;
+        min-height: 32px;
+        overflow-wrap: break-word;
+        outline: none;
+        text-align: left;
+        box-sizing: border-box;
+    
+        //width: 511px;
+        //height: 50px;
+        background: #F4F4F4;
+        border: 1px solid #DCDCDC;
+        //margin-bottom: 5px;
+        margin-left: 3%;
+    }
+
+    .esign-input-box::placeholder {
+        color: #262626;
+        opacity: 1;
+    }
+
+    .esign-input-box-modal {
+        
+        height: 53px;
+        width: 100%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: left;
+        min-height: 32px;
+        overflow-wrap: break-word;
+        outline: none;
+        display: block;
+        margin-top: 5%;
+        
+        box-sizing: border-box;
+    
+        //width: 511px;
+        //height: 50px;
+        background: #F4F4F4;
+        border: 1px solid #DCDCDC;
+        //margin-bottom: 5px;
+        //margin-left: 2%;
+    }
+
+    .esign-input-box-modal::placeholder {
+        color: #262626;
+        opacity: 1;
+    }
+    
+    .esign-initial-box {
+        
+        height: 53px;
+        width: 13%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: center;
+        min-height: 32px;
+        overflow-wrap: break-word;
+        outline: none;
+        text-align: left;
+        box-sizing: border-box;
+    
+        //width: 511px;
+        //height: 50px;
+        background: #F4F4F4;
+        border: 1px solid #DCDCDC;
+        //margin-bottom: 5px;
+        margin-left: 3%;
+        margin-right: 2%
+    }
+
+    .esign-initial-box::placeholder {
+        color: #262626;
+        opacity: 1;
+    }
+
+    .esign-grey-text {
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 17px;
+        /* identical to box height */
+    
+        display: flex;
+        align-items: center;
+        text-align: center;
+    
+        color: #727272 !important;
+        margin-bottom: 5px;
+    }
+    
+    .esign-black-text{
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 17px;
+        /* identical to box height */
+        //padding-left: 15px;
+        display: block;
+        align-items: center;
+        text-align: left;
+        color: #000000 !important;
+        margin-bottom: 5px;
+        display: block;
+        margin-left: 3%;
+    
+    }
+
+    .esign-black-text-mobile{
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 17px;
+        /* identical to box height */
+        padding-left: 15px;
+        display: block;
+        align-items: center;
+        text-align: left;
+        color: #000000 !important;
+        margin-bottom: 5px;
+        display: block;
+        margin-left: 1%;
+    
+    }
+
+    .esign-checkmark{
+        position: absolute;
+        right: 23px;
+        top: 55px;
+
+        &__disabled {
+            visibility: hidden;
+            position: absolute;
+            right: 23px;
+            top: 55px;
+        }
+    }
+
+    //testing modal/popup
+    .modal-normal {
+        flex: 1;
+        display: block;
+        right: $rightWeight + 14px;
+        bottom: $floatingBottom + $floatingHeight + 20px;
+        border-radius: 8px;
+        width: $chatWidth;
+        max-width: 80vw;
+        height: calc(80vh - #{$bottom} - 20px);
+        //display: flex;
+       //justify-content: center;
+        position: fixed; /* Stay in place */
+        z-index: 2; /* Sit on top */
+       // left: 85%;
+        //margin-top: 5%;
+        //top: ($headerTotalHeight)+100;
+       // top: 14%;
+        //width: ($chatWidth)-11; /* Full width */
+        //height: 75%;
+       // transform: translate(-10%, -9%);
+        //background-color: rgb(0,0,0); 
+        //background-color: rgba(0,0,0,0.4);
+       // top: 25%;
+           // transform: translateY(-$actionsHeight);
+
+           @include mobileAndTablet {
+            border-radius: 0;
+            width: 100vw;
+            background-color: white;
+            // need to be !important because this is being set inline for element
+            height: 100% !important;
+            right: 0 !important;
+            top: 0 !important;
+            bottom: 0 !important;
+
+            left: 0;
+            min-width: 100%;
+        }
+        
+        @include mobileAndTablet {
+            background-color: white;
+            width: 150%;
+            z-index: 1;
+        }
+
+        &-fullscreen {
+            top: 10%;
+            height: 188%;
+        }
+
+        &-fullheight {
+            height: 188%;
+        }
+      }
+
+      .modal-fullscreen{
+        flex: 1;
+        display: flex;
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+       // left: 85%;
+        margin-top: $headerTotalHeight;
+        top: 19%;
+        width: 165%; /* Full width */
+        height: 188%;
+        left: 50%;
+        //width: 242vw;
+        transform: translate(-10%, -10%);
+        //background-color: rgb(0,0,0); 
+        //background-color: rgba(0,0,0,0.4);
+       // top: 25%;
+           // transform: translateY(-$actionsHeight);
+        
+        @include mobileAndTablet {
+            width: 150%;
+            z-index: 1;
+        }
+
+        &-fullscreen {
+            top: 10%;
+            height: 188%;
+        }
+
+        &-fullheight {
+            height: 188%;
+        }
+      }
+
+      .modal-fullheight {
+        flex: 1;
+        display: flex;
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+       // left: 85%;
+        margin-top: $headerTotalHeight;
+        top: 15%;
+        //width: 150%; /* Full width */
+        height: 188%;
+        transform: translate(-10%, -10%);
+        width: $chatWidth;
+        //background-color: rgb(0,0,0); 
+        //background-color: rgba(0,0,0,0.4);
+       // top: 25%;
+           // transform: translateY(-$actionsHeight);
+        
+        @include mobileAndTablet {
+            width: 150%;
+            z-index: 1;
+        }
+
+        &-fullscreen {
+            top: 10%;
+            height: 188%;
+        }
+
+        &-fullheight {
+            height: 188%;
+        }
+      }  
+
+    .modal {
+        position: fixed; /* Stay in place */
+        z-index: 5; /* Sit on top */
+        left: 50%;
+        top: 50%;
+        width: 100%; /* Full width */
+        transform: translate(-50%, -50%);
+        //background-color: rgb(0,0,0); 
+        //background-color: rgba(0,0,0,0.4);
+        
+        @include mobileAndTablet {
+            width: 150%;
+            z-index: 1;
+        }
+      }
+
+      .modal-signature {
+        position: fixed; /* Stay in place */
+        height: 100%;
+        z-index: 5; /* Sit on top */
+        left: 50%;
+        top: 50%;
+        width: $chatWidth; /* Full width */
+        transform: translate(-50%, -50%);
+        background-color: rgb(0,0,0); 
+        background-color: rgba(0,0,0,0.4);
+        
+        @include mobileAndTablet {
+            width: 150%;
+            z-index: 1;
+        }
+      }
+      
+      /* Modal Content/Box */
+      .modal-content {
+        background-color: #fefefe;
+        //margin: 15% auto; 
+        //padding: 20px;
+       // border: 1px solid #888;
+       // width: ($chatWidth)-1;  
+        height: 100%;
+
+        @include mobileAndTablet {
+            width: 100%;
+            height: 10%;
+            background-color: white;
+        }
+
+      }
+
+      .modal-content-full {
+        background-color: #fefefe;
+        //margin: 15% auto; 
+        //padding: 20px;
+       // border: 1px solid #888;
+        width: 80%;  
+        height: 100%;
+        
+
+        @include mobileAndTablet {
+            width: 100%;
+            padding: 100% 20px 100% 20px;
+        }
+
+      }
+
+      .modal-content-mobile{
+        background-color: #fefefe;
+        margin: 15% auto; 
+        padding: 0px 0px 20px 0px;
+       // width: ($chatWidth)-1;  
+        //height: 100%;
+
+        @include mobileAndTablet {
+            width: 100%;
+          
+        }
+
+      }
+
+      .esign-document-display {
+        width: 100%;
+        left: 402px;
+        top: 249px;
+        background: #E9E9E9;
+        height: 100%;
+        
+
+        @include mobileAndTablet {
+            width: 100%;
+            height: 100%;
+        }
+      }
+
+      .esign-document-display2 {
+        width: 100%;
+        left: 30%;
+        //top: 249px;
+        background: #E9E9E9;
+        height: 100%;
+        margin-bottom: 1%;
+        text-decoration: none;
+        font-family: none !important;
+        
+
+        @include mobileAndTablet {
+            width: 100%;
+            height: 100%;
+        }
+      }
+
+      .esign-document-display-mobile {
+        width: $chatWidthMobile;
+        //top: 249px;
+        background: #E9E9E9;
+        height: 100%;
+        margin-bottom: 1%;
+        text-decoration: none;
+        //margin: 0 auto;
+        zoom: 65%;
+        //zoom: 0.9%;
+        
+
+        @include mobileAndTablet {
+           // width: 70%;
+            height: 100%;
+        }
+      }
+
+      .esign-document-holder {
+        width: 100%;
+        left: 402px;
+        top: 249px;
+        background: #E9E9E9;
+        height: 79%;
+        overflow: scroll;
+        overflow-x: hidden;
+        
+
+        @include mobileAndTablet {
+            width: 100%;
+            height: 100%;
+            top: 0;
+        }
+
+      }
+
+      .esign_fullwindow {
+         /* Stay in place */
+        z-index: 3; /* Sit on top */
+        position: fixed; /* Stay in place */
+        z-index: 3; /* Sit on top */
+        left: 50%;
+        top: 10%;
+        width: 100%; /* Full width */
+        height: 100%;
+        transform: translate(-50%, -50%);
+        background-color:  #E9E9E9;
+        
+       
+        width: 100%; /* Full width */
+
+        @include mobileAndTablet {
+            width: 101%;
+            background-color: white;
+        }
+      }
+
+      .esign_topbar {
+        box-sizing: border-box;
+        color: #fff;
+        top: 37%;
+        height: 9%;
+        width: 100%;
+        background: rgba(254, 254, 254, 1);
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(5px); 
+        font-weight: 500;
+        left: 0;
+        letter-spacing: 0.5px;
+        position: absolute;
+        right: 0;
+        z-index: 99999;
+        display: flex;
+        line-height: 1.2em;
+        font-family: $lato;
+        $logo-size: 42px;
+        border-bottom: 0;
+       
+
+        @include mobileAndTablet {
+            max-width: $chatWidthMobile;
+            //height: 12%;
+        }
+
+        span {
+            font-size: 18px;
+            vertical-align: middle;
+            margin-left: 18px;
+            margin-right: 18px;
+            display: inline-flex;
+            flex-grow: 1;
+            justify-content: center;
+            align-items: center;
+        }  
+    }
+
+      
+
+      .esign-topbar-buttons {
+        margin: 0 auto;
+        display: inline-block;
+
+      }
+
+      .gideon-download-button1 {
+       position: absolute;
+       right: 200px;
+      width: 158.47px;
+      top: 36px;
+       height: 52px;
+       background-color: #fff;
+        border: 1px solid #3F6DE1;
+        border-radius: 3px !important;
+        color: #3F6DE1;
+        min-height: 32px;
+        //height: auto;
+        white-space: normal;
+        overflow-wrap: break-word;
+        //padding: 18px;
+        text-align: center;
+        box-shadow: 2px 2px 4px 0px $c_shadow;
+        display: inline-block;
+      }
+
+      .gideon-download-button2 {
+        position: absolute;
+        right: 10px;
+        top: 38%;
+       width: 130px;
+        //height: 52px;
+        background-color: #3F6DE1;
+         border: 1px solid #3F6DE1;
+         border-radius: 3px !important;
+         color: #ffffff;
+         min-height: 32px;
+         //height: auto;
+         white-space: normal;
+         overflow-wrap: break-word;
+         //padding: 18px;
+         text-align: center;
+         box-shadow: 2px 2px 4px 0px $c_shadow;
+         display: inline-block;
+
+         @include mobile {
+            top: 35%
+         }
+       }
+
+      .fullview{
+        display: block;
+
+        @include mobile {
+            height: 140%;
+        }
+      }
+
+      .pdfholder{
+        position: absolute;
+        top: 46%;
+        width: 101%;
+        height: 95%;
+        //background: #E9E9E9;
+        right: -2px;
+        overflow: auto;
+        background-color: #E9E9E9;
+
+        @include mobileAndTablet {
+            height: 100%;
+           top: 49%;
+           width: 101%;
+        }
+      }
+
+      .pdfholder-mobile-full{
+        position: absolute;
+        top: 40%;
+        width: 101%;
+        background: #E9E9E9;
+        right: -4px;
+        overflow: auto;
+
+        @include mobileAndTablet {
+            height: 100%;
+        }
+      }
+
+      .pdfholder-notop{
+        position: absolute;
+        top: 46%;
+        width: 101%;
+        background: #E9E9E9;
+        right: -2px;
+
+        @include mobileAndTablet {
+            height: 64%;
+            top: 35%;
+            width: 100%;
+           
+        }
+      }
+
+      .mobileview {
+        background: #E9E9E9;
+        height: 100%;
+
+
+      }
+
+      .presign_area {
+        width: 50%;
+        padding: 0px 0px 0px 0px !important;
+        height: 60%; 
+
+        @include mobile {
+            height: 400%;
+        }
+      }
+
+      .presign_area_full {
+        //width: 50%;
+        padding: 0px 0px 0px 0px !important;
+        height: 20%; 
+       // background-size: 50% 100%;
+      }
+
+      .uploaded-files-container {
+        //margin-top: 10%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+      }
+
+      .uploaded-files-container2 {
+        //margin-top: 10%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+      }
+
+      .document_area{
+        margin-top: 5%;
+        
+        @include mobileAndTablet{
+            margin-top: 20%;
+        }
+      }
+
+      .document_area2{
+
+        @media (min-height: 924px) {
+            margin-top: 5%;
+        }
+        
+        @include mobileAndTablet{
+            margin-top: 20%;
+        }
+      }
+
+      .submit-area{
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        display: flex;
+      }
+
+      .submit-area2{
+        width: 100%;
+        justify-content: space-between;
+
+        //align-items: center;
+       // display: flex;
+      }
+
+      .sign-area{
+        //position: absolute;
+        bottom: 0;
+       // margin-top: 10%;
+      }
+
+      .button-area{
+        width: 20%;
+        padding: 18px;
+        min-height: 32px;
+        display: flex;
+        
+        @include mobile {
+            width: 100%;
+            padding: 18px 20px 0px 18px;
+        }
+      }
+
+      .button-area-modal{
+        width: 20%;
+        //padding: 18px;
+        min-height: 32px;
+        margin-top: 5%;
+        
+        @include mobile {
+            width: 100%;
+        }
+      }
+
+      .loading_esign{
+        position: fixed;
+        top: 46%;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 30;
+        height: 100%;
+        background-color: #979999;
+        opacity: 0.5;
+       
+      }
+
+      .loading_esign_mobile{
+        position: fixed;
+        top: 40%;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 30;
+        height: 100%;
+        background-color: #979999;
+        opacity: 0.5;
+      }
+
+      .loaderwheel_esign{
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+        z-index: 30;
+        background-color: #979999;
+        left: 50%;
+        position: absolute;
+        top: 30%
+
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      .loaderwheel_esign_mobile{
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+        z-index: 30;
+        background-color: #979999;
+        //left: 50%;
+        position: absolute;
+        top: 30%;
+        right: 34%
+
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      .test{
+        background-color: #ffffff;
+        width: 100%;
+        height: 100%;
+      }
+
+      .mobile-modal{
+        width: 100%;
+        height: 40%;
+        padding: 20px;
+        margin-top: 70%;
+      }
+
+      .esign-modal-text{
+        display: block;
+        font-family: 'Lato';
+        color: #000000;
+        text-align: left;
+        font-style: normal;
+        font-weight: 600;
+        font-size: medium;
+        line-height: 19px;
+        letter-spacing: 0.03em;
+
+      }
+
+      .esign-bank-area {
+        margin-top: 1%;
+        margin-bottom: 10%;
+      }
+
+      .bank-text-big {
+        display: block;
+        font-family: 'Lato';
+        color: #000000;
+        text-align: left;
+        font-style: normal;
+        font-weight: 600;
+        font-size: medium;
+        line-height: 19px;
+        letter-spacing: 0.03em;
+      }
+
+      .bank-text-small {
+        display: block;
+        font-family: 'Lato';
+        color: #000000;
+        text-align: left;
+        font-style: normal;
+        font-weight: 400;
+        font-size: small;
+        line-height: 19px;
+        margin-top: 1%;
+        white-space: nowrap;
+      }
+
+      .bank-text-small-desktop {
+        font-family: 'Lato';
+        color: #000000;
+        text-align: left;
+        font-style: normal;
+        font-weight: 400;
+        font-size: small;
+        line-height: 19px;
+        margin-top: 1%;
+        white-space: nowrap;
+        margin-left: 1%;
+      }
+   

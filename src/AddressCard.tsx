@@ -104,6 +104,18 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
         }
     }
 
+    validateAddressInformation = () => {
+        if(this.state.address && this.state.zipcode){
+            
+            return true;
+        } else {
+            this.setState({
+                addressError: "That address doesn\'t look quite right"
+            });
+            return false;
+        }
+    }
+
     apartmentActive = () => {
         return this.props.node.meta && this.props.node.meta.apartment;
     }

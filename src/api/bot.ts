@@ -37,7 +37,7 @@ export const conversationHistory = (
     conversationId: string,
     lastMessageId: string = null
 ): any => {
-    return axios.get(`${baseUrl}/api/v1/conversations/history?conversation_id=${conversationId}&directLine=${directLine}&limit=30&last=${lastMessageId}`);
+    return axios.get(`${baseUrl}/api/v1/conversations/history?conversation_id=${conversationId}&directLine=${directLine}&last=${lastMessageId}`);
 };
 
 export const ping = (
@@ -81,4 +81,27 @@ export const checkNeedBackButton = async (baseUrl: string, directLine: string, m
     const attempt = (await temp).data
     return attempt;
 };
+
+
+//sends signature from esign card to populate document, expects signed document in return?
+export const sendSignature = (
+    baseUrl: string,
+    directLine: string,
+    conversationId: string,
+    signature: string,
+    document: string,
+    initials: string,
+    account_num: string
+): any => {
+   return axios.post(`${baseUrl}/api/v1/bot/esign`, {
+       link: document,
+       signature: signature,
+       msft_conversation_id: conversationId,
+       initials: initials,
+       account_num: account_num
+
+   })
+
+
+}
 

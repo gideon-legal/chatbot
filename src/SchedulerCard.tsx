@@ -99,11 +99,14 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
     }
 
     componentDidMount() {
+      
+      
         this.getAvailableTimes( moment(), true );
     }
 
     /** Setting the availabilities and excluded times for provide date */
     getAvailableTimes = ( date: moment.Moment, changeExcludeTime: boolean ) => {
+      
         const {
             node,
             gid,
@@ -111,7 +114,7 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
             conversationId
         } = this.props;
         const startDate = date.clone().format('YYYY-MM-DD');
-
+        
         if (!node) {
             return;
         }
@@ -120,10 +123,13 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
         this.setState({loading: true});
         availableTimes(gid, directLine.secret, conversationId, startDate)
             .then((res: any) => {
+              
                 const allAvailabilities = this.mapAvailabilitiesDateWise(res.data);
+                
                 let getAvailForDate = date;
 
                 if (!changeExcludeTime && (this.state.date && this.state.date.month() === date.month())) {
+                  
                     getAvailForDate = this.state.date;
                 }
                 const minuteString = +res.data.duration.split(':')[1];
@@ -135,11 +141,15 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
 
                 let updatedPreviousStartDates: moment.Moment[];
                 if (this.state.previousStartDates.length === 0) {
+                  
                     updatedPreviousStartDates = [date];
                 } else {
+                  
                     if (lastStartDate < date) {
+                      
                         updatedPreviousStartDates = this.state.previousStartDates.concat(date);
                     } else if (lastStartDate > date && this.state.previousStartDates.length > 1) {
+                      
                         updatedPreviousStartDates = this.state.previousStartDates.slice(0, -1);
                     }
                 }
@@ -224,10 +234,10 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
     }
 
     getDateText = () => {
-      //adds timezone label
-        const d = new Date(Date.now())
-        const timezone = d.toLocaleDateString("en-US", { day: '2-digit', timeZoneName: 'short'}).split(',')[1]
-        return this.state.date.format(dateFormatWithTime) + timezone;
+      //need to convert to include label
+      const d = new Date(Date.now())
+      const timezone = d.toLocaleDateString("en-US", { day: '2-digit', timeZoneName: 'short'}).split(',')[1]
+      return this.state.date.format(dateFormatWithTime) + timezone;
     }
 
     validateSelection = () => {
@@ -254,6 +264,7 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
 
     availabilitiesExistOnDay = (day: string) => {
       const date = moment(day);
+      
       return date.dayOfYear() >= moment().dayOfYear() && getIncludedTimes(this.state.monthAvailabilities[date.format('YYYY-MM-DD')], this.state.duration, date).length > 0;
     }
 
@@ -267,6 +278,7 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
       let endDate: moment.Moment;
       keys.forEach(key => {
         if (this.state.monthAvailabilities[key].length > 0) {
+
           endDate = moment(key);
         }
       });
@@ -278,7 +290,6 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
             <span>{this.getUsersTimeZone()}</span>
           </div>
           <div className="gd-date-picker-days-container">
-            {console.log(this.state)}
           {this.state.monthAvailabilities && !this.state.loading &&
             keys.map(date =>
               this.availabilitiesExistOnDay(date) && <button

@@ -8,6 +8,7 @@ import { classList, doCardAction, IDoCardAction } from './Chat';
 import { activityIsDisclaimer, DisclaimerCard } from './DisclaimerCard';
 import { DisclaimerCardReadOnly } from './DisclaimerCardReadOnly';
 import { FileUploadCardReadOnly } from './FileUploadCardReadOnly';
+import { EsignCardReadOnly } from './EsignCardReadOnly';
 import * as konsole from './Konsole';
 import { ChatState, FormatState, SizeState } from './Store';
 import { sendMessage } from './Store';
@@ -49,6 +50,29 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         super(props);
         this.state = { filesList: {} };
         this.addFilesToState = this.addFilesToState.bind(this);
+    }
+
+    componentDidMount(): void {
+        // prompt to start new convo only shows up when:
+        // - page was refreshed
+        // - chat wasn't empty before the page refresh
+        // - not a new convo being started
+        
+        this.newConvoPrompt = false;
+        
+        if(performance.getEntriesByType('navigation')[0].type === 'reload' 
+            && (!sessionStorage.getItem('newConvo') || sessionStorage.getItem('newConvo') !== 'true')
+            && (!sessionStorage.getItem('emptyChat') || sessionStorage.getItem('emptyChat') !== 'true')
+            && sessionStorage.getItem('original_length')
+           // && !sessionStorage.getItem("pastConvoID")
+        ){
+            
+            this.newConvoPrompt = true;
+        } else if(sessionStorage.getItem("pastConvoID") && (!sessionStorage.getItem("convoComplete") || sessionStorage.getItem("convoComplete") === "null")) {
+        //prompt disappears if uncompleted past convo is being viewed
+       
+            this.newConvoPrompt = false;
+        }
     }
 
     componentWillUpdate(nextProps: HistoryProps) {
@@ -146,10 +170,28 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         this.setState(prevState => ({ filesList: { ...prevState.filesList, [index]: files } }));
     }
 
+    private startNewConvo() {
+        
+        sessionStorage.setItem('newConvo', 'true');
+        sessionStorage.setItem('emptyChat', 'true');
+        sessionStorage.removeItem("msft_conversation_id");
+        sessionStorage.removeItem("node_count");
+        sessionStorage.removeItem('pastConvoID');
+        sessionStorage.removeItem('pastConvoDate');
+        window.location.reload();
+    }
+
     render() {
         let content;
         let lastActivityIsDisclaimer = false;
         let activityDisclaimer: any;
+
+        //if convo is finished, prompt will appear
+        if(sessionStorage.getItem("convoComplete") && (!sessionStorage.getItem("pastConvoID") || sessionStorage.getItem("pastConvoID") === "null")) {
+            
+            this.newConvoPrompt = true;
+        }
+
         if (this.props.size.width !== undefined) {
             if (this.props.format.carouselMargin === undefined) {
                 // For measuring carousels we need a width known to be larger than the chat itself
@@ -202,6 +244,27 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                             />
                         </WrappedActivity>
                 );
+
+                let reloaded = performance.getEntriesByType('navigation')[0].type === 'reload';
+
+                //saves the length of activities for prompt timing
+                if(!this.newConvoPrompt || (this.newConvoPrompt && !sessionStorage.getItem("original_length"))) {
+                //if(!reloaded && !Boolean(sessionStorage.getItem("newConvo")) && !Boolean(sessionStorage.getItem("pastConvoID"))) {
+                    sessionStorage.setItem("original_length", activities.length.toString());
+                }
+
+                //instances where prompt disappears
+                if(activities[activities.length - 1]) {
+                    //prompt disappears once user interacts with it
+                    if(reloaded && activities[activities.length - 1].from.id === localStorage.getItem("msft_user_id") && !Number.isInteger(Number(activities[activities.length - 1].id))){    
+                        this.newConvoPrompt = false;
+                        
+                    //prompt disappears after back button pressed
+                    } else if(Number(sessionStorage.getItem("original_length")) - 1 > activities.length && this.newConvoPrompt){
+                        this.newConvoPrompt = false;
+                        
+                    }
+                }
             }
         }
 
@@ -221,6 +284,15 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                         <div className="wc-date-header-line"></div>
                     </div>
                     { content }
+                    {/* prompt to start new convo if page refreshed */}
+                    { this.newConvoPrompt &&
+                        <div className="new__convo" style={{ color:'#727272', textAlign: 'center', padding: "20px 0", lineHeight: "20px" }}>Do you want to start a new session?
+                            <br />
+                            <a onClick={this.startNewConvo} style={{ color:'#3F6DE1', marginLeft: '5px', cursor: 'pointer', paddingTop: "20px" }}>
+                                Click here to start new
+                            </a>
+                        </div>
+                    }
                 </div>
             </div>
             {/* {lastActivityIsDisclaimer && <DisclaimerCard activity={activityDisclaimer} onImageLoad={ () => this.autoscroll() }/>} */}
@@ -362,7 +434,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                 nodeType = activityActions.actions[0].type;
             }
 
-            if (nodeType === 'date' || nodeType === 'handoff' || nodeType === 'file' || nodeType === 'imBack' || nodeType === 'contact' || nodeType === 'address' || nodeType === 'disclaimer') {
+            if (nodeType === 'date' || nodeType === 'handoff' || nodeType === 'esign' || nodeType === 'file' || nodeType === 'imBack' || nodeType === 'contact' || nodeType === 'address' || nodeType === 'disclaimer') {
                 let lastMessageClass = ' ';
                 if (this.props.format.fullscreen && !this.props.inputEnabled) {
                     lastMessageClass += 'wc-fullscreen-last-message';
@@ -402,6 +474,22 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                     <div className={'wc-message wc-message-from-me wc-message-node wc-message-file' + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
                         <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
                             <FileUploadCardReadOnly files={this.props.files}/>
+                        </div>
+                    </div>
+                </div>
+            );
+        } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'esign') {
+            let lastMessageClass = ' ';
+            if (lastMessage && this.props.format.fullscreen && !this.props.inputEnabled) {
+                lastMessageClass += 'wc-fullscreen-last-message';
+            } else if (lastMessage && !this.props.format.fullscreen && !this.props.inputEnabled) {
+                lastMessageClass += 'wc-non-fullscreeen-last-message';
+            }
+            return (
+                <div data-activity-id={activity.id } className={wrapperClassName + lastMessageClass}>
+                    <div className={'wc-message wc-message-from-me wc-message-node wc-message-file' + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
+                        <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
+                           <EsignCardReadOnly files={this.props.files}/>
                         </div>
                     </div>
                 </div>
