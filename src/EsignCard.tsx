@@ -485,8 +485,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         To start working with McCune Law Group, please click on the button below to sign your representation agreement.
                     </div>
                 </div> 
-                <button type="button" className="gideon-submit-button" id="sign_btn" onClick={e => this.handleSign(e)}>
-                     <EsignPen/> Review & Sign Now
+                <button type="button" className="gideon-submit-button-presign" id="sign_btn" onClick={e => this.handleSign(e)}>
+                     <EsignPen/> Review & Sign
                 </button>
                  <div>
                     {/*<button type="button" className={ this.state.isPopup ? "gideon-submit-button-white" : "gideon-submit-button-white__disabled"} onClick={e => this.handleSkip(e)}>
@@ -511,8 +511,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         To start working with McCune Law Group, please click on the button below to sign your representation agreement.
                     </div>
                 </div> 
-                <button type="button" className="gideon-submit-button" id="sign_btn" onClick={e => this.handleSign(e)}>
-                     <EsignPen/> Review & Sign Now
+                <button type="button" className="gideon-submit-button-presign" id="sign_btn" onClick={e => this.handleSign(e)}>
+                     <EsignPen/> Review & Sign 
                 </button>
                  <div>
                     {/*<button type="button" className={ this.state.isPopup ? "gideon-submit-button-white" : "gideon-submit-button-white__disabled"} onClick={e => this.handleSkip(e)}>
