@@ -2017,7 +2017,11 @@ $lato: Lato, sans-serif;
         text-align: center;
         font-size: 22px !important;
         box-shadow: 2px 2px 4px 0px $c_shadow;
-        margin-top: 40px;
+
+        @media (min-height: 924px) {
+            margin-top: 40px;
+        }
+
     }
 
     .gideon-submit-button-modal {
