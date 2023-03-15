@@ -3145,6 +3145,18 @@ $lato: Lato, sans-serif;
        
       }
 
+      .loading_esign_mobile{
+        position: fixed;
+        //top: 46%;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 30;
+        height: 100%;
+        background-color: #979999;
+        opacity: 0.5;
+      }
+
       .loaderwheel_esign{
         border: 16px solid #f3f3f3; /* Light grey */
         border-top: 16px solid #3498db; /* Blue */
