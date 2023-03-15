@@ -2077,7 +2077,10 @@ $lato: Lato, sans-serif;
         position: absolute;
         left: 13%;
         font-size: 22px !important;
-        margin-top: 40px;
+
+        @media (min-height: 924px) {
+            margin-top: 40px;
+        }
     }
 
     .gideon-submit-button-white {
@@ -2333,6 +2336,10 @@ $lato: Lato, sans-serif;
 
        color: #262626;
        padding: 15px 0px 15px 0px;
+
+       @include mobileAndTablet{
+        padding: 20px 0px 15px 0px;
+    }
     }
 
     .esign-message-handoff-big2 {
@@ -2349,7 +2356,7 @@ $lato: Lato, sans-serif;
         /* Gideon/Primary text */
 
        color: #262626;
-    //padding: 15px 0px 15px 0px;
+        padding: 15px 0px 15px 0px;
 
     @include mobileAndTablet{
         padding: 20px 0px 15px 0px;
@@ -2372,7 +2379,7 @@ $lato: Lato, sans-serif;
 
        @include mobileAndTablet {
         padding-bottom: 30px;
-       // padding-top: 50px
+        padding-top: 50px
        }
     }
 
@@ -2391,7 +2398,7 @@ $lato: Lato, sans-serif;
        padding: 15px 0px 15px 0px;
 
        @include mobileAndTablet {
-        padding-bottom: 50px;
+        padding-bottom: 30px;
         padding-top: 50px
        }
     }
@@ -2804,7 +2811,7 @@ $lato: Lato, sans-serif;
         left: 402px;
         top: 249px;
         background: #E9E9E9;
-        height: 80%;
+        height: 79%;
         overflow: scroll;
         overflow-x: hidden;
         
@@ -3006,7 +3013,7 @@ $lato: Lato, sans-serif;
        // background-size: 50% 100%;
       }
 
-      .uploaded-files-container {
+      .uploaded-files-container2 {
         //margin-top: 10%;
         display: flex;
         justify-content: center;
@@ -3016,7 +3023,18 @@ $lato: Lato, sans-serif;
 
       .document_area{
         margin-top: 5%;
+        
+        @include mobileAndTablet{
+            margin-top: 20%;
+        }
+      }
 
+      .document_area2{
+
+        @media (min-height: 924px) {
+            margin-top: 5%;
+        }
+        
         @include mobileAndTablet{
             margin-top: 20%;
         }

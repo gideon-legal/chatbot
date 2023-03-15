@@ -42,7 +42,7 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
             <div className="esign__card gideon__node">
                 <div>
                 
-                    <div className="document_area">
+                    <div className="document_area2">
                         <EsignNode />
                     </div>
                     <div className='esign-message-handoff-big2'>
@@ -52,7 +52,7 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                         Please download your completed representation agreement below. A member of our team will be in touch 
                         to advise you on your next steps. Thank you!
                     </div>
-                <div className="uploaded-files-container">
+                <div className="uploaded-files-container2">
                 <div >
                 {this.props.files.map((file: any) => (
                     
