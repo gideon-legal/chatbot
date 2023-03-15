@@ -35,14 +35,13 @@ export interface HistoryProps {
 }
 
 export interface HistoryState {
-    filesList: { [index: number]: { name: string, url: string }[] };
+    filesList: { [index: number]: Array<{ name: string, url: string }> };
 }
 
 export class HistoryView extends React.Component<HistoryProps, HistoryState> {
     private scrollMe: HTMLDivElement;
     private scrollContent: HTMLDivElement;
     private scrollToBottom = true;
-    private newConvoPrompt = false;
 
     private carouselActivity: WrappedActivity;
     private largeWidth: number;
@@ -167,7 +166,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         return this.props.doCardAction(type, value);
     }
 
-    private addFilesToState(index: number, files: { name: string, url: string }[]) {
+    private addFilesToState(index: number, files: Array<{ name: string, url: string }>) {
         this.setState(prevState => ({ filesList: { ...prevState.filesList, [index]: files } }));
     }
 
@@ -202,61 +201,48 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                 const activities = filteredActivities(this.props.activities, this.props.format.strings.pingMessage);
                 activityDisclaimer = activities.length > 0 ? activities[activities.length - 1] : undefined;
                 lastActivityIsDisclaimer = activityDisclaimer && activityDisclaimer.entities && activityDisclaimer.entities.length > 0 && activityDisclaimer.entities[0].node_type === 'disclaimer';
-                //console.log(activities);
                 content = activities
-                .map((activity, index) => {
-                        // for cases where user refreshes before any messages appear
-                        // saves message id of last message given
-                        if(this.props.isFromMe(activity) && activities.length > 1) {
-                            sessionStorage.setItem('emptyChat', 'false');
-
-                            //removes newconvo from storage once user responds
-                            if(sessionStorage.getItem("newConvo")) sessionStorage.removeItem("newConvo")
-                        }
-                        
-                        return (
-                            ((activity.type !== 'message' || activity.text || (activity.attachments && !!activity.attachments.length))) &&
-                                <WrappedActivity
-                                    format={ this.props.format }
-                                    key={ 'message' + index }
-                                    activity={ activity }
-                                    nextActivityFromMe={ index + 1 < activities.length ? this.props.isFromMe(activities[index + 1]) : false}
-                                    doCardAction={this.doCardAction}
-                                    lastMessage={index === activities.length - 1}
-                                    showTimestamp={ index === activities.length - 1 || (index + 1 < activities.length && suitableInterval(activity, activities[index + 1])) }
-                                    selected={ this.props.isSelected(activity) }
-                                    fromMe={ this.props.isFromMe(activity) }
-                                    displayName={ index === 0 || (!this.props.isFromMe(activity) && this.props.isFromMe(activities[index - 1]))}
-                                    onClickActivity={ this.props.onClickActivity(activity) }
-                                    onClickRetry={e => {
-                                        // Since this is a click on an anchor, we need to stop it
-                                        // from trying to actually follow a (nonexistant) link
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        this.props.onClickRetry(activity);
-                                    } }
-                                    gid={ this.props.gid }
-                                    directLine={ this.props.directLine }
-                                    files={ index in this.state.filesList ? this.state.filesList[index] : [] }
-                                    addFilesToState={this.addFilesToState}
-                                    index={ index }
-                                    inputEnabled={ this.props.inputEnabled }
-                                >
-                                    <ActivityView
-                                        format={ this.props.format }
-                                        size={ this.props.size }
-                                        activity={ activity }
-                                        type={activity.type}
-                                        onCardAction={ (type: CardActionTypes, value: string | object) => this.doCardAction(type, value) }
-                                        onImageLoad={ () => this.autoscroll() }
-                                        gid={ this.props.gid}
-                                        directLine={ this.props.directLine }
-                                        addFilesToState={this.addFilesToState}
-                                        index={ index }
-                                    />
-                                </WrappedActivity>
-                        )
-                    }
+                .map((activity, index) =>
+                    ((activity.type !== 'message' || activity.text || (activity.attachments && !!activity.attachments.length))) &&
+                        <WrappedActivity
+                            format={ this.props.format }
+                            key={ 'message' + index }
+                            activity={ activity }
+                            nextActivityFromMe={ index + 1 < activities.length ? this.props.isFromMe(activities[index + 1]) : false}
+                            doCardAction={this.doCardAction}
+                            lastMessage={index === activities.length - 1}
+                            showTimestamp={ index === activities.length - 1 || (index + 1 < activities.length && suitableInterval(activity, activities[index + 1])) }
+                            selected={ this.props.isSelected(activity) }
+                            fromMe={ this.props.isFromMe(activity) }
+                            displayName={ index === 0 || (!this.props.isFromMe(activity) && this.props.isFromMe(activities[index - 1]))}
+                            onClickActivity={ this.props.onClickActivity(activity) }
+                            onClickRetry={e => {
+                                // Since this is a click on an anchor, we need to stop it
+                                // from trying to actually follow a (nonexistant) link
+                                e.preventDefault();
+                                e.stopPropagation();
+                                this.props.onClickRetry(activity);
+                            } }
+                            gid={ this.props.gid }
+                            directLine={ this.props.directLine }
+                            files={ index in this.state.filesList ? this.state.filesList[index] : [] }
+                            addFilesToState={this.addFilesToState}
+                            index={ index }
+                            inputEnabled={ this.props.inputEnabled }
+                        >
+                            <ActivityView
+                                format={ this.props.format }
+                                size={ this.props.size }
+                                activity={ activity }
+                                type={activity.type}
+                                onCardAction={ (type: CardActionTypes, value: string | object) => this.doCardAction(type, value) }
+                                onImageLoad={ () => this.autoscroll() }
+                                gid={ this.props.gid}
+                                directLine={ this.props.directLine }
+                                addFilesToState={this.addFilesToState}
+                                index={ index }
+                            />
+                        </WrappedActivity>
                 );
 
                 let reloaded = performance.getEntriesByType('navigation')[0].type === 'reload';
@@ -282,14 +268,6 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
             }
         }
 
-        let date: any;
-
-        //changing time at top of chat for past ones
-        if(sessionStorage.getItem("pastConvoDate")) {
-            date = new Date(sessionStorage.getItem("pastConvoDate"));
-            date = date.toLocaleDateString();
-        }
-
         const groupsClassName = classList('wc-message-groups', !this.props.format.chatTitle && 'no-header',  this.props.format.fullscreen && 'wc-message-groups-fullscreen', !this.props.inputEnabled && 'no-console');
         return (
             <div>
@@ -302,7 +280,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                 <div className="wc-message-group-content" ref={ div => { if (div) { this.scrollContent = div; } }}>
                     <div className="wc-date-header">
                         <div className="wc-date-header-line"></div>
-                        <div className="wc-date-header-text">{ date ? date : moment().format('MM/DD/YYYY') }</div>
+                        <div className="wc-date-header-text">{ moment().format('MM/DD/YYYY') }</div>
                         <div className="wc-date-header-line"></div>
                     </div>
                     { content }
@@ -360,7 +338,7 @@ export const History = connect(
         onClickActivity: (activity: Activity) => stateProps.connectionSelectedActivity && (() => stateProps.connectionSelectedActivity.next({ activity })),
         onCardAction: ownProps.onCardAction,
         gid: ownProps.gid,
-        directLine: ownProps.directLine,
+        directLine: ownProps.directLine
     }), {
         withRef: true
     }
@@ -418,7 +396,7 @@ export interface WrappedActivityProps {
     onClickRetry: React.MouseEventHandler<HTMLAnchorElement>;
     gid: string;
     directLine?: DirectLineOptions;
-    files: { name: string, url: string }[];
+    files: Array<{ name: string, url: string }>;
     addFilesToState: (index: number, files: [{ name: string, url: string }]) => void;
     index: number;
     inputEnabled: boolean;
