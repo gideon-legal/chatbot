@@ -99,14 +99,14 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
     }
 
     componentDidMount() {
-      console.log("getting available times")
-      console.log(moment())
+      
+      
         this.getAvailableTimes( moment(), true );
     }
 
     /** Setting the availabilities and excluded times for provide date */
     getAvailableTimes = ( date: moment.Moment, changeExcludeTime: boolean ) => {
-      console.log("in getAvailable times")
+      
         const {
             node,
             gid,
@@ -114,8 +114,7 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
             conversationId
         } = this.props;
         const startDate = date.clone().format('YYYY-MM-DD');
-        console.log("start date")
-        console.log(startDate)
+        
         if (!node) {
             return;
         }
@@ -124,13 +123,13 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
         this.setState({loading: true});
         availableTimes(gid, directLine.secret, conversationId, startDate)
             .then((res: any) => {
-              console.log("returned from api call")
+              
                 const allAvailabilities = this.mapAvailabilitiesDateWise(res.data);
-                console.log(allAvailabilities)
+                
                 let getAvailForDate = date;
 
                 if (!changeExcludeTime && (this.state.date && this.state.date.month() === date.month())) {
-                  console.log("reached if statement 1")
+                  
                     getAvailForDate = this.state.date;
                 }
                 const minuteString = +res.data.duration.split(':')[1];
@@ -142,15 +141,15 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
 
                 let updatedPreviousStartDates: moment.Moment[];
                 if (this.state.previousStartDates.length === 0) {
-                  console.log("reached if statement 2")
+                  
                     updatedPreviousStartDates = [date];
                 } else {
-                  console.log("reached if statement 3")
+                  
                     if (lastStartDate < date) {
-                      console.log("reached if statement 4")
+                      
                         updatedPreviousStartDates = this.state.previousStartDates.concat(date);
                     } else if (lastStartDate > date && this.state.previousStartDates.length > 1) {
-                      console.log("reached if statement 5")
+                      
                         updatedPreviousStartDates = this.state.previousStartDates.slice(0, -1);
                     }
                 }
@@ -265,8 +264,7 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
 
     availabilitiesExistOnDay = (day: string) => {
       const date = moment(day);
-      console.log("checking if availabilities exist on day")
-      console.log(date.dayOfYear() >= moment().dayOfYear() && getIncludedTimes(this.state.monthAvailabilities[date.format('YYYY-MM-DD')], this.state.duration, date).length > 0)
+      
       return date.dayOfYear() >= moment().dayOfYear() && getIncludedTimes(this.state.monthAvailabilities[date.format('YYYY-MM-DD')], this.state.duration, date).length > 0;
     }
 
@@ -280,8 +278,7 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
       let endDate: moment.Moment;
       keys.forEach(key => {
         if (this.state.monthAvailabilities[key].length > 0) {
-          console.log("key")
-          console.log(key)
+
           endDate = moment(key);
         }
       });
@@ -293,8 +290,6 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
             <span>{this.getUsersTimeZone()}</span>
           </div>
           <div className="gd-date-picker-days-container">
-            {console.log("in gd date picker for select day")}
-            {console.log(this.state)}
           {this.state.monthAvailabilities && !this.state.loading &&
             keys.map(date =>
               this.availabilitiesExistOnDay(date) && <button
