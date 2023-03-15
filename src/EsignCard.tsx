@@ -530,7 +530,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
             <div className="modal-signature">
                 <div className="modal-content">
                 <div className="signature-box-area">
-                <div className='esign-black-text'>
+                <div className='esign-black-text-mobile'>
                     Type in Full Name to Create Signature
                 </div>
                <div className='esign-grey-text'>
@@ -571,7 +571,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                     <text className='bank-text-small-desktop'> Please provide the last 4 digits of your bank account number.</text>
                 </div>
                 <div className='submit-area'>
-                <input className="esign-input-box" maxLength={4} placeholder="Account Number" style= {{width: "100%", marginLeft:"25px" }} type="text" value={this.state.bankNum} onKeyPress={this.handleKeyDown} onChange={this.onChangeBankAccount} id="signature"></input>
+                <input className="esign-input-box-bank" maxLength={4} placeholder="Account Number" style= {{width: "100%"}} type="text" value={this.state.bankNum} onKeyPress={this.handleKeyDown} onChange={this.onChangeBankAccount} id="signature"></input>
                 <div className="button-area">
                     <button  id="sign-btn" className="gideon-submit-button" style={{width: "80%" }} onClick={e => this.submitBankNumber(e)}> Next  </button>
                 </div>

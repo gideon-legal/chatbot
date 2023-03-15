@@ -2447,6 +2447,28 @@ $lato: Lato, sans-serif;
         //margin-left: 2%;
     }
 
+    .esign-input-box-bank {
+        
+        height: 53px;
+        width: 68%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: center;
+        min-height: 32px;
+        overflow-wrap: break-word;
+        outline: none;
+        text-align: left;
+        box-sizing: border-box;
+    
+        //width: 511px;
+        //height: 50px;
+        background: #F4F4F4;
+        border: 1px solid #DCDCDC;
+        //margin-bottom: 5px;
+        margin-left: 3%;
+    }
+
     .esign-input-box::placeholder {
         color: #262626;
         opacity: 1;
@@ -2526,6 +2548,24 @@ $lato: Lato, sans-serif;
     }
     
     .esign-black-text{
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 17px;
+        /* identical to box height */
+        //padding-left: 15px;
+        display: block;
+        align-items: center;
+        text-align: left;
+        color: #000000 !important;
+        margin-bottom: 5px;
+        display: block;
+        margin-left: 3%;
+    
+    }
+
+    .esign-black-text-mobile{
         font-family: 'Lato';
         font-style: normal;
         font-weight: 600;
@@ -3011,6 +3051,14 @@ $lato: Lato, sans-serif;
         padding: 0px 0px 0px 0px !important;
         height: 20%; 
        // background-size: 50% 100%;
+      }
+
+      .uploaded-files-container {
+        //margin-top: 10%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
       }
 
       .uploaded-files-container2 {
