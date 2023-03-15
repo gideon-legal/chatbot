@@ -115,9 +115,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
     }
 
     handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>){
-        console.log("hit enter")
         if (e.key === 'Enter' && this.validateSignature()){
-            console.log("hit if case enter")
             sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx,this.state.initials, this.state.bankNum)
             .then((res: any) => {
                 this.setState({
@@ -156,7 +154,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
     }
 
     renderLoading(){
-         console.log("in loading")
          return (
             <div className='loading_esign'>
                 <div id="loading-bar-spinner" className="spinner"><div className="spinner-icon"></div></div>
@@ -172,8 +169,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 ...this.state,
                 loading: true
             })
-            console.log("loading")
-            console.log(this.state.loading)
             this.renderLoading()
             let loading_div = document.createElement("div")
             loading_div.setAttribute("class", "loading_esign")
@@ -181,14 +176,12 @@ class Esign extends React.Component<EsignProps, EsignState> {
             if(this.state.isModal == true){
                 loader_wheel.setAttribute("class", "loaderwheel_esign_mobile")
                 let sign_btn = document.getElementById("sign-btn");
-                console.log(sign_btn)
                 sign_btn.setAttribute("class", "gideon-submit-button-sign-disabled");
                 document.getElementById("mobile-modal").appendChild(loading_div).appendChild(loader_wheel)
             } else {
                 loader_wheel.setAttribute("class", "loaderwheel_esign")
     
                let sign_btn = document.getElementById("sign-btn");
-               console.log(sign_btn)
                sign_btn.setAttribute("class", "gideon-submit-button-sign-disabled");
                document.getElementById("pdfarea").appendChild(loading_div).appendChild(loader_wheel)
             }
@@ -196,14 +189,9 @@ class Esign extends React.Component<EsignProps, EsignState> {
             
     
             //need to send to api so it can be used to populate document
-            console.log("hey everybody!!!!!!!")
-            console.log(this.props.docx)
-            console.log("obtained signature")
-            console.log(this.state.signature)
             //send to api and wait to receive signed pdf link, set to this.state.signedfile
             sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx, this.state.initials, this.state.bankNum)
             .then((res: any) => {
-                console.log(res.data)
                 this.setState({
                     ...this.state,
                     signedfile: res.data.pdf_link
@@ -220,10 +208,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 loading: false,
                 isModal: false
             })
-            console.log("files array")
-            console.log(files)
-            console.log("signed file")
-            console.log(this.state.signedfile)
             this.props.addFilesToState(this.props.index, files)
             this.props.sendMessage(JSON.stringify(this.state.signedfile))
             })
@@ -236,8 +220,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
             ...this.state,
             signature: event.target.value
         })
-        console.log("changed signature")
-        console.log(this.state.signature)
     }
 
     onChangeInitials(event: React.ChangeEvent<HTMLInputElement>) {
@@ -245,8 +227,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
             ...this.state,
             initials: event.target.value
         })
-        console.log("changed intials")
-        console.log(this.state.initials)
     }
 
     onChangeBankAccount(event: React.ChangeEvent<HTMLInputElement>) {
@@ -254,23 +234,17 @@ class Esign extends React.Component<EsignProps, EsignState> {
             ...this.state,
             bankNum: event.target.value
         })
-        console.log("changed bank")
-        console.log(this.state.bankNum)
 
     }
 
     
     //Handles getting the number of page numbers needed to display the pdf
     onDocumentLoad(pdf: any){
-        console.log("in document load")
-        console.log(pdf)
         this.setNumPages(pdf.numPages) 
     }
 
     //Handles setting the number of page numbers of the pdf
     setNumPages(numPages: any){
-        console.log("setting numpages")
-        console.log(numPages)
         this.setState({
            numPages: numPages
         })
@@ -279,8 +253,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
     }
 
     renderLargerPdf = () => {
-        console.log("mobile check: ")
-        console.log(isMobile)
         if(isMobile == true){
             if(this.state.isSignature == true && this.state.isModal == false) {
                  //mobile view
@@ -381,7 +353,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     //for clicking the Add Your Signature on mobile
     handleSignModalMobile(e: React.MouseEvent<HTMLButtonElement>){
-        console.log("setting isModal true")
         this.setState({
             isSignature: true,
             isModal: true
@@ -407,7 +378,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     //to render new mobile modal for signature and initials and backbutton
     renderMobileSigningModal(){
-        console.log("in new modal")
         return (
             <div className='fullview'>
                 <div className='test' id="mobile-modal">
@@ -557,11 +527,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     //Displays signature at bottom of screen when viewing pdf
     renderSignatureMobile() {
-        console.log('hasBank:')
-        console.log(this.state.hasBank)
-        console.log(this.state.isNext)
-        console.log("isMobile:")
-        console.log(isMobile)
         if(this.state.hasBank == true && this.state.isNext == false && isMobile == false){
             let sig = (
                 <footer className="signature-box-area">
@@ -754,10 +719,6 @@ export const EsignCard = connect(
         sendFiles
     },
      (stateProps: any, dispatchProps: any, ownProps: any): EsignProps => {
-        console.log("props:")
-        console.log(stateProps)
-        console.log(ownProps)
-        console.log(dispatchProps)
         return {
             // from stateProps
             node: ownProps.node,

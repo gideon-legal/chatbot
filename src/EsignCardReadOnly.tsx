@@ -25,10 +25,6 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
     constructor(props: EsignCardReadOnlyProps) {
         super(props);
 
-        console.log("check files")
-        console.log(this.props.files)
-
-
         this.state = {
           showDisclaimer: false
         };
@@ -55,7 +51,6 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                 <div className="uploaded-files-container2">
                 <div >
                 {this.props.files.map((file: any) => (
-                    
                       <a className="gideon-submit-button-download" target="_blank" href={file.url}>{"Download Document"}</a>
                    
                 ))}
