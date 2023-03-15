@@ -106,7 +106,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
 
     validateAddressInformation = () => {
         if(this.state.address && this.state.zipcode){
-            console.log("valid address")
+            
             return true;
         } else {
             this.setState({

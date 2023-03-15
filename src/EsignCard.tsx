@@ -171,7 +171,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
             })
             this.renderLoading()
             let loading_div = document.createElement("div")
-            loading_div.setAttribute("class", "loading_esign")
+            loading_div.setAttribute("class", "loading_esign_mobile")
             let loader_wheel = document.createElement("div")
             if(this.state.isModal == true){
                 loader_wheel.setAttribute("class", "loaderwheel_esign_mobile")
