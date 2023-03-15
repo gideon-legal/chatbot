@@ -14,7 +14,7 @@ import { HistoryInline } from './assets/icons/HistoryInline'
 import { Activity, CardActionTypes, DirectLine, DirectLineOptions, IBotConnection, User, Conversation } from 'botframework-directlinejs';
 import { isMobile } from 'react-device-detect';
 import { connect, Provider } from 'react-redux';
-import { conversationHistory, mapMessagesToActivities, ping, step, verifyConversation, checkNeedBackButton } from './api/bot';
+import { conversationHistory, mapMessagesToActivities, ping, step, verifyConversation, checkNeedBackButton, conversationList } from './api/bot';
 import { getTabIndex } from './getTabIndex';
 import { guid } from './GUID';
 import * as konsole from './Konsole';
@@ -54,6 +54,7 @@ export interface State {
     orginalBodyClass: string;
     fullscreen: boolean;
     full_height: boolean;
+    showConvoHistory: boolean;
     back_visible: boolean;
     node_count: number;
     pastConversations: any[];
@@ -81,7 +82,10 @@ export class Chat extends React.Component<ChatProps, State> {
         back_visible: false,
         orginalBodyClass: document.body.className,
         node_count: -1,
-        clicked: false
+        showConvoHistory: false,
+        pastConversations: [] as any,
+        messages: [] as any,
+        loading: true
     };
 
    // private clicked: any; // status of if the back button has been clicked already
@@ -459,7 +463,8 @@ export class Chat extends React.Component<ChatProps, State> {
         const new_count = this.state.node_count+1
         this.setState({
             node_count: new_count
-        })
+        });
+        sessionStorage.setItem("node_count", new_count.toString());
     }
 
     private deleteNodeCount = (amount: number) => {
@@ -506,6 +511,9 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private clicked = (show: boolean) => {
+        //this.toggleBackButton(false);
+        //document.getElementById('btn1').style.pointerEvents = 'none';
+        //document.getElementById('btn3').style.pointerEvents = 'none';
         if (show == true){
             document.getElementById('btn3').style.pointerEvents = 'none';
 
@@ -649,11 +657,11 @@ export class Chat extends React.Component<ChatProps, State> {
                // this.clicked(false);
                this.checkActivitiesLength();
             });
-        }
-        )
+        })
         .catch((err: any) => {
             console.log(err);
         });
+         
     }
 
     private getConvoList = (userID: string, convoId: string) => {
@@ -770,9 +778,18 @@ export class Chat extends React.Component<ChatProps, State> {
 
         let botConnection: any = null;
 
-        botConnection = this.props.directLine ?
-            (this.botConnection = new DirectLine(this.props.directLine)) :
-            this.props.botConnection;
+        //if it's not new convo, it's not a empty chat, or past convo being viewed
+        if((reloaded && !isNew ) || (reloaded && sessionStorage.getItem('emptyChat') === 'false') || sessionStorage.getItem('pastConvoID')) {
+            botConnection = this.props.directLine ?
+                (this.botConnection = new DirectLine({
+                    secret: this.props.directLine.secret,
+                    conversationId: sessionStorage.getItem('pastConvoID') ? sessionStorage.getItem('pastConvoID') : sessionStorage.getItem('msft_conversation_id')
+                })) :
+                this.props.botConnection;
+        } else {
+            botConnection = this.props.directLine ? (this.botConnection = new DirectLine(this.props.directLine)) : this.props.botConnection;
+            sessionStorage.setItem('emptyChat', 'true');
+        }
 
         if (this.props.resize === 'window') {
             window.addEventListener('resize', this.resizeListener);
@@ -805,7 +822,7 @@ export class Chat extends React.Component<ChatProps, State> {
             if (connectionStatus === 2) {  // wait for connection is 'OnLine' to send data to bot
 
                 const botCopy: any = botConnection;
-                const conversationId = botCopy.conversationId;
+                let conversationId = botCopy.conversationId;
 
                 // if not new convo and there's a convo id in local storage
                 if(reloaded && !isNew) {
@@ -835,9 +852,11 @@ export class Chat extends React.Component<ChatProps, State> {
                     .then((res: any) => {
                         // Only save these when we successfully connect
                         // uncomment when re-enabling chat history
-                        window.localStorage.setItem('msft_conversation_id', conversationId);
-                        window.localStorage.setItem('gid', this.props.gid);
-                        window.localStorage.setItem('msft_user_id', user.id);
+                        if(isNew && conversationId !== sessionStorage.getItem("pastConvoID")) {
+                            window.sessionStorage.setItem('msft_conversation_id', conversationId);
+                            window.localStorage.setItem('gid', this.props.gid);
+                            window.localStorage.setItem('msft_user_id', user.id);
+                        }
 
                         this.setState({
                             display: true
@@ -937,6 +956,8 @@ export class Chat extends React.Component<ChatProps, State> {
                                 
                             // }
 
+                            if(isNew && messages.length === 0) isNew = true;
+
                             this.store.dispatch<ChatActions>({
                                 type: 'Set_Messages',
                                 activities: mapMessagesToActivities(messages, state.connection.user.id)
@@ -962,6 +983,7 @@ export class Chat extends React.Component<ChatProps, State> {
                             // Send initial message to start conversation
                             this.store.dispatch(sendMessage(state.format.strings.pingMessage, state.connection.user, state.format.locale));
                         }
+
                     })
                     .catch((err: any) => {
                         this.store.dispatch<ChatActions>({
@@ -1124,7 +1146,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
     render() {
         const state = this.store.getState();
-        const { open, opened, display, fullscreen } = this.state;
+        let { open, opened, display, fullscreen } = this.state;
 
         const chatviewPanelStyle = this.calculateChatviewPanelStyle(state.format);
 
@@ -1153,7 +1175,6 @@ export class Chat extends React.Component<ChatProps, State> {
         // only render real stuff after we know our dimensions
         return (
             <Provider store={ this.store }>
-                <div>
                 <div
                     className={`wc-wrap ${display ? '' : 'hide'}`}
                     style={{ display: 'none'}}
@@ -1169,8 +1190,8 @@ export class Chat extends React.Component<ChatProps, State> {
                         ref={ this._saveChatviewPanelRef }
                         style={chatviewPanelStyle}
                     >
-                        {
-                            !!state.format.chatTitle &&
+                        { // different header for current convo and history
+                            !!state.format.chatTitle && !this.state.showConvoHistory ?
                                 <div className={!fullscreen ? 'wc-header' : 'wc-header wc-header-fullscreen'} style={{backgroundColor: state.format.themeColor}}>
                                     <img
                                         className="wc-header--logo"
@@ -1189,7 +1210,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                         <HistoryInline />
                                     </IconButton>
                                     {/* Close X image on chat */}
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={() => {this.toggle(); }} >
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={() => {this.toggle(); this.initialOpen = false;}} >
                                         <title>wc-header--close</title>
                                         <path className="wc-header--close" d="M18 2L2 18" stroke="#FCFCFC" stroke-width="3" stroke-linecap="round" />
                                         <path className="wc-header--close" d="M2 2L18 18" stroke="#FCFCFC" stroke-width="3" stroke-linecap="round" />
@@ -1199,15 +1220,19 @@ export class Chat extends React.Component<ChatProps, State> {
                                         onClick={() => {this.toggle(); }}
                                         src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/close.svg" /> */}
 
-                                    {/* {{ <img
-                                        className="wc-header--back" onClick={() => {
-                                            if (!this.clicked.disabled) {
-                                            this.step(); this.clicked.disabled = true; }// disable click action after first click
-                                    }}
-                                    src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/back.svg" />  } */} 
+                                    {/* <img
+                                        className="wc-header--back"
+                                        onClick={() => {this.step(); }}
+                                        src="https://s3.amazonaws.com/com.gideon.static.dev/chatbot/back.svg" /> */}
+                                </div>
+                                :
+                                <div className={!fullscreen ? 'history-header wc-header' : 'wc-header wc-header-fullscreen'}>
+                                    <IconButton onClick={() => this.handleHistory(false)}  className="icon__button" style={{ padding: 0, color: 'white', height: "auto" }}>
+                                        <ArrowBack className="back__button" />
+                                    </IconButton>
+                                    <span>Current Conversation</span>
                                 </div>
                         }
-
                         <div className="wc-chatbot-content">
                             {fullscreen && <div className="wc-chatbot-content-left">
                                 {/* TODO - Put content to display on left side of fullscreen */}
@@ -1217,6 +1242,21 @@ export class Chat extends React.Component<ChatProps, State> {
                                                 null}
                                 />
                             </div>}
+                            {/* current convo or history? */}
+                            {!this.state.showConvoHistory ?
+                                (this.state.loading ?
+                                    <div className="wc-chatbot-content-right">
+                                        <div id="loading-bar-spinner" className="spinner"><div className="spinner-icon"></div></div>
+                                    </div>
+                                    :
+                                    <div className="wc-chatbot-content-right">
+                                        <History
+                                            onCardAction={ this._handleCardAction }
+                                            ref={ this._saveHistoryRef }
+                                            gid={ this.props.gid }
+                                            directLine={ this.props.directLine }
+                                        />
+                                        <Shell ref={ this._saveShellRef } />
 
                                         { // if input is enabled show this && or if bot is talking
                                             <div id="btn3" className = {backButtonClassName}>
@@ -1260,15 +1300,23 @@ export class Chat extends React.Component<ChatProps, State> {
                                                     />
                                                 </a> */}
 
-                            
-                            </div>
-                                {
-                                    this.props.resize === 'detect' &&
-                                        <ResizeDetector onresize={ this.resizeListener } />
-                                }
-                            </div>
+                                        {
+                                            this.props.resize === 'detect' &&
+                                                <ResizeDetector onresize={ this.resizeListener } />
+                                        }
+                                    </div>)
+                                :
+                                (<div className="wc-chatbot-content-right" style={{paddingTop:'67px'}}>
+                                    { this.state.loading ? 
+                                        <div id="loading-bar-spinner" className="spinner"><div className="spinner-icon"></div></div>
+                                        :
+                                        <ConvoHistory conversations={this.state.pastConversations} setCurrentConversation={this.changeCurrentConversation}/>
+                                    }
+                                </div>)
+                            }
                         </div>
                     </div>
+                </div>
             </Provider >
         );
     }
@@ -1347,7 +1395,7 @@ export const renderIfNonempty = (value: any, renderer: (value: any) => JSX.Eleme
     }
 };
 
-export const classList = (...args: Array<string | boolean>) => {
+export const classList = (...args: (string | boolean)[]) => {
     return args.filter(Boolean).join(' ');
 };
 

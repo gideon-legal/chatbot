@@ -121,21 +121,21 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
     }
 
     private handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>): any {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && this.validateAddressInformation()) {
             this.props.sendMessage(this.getFormattedAddress());
             document.removeEventListener('keypress', this.handleKeyDown.bind(this));
         }
     }
 
     private onKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && this.validateAddressInformation()) {
             this.props.sendMessage(this.getFormattedAddress());
             document.removeEventListener('keypress', this.handleKeyDown.bind(this));
         }
     }
 
     clickToSubmitContactInformation(e: React.MouseEvent<HTMLButtonElement>) {
-      // if (!this.validateContactInformation()) { return; }
+      if (!this.validateAddressInformation()) { return; }
       this.props.sendMessage(this.getFormattedAddress());
       document.removeEventListener('keypress', this.handleKeyDown.bind(this));
       e.stopPropagation();
