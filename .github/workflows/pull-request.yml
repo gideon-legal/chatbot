@@ -14,9 +14,9 @@ jobs:
         node-version: 9.9.0
     - name: Install dependencies
       run: |
-        export NODE_OPTIONS="--max_old_space_size=4096"
+        export NODE_OPTIONS="--max_old_space_size=5120"
         npm install
     - name: Build application
       run: |
-        export NODE_OPTIONS="--max_old_space_size=4096"
+        export NODE_OPTIONS="--max_old_space_size=5120"
         npm run prepublish
