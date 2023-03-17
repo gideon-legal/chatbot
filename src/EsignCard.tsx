@@ -40,6 +40,7 @@ interface EsignProps {
     fullheight: boolean;
     fullscreen: boolean;
     accountNum: boolean;
+    presignText: string;
 
 }
 
@@ -452,7 +453,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                            You're almost done! 
                     </div>
                     <div className="esign-message-handoff-small">
-                        To start working with McCune Law Group, please click on the button below to sign your representation agreement.
+                        {this.props.presignText}
                     </div>
                 </div> 
                 <button type="button" className="gideon-submit-button-presign" id="sign_btn" onClick={e => this.handleSign(e)}>
@@ -478,7 +479,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                            You're almost done! 
                     </div>
                     <div className="esign-message-handoff-small">
-                        To start working with McCune Law Group, please click on the button below to sign your representation agreement.
+                        {this.props.presignText}
                     </div>
                 </div> 
                 <button type="button" className="gideon-submit-button-presign" id="sign_btn" onClick={e => this.handleSign(e)}>
@@ -719,6 +720,12 @@ export const EsignCard = connect(
         sendFiles
     },
      (stateProps: any, dispatchProps: any, ownProps: any): EsignProps => {
+        console.log("own props:")
+        console.log(ownProps)
+        console.log("state props:")
+        console.log(stateProps)
+        console.log("dispatch props:")
+        console.log(dispatchProps)
         return {
             // from stateProps
             node: ownProps.node,
@@ -728,14 +735,15 @@ export const EsignCard = connect(
             gid: ownProps.gid,
             directLine: ownProps.directLine,
             conversationId: stateProps.conversationId,
-            document: ownProps.activity.pdf_link.pdf_link[0],
-            docx: ownProps.activity.pdf_link.docx_link[0],
+            document: ownProps.activity.entities[0].pdf_link.pdf_link[0],
+            docx: ownProps.activity.entities[0].pdf_link.docx_link[0],
             prompt: ownProps.text,
             addFilesToState: ownProps.addFilesToState,
             index: ownProps.index,
             fullheight: ownProps.format.full_height,
             fullscreen: ownProps.format.fullscreen,
-            accountNum: ownProps.activity.pdf_link.account_num
+            accountNum: ownProps.activity.entities[0].pdf_link.account_num,
+            presignText: ownProps.activity.text
         }
     }
 )(Esign);
