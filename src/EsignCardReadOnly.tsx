@@ -32,6 +32,7 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
 
     //change list view to button
     render() {
+        document.getElementById('btn3').style.display = "none"
         return (
             <div className="modal-normal">
             <div className="modal-content">
