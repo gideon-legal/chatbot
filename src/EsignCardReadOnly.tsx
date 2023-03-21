@@ -19,11 +19,15 @@ export interface Node {
 
 export interface EsignCardReadOnlyProps {
     files: Array<{ name: string, url: string }>;
+    post_message: any;
 }
 
 export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {}> {
     constructor(props: EsignCardReadOnlyProps) {
         super(props);
+
+        console.log("esign post props")
+        console.log(props)
 
         this.state = {
           showDisclaimer: false
@@ -46,8 +50,9 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                         Congrats! 
                     </div>
                     <div className="esign-message-handoff-small2">
-                        Please download your completed representation agreement below. A member of our team will be in touch 
-                        to advise you on your next steps. Thank you!
+                    {this.props.post_message.postesign_message ||
+                 "Please download your completed representation agreement below. A member of our team will be in touch to advise you on your next steps. Thank you!"}
+                      
                     </div>
                 <div className="uploaded-files-container2">
                 <div >
