@@ -531,13 +531,16 @@ export class Chat extends React.Component<ChatProps, State> {
         if(botConnection && botConnection.conversationId){
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
                 .then((res: any) => {
+
+                    this.setState({
+                        loading: false
+                    })
+                    
                     const messages = res.data.messages.reverse();
 
                     this.setState({
                         node_count: 0
                     });
-
-                   
 
                     let i : any;
                     for(i of messages){
@@ -661,7 +664,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 loading: false
             })
                this.checkActivitiesLength();
-               
+
             });
         })
         .catch((err: any) => {
@@ -1145,13 +1148,6 @@ export class Chat extends React.Component<ChatProps, State> {
         }
     }
 
-//     renderLoading(){
-//         return (
-//             <div className="wc-chatbot-content-right">
-//                 <div id="loading-bar-spinner" className="spinner"><div className="spinner-icon"></div></div>
-//             </div>
-//         )
-//    }
 
     // At startup we do three render passes:
     // 1. To determine the dimensions of the chat panel (nothing needs to actually render here, so we don't)
@@ -1182,6 +1178,9 @@ export class Chat extends React.Component<ChatProps, State> {
            && !this.reloadMsgsCalled
            && this.store.getState().connection.botConnection && this.store.getState().connection.botConnection.conversationId
         ) {
+            this.setState({
+                loading: false
+            })
             this.reload_messages();
             this.reloadMsgsCalled = true;
         }
