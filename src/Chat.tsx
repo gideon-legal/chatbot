@@ -532,9 +532,9 @@ export class Chat extends React.Component<ChatProps, State> {
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
                 .then((res: any) => {
 
-                    this.setState({
-                        loading: false
-                    })
+                   // this.setState({
+                   //     loading: false
+                   // })
                     
                     const messages = res.data.messages.reverse();
 
@@ -1178,9 +1178,9 @@ export class Chat extends React.Component<ChatProps, State> {
            && !this.reloadMsgsCalled
            && this.store.getState().connection.botConnection && this.store.getState().connection.botConnection.conversationId
         ) {
-            this.setState({
-                loading: false
-            })
+           // this.setState({
+           //     loading: false
+           // })
             this.reload_messages();
             this.reloadMsgsCalled = true;
         }
