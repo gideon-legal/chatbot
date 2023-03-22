@@ -531,13 +531,16 @@ export class Chat extends React.Component<ChatProps, State> {
         if(botConnection && botConnection.conversationId){
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
                 .then((res: any) => {
+
+                   // this.setState({
+                   //     loading: false
+                   // })
+                    
                     const messages = res.data.messages.reverse();
 
                     this.setState({
                         node_count: 0
                     });
-
-                   
 
                     let i : any;
                     for(i of messages){
@@ -626,6 +629,7 @@ export class Chat extends React.Component<ChatProps, State> {
         .then((res: any) => {
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, res.data.id)
             .then((res: any) => {
+                
                 const messages = res.data.messages.reverse();
                 const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
                 this.props.showConsole === false;
@@ -655,7 +659,12 @@ export class Chat extends React.Component<ChatProps, State> {
 
                 //sessionStorage.removeItem("node_count");
                // this.clicked(false);
+
+               this.setState({
+                loading: false
+            })
                this.checkActivitiesLength();
+
             });
         })
         .catch((err: any) => {
@@ -1139,6 +1148,7 @@ export class Chat extends React.Component<ChatProps, State> {
         }
     }
 
+
     // At startup we do three render passes:
     // 1. To determine the dimensions of the chat panel (nothing needs to actually render here, so we don't)
     // 2. To determine the margins of any given carousel (we just render one mock activity so that we can measure it)
@@ -1168,6 +1178,9 @@ export class Chat extends React.Component<ChatProps, State> {
            && !this.reloadMsgsCalled
            && this.store.getState().connection.botConnection && this.store.getState().connection.botConnection.conversationId
         ) {
+           // this.setState({
+           //     loading: false
+           // })
             this.reload_messages();
             this.reloadMsgsCalled = true;
         }
@@ -1264,6 +1277,11 @@ export class Chat extends React.Component<ChatProps, State> {
                                                 <label 
                                                     className="wcbackbutton" onClick={() => {
                                                             this.clicked(true)
+
+                                                            this.setState({
+                                                                loading: true
+                                                            })
+
                                                             this.step(); 
 
                                                             this.deleteNodeCount(1);
