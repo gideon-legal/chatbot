@@ -508,6 +508,7 @@ export class Chat extends React.Component<ChatProps, State> {
         if (curr_node_count <= 0 ) {
             this.toggleBackButton( false );
         }
+        
     }
 
     private clicked = (show: boolean) => {
@@ -531,12 +532,11 @@ export class Chat extends React.Component<ChatProps, State> {
         if(botConnection && botConnection.conversationId){
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
                 .then((res: any) => {
-
-                   // this.setState({
-                   //     loading: false
-                   // })
-                    
                     const messages = res.data.messages.reverse();
+
+                    this.setState({
+                        loading: true
+                    })
 
                     this.setState({
                         node_count: 0
@@ -611,11 +611,11 @@ export class Chat extends React.Component<ChatProps, State> {
                             activity: message_activities[message_activities.length-1]}
                         )
                     };
-
+                
                     this.setState({
                         loading: false
-                    });
-                    
+                    })
+
                    this.checkActivitiesLength();
             });
         }
@@ -1178,11 +1178,13 @@ export class Chat extends React.Component<ChatProps, State> {
            && !this.reloadMsgsCalled
            && this.store.getState().connection.botConnection && this.store.getState().connection.botConnection.conversationId
         ) {
-           // this.setState({
-           //     loading: false
-           // })
+           
+            this.setState({
+                loading: true
+            })
             this.reload_messages();
             this.reloadMsgsCalled = true;
+        
         }
 
         // only render real stuff after we know our dimensions
