@@ -163,6 +163,11 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private async handleIncomingActivity(activity: Activity) {
+        if(this.state.loading == true){
+            this.setState({
+                loading: false
+            })
+        }
         const activityCopy: any = activity;
         let is_handoff = false;
         let lastActivity: any;
@@ -612,9 +617,9 @@ export class Chat extends React.Component<ChatProps, State> {
                         )
                     };
                 
-                    this.setState({
-                        loading: false
-                    })
+                    //this.setState({
+                   //     loading: false
+                   // })
 
                    this.checkActivitiesLength();
             });
