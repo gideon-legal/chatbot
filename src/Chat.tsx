@@ -631,9 +631,9 @@ export class Chat extends React.Component<ChatProps, State> {
                         )
                     };
                 
-                    //this.setState({
-                   //     loading: false
-                   // })
+                    this.setState({
+                        loading: false
+                    })
 
                    this.checkActivitiesLength();
             });
