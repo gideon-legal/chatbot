@@ -163,11 +163,6 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private async handleIncomingActivity(activity: Activity) {
-        if(this.state.loading == true){
-            this.setState({
-                loading: false
-            })
-        }
         const activityCopy: any = activity;
         let is_handoff = false;
         let lastActivity: any;
@@ -275,6 +270,11 @@ export class Chat extends React.Component<ChatProps, State> {
                     break;
                     
                 case 'typing':
+                    if(this.state.loading == true){
+                        this.setState({
+                            loading: false
+                        })
+                    }
                     
                     is_handoff = true
                     //this.toggleBackButton(false);
@@ -327,6 +327,11 @@ export class Chat extends React.Component<ChatProps, State> {
                 }
                 if(currActivity.type == "typing" && dup == true){
                         currActivity = this.store.getState().history.activities[this.store.getState().history.activities.length-1]  
+                        if(this.state.loading == true){
+                            this.setState({
+                                loading: false
+                            })
+                        }
                 }
                 
                 if(currActivity.type == "message"){
@@ -393,6 +398,11 @@ export class Chat extends React.Component<ChatProps, State> {
                 } else {
                     this.toggleBackButton(false);
                     if(activity.type == 'typing'){
+                        if(this.state.loading == true){
+                            this.setState({
+                                loading: false
+                            })
+                        }
                         if (activity.from.id !== state.connection.user.id) {
                             this.store.dispatch<ChatActions>({ type: 'Show_Typing', activity });
                             this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
@@ -517,16 +527,20 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private clicked = (show: boolean) => {
+        if(this.state.loading != true){
+            if (show == true){
+                document.getElementById('btn3').style.pointerEvents = 'none';
+    
+            } else {
+                document.getElementById('btn3').style.pointerEvents = 'auto';
+    
+            }
+
+        }
         //this.toggleBackButton(false);
         //document.getElementById('btn1').style.pointerEvents = 'none';
         //document.getElementById('btn3').style.pointerEvents = 'none';
-        if (show == true){
-            document.getElementById('btn3').style.pointerEvents = 'none';
-
-        } else {
-            document.getElementById('btn3').style.pointerEvents = 'auto';
-
-        }
+       
         this.setState({
             clicked: show
         })  
