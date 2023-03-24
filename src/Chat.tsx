@@ -553,9 +553,9 @@ export class Chat extends React.Component<ChatProps, State> {
                 .then((res: any) => {
                     const messages = res.data.messages.reverse();
 
-                    this.setState({
-                        loading: true
-                    })
+                    ////this.setState({
+                    //    loading: true
+                   // })
 
                     this.setState({
                         node_count: 0
@@ -855,6 +855,9 @@ export class Chat extends React.Component<ChatProps, State> {
                 // if not new convo and there's a convo id in local storage
                 if(reloaded && !isNew) {
                     conversationId = sessionStorage.getItem('msft_conversation_id');
+                    this.setState({
+                        loading: true
+                    })
                 } else if(sessionStorage.getItem('pastConvoID')) {
                     conversationId = sessionStorage.getItem('pastConvoID');
                 }
