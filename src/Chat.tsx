@@ -271,11 +271,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     break;
                     
                 case 'typing':
-                    if(this.state.loading == true){
-                       // this.setState({
-                       //     loading: false
-                      //  })
-                    }
+                   
                     
                     is_handoff = true
                     //this.toggleBackButton(false);
@@ -328,11 +324,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 }
                 if(currActivity.type == "typing" && dup == true){
                         currActivity = this.store.getState().history.activities[this.store.getState().history.activities.length-1]  
-                        if(this.state.loading == true){
-                           // this.setState({
-                           //     loading: false
-                          //  })
-                        }
+                       
                 }
                 
                 if(currActivity.type == "message"){
@@ -398,11 +390,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 } else {
                     this.toggleBackButton(false);
                     if(activity.type == 'typing'){
-                        if(this.state.loading == true){
-                           // this.setState({
-                          //      loading: false
-                          //  })
-                        }
+                       
                         if (activity.from.id !== state.connection.user.id) {
                             this.store.dispatch<ChatActions>({ type: 'Show_Typing', activity });
                             this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
@@ -633,11 +621,10 @@ export class Chat extends React.Component<ChatProps, State> {
                     };
                 
                     setTimeout(() => {
+                        sessionStorage.setItem("loading", 'false');
                         this.setState({
                             loading: false
-                        })
-                        
-                       
+                        })    
                     }, 1000); 
 
                     
@@ -802,20 +789,24 @@ export class Chat extends React.Component<ChatProps, State> {
         //if newConvo exists in localstorage
         if(sessionStorage.getItem('newConvo') === 'true') {
             isNew = true;
-            this.setState({
-                loading: false
-            });
+           // this.setState({
+           //     loading: false
+           // });
         } else if(sessionStorage.getItem('newConvo') === 'false') {
             isNew = false;
-            this.setState({
-                loading: true
-            });
+           // this.setState({
+          //      loading: true
+          //  });
         }
 
         let botConnection: any = null;
 
         //if it's not new convo, it's not a empty chat, or past convo being viewed
         if((reloaded && !isNew ) || (reloaded && sessionStorage.getItem('emptyChat') === 'false') || sessionStorage.getItem('pastConvoID')) {
+            this.setState({
+                      loading: true
+            });
+            
             botConnection = this.props.directLine ?
                 (this.botConnection = new DirectLine({
                     secret: this.props.directLine.secret,
@@ -1216,6 +1207,7 @@ export class Chat extends React.Component<ChatProps, State> {
             this.setState({
                 loading: true
             })
+            sessionStorage.setItem("loading", 'true');
             this.reload_messages();
             this.reloadMsgsCalled = true;
         
@@ -1293,7 +1285,7 @@ export class Chat extends React.Component<ChatProps, State> {
                             </div>}
                             {/* current convo or history? */}
                             {!this.state.showConvoHistory ?
-                                (this.state.loading ?
+                                ((this.state.loading== true && sessionStorage.getItem("loading" ) == "true")?
                                     <div className="wc-chatbot-content-right">
                                         <div id="loading-bar-spinner" className="spinner"><div className="spinner-icon"></div></div>
                                     </div>

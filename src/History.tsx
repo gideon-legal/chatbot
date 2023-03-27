@@ -67,7 +67,8 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
             && sessionStorage.getItem('original_length')
            // && !sessionStorage.getItem("pastConvoID")
         ){
-            
+            console.log(this.props)
+            sessionStorage.setItem("loading", 'true');
             this.newConvoPrompt = true;
         } else if(sessionStorage.getItem("pastConvoID") && (!sessionStorage.getItem("convoComplete") || sessionStorage.getItem("convoComplete") === "null")) {
         //prompt disappears if uncompleted past convo is being viewed
@@ -335,7 +336,8 @@ export const History = connect(
         connectionSelectedActivity: state.connection.selectedActivity,
         selectedActivity: state.history.selectedActivity,
         botConnection: state.connection.botConnection,
-        user: state.connection.user
+        user: state.connection.user,
+        
     }), {
         setMeasurements: (carouselMargin: number) => ({ type: 'Set_Measurements', carouselMargin }),
         onClickRetry: (activity: Activity) => ({ type: 'Send_Message_Retry', clientActivityId: activity.channelData.clientActivityId }),
