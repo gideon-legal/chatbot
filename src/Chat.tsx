@@ -189,6 +189,7 @@ export class Chat extends React.Component<ChatProps, State> {
             switch (activity.type) {
                 case 'message':
                     // adding node count to check if first node, need to grey out back button
+                    
 
               
                     if(activity.entities) {
@@ -270,11 +271,11 @@ export class Chat extends React.Component<ChatProps, State> {
                     break;
                     
                 case 'typing':
-                   // if(this.state.loading == true){
-                   //     this.setState({
-                   //         loading: false
-                   //     })
-                    //}
+                    if(this.state.loading == true){
+                        this.setState({
+                            loading: false
+                        })
+                    }
                     
                     is_handoff = true
                     //this.toggleBackButton(false);
@@ -327,15 +328,14 @@ export class Chat extends React.Component<ChatProps, State> {
                 }
                 if(currActivity.type == "typing" && dup == true){
                         currActivity = this.store.getState().history.activities[this.store.getState().history.activities.length-1]  
-                       // if(this.state.loading == true){
-                        //    this.setState({
-                       //         loading: false
-                       //     })
-                       // }
+                        if(this.state.loading == true){
+                            this.setState({
+                                loading: false
+                            })
+                        }
                 }
                 
                 if(currActivity.type == "message"){
-
                     const buttonCheck = this.checkNodeCount();
 
                     if(currActivity.entities && currActivity.entities.length >= 1){
@@ -398,11 +398,11 @@ export class Chat extends React.Component<ChatProps, State> {
                 } else {
                     this.toggleBackButton(false);
                     if(activity.type == 'typing'){
-                       // if(this.state.loading == true){
-                           // this.setState({
-                           //     loading: false
-                          //  })
-                       // }
+                        if(this.state.loading == true){
+                            this.setState({
+                                loading: false
+                            })
+                        }
                         if (activity.from.id !== state.connection.user.id) {
                             this.store.dispatch<ChatActions>({ type: 'Show_Typing', activity });
                             this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
@@ -410,6 +410,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         }
 
                     } else if(activity.type == 'message') {
+                     
                         const botConnection: any = this.store.getState().connection.botConnection;
                         const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)  
                         //set convoComplete to true if current convo is finished
@@ -994,9 +995,9 @@ export class Chat extends React.Component<ChatProps, State> {
                                 activities: mapMessagesToActivities(messages, state.connection.user.id)
                             });
 
-                              //  this.setState({
-                             //       loading: false
-                             //   });
+                                this.setState({
+                                    loading: true
+                                });
                         });
 
                         // Ping server with activity every 30 seconds
@@ -1007,6 +1008,10 @@ export class Chat extends React.Component<ChatProps, State> {
                                 this.props.directLine.secret
                             );
                         }, 10000);
+
+                        this.setState({
+                            loading: false
+                        });
 
                         // Only initialize convo for user if it's their first time
                         // interacting with the chatbot
