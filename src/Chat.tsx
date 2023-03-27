@@ -272,9 +272,9 @@ export class Chat extends React.Component<ChatProps, State> {
                     
                 case 'typing':
                     if(this.state.loading == true){
-                        this.setState({
-                            loading: false
-                        })
+                       // this.setState({
+                       //     loading: false
+                      //  })
                     }
                     
                     is_handoff = true
@@ -329,9 +329,9 @@ export class Chat extends React.Component<ChatProps, State> {
                 if(currActivity.type == "typing" && dup == true){
                         currActivity = this.store.getState().history.activities[this.store.getState().history.activities.length-1]  
                         if(this.state.loading == true){
-                            this.setState({
-                                loading: false
-                            })
+                           // this.setState({
+                           //     loading: false
+                          //  })
                         }
                 }
                 
@@ -399,9 +399,9 @@ export class Chat extends React.Component<ChatProps, State> {
                     this.toggleBackButton(false);
                     if(activity.type == 'typing'){
                         if(this.state.loading == true){
-                            this.setState({
-                                loading: false
-                            })
+                           // this.setState({
+                          //      loading: false
+                          //  })
                         }
                         if (activity.from.id !== state.connection.user.id) {
                             this.store.dispatch<ChatActions>({ type: 'Show_Typing', activity });
@@ -554,9 +554,9 @@ export class Chat extends React.Component<ChatProps, State> {
                 .then((res: any) => {
                     const messages = res.data.messages.reverse();
 
-                    ////this.setState({
-                    //    loading: true
-                   // })
+                  //  this.setState({
+                  //      loading: true
+                  //  })
 
                     this.setState({
                         node_count: 0
@@ -632,9 +632,16 @@ export class Chat extends React.Component<ChatProps, State> {
                         )
                     };
                 
-                    this.setState({
-                        loading: false
-                    })
+                    setTimeout(() => {
+                        this.setState({
+                            loading: false
+                        })
+                        
+                       
+                    }, 1000); 
+
+                    
+                   
 
                    this.checkActivitiesLength();
             });
@@ -1047,9 +1054,9 @@ export class Chat extends React.Component<ChatProps, State> {
             (error: Error) => konsole.log('activity$ error', error)
         );
 
-        this.setState({
-            loading: false
-        });
+       // this.setState({
+       //     loading: false
+       // });
 
         if (this.props.selectedActivity) {
             this.selectedActivitySubscription = this.props.selectedActivity.subscribe(activityOrID => {
