@@ -995,9 +995,9 @@ export class Chat extends React.Component<ChatProps, State> {
                                 activities: mapMessagesToActivities(messages, state.connection.user.id)
                             });
 
-                                this.setState({
-                                    loading: true
-                                });
+                                // this.setState({
+                                //     loading: true
+                                // });
                         });
 
                         // Ping server with activity every 30 seconds
@@ -1009,9 +1009,9 @@ export class Chat extends React.Component<ChatProps, State> {
                             );
                         }, 10000);
 
-                        this.setState({
-                            loading: false
-                        });
+                        // this.setState({
+                        //     loading: false
+                        // });
 
                         // Only initialize convo for user if it's their first time
                         // interacting with the chatbot
