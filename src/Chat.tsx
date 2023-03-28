@@ -189,6 +189,7 @@ export class Chat extends React.Component<ChatProps, State> {
             switch (activity.type) {
                 case 'message':
                     // adding node count to check if first node, need to grey out back button
+                    
 
               
                     if(activity.entities) {
@@ -270,6 +271,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     break;
                     
                 case 'typing':
+                   
                     
                     is_handoff = true
                     //this.toggleBackButton(false);
@@ -322,10 +324,10 @@ export class Chat extends React.Component<ChatProps, State> {
                 }
                 if(currActivity.type == "typing" && dup == true){
                         currActivity = this.store.getState().history.activities[this.store.getState().history.activities.length-1]  
+                       
                 }
                 
                 if(currActivity.type == "message"){
-
                     const buttonCheck = this.checkNodeCount();
 
                     if(currActivity.entities && currActivity.entities.length >= 1){
@@ -388,6 +390,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 } else {
                     this.toggleBackButton(false);
                     if(activity.type == 'typing'){
+                       
                         if (activity.from.id !== state.connection.user.id) {
                             this.store.dispatch<ChatActions>({ type: 'Show_Typing', activity });
                             this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
@@ -395,6 +398,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         }
 
                     } else if(activity.type == 'message') {
+                     
                         const botConnection: any = this.store.getState().connection.botConnection;
                         const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)  
                         //set convoComplete to true if current convo is finished
@@ -508,19 +512,24 @@ export class Chat extends React.Component<ChatProps, State> {
         if (curr_node_count <= 0 ) {
             this.toggleBackButton( false );
         }
+        
     }
 
     private clicked = (show: boolean) => {
+        if(this.state.loading != true){
+            if (show == true){
+                document.getElementById('btn3').style.pointerEvents = 'none';
+    
+            } else {
+                document.getElementById('btn3').style.pointerEvents = 'auto';
+    
+            }
+
+        }
         //this.toggleBackButton(false);
         //document.getElementById('btn1').style.pointerEvents = 'none';
         //document.getElementById('btn3').style.pointerEvents = 'none';
-        if (show == true){
-            document.getElementById('btn3').style.pointerEvents = 'none';
-
-        } else {
-            document.getElementById('btn3').style.pointerEvents = 'auto';
-
-        }
+       
         this.setState({
             clicked: show
         })  
@@ -531,12 +540,11 @@ export class Chat extends React.Component<ChatProps, State> {
         if(botConnection && botConnection.conversationId){
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
                 .then((res: any) => {
-
-                   // this.setState({
-                   //     loading: false
-                   // })
-                    
                     const messages = res.data.messages.reverse();
+
+                  //  this.setState({
+                  //      loading: true
+                  //  })
 
                     this.setState({
                         node_count: 0
@@ -611,11 +619,17 @@ export class Chat extends React.Component<ChatProps, State> {
                             activity: message_activities[message_activities.length-1]}
                         )
                     };
+                
+                    setTimeout(() => {
+                        sessionStorage.setItem("loading", 'false');
+                        this.setState({
+                            loading: false
+                        })    
+                    }, 1000); 
 
-                    this.setState({
-                        loading: false
-                    });
                     
+                   
+
                    this.checkActivitiesLength();
             });
         }
@@ -775,20 +789,24 @@ export class Chat extends React.Component<ChatProps, State> {
         //if newConvo exists in localstorage
         if(sessionStorage.getItem('newConvo') === 'true') {
             isNew = true;
-            this.setState({
-                loading: false
-            });
+           // this.setState({
+           //     loading: false
+           // });
         } else if(sessionStorage.getItem('newConvo') === 'false') {
             isNew = false;
-            this.setState({
-                loading: true
-            });
+           // this.setState({
+          //      loading: true
+          //  });
         }
 
         let botConnection: any = null;
 
         //if it's not new convo, it's not a empty chat, or past convo being viewed
         if((reloaded && !isNew ) || (reloaded && sessionStorage.getItem('emptyChat') === 'false') || sessionStorage.getItem('pastConvoID')) {
+            this.setState({
+                      loading: true
+            });
+            
             botConnection = this.props.directLine ?
                 (this.botConnection = new DirectLine({
                     secret: this.props.directLine.secret,
@@ -836,6 +854,9 @@ export class Chat extends React.Component<ChatProps, State> {
                 // if not new convo and there's a convo id in local storage
                 if(reloaded && !isNew) {
                     conversationId = sessionStorage.getItem('msft_conversation_id');
+                    this.setState({
+                        loading: true
+                    })
                 } else if(sessionStorage.getItem('pastConvoID')) {
                     conversationId = sessionStorage.getItem('pastConvoID');
                 }
@@ -972,9 +993,9 @@ export class Chat extends React.Component<ChatProps, State> {
                                 activities: mapMessagesToActivities(messages, state.connection.user.id)
                             });
 
-                                this.setState({
-                                    loading: false
-                                });
+                                // this.setState({
+                                //     loading: true
+                                // });
                         });
 
                         // Ping server with activity every 30 seconds
@@ -985,6 +1006,10 @@ export class Chat extends React.Component<ChatProps, State> {
                                 this.props.directLine.secret
                             );
                         }, 10000);
+
+                        // this.setState({
+                        //     loading: false
+                        // });
 
                         // Only initialize convo for user if it's their first time
                         // interacting with the chatbot
@@ -1020,9 +1045,9 @@ export class Chat extends React.Component<ChatProps, State> {
             (error: Error) => konsole.log('activity$ error', error)
         );
 
-        this.setState({
-            loading: false
-        });
+       // this.setState({
+       //     loading: false
+       // });
 
         if (this.props.selectedActivity) {
             this.selectedActivitySubscription = this.props.selectedActivity.subscribe(activityOrID => {
@@ -1178,11 +1203,14 @@ export class Chat extends React.Component<ChatProps, State> {
            && !this.reloadMsgsCalled
            && this.store.getState().connection.botConnection && this.store.getState().connection.botConnection.conversationId
         ) {
-           // this.setState({
-           //     loading: false
-           // })
+           
+            this.setState({
+                loading: true
+            })
+            sessionStorage.setItem("loading", 'true');
             this.reload_messages();
             this.reloadMsgsCalled = true;
+        
         }
 
         // only render real stuff after we know our dimensions
@@ -1257,7 +1285,7 @@ export class Chat extends React.Component<ChatProps, State> {
                             </div>}
                             {/* current convo or history? */}
                             {!this.state.showConvoHistory ?
-                                (this.state.loading ?
+                                ((this.state.loading== true && sessionStorage.getItem("loading" ) == "true")?
                                     <div className="wc-chatbot-content-right">
                                         <div id="loading-bar-spinner" className="spinner"><div className="spinner-icon"></div></div>
                                     </div>
