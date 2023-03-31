@@ -1151,6 +1151,12 @@ export class Chat extends React.Component<ChatProps, State> {
             showConvoHistory: bool
         });
 
+        if(bool == false){
+            console.log("here")
+            window.location.reload();
+
+        }
+
         if(!bool && sessionStorage.getItem('pastConvoID')) {
             window.location.reload();
             sessionStorage.removeItem('pastConvoID');
