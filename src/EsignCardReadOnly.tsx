@@ -39,8 +39,6 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
         if(this.props.files.length > 0){
             sessionStorage.setItem("file",this.props.files[0].url)
         }
-        console.log(sessionStorage.getItem("file"))
-
     }
 
     //change list view to button
