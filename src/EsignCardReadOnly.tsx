@@ -30,13 +30,22 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
         console.log(props)
 
         this.state = {
-          showDisclaimer: false
+          showDisclaimer: false,
+          savedfiles: this.props.files
         };
+        console.log("state files")
+        console.log(this.state)
+        //add files to sessionStorage for refresh?
+        if(this.props.files.length > 0){
+            sessionStorage.setItem("file",this.props.files[0].url)
+        }
     }
 
     //change list view to button
     render() {
-        document.getElementById('btn3').style.display = "none"
+        if(document.getElementById('btn3') != null){
+            document.getElementById('btn3').style.display = "none"
+        }
         return (
             <div className="modal-normal">
             <div className="modal-content">
@@ -56,10 +65,13 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                     </div>
                 <div className="uploaded-files-container2">
                 <div >
-                {this.props.files.map((file: any) => (
-                      <a className="gideon-submit-button-download" target="_blank" href={file.url}>{"Download Document"}</a>
-                   
-                ))}
+                    {this.props.files.length <= 0 ? <a className="gideon-submit-button-download" target="_blank" href={sessionStorage.getItem("file")}>{"Download Document"}</a> :
+                    this.props.files.map((file: any) => (
+                        <a className="gideon-submit-button-download" target="_blank" href={file.url}>{"Download Document"}</a>
+                     
+                  ))
+                    }
+              
                 </div>
             </div>
                 </div>
