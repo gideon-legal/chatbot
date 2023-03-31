@@ -61,6 +61,7 @@ export interface State {
     messages: any[];
     loading: boolean;
     clicked: boolean;
+    currType: any;
 }
 
 import { FloatingIcon } from './FloatingIcon';
@@ -85,7 +86,8 @@ export class Chat extends React.Component<ChatProps, State> {
         showConvoHistory: false,
         pastConversations: [] as any,
         messages: [] as any,
-        loading: true
+        loading: true,
+        currType: ""
     };
 
    // private clicked: any; // status of if the back button has been clicked already
@@ -197,6 +199,9 @@ export class Chat extends React.Component<ChatProps, State> {
 
                         if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
                             this.addNodeCount();
+                            this.setState({
+                                currType: activity.entities[0].node_type
+                            })
                             
                         }
 
@@ -1150,8 +1155,9 @@ export class Chat extends React.Component<ChatProps, State> {
         this.setState({
             showConvoHistory: bool
         });
-
-        if(bool == false){
+        console.log("currType test")
+        console.log(this.state.currType)
+        if(bool == false && this.state.currType == 'esign'){
             console.log("here")
             window.location.reload();
 
