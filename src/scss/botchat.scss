@@ -1801,6 +1801,24 @@ $lato: Lato, sans-serif;
         }
     }
 
+    .wc-console-fill {
+        bottom: 0;
+        box-sizing: border-box;
+        background: white;
+        height: $consoleHeight;
+        max-width: $chatWidth;
+        left: 0;
+        // width: 66%;
+        position: absolute;
+        right: 0;
+        //transition: background-color .4s;
+        z-index: 6;
+
+        @include mobileAndTablet {
+            max-width: $chatWidthMobile;
+        }
+    }
+
     .wc-console-fullscreen {
         max-width: 100%;
     }
