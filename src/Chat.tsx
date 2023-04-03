@@ -1245,7 +1245,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     style={{ display: 'none'}}
                 >
                     <FloatingIcon
-                        visible={!open}
+                        visible={!open && sessionStorage.getItem("openCheck") != "true"}
                         clicked={() => this.toggle()}
                     />
 
