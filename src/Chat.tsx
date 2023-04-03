@@ -444,6 +444,8 @@ export class Chat extends React.Component<ChatProps, State> {
             opened: true,
             back_visible: !this.state.back_visible
         });
+        console.log("toggled this.state.open: ")
+        console.log(this.state.open)
     }
 
     // Gets initially called if open_fullscreen botParam is set to true
@@ -1065,10 +1067,14 @@ export class Chat extends React.Component<ChatProps, State> {
         }
 
         this.initialOpen = this.state.open;
+        console.log("InitialOpen check 2")
+            console.log(this.initialOpen)
 
         //open === true if new convo or past convo
         if(Boolean(sessionStorage.getItem('newConvo')) || sessionStorage.getItem('pastConvoID') || (!sessionStorage.getItem('pastConvoID') && sessionStorage.getItem('emptyChat') && reloaded)) {
             this.initialOpen = true;
+            console.log("InitialOpen check 3")
+            console.log(this.initialOpen)
         }
 
         this.getConvoList(localStorage.getItem('msft_user_id'),sessionStorage.getItem('msft_conversation_id'));
@@ -1205,6 +1211,8 @@ export class Chat extends React.Component<ChatProps, State> {
 
         //stays open after reloading for a new convo or past convo
         if(this.initialOpen) {
+            console.log("InitialOpen check")
+            console.log(this.initialOpen)
             open = this.initialOpen;
         }
 
