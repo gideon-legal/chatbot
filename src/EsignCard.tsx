@@ -666,7 +666,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     renderNode(){
         const {willSubmit, completedDoc} = this.state;
-
+       // let blank_div = document.createElement("div")
+       // blank_div.setAttribute("class","wc-console")
+       // document.appendChild(blank_div)
+      //  console.log("after add blank")
         return (
             <div className="esign__card gideon__node">
             <NodeHeader
