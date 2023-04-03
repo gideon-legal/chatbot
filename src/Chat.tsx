@@ -199,6 +199,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
                         if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
                             this.addNodeCount();
+                            sessionStorage.setItem("currType", activity.entities[0].node_type)
                             this.setState({
                                 currType: activity.entities[0].node_type
                             })
@@ -1157,7 +1158,7 @@ export class Chat extends React.Component<ChatProps, State> {
         });
         console.log("currType test")
         console.log(this.state.currType)
-        if(bool == false && this.state.currType == 'esign'){
+        if(bool == false && (this.state.currType == 'esign' || sessionStorage.getItem("currType") == 'esign')){
             console.log("here")
             window.location.reload();
 
