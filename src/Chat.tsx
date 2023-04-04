@@ -649,6 +649,11 @@ export class Chat extends React.Component<ChatProps, State> {
                         })    
                     }, 1000); 
 
+                    if(sessionStorage.getItem("currType") == "esign"){
+                        console.log("curr type is esign in reload")
+                        console.log(this.initialOpen)
+                        this.state.open = true;
+                    }
                     if(sessionStorage.getItem("currType") == "esign" && document.getElementById("close-bubble") != null){
                         console.log("detected open bubble")
                         document.getElementById("close-bubble").style.display = "none"
@@ -1227,11 +1232,10 @@ export class Chat extends React.Component<ChatProps, State> {
             console.log(this.initialOpen)
             open = this.initialOpen;
         }
-        if(sessionStorage.getItem("currType") == "esign" && this.initialOpen){
+        if(sessionStorage.getItem("currType") == "esign"){
             console.log("curr type is esign")
             console.log(this.initialOpen)
             open = this.initialOpen;
-
         }
 
         //reload msg when reloaded and waits until all previous msg appear before reload_messages is called
@@ -1261,6 +1265,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 >
                     <FloatingIcon
                         id="close-bubble"
+                        display={() => this.checkVisible()}
                         visible={() => this.checkVisible()}
                         clicked={() => this.toggle()}
                     />
