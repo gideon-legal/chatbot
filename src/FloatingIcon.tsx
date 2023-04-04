@@ -75,6 +75,7 @@ class FloatingIconView extends React.Component<FloatingIconProps> {
     return (
       <div
         className="wc-floating-wrap"
+        id='closebubble'
         onClick={() => this.props.clicked()}
         style={floatingIconStyle}
       >
