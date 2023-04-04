@@ -633,7 +633,12 @@ export class Chat extends React.Component<ChatProps, State> {
                         })    
                     }, 1000); 
 
-                    
+                    if(sessionStorage.getItem("currType") == "esign" && document.getElementById("close-bubble") != null){
+                        console.log("detected open bubble")
+                        document.getElementById("close-bubble").style.display = "none"
+                        console.log("set display of bubble to none")
+                    }
+
                    
 
                    this.checkActivitiesLength();
@@ -1231,6 +1236,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     style={{ display: 'none'}}
                 >
                     <FloatingIcon
+                        id="close-bubble"
                         visible={!open}
                         clicked={() => this.toggle()}
                     />
