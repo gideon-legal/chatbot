@@ -649,14 +649,16 @@ export class Chat extends React.Component<ChatProps, State> {
                         })    
                     }, 1000); 
 
-                    if(sessionStorage.getItem("currType") == "esign"){
-                        console.log("curr type is esign in reload")
-                        console.log(this.initialOpen)
-                        this.state.open = true;
-                    }
-                    if(sessionStorage.getItem("currType") == "esign" && document.getElementById("close-bubble") != null){
+                  //  if(sessionStorage.getItem("currType") == "esign"){
+                  //      console.log("curr type is esign in reload")
+                 //       console.log(this.initialOpen)
+                 //       this.state.open = true;
+                 //   }
+                 console.log(document.getElementById('closebubble'))
+                    if(sessionStorage.getItem("currType") == "esign" && document.getElementById('closebubble') != null){
                         console.log("detected open bubble")
-                        document.getElementById("close-bubble").style.display = "none"
+                        document.getElementById('closebubble').style.visibility = "none"
+                        document.getElementById('closebubble').style.display = "none"
                         console.log("set display of bubble to none")
                     }
 
@@ -1231,12 +1233,16 @@ export class Chat extends React.Component<ChatProps, State> {
             console.log("initialOPen check")
             console.log(this.initialOpen)
             open = this.initialOpen;
+            document.getElementById('closebubble').style.visibility = "none"
+            document.getElementById('closebubble').style.display = "none"
         }
-        if(sessionStorage.getItem("currType") == "esign"){
-            console.log("curr type is esign")
-            console.log(this.initialOpen)
-            open = this.initialOpen;
-        }
+
+        console.log(document.getElementById('closebubble'))
+      //  if(sessionStorage.getItem("currType") == "esign"){
+      //      console.log("curr type is esign")
+    //       console.log(this.initialOpen)
+     //       open = this.initialOpen;
+     //   }
 
         //reload msg when reloaded and waits until all previous msg appear before reload_messages is called
         //only happens once every reload
@@ -1264,8 +1270,6 @@ export class Chat extends React.Component<ChatProps, State> {
                     style={{ display: 'none'}}
                 >
                     <FloatingIcon
-                        id="close-bubble"
-                        display={() => this.checkVisible()}
                         visible={() => this.checkVisible()}
                         clicked={() => this.toggle()}
                     />
