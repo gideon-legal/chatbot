@@ -444,7 +444,6 @@ export class Chat extends React.Component<ChatProps, State> {
             opened: true,
             back_visible: !this.state.back_visible
         });
-        sessionStorage.setItem("openCheck",""+this.state.open)
     }
 
     // Gets initially called if open_fullscreen botParam is set to true
@@ -1066,12 +1065,10 @@ export class Chat extends React.Component<ChatProps, State> {
         }
 
         this.initialOpen = this.state.open;
-        sessionStorage.setItem("openCheck",""+this.state.open)
 
         //open === true if new convo or past convo
         if(Boolean(sessionStorage.getItem('newConvo')) || sessionStorage.getItem('pastConvoID') || (!sessionStorage.getItem('pastConvoID') && sessionStorage.getItem('emptyChat') && reloaded)) {
             this.initialOpen = true;
-            sessionStorage.setItem("openCheck","true")
         }
 
         this.getConvoList(localStorage.getItem('msft_user_id'),sessionStorage.getItem('msft_conversation_id'));
@@ -1265,7 +1262,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                     </IconButton>
                                     {/* Close X image on chat */}
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" 
-                                    onClick={() => {this.toggle(); this.initialOpen = false; sessionStorage.setItem("openCheck","false")}} >
+                                    onClick={() => {this.toggle(); this.initialOpen = false;}} >
                                         <title>wc-header--close</title>
                                         <path className="wc-header--close" d="M18 2L2 18" stroke="#FCFCFC" stroke-width="3" stroke-linecap="round" />
                                         <path className="wc-header--close" d="M2 2L18 18" stroke="#FCFCFC" stroke-width="3" stroke-linecap="round" />
