@@ -446,6 +446,22 @@ export class Chat extends React.Component<ChatProps, State> {
         });
     }
 
+    private checkVisible = () => {
+        console.log("checking visible")
+        var setVisible = true
+        if(this.state.open == false){
+            console.log("set to false 1")
+            setVisible = false
+        }
+        if(sessionStorage.getItem("currType") == "esign"){
+            console.log("set to false 2")
+            setVisible = false
+        }
+        console.log("visible returning")
+        console.log(setVisible)
+        return setVisible
+    }
+
     // Gets initially called if open_fullscreen botParam is set to true
     private toggleFullscreen = () => {
         this.setState({
@@ -1207,7 +1223,15 @@ export class Chat extends React.Component<ChatProps, State> {
 
         //stays open after reloading for a new convo or past convo
         if(this.initialOpen) {
+            console.log("initialOPen check")
+            console.log(this.initialOpen)
             open = this.initialOpen;
+        }
+        if(sessionStorage.getItem("currType") == "esign" && this.initialOpen){
+            console.log("curr type is esign")
+            console.log(this.initialOpen)
+            open = this.initialOpen;
+
         }
 
         //reload msg when reloaded and waits until all previous msg appear before reload_messages is called
@@ -1237,7 +1261,7 @@ export class Chat extends React.Component<ChatProps, State> {
                 >
                     <FloatingIcon
                         id="close-bubble"
-                        visible={!open}
+                        visible={() => this.checkVisible()}
                         clicked={() => this.toggle()}
                     />
 
