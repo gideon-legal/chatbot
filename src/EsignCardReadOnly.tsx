@@ -26,15 +26,10 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
     constructor(props: EsignCardReadOnlyProps) {
         super(props);
 
-        console.log("esign post props")
-        console.log(props)
-
         this.state = {
           showDisclaimer: false,
           savedfiles: this.props.files
         };
-        console.log("state files")
-        console.log(this.state)
         //add files to sessionStorage for refresh?
         if(this.props.files.length > 0){
             sessionStorage.setItem("file",this.props.files[0].url)
