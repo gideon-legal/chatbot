@@ -1165,7 +1165,7 @@ export class Chat extends React.Component<ChatProps, State> {
         const rightOffset = fullHeight ? 0 : (alignment !== 'left' && format && format.rightOffset ? format.rightOffset : -1);
         const height = fullHeight ? '100vh' : '80%';
 
-        if(!sessionStorage.getItem("bottomCheck") || sessionStorage.getItem("bottomCheck") >= ""+bottomOffset){
+        if(!sessionStorage.getItem("bottomCheck") || parseInt(sessionStorage.getItem("bottomCheck")) >= bottomOffset){
             sessionStorage.setItem("bottomCheck", ""+bottomOffset)
             console.log("set bottomCheck")
         }
@@ -1245,7 +1245,7 @@ export class Chat extends React.Component<ChatProps, State> {
            // document.getElementById('closebubble').style.display = "none"
            console.log("chat bottom")
            console.log(document.getElementById('chatviewpanel').style.bottom)
-           if(sessionStorage.getItem("bottomCheck") <= document.getElementById('chatviewpanel').style.bottom){
+           if(parseInt(sessionStorage.getItem("bottomCheck")) <= parseInt(document.getElementById('chatviewpanel').style.bottom)){
             console.log("bottomcheck")
             console.log(sessionStorage.getItem("bottomCheck"))
             document.getElementById('chatviewpanel').style.bottom = sessionStorage.getItem("bottomCheck")
