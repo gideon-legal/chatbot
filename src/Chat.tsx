@@ -654,12 +654,16 @@ export class Chat extends React.Component<ChatProps, State> {
                  //       console.log(this.initialOpen)
                  //       this.state.open = true;
                  //   }
-                 console.log(document.getElementById('closebubble'))
                     if(sessionStorage.getItem("currType") == "esign" && document.getElementById('closebubble') != null){
                         console.log("detected open bubble")
-                        document.getElementById('closebubble').style.visibility = "none"
-                        document.getElementById('closebubble').style.display = "none"
+                       // document.getElementById('closebubble').style.visibility = "none"
+                      //  document.getElementById('closebubble').style.display = "none"
                         console.log("set display of bubble to none")
+                        if(sessionStorage.getItem("bottomCheck") && sessionStorage.getItem("bottomCheck") != "0"){
+                            console.log("bottomcheck")
+                            console.log(sessionStorage.getItem("bottomCheck"))
+                            document.getElementById('chatviewpanel').style.bottom = sessionStorage.getItem("bottomCheck")
+                           }
                     }
 
                    
@@ -1155,10 +1159,16 @@ export class Chat extends React.Component<ChatProps, State> {
             };
         }
 
+
         const bottomOffset = fullHeight ? 0 : (format && format.bottomOffset ? format.bottomOffset + 99 : 17);
         const topOffset = format && format.topOffset ? format.topOffset : 0;
         const rightOffset = fullHeight ? 0 : (alignment !== 'left' && format && format.rightOffset ? format.rightOffset : -1);
         const height = fullHeight ? '100vh' : '80%';
+
+        if(!sessionStorage.getItem("bottomCheck") || sessionStorage.getItem("bottomCheck") == "0"){
+            sessionStorage.setItem("bottomCheck", ""+bottomOffset)
+            console.log("set bottomCheck")
+        }
 
         let styles = {
             bottom: bottomOffset,
@@ -1230,11 +1240,16 @@ export class Chat extends React.Component<ChatProps, State> {
 
         //stays open after reloading for a new convo or past convo
         if(this.initialOpen) {
-            console.log("initialOPen check")
-            console.log(this.initialOpen)
             open = this.initialOpen;
-            document.getElementById('closebubble').style.visibility = "none"
-            document.getElementById('closebubble').style.display = "none"
+           // document.getElementById('closebubble').style.visibility = "none"
+           // document.getElementById('closebubble').style.display = "none"
+           console.log("chat bottom")
+           console.log(document.getElementById('chatviewpanel').style.bottom)
+           if(sessionStorage.getItem("bottomCheck") && sessionStorage.getItem("bottomCheck") != "0"){
+            console.log("bottomcheck")
+            console.log(sessionStorage.getItem("bottomCheck"))
+            document.getElementById('chatviewpanel').style.bottom = sessionStorage.getItem("bottomCheck")
+           }
         }
 
         console.log(document.getElementById('closebubble'))
@@ -1276,6 +1291,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
                     <div
                         className={`wc-chatview-panel ${open ? 'wc-chatview-panel__open' : 'wc-chatview-panel__closed' }`}
+                        id='chatviewpanel'
                         onKeyDownCapture={ this._handleKeyDownCapture }
                         ref={ this._saveChatviewPanelRef }
                         style={chatviewPanelStyle}
