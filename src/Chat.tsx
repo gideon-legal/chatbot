@@ -206,11 +206,6 @@ export class Chat extends React.Component<ChatProps, State> {
                             
                         }
 
-                        // if(activity.entities[0].node_type === 'prompt' || activity.entities[0].type === 'ClientCapabilities'){
-                        //     this.addNodeCount();
-                        //     console.log( "nodecount 1 " + this.state.node_count);
-                        // }
-
                         const buttonCheck = this.state.node_count;
 
                         this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
@@ -231,11 +226,6 @@ export class Chat extends React.Component<ChatProps, State> {
                 } else {
                     
                     const botConnection: any = this.store.getState().connection.botConnection;
-
-                    // const buttonCheck = ( curr_node_count - nodeCheck );
-                    //     console.log("activities.length 2 " + curr_node_count);
-                    //     console.log("nodeCheck 2 " + nodeCheck);
-                    //     console.log("buttonCheck 2 " + buttonCheck);
 
                     const buttonCheck = this.state.node_count;
 
@@ -447,18 +437,13 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private checkVisible = () => {
-        console.log("checking visible")
         var setVisible = true
         if(this.state.open == false){
-            console.log("set to false 1")
             setVisible = false
         }
         if(sessionStorage.getItem("currType") == "esign"){
-            console.log("set to false 2")
             setVisible = false
         }
-        console.log("visible returning")
-        console.log(setVisible)
         return setVisible
     }
 
@@ -648,25 +633,6 @@ export class Chat extends React.Component<ChatProps, State> {
                             loading: false
                         })    
                     }, 1000); 
-
-                  //  if(sessionStorage.getItem("currType") == "esign"){
-                  //      console.log("curr type is esign in reload")
-                 //       console.log(this.initialOpen)
-                 //       this.state.open = true;
-                 //   }
-                //    if(sessionStorage.getItem("currType") == "esign" && document.getElementById('closebubble') != null){
-                ///        console.log("detected open bubble")
-                       // document.getElementById('closebubble').style.visibility = "none"
-                      //  document.getElementById('closebubble').style.display = "none"
-                //        console.log("set display of bubble to none")
-                //        if(sessionStorage.getItem("bottomCheck") && sessionStorage.getItem("bottomCheck") != "0"){
-               //             console.log("bottomcheck")
-               //             console.log(sessionStorage.getItem("bottomCheck"))
-               //             document.getElementById('chatviewpanel').style.bottom = sessionStorage.getItem("bottomCheck")
-               //            }
-               //     }
-
-                   
 
                    this.checkActivitiesLength();
             });
@@ -1002,28 +968,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         .then((res: any) => {
                             const state = this.store.getState();
                             const messages = res.data.messages.reverse();
-                            // if(res.data.messages.length == 0){
-                            //     "setting back button to false"
-                            //     //disable back button test
-                            //     this.setState({
-                            //         node_count: 0
-                            //     });
-                            //     this.state.node_count = 0;
-                            //     sessionStorage.setItem("node_count", "0");
-                            //     console.log("toggle false 3")
-                            //     this.toggleBackButton(false);
-                            // } else {
-                            //     console.log("setting back button to true")
-                            //     console.log(this.state.node_count)
-                            //     this.setState({
-                            //         node_count: res.data.messages.length
-                            //     });
-                            //     //this.state.node_count = res.data.messages.length;
-                            //     //if(messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0)
-                            //     this.toggleBackButton(true);
-                                
-                            // }
-
+                    
                             if(isNew && messages.length === 0) isNew = true;
 
                             this.store.dispatch<ChatActions>({
@@ -1031,9 +976,6 @@ export class Chat extends React.Component<ChatProps, State> {
                                 activities: mapMessagesToActivities(messages, state.connection.user.id)
                             });
 
-                                // this.setState({
-                                //     loading: true
-                                // });
                         });
 
                         // Ping server with activity every 30 seconds
@@ -1167,8 +1109,6 @@ export class Chat extends React.Component<ChatProps, State> {
 
         if(!sessionStorage.getItem("bottomCheck") || parseInt(sessionStorage.getItem("bottomCheck")) >= bottomOffset){
             sessionStorage.setItem("bottomCheck", ""+bottomOffset)
-            console.log("set bottomCheck in calculate function")
-            console.log(sessionStorage.getItem("bottomCheck"))
         }
 
         //set bottom to what is stored in bottomCheck
@@ -1245,21 +1185,11 @@ export class Chat extends React.Component<ChatProps, State> {
             open = this.initialOpen;
            // document.getElementById('closebubble').style.visibility = "none"
            // document.getElementById('closebubble').style.display = "none"
-           console.log("chat bottom")
-           console.log(document.getElementById('chatviewpanel').style.bottom)
            if(parseInt(sessionStorage.getItem("bottomCheck")) <= parseInt(document.getElementById('chatviewpanel').style.bottom)){
-            console.log("bottomcheck")
-            console.log(sessionStorage.getItem("bottomCheck"))
             document.getElementById('chatviewpanel').style.bottom = sessionStorage.getItem("bottomCheck")
            } 
         }
 
-        console.log(document.getElementById('closebubble'))
-      //  if(sessionStorage.getItem("currType") == "esign"){
-      //      console.log("curr type is esign")
-    //       console.log(this.initialOpen)
-     //       open = this.initialOpen;
-     //   }
 
         //reload msg when reloaded and waits until all previous msg appear before reload_messages is called
         //only happens once every reload
