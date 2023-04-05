@@ -226,7 +226,6 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
                   <DisclaimerCard { ...props } activity={activityCopy} />
             );
         } else if (type === 'esign') {
-          console.log(activityCopy)
           return (
                 <EsignCard{ ...props } activity={activityCopy} />
           );
