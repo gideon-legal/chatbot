@@ -654,17 +654,17 @@ export class Chat extends React.Component<ChatProps, State> {
                  //       console.log(this.initialOpen)
                  //       this.state.open = true;
                  //   }
-                    if(sessionStorage.getItem("currType") == "esign" && document.getElementById('closebubble') != null){
-                        console.log("detected open bubble")
+                //    if(sessionStorage.getItem("currType") == "esign" && document.getElementById('closebubble') != null){
+                ///        console.log("detected open bubble")
                        // document.getElementById('closebubble').style.visibility = "none"
                       //  document.getElementById('closebubble').style.display = "none"
-                        console.log("set display of bubble to none")
-                        if(sessionStorage.getItem("bottomCheck") && sessionStorage.getItem("bottomCheck") != "0"){
-                            console.log("bottomcheck")
-                            console.log(sessionStorage.getItem("bottomCheck"))
-                            document.getElementById('chatviewpanel').style.bottom = sessionStorage.getItem("bottomCheck")
-                           }
-                    }
+                //        console.log("set display of bubble to none")
+                //        if(sessionStorage.getItem("bottomCheck") && sessionStorage.getItem("bottomCheck") != "0"){
+               //             console.log("bottomcheck")
+               //             console.log(sessionStorage.getItem("bottomCheck"))
+               //             document.getElementById('chatviewpanel').style.bottom = sessionStorage.getItem("bottomCheck")
+               //            }
+               //     }
 
                    
 
@@ -1165,7 +1165,7 @@ export class Chat extends React.Component<ChatProps, State> {
         const rightOffset = fullHeight ? 0 : (alignment !== 'left' && format && format.rightOffset ? format.rightOffset : -1);
         const height = fullHeight ? '100vh' : '80%';
 
-        if(!sessionStorage.getItem("bottomCheck") || sessionStorage.getItem("bottomCheck") == "0"){
+        if(!sessionStorage.getItem("bottomCheck") || sessionStorage.getItem("bottomCheck") >= ""+bottomOffset){
             sessionStorage.setItem("bottomCheck", ""+bottomOffset)
             console.log("set bottomCheck")
         }
@@ -1245,11 +1245,11 @@ export class Chat extends React.Component<ChatProps, State> {
            // document.getElementById('closebubble').style.display = "none"
            console.log("chat bottom")
            console.log(document.getElementById('chatviewpanel').style.bottom)
-           if(sessionStorage.getItem("bottomCheck") && sessionStorage.getItem("bottomCheck") != "0"){
+           if(sessionStorage.getItem("bottomCheck") <= document.getElementById('chatviewpanel').style.bottom){
             console.log("bottomcheck")
             console.log(sessionStorage.getItem("bottomCheck"))
             document.getElementById('chatviewpanel').style.bottom = sessionStorage.getItem("bottomCheck")
-           }
+           } 
         }
 
         console.log(document.getElementById('closebubble'))
