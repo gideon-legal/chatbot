@@ -1167,11 +1167,13 @@ export class Chat extends React.Component<ChatProps, State> {
 
         if(!sessionStorage.getItem("bottomCheck") || parseInt(sessionStorage.getItem("bottomCheck")) >= bottomOffset){
             sessionStorage.setItem("bottomCheck", ""+bottomOffset)
-            console.log("set bottomCheck")
+            console.log("set bottomCheck in calculate function")
+            console.log(sessionStorage.getItem("bottomCheck"))
         }
 
+        //set bottom to what is stored in bottomCheck
         let styles = {
-            bottom: bottomOffset,
+            bottom: parseInt(sessionStorage.getItem("bottomCheck")),
             height,
             ...(rightOffset !== -1 || (format && format.full_height)) && { right: rightOffset }
         };
