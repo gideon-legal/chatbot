@@ -444,8 +444,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
         //need special styling for fullscreen
         if(this.state.isFullscreen ==  true){
             return (
-                <div>
-                <div className="esign__card esign__node" id="presign">
+                <div id="presign2">
+                <div id="presign_card_check" className="esign__card esign__node">
                 <div className= {this.state.validated && !this.state.isPopup ? "esign-checkmark" : "esign-checkmark__disabled"}>
                          <EsignCheckMark />
                     </div>
@@ -471,7 +471,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         return (
             <div>
                  
-                <div className="esign__card esign__node">
+                <div className="esign__card esign__node" id="presign_card_check">
                 <div className= {this.state.validated && !this.state.isPopup ? "esign-checkmark" : "esign-checkmark__disabled"}>
                          <EsignCheckMark />
                     </div>
@@ -595,7 +595,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <div className="presign_area">
                         <EsignPreSign />
                 </div>
-                <div className="esign__card gideon__node">
+                <div className="esign__card gideon__node" id="presignnode">
                 
                 {willSubmit == false &&  this.renderStartingScreen()}
                 {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
