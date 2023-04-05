@@ -445,7 +445,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         if(this.state.isFullscreen ==  true){
             return (
                 <div>
-                <div className="esign__card esign__node">
+                <div className="esign__card esign__node" id="presign">
                 <div className= {this.state.validated && !this.state.isPopup ? "esign-checkmark" : "esign-checkmark__disabled"}>
                          <EsignCheckMark />
                     </div>
