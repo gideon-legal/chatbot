@@ -67,7 +67,8 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
             && sessionStorage.getItem('original_length')
            // && !sessionStorage.getItem("pastConvoID")
         ){
-            
+           // console.log(this.props)
+            sessionStorage.setItem("loading", 'true');
             this.newConvoPrompt = true;
         } else if(sessionStorage.getItem("pastConvoID") && (!sessionStorage.getItem("convoComplete") || sessionStorage.getItem("convoComplete") === "null")) {
         //prompt disappears if uncompleted past convo is being viewed
@@ -335,7 +336,8 @@ export const History = connect(
         connectionSelectedActivity: state.connection.selectedActivity,
         selectedActivity: state.history.selectedActivity,
         botConnection: state.connection.botConnection,
-        user: state.connection.user
+        user: state.connection.user,
+        
     }), {
         setMeasurements: (carouselMargin: number) => ({ type: 'Set_Measurements', carouselMargin }),
         onClickRetry: (activity: Activity) => ({ type: 'Send_Message_Retry', clientActivityId: activity.channelData.clientActivityId }),
@@ -511,7 +513,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                 <div data-activity-id={activity.id } className={wrapperClassName + lastMessageClass}>
                     <div className={'wc-message wc-message-from-me wc-message-node wc-message-file' + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
                         <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
-                           <EsignCardReadOnly files={this.props.files}/>
+                           <EsignCardReadOnly files={this.props.files} post_message={activityCopy.entities[0].meta}/>
                         </div>
                     </div>
                 </div>
