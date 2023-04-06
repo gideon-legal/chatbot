@@ -632,7 +632,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         this.setState({
                             loading: false
                         })    
-                    }, 3000); 
+                    }, 2000); 
 
                    this.checkActivitiesLength();
             });
