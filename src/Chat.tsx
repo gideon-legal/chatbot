@@ -681,6 +681,7 @@ export class Chat extends React.Component<ChatProps, State> {
                this.setState({
                 loading: false
             })
+            sessionStorage.setItem("loading","false")
                this.checkActivitiesLength();
 
             });
@@ -1307,6 +1308,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                                             this.setState({
                                                                 loading: true
                                                             })
+                                                            sessionStorage.setItem("loading", 'true');
 
                                                             this.step(); 
 
