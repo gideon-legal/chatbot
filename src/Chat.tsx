@@ -633,7 +633,7 @@ export class Chat extends React.Component<ChatProps, State> {
                             loading: false
                         })    
                     }, 2000); 
-
+                    sessionStorage.setItem("loading", 'false');
                    this.checkActivitiesLength();
             });
         }
@@ -1208,7 +1208,7 @@ export class Chat extends React.Component<ChatProps, State> {
             })
             sessionStorage.setItem("loading", 'true');
             this.reload_messages();
-            sessionStorage.setItem("loading", 'false');
+            // sessionStorage.setItem("loading", 'false');
             this.reloadMsgsCalled = true;
         
         }
