@@ -1209,6 +1209,7 @@ export class Chat extends React.Component<ChatProps, State> {
             })
             sessionStorage.setItem("loading", 'true');
             this.reload_messages();
+            sessionStorage.setItem("loading", 'false');
             this.reloadMsgsCalled = true;
         
         }
