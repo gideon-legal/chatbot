@@ -1194,7 +1194,6 @@ export class Chat extends React.Component<ChatProps, State> {
            } 
         }
 
-
         //reload msg when reloaded and waits until all previous msg appear before reload_messages is called
         //only happens once every reload
         if(performance.getEntriesByType('navigation')[0].type === 'reload' 
@@ -1287,6 +1286,10 @@ export class Chat extends React.Component<ChatProps, State> {
                                 />
                             </div>}
                             {/* current convo or history? */}
+                            {console.log("this.state.loading")}
+                            {console.log(this.state.loading)}
+                            {console.log("session storage loading")}
+                            {console.log(sessionStorage.getItem("loading" ))}
                             {!this.state.showConvoHistory ?
                                 ((this.state.loading== true && sessionStorage.getItem("loading" ) == "true")?
                                     <div className="wc-chatbot-content-right">
