@@ -634,7 +634,9 @@ export class Chat extends React.Component<ChatProps, State> {
                         })    
                     }, 2000); 
                     sessionStorage.setItem("loading", 'false');
+                    console.log("finished reload messages")
                    this.checkActivitiesLength();
+
             });
         }
     }
@@ -1202,7 +1204,7 @@ export class Chat extends React.Component<ChatProps, State> {
            && !this.reloadMsgsCalled
            && this.store.getState().connection.botConnection && this.store.getState().connection.botConnection.conversationId
         ) {
-           
+           console.log("calling reload messages")
             this.setState({
                 loading: true
             })
