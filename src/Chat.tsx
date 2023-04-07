@@ -696,6 +696,7 @@ export class Chat extends React.Component<ChatProps, State> {
         this.setState({
             loading: true
         })
+        sessionStorage.setItem("loading", 'true');
         conversationList(this.props.gid, userID, convoId)
         .then((res: any) => {
             this.setState({
@@ -704,6 +705,7 @@ export class Chat extends React.Component<ChatProps, State> {
             this.setState({
                 loading: false
             });
+            sessionStorage.setItem("loading", 'false');
         })
         .catch((err: any) => {
             console.log(err);
@@ -811,7 +813,7 @@ export class Chat extends React.Component<ChatProps, State> {
             this.setState({
                       loading: true
             });
-            
+            sessionStorage.setItem("loading", 'true');
             botConnection = this.props.directLine ?
                 (this.botConnection = new DirectLine({
                     secret: this.props.directLine.secret,
@@ -862,6 +864,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     this.setState({
                         loading: true
                     })
+                    sessionStorage.setItem("loading", 'true');
                 } else if(sessionStorage.getItem('pastConvoID')) {
                     conversationId = sessionStorage.getItem('pastConvoID');
                 }
