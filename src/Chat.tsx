@@ -1219,6 +1219,10 @@ export class Chat extends React.Component<ChatProps, State> {
         
         }
 
+        if(sessionStorage.getItem("loading") == "true" && this.state.loading == false){
+            sessionStorage.setItem("loading", 'false');
+        }
+
         // only render real stuff after we know our dimensions
         return (
             <Provider store={ this.store }>
