@@ -633,8 +633,10 @@ export class Chat extends React.Component<ChatProps, State> {
                             loading: false
                         })    
                     }, 2000); 
-
+                   // sessionStorage.setItem("loading", 'false');
+                    console.log("finished reload messages")
                    this.checkActivitiesLength();
+
             });
         }
     }
@@ -696,6 +698,8 @@ export class Chat extends React.Component<ChatProps, State> {
         this.setState({
             loading: true
         })
+        sessionStorage.setItem("loading", 'true');
+        console.log("1 " + this.state.loading);
         conversationList(this.props.gid, userID, convoId)
         .then((res: any) => {
             this.setState({
@@ -704,6 +708,7 @@ export class Chat extends React.Component<ChatProps, State> {
             this.setState({
                 loading: false
             });
+            sessionStorage.setItem("loading", 'false');
         })
         .catch((err: any) => {
             console.log(err);
@@ -811,7 +816,8 @@ export class Chat extends React.Component<ChatProps, State> {
             this.setState({
                       loading: true
             });
-            
+            sessionStorage.setItem("loading", 'true');
+            console.log("2 " + this.state.loading);
             botConnection = this.props.directLine ?
                 (this.botConnection = new DirectLine({
                     secret: this.props.directLine.secret,
@@ -862,6 +868,8 @@ export class Chat extends React.Component<ChatProps, State> {
                     this.setState({
                         loading: true
                     })
+                    sessionStorage.setItem("loading", 'true');
+                    console.log("3 " + this.state.loading);
                 } else if(sessionStorage.getItem('pastConvoID')) {
                     conversationId = sessionStorage.getItem('pastConvoID');
                 }
@@ -1191,7 +1199,6 @@ export class Chat extends React.Component<ChatProps, State> {
            } 
         }
 
-
         //reload msg when reloaded and waits until all previous msg appear before reload_messages is called
         //only happens once every reload
         if(performance.getEntriesByType('navigation')[0].type === 'reload' 
@@ -1200,12 +1207,14 @@ export class Chat extends React.Component<ChatProps, State> {
            && !this.reloadMsgsCalled
            && this.store.getState().connection.botConnection && this.store.getState().connection.botConnection.conversationId
         ) {
-           
+           console.log("calling reload messages")
             this.setState({
                 loading: true
             })
             sessionStorage.setItem("loading", 'true');
+            console.log("4 " + this.state.loading);
             this.reload_messages();
+            // sessionStorage.setItem("loading", 'false');
             this.reloadMsgsCalled = true;
         
         }
@@ -1283,6 +1292,10 @@ export class Chat extends React.Component<ChatProps, State> {
                                 />
                             </div>}
                             {/* current convo or history? */}
+                            {console.log("this.state.loading")}
+                            {console.log(this.state.loading)}
+                            {console.log("session storage loading")}
+                            {console.log(sessionStorage.getItem("loading" ))}
                             {!this.state.showConvoHistory ?
                                 ((this.state.loading== true && sessionStorage.getItem("loading" ) == "true")?
                                     <div className="wc-chatbot-content-right">
@@ -1309,7 +1322,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                                                 loading: true
                                                             })
                                                             sessionStorage.setItem("loading", 'true');
-
+                                                            console.log("5 " + this.state.loading);
                                                             this.step(); 
 
                                                             this.deleteNodeCount(1);
