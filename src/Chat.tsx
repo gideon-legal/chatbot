@@ -633,7 +633,7 @@ export class Chat extends React.Component<ChatProps, State> {
                             loading: false
                         })    
                     }, 2000); 
-                    sessionStorage.setItem("loading", 'false');
+                   // sessionStorage.setItem("loading", 'false');
                     console.log("finished reload messages")
                    this.checkActivitiesLength();
 
@@ -1217,10 +1217,6 @@ export class Chat extends React.Component<ChatProps, State> {
             // sessionStorage.setItem("loading", 'false');
             this.reloadMsgsCalled = true;
         
-        }
-
-        if(sessionStorage.getItem("loading") == "true" && this.state.loading == false){
-            sessionStorage.setItem("loading", 'false');
         }
 
         // only render real stuff after we know our dimensions
