@@ -816,7 +816,7 @@ export class Chat extends React.Component<ChatProps, State> {
             this.setState({
                       loading: true
             });
-            sessionStorage.setItem("loading", 'true');
+            //sessionStorage.setItem("loading", 'true');
             console.log("2 " + this.state.loading);
             botConnection = this.props.directLine ?
                 (this.botConnection = new DirectLine({
@@ -1206,6 +1206,7 @@ export class Chat extends React.Component<ChatProps, State> {
            && (((Number(sessionStorage.getItem("original_length")) === this.store.getState().history.activities.length) || Number(sessionStorage.getItem("original_length")) - this.store.getState().history.activities.length === -1 && Number(sessionStorage.getItem("original_length")) !== 0) || sessionStorage.getItem("convoComplete") === "true")
            && !this.reloadMsgsCalled
            && this.store.getState().connection.botConnection && this.store.getState().connection.botConnection.conversationId
+           && this.state.loading == false && sessionStorage.getItem("loading") == "false"
         ) {
            console.log("calling reload messages")
             this.setState({
