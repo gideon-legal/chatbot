@@ -192,6 +192,8 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         if(sessionStorage.getItem("convoComplete") && (!sessionStorage.getItem("pastConvoID") || sessionStorage.getItem("pastConvoID") === "null")) {
             
             this.newConvoPrompt = true;
+            sessionStorage.setItem("loading","false")
+          
         }
 
         if (this.props.size.width !== undefined) {
