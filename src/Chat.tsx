@@ -628,7 +628,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     };
                 
                     setTimeout(() => {
-                        sessionStorage.setItem("loading", 'false');
+                   //     sessionStorage.setItem("loading", 'false');
                         this.setState({
                             loading: false
                         })    
@@ -869,7 +869,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         loading: true
                     })
                     sessionStorage.setItem("loading", 'true');
-                    console.log("3 " + this.state.loading);
+                    //console.log("3 " + this.state.loading);
                 } else if(sessionStorage.getItem('pastConvoID')) {
                     conversationId = sessionStorage.getItem('pastConvoID');
                 }
