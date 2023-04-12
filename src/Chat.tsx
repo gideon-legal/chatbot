@@ -172,6 +172,7 @@ export class Chat extends React.Component<ChatProps, State> {
         const state = this.store.getState();
         this.toggleBackButton(false);
         let alreadyContains = false;
+       // sessionStorage.setItem("loading", 'false');
         //checking if history.activities contains same text and message type as incoming activity
         let i: any;
         let duplicate: any;
