@@ -68,8 +68,10 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
            // && !sessionStorage.getItem("pastConvoID")
         ){
            // console.log(this.props)
-            sessionStorage.setItem("loading", 'true');
+            //sessionStorage.setItem("loading", 'true');
             this.newConvoPrompt = true;
+            sessionStorage.setItem("loading","false")
+            console.log("in history, setting loading to false 1")
         } else if(sessionStorage.getItem("pastConvoID") && (!sessionStorage.getItem("convoComplete") || sessionStorage.getItem("convoComplete") === "null")) {
         //prompt disappears if uncompleted past convo is being viewed
        
@@ -192,6 +194,9 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
         if(sessionStorage.getItem("convoComplete") && (!sessionStorage.getItem("pastConvoID") || sessionStorage.getItem("pastConvoID") === "null")) {
             
             this.newConvoPrompt = true;
+            sessionStorage.setItem("loading","false")
+            console.log("in history, setting loading to false")
+          
         }
 
         if (this.props.size.width !== undefined) {
