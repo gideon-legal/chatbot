@@ -174,6 +174,9 @@ export class Chat extends React.Component<ChatProps, State> {
         let alreadyContains = false;
         //sessionStorage.setItem("loading", 'true');
         //checking if history.activities contains same text and message type as incoming activity
+        console.log("handling incoming activity")
+        console.log("lastActivity:")
+        console.log(lastActivity)
         let i: any;
         let duplicate: any;
         let checked_ids: any[] = []
@@ -313,6 +316,8 @@ export class Chat extends React.Component<ChatProps, State> {
                 
                 //add case when creating currActivity, if -2 is gideon message start, stick with -1
                 let currActivity = this.store.getState().history.activities[this.store.getState().history.activities.length-1]
+                console.log("need to use currActivity:")
+                console.log(currActivity)
                 if(this.store.getState().history.activities.length >= 2){
                     currActivity = this.store.getState().history.activities[this.store.getState().history.activities.length-2]
                 }
