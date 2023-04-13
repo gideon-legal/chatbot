@@ -172,7 +172,7 @@ export class Chat extends React.Component<ChatProps, State> {
         const state = this.store.getState();
         this.toggleBackButton(false);
         let alreadyContains = false;
-       // sessionStorage.setItem("loading", 'false');
+        //sessionStorage.setItem("loading", 'true');
         //checking if history.activities contains same text and message type as incoming activity
         let i: any;
         let duplicate: any;
@@ -232,7 +232,9 @@ export class Chat extends React.Component<ChatProps, State> {
 
                     // if the current activity has no entities, it might be a completion node, in which case we must hide the back button
                     // checkNeedBackButton returns if the current activity corresponds to a completion node or not
+                    console.log("before await case 1")
                     const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)  
+                    console.log("after await case 1")
                     //set convoComplete to true if current convo is finished
                     if(notNode === "handoff") { sessionStorage.setItem("convoComplete", 'true');
                         
@@ -351,7 +353,9 @@ export class Chat extends React.Component<ChatProps, State> {
                         }
                     } else {
                         const botConnection: any = this.store.getState().connection.botConnection;
-                        const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, currActivity.text)  
+                        console.log("before await case 2")
+                        const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, currActivity.text) 
+                        console.log("after await case 2") 
                     //set convoComplete to true if current convo is finished
                     if(notNode === "handoff") { 
                         sessionStorage.setItem("convoComplete", 'true');
@@ -397,7 +401,9 @@ export class Chat extends React.Component<ChatProps, State> {
                     } else if(activity.type == 'message') {
                      
                         const botConnection: any = this.store.getState().connection.botConnection;
-                        const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)  
+                        console.log("before await case 3")
+                        const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text) 
+                        console.log("after await case 3") 
                         //set convoComplete to true if current convo is finished
                         if(notNode === "handoff") sessionStorage.setItem("convoComplete", 'true');
                         if(notNode === "esign") sessionStorage.setItem("convoComplete", 'true');
