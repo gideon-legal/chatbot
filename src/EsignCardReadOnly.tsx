@@ -10,10 +10,12 @@ import { EsignNode, EsignPopup, EsignCheckMark } from './assets/icons/EsignIcons
 import { sendSignature } from './api/bot';
 import { Hidden } from '@material-ui/core';
 //will most likely need read only card too for after signing
+//need to add fullscreen variable to check
 export interface Node {
     node_type: string;
     document: any;
     meta: any;
+    //isFullscreen: boolean;
     
 }
 
