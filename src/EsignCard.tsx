@@ -694,6 +694,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
     //screen 1: message + button to sign
     //screen 2: document viewable + signature box
 
+    //need to add fullscreen changes
     render() {
         const {willSubmit, completedDoc, isPopup, isDocument, isSignature, isModal} = this.state;
        return (
