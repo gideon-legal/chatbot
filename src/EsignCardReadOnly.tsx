@@ -15,13 +15,14 @@ export interface Node {
     node_type: string;
     document: any;
     meta: any;
-    //isFullscreen: boolean;
     
 }
 
 export interface EsignCardReadOnlyProps {
     files: Array<{ name: string, url: string }>;
     post_message: any;
+    fullscreen: boolean;
+    fullheight: boolean;
 }
 
 export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {}> {
