@@ -53,6 +53,7 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
             return (
                 <div className="modal-normal">
                 <div className="modal-content">
+                <div className='presign_area_full'>
                 <div className="esign__card gideon__node">
                     <div>
                     
@@ -84,6 +85,7 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                 </div>
                
                 </div>
+                </div>
             )
         } else {
             // not fullscreen styling
@@ -95,8 +97,8 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
               
             }
             return (
-                <div className="modal-fullscreen">
-                <div className="modal-content-full">
+                <div className="modal-normal">
+                <div className="modal-content">
                 <div className="esign__card gideon__node">
                     <div>
                     

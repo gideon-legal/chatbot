@@ -455,10 +455,12 @@ class Esign extends React.Component<EsignProps, EsignState> {
                     <div className="esign-message-handoff-small">
                         {this.props.presignText}
                     </div>
-                </div> 
+                </div>
+                <div className="fullbutton-test">
                 <button type="button" className="gideon-submit-button-presign-fullscreen" id="sign_btn" onClick={e => this.handleSign(e)}>
                      <EsignPen/> Review & Sign
                 </button>
+                </div> 
                  <div>
                     {/*<button type="button" className={ this.state.isPopup ? "gideon-submit-button-white" : "gideon-submit-button-white__disabled"} onClick={e => this.handleSkip(e)}>
                          Sign Later
