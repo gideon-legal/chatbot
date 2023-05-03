@@ -2024,6 +2024,27 @@ $lato: Lato, sans-serif;
 
     }
 
+    .gideon-submit-button-presign-fullscreen {
+        background-color: #3F6DE1;
+        border: 1px solid #3F6DE1;
+        border-radius: 3px !important;
+        color: #ffffff;
+        min-height: 32px;
+        height: auto;
+        width: 80%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: center;
+        font-size: 22px !important;
+        box-shadow: 2px 2px 4px 0px $c_shadow;
+
+        @media (min-height: 924px) {
+            margin-top: 40px;
+        }
+
+    }
+
     .gideon-submit-button-modal {
         background-color: #3F6DE1;
         border: 1px solid #3F6DE1;
@@ -2660,7 +2681,7 @@ $lato: Lato, sans-serif;
        // left: 85%;
         margin-top: $headerTotalHeight;
         top: 19%;
-        width: 82%; /* Full width */
+        width: 92%; /* Full width */
         height: 188%;
         left: 43%;
         //width: 242vw;

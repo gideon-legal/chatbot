@@ -456,7 +456,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         {this.props.presignText}
                     </div>
                 </div> 
-                <button type="button" className="gideon-submit-button-presign" id="sign_btn" onClick={e => this.handleSign(e)}>
+                <button type="button" className="gideon-submit-button-presign-fullscreen" id="sign_btn" onClick={e => this.handleSign(e)}>
                      <EsignPen/> Review & Sign
                 </button>
                  <div>

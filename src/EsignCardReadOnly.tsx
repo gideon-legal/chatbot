@@ -41,7 +41,7 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
 
     //change list view to button
     render() {
-        if(this.props.fullscreen != false){
+        if(this.props.fullscreen == false){
             // do fullscreen version -> modify srtyling
             if(document.getElementById('btn3') != null){
                 document.getElementById('btn3').style.display = "none"
@@ -95,8 +95,8 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
               
             }
             return (
-                <div className="modal-normal">
-                <div className="modal-content">
+                <div className="modal-fullscreen">
+                <div className="modal-content-full">
                 <div className="esign__card gideon__node">
                     <div>
                     
