@@ -6,7 +6,7 @@ import { ChatState } from './Store';
 import { ChatActions, sendMessage, sendFiles } from './Store';
 import { connect } from 'react-redux';
 import { isMobile } from 'react-device-detect';
-import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign, EsignPen } from './assets/icons/EsignIcons';
+import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign, EsignPen, EsignPreSignFull, EsignFullTest, EsignFullTestPaper } from './assets/icons/EsignIcons';
 import { sendSignature } from './api/bot';
 import { Hidden } from '@material-ui/core';
 import { any } from 'bluebird';
@@ -455,10 +455,12 @@ class Esign extends React.Component<EsignProps, EsignState> {
                     <div className="esign-message-handoff-small">
                         {this.props.presignText}
                     </div>
-                </div> 
-                <button type="button" className="gideon-submit-button-presign" id="sign_btn" onClick={e => this.handleSign(e)}>
+                </div>
+                <div className="fullbutton-test">
+                <button type="button" className="gideon-submit-button-presign-fullscreen" id="sign_btn" onClick={e => this.handleSign(e)}>
                      <EsignPen/> Review & Sign
                 </button>
+                </div> 
                  <div>
                     {/*<button type="button" className={ this.state.isPopup ? "gideon-submit-button-white" : "gideon-submit-button-white__disabled"} onClick={e => this.handleSkip(e)}>
                          Sign Later
@@ -607,7 +609,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
             )
         if(isFullHeight == true){
-            //fullscreen css
             esignPopup = (
                 <div className="modal-fullheight">
                 <div className="modal-content">
@@ -624,25 +625,31 @@ class Esign extends React.Component<EsignProps, EsignState> {
             </div>
             )
         }
-        // if(isFullscreen == true){
-        //     //fullheight css
-        //     esignPopup = (
-        //         <div className="modal-fullscreen">
-        //         <div className="modal-content-full">
-        //         <div className="presign_area_full">
-        //                 <EsignPreSignFull />
-        //         </div>
-        //         <div className="esign__card gideon__node">
-        //         {willSubmit == false && this.renderStartingScreen()}
-        //         {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
-        //         {/*willSubmit == true && completedDoc == true && this.renderCompletedDoc() */}
-        //         {/*isSignature == true && this.renderSignatureModal()*/}
+        //fullscreen css - need special svg + button adjustments?
+         if(isFullscreen == true){
+             //fullheight css
+             esignPopup = (
+                 <div className="modal-fullscreen">
+                 <div className="modal-content-full">
+                 <div className="presign_area_full">
+                        <div className="fullsign_paper">
+                            <EsignFullTestPaper/>
+                        </div>
+                        <div className='fullsign_bg'>
+                        <EsignFullTest/>
+                        </div>
+                 </div>
+                 <div className="esign__card gideon__node">
+                 {willSubmit == false && this.renderStartingScreen()}
+                 {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
+                 {/*willSubmit == true && completedDoc == true && this.renderCompletedDoc() */}
+                 {/*isSignature == true && this.renderSignatureModal()*/}
     
-        //     </div>
-        //         </div>
-        //     </div>
-        //     )
-        // }
+             </div>
+                 </div>
+             </div>
+             )
+         }
         if(isMobile == true){
             esignPopup = (
                 <div className="modal-normal">
@@ -694,6 +701,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
     //screen 1: message + button to sign
     //screen 2: document viewable + signature box
 
+    //need to add fullscreen changes
     render() {
         const {willSubmit, completedDoc, isPopup, isDocument, isSignature, isModal} = this.state;
        return (
