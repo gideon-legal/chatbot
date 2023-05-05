@@ -2409,6 +2409,8 @@ $lato: Lato, sans-serif;
         font-size: xx-large;
         line-height: 40px;
         /* or 89% */
+        margin-left: 15%;
+        margin-right: 15%;
 
         text-align: center;
         letter-spacing: 0.04em;
@@ -3115,6 +3117,13 @@ $lato: Lato, sans-serif;
         height: 25%; 
         margin-right: 50%;
        // background-size: 50% 100%;
+      }
+
+      .fullsign_paper {
+        position: absolute;
+        left: 30%;
+        top: 2%
+       
       }
 
       .presign_area_full_post {

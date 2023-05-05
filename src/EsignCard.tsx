@@ -6,7 +6,7 @@ import { ChatState } from './Store';
 import { ChatActions, sendMessage, sendFiles } from './Store';
 import { connect } from 'react-redux';
 import { isMobile } from 'react-device-detect';
-import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign, EsignPen, EsignPreSignFull } from './assets/icons/EsignIcons';
+import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign, EsignPen, EsignPreSignFull, EsignFullTest, EsignFullTestPaper } from './assets/icons/EsignIcons';
 import { sendSignature } from './api/bot';
 import { Hidden } from '@material-ui/core';
 import { any } from 'bluebird';
@@ -632,7 +632,11 @@ class Esign extends React.Component<EsignProps, EsignState> {
                  <div className="modal-fullscreen">
                  <div className="modal-content-full">
                  <div className="presign_area_full">
-                         <EsignPreSignFull />
+                        <div className="fullsign_paper">
+                            <EsignFullTestPaper/>
+                        </div>
+                         <EsignFullTest/>
+
                  </div>
                  <div className="esign__card gideon__node">
                  {willSubmit == false && this.renderStartingScreen()}
