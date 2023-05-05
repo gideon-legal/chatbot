@@ -2727,7 +2727,7 @@ $lato: Lato, sans-serif;
         top: 19%;
         width: 92%; /* Full width */
         height: 188%;
-        left: 43%;
+        left: 42.5%;
         //width: 242vw;
         transform: translate(-10%, -10%);
         //background-color: rgb(0,0,0); 
@@ -3123,7 +3123,10 @@ $lato: Lato, sans-serif;
         position: absolute;
         left: 30%;
         top: 2%
-       
+      }
+
+      .fullsign_bg {
+        width: 50%;
       }
 
       .presign_area_full_post {

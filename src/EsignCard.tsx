@@ -635,8 +635,9 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         <div className="fullsign_paper">
                             <EsignFullTestPaper/>
                         </div>
-                         <EsignFullTest/>
-
+                        <div className='fullsign_bg'>
+                        <EsignFullTest/>
+                        </div>
                  </div>
                  <div className="esign__card gideon__node">
                  {willSubmit == false && this.renderStartingScreen()}
