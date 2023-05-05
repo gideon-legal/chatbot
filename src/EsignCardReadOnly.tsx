@@ -41,7 +41,7 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
 
     //change list view to button
     render() {
-        if(this.props.fullscreen == false){
+        if(this.props.fullscreen == true){
             // do fullscreen version -> modify srtyling
             if(document.getElementById('btn3') != null){
                 document.getElementById('btn3').style.display = "none"
@@ -51,15 +51,13 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
               
             }
             return (
-                <div className="modal-normal">
-                <div className="modal-content">
-                <div className='presign_area_full'>
+                <div className="modal-fullscreen">
+                <div className="modal-content-full">
+                <div className='presign_area_full_post'>
+                    <EsignNode />
+                </div>      
                 <div className="esign__card gideon__node">
-                    <div>
-                    
-                        <div className="document_area2">
-                            <EsignNode />
-                        </div>
+                    <div className="esign__card esign__node">
                         <div className='esign-message-handoff-big2'>
                             Congrats! 
                         </div>
@@ -68,11 +66,11 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                      "Please download your completed representation agreement below. A member of our team will be in touch to advise you on your next steps. Thank you!"}
                           
                         </div>
-                    <div className="uploaded-files-container2">
+                    <div className="fullbutton-test">
                     <div >
-                        {this.props.files.length <= 0 ? <a className="gideon-submit-button-download" target="_blank" href={sessionStorage.getItem("file")}>{"Download Document"}</a> :
+                        {this.props.files.length <= 0 ? <a className="gideon-submit-button-download-full" target="_blank" href={sessionStorage.getItem("file")}>{"Download Document"}</a> :
                         this.props.files.map((file: any) => (
-                            <a className="gideon-submit-button-download" target="_blank" href={file.url}>{"Download Document"}</a>
+                            <a className="gideon-submit-button-download-full" target="_blank" href={file.url}>{"Download Document"}</a>
                          
                       ))
                         }
@@ -80,7 +78,7 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                     </div>
                 </div>
                     </div>
-                </div>
+                
     
                 </div>
                

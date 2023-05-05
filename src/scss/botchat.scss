@@ -2045,6 +2045,18 @@ $lato: Lato, sans-serif;
 
     }
 
+    .gideon-submit-button-presign-fullscreen:hover {
+        background-color: #fff;
+        border-color: #3F6DE1;
+        color: #3F6DE1;
+    }
+
+    .gideon-submit-button-presign-fullscreen-disabled:hover {
+        background-color: #B5B5B5 !important;
+        cursor: not-allowed !important;
+        color: white !important;
+    }
+
     .fullbutton-test {
         width: 70%;
         margin-left: 23%;
@@ -2102,6 +2114,28 @@ $lato: Lato, sans-serif;
         box-shadow: 2px 2px 4px 0px $c_shadow;
         position: absolute;
         left: 13%;
+        font-size: 22px !important;
+
+        @media (min-height: 924px) {
+            margin-top: 40px;
+        }
+    }
+
+    .gideon-submit-button-download-full {
+        text-decoration:none;
+        background-color: #3F6DE1;
+        border: 1px solid #3F6DE1;
+        border-radius: 3px !important;
+        color: #ffffff !important;
+        min-height: 32px;
+        height: auto;
+        width: 42%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: center;
+        box-shadow: 2px 2px 4px 0px $c_shadow;
+        position: absolute;
         font-size: 22px !important;
 
         @media (min-height: 924px) {
@@ -2418,6 +2452,9 @@ $lato: Lato, sans-serif;
         line-height: 19px;
         text-align: center;
         letter-spacing: 0.03em;
+        left: 15%;
+        margin-left: 15%;
+        margin-right: 15%;
     
        /* Gideon/Primary text */
        color: #262626;
@@ -3077,6 +3114,13 @@ $lato: Lato, sans-serif;
         padding: 0px 0px 0px 0px !important;
         height: 25%; 
         margin-right: 50%;
+       // background-size: 50% 100%;
+      }
+
+      .presign_area_full_post {
+        //width: 50%;
+        padding: 0px 0px 0px 0px !important;
+        height: 25%; 
        // background-size: 50% 100%;
       }
 
