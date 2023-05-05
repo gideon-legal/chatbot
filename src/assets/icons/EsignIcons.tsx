@@ -774,7 +774,7 @@ export class EsignPreSignFull extends React.Component<{}, {}> {
 
 export class EsignFullTest extends React.Component<{}, {}> {
     render(){
-     return <svg xmlns="http://www.w3.org/2000/svg" width="1262" height="476" viewBox="0 0 1262 476" fill="none">
+     return <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 1262 476" fill="none">
 <rect width="1262" height="476" fill="url(#paint0_linear_5520_1595)" fill-opacity="0.4"/>
 <mask id="mask0_5520_1595"  maskUnits="userSpaceOnUse" x="0" y="0" width="1261" height="434">
 <rect width="1260.88" height="433.964" fill="#FBFBFB"/>
