@@ -812,7 +812,7 @@ export class EsignFullTest extends React.Component<{}, {}> {
 
 export class EsignFullTestPaper extends React.Component<{}, {}>{
     render(){
-    return    <svg xmlns="http://www.w3.org/2000/svg" width="298" height="330" viewBox="0 0 298 330" fill="none">
+    return    <svg xmlns="http://www.w3.org/2000/svg" width="298" height="50%" viewBox="0 0 298 330" fill="none">
 <g filter="url(#filter0_d_5518_835)">
 <ellipse cx="149" cy="307" rx="144" ry="17" fill="#B7CBFF"/>
 <path d="M280 4H20V303.323H280V4Z" fill="white"/>
