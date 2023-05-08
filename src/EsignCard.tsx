@@ -452,7 +452,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                     <div className="esign-message-handoff-big">
                            You're almost done! 
                     </div>
-                    <div className="esign-message-handoff-small">
+                    <div className="esign-message-handoff-small2">
                         {this.props.presignText}
                     </div>
                 </div>
