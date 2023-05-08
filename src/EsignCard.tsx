@@ -6,7 +6,7 @@ import { ChatState } from './Store';
 import { ChatActions, sendMessage, sendFiles } from './Store';
 import { connect } from 'react-redux';
 import { isMobile } from 'react-device-detect';
-import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign, EsignPen, EsignPreSignFull, EsignFullTest, EsignFullTestPaper } from './assets/icons/EsignIcons';
+import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign, EsignPen, EsignPreSignFull, EsignFullTest, EsignFullTestPaper, EsignFullTestPaperSmall } from './assets/icons/EsignIcons';
 import { sendSignature } from './api/bot';
 import { Hidden } from '@material-ui/core';
 import { any } from 'bluebird';
@@ -627,28 +627,58 @@ class Esign extends React.Component<EsignProps, EsignState> {
         }
         //fullscreen css - need special svg + button adjustments?
          if(isFullscreen == true){
-             //fullheight css
+            let heightCheck = window.screen.height
+            console.log("height check")
+            console.log(heightCheck)
+            if(heightCheck >= 924){
+                 //fullheight css
              esignPopup = (
-                 <div className="modal-fullscreen">
-                 <div className="modal-content-full">
-                 <div className="presign_area_full">
-                        <div className="fullsign_paper">
-                            <EsignFullTestPaper/>
-                        </div>
-                        <div className='fullsign_bg'>
-                        <EsignFullTest/>
-                        </div>
-                 </div>
-                 <div className="esign__card gideon__node">
-                 {willSubmit == false && this.renderStartingScreen()}
-                 {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
-                 {/*willSubmit == true && completedDoc == true && this.renderCompletedDoc() */}
-                 {/*isSignature == true && this.renderSignatureModal()*/}
-    
-             </div>
-                 </div>
-             </div>
-             )
+                <div className="modal-fullscreen">
+                <div className="modal-content-full">
+                <div className="presign_area_full">
+                       <div className="fullsign_paper">
+                           <EsignFullTestPaper/>
+                       </div>
+                       <div className='fullsign_bg'>
+                       <EsignFullTest/>
+                       </div>
+                </div>
+                <div className="esign__card gideon__node">
+                {willSubmit == false && this.renderStartingScreen()}
+                {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
+                {/*willSubmit == true && completedDoc == true && this.renderCompletedDoc() */}
+                {/*isSignature == true && this.renderSignatureModal()*/}
+   
+            </div>
+                </div>
+            </div>
+            )
+
+            } else {
+                 //fullheight css
+             esignPopup = (
+                <div className="modal-fullscreen">
+                <div className="modal-content-full">
+                <div className="presign_area_full">
+                       <div className="fullsign_paper">
+                           <EsignFullTestPaperSmall/>
+                       </div>
+                       <div className='fullsign_bg'>
+                       <EsignFullTest/>
+                       </div>
+                </div>
+                <div className="esign__card gideon__node">
+                {willSubmit == false && this.renderStartingScreen()}
+                {/*willSubmit == true && completedDoc == false && this.renderLargerPdf()*/}
+                {/*willSubmit == true && completedDoc == true && this.renderCompletedDoc() */}
+                {/*isSignature == true && this.renderSignatureModal()*/}
+   
+            </div>
+                </div>
+            </div>
+            )
+
+            }
          }
         if(isMobile == true){
             esignPopup = (
