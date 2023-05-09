@@ -58,7 +58,7 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                 </div>      
                 <div className="esign__card gideon__node">
                     <div className="esign__card esign__node">
-                        <div className='esign-message-handoff-big2'>
+                        <div className='esign-message-handoff-bigfull'>
                             Congrats! 
                         </div>
                         <div className="esign-message-handoff-small2">
