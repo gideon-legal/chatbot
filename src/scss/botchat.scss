@@ -2095,9 +2095,18 @@ $lato: Lato, sans-serif;
         margin-left: 18%;
     }
 
+    .fullbutton-testpost {
+        width: 70%;
+        margin-left: 24%;
+
+        @media (max-height: 924px) {
+            margin-left: 18%;
+           }
+    }
+
     .fullbutton-test2 {
         width: 70%;
-        margin-left: 15%;
+        margin-left: 20%;
     }
 
     .gideon-submit-button-modal {
@@ -2447,7 +2456,7 @@ $lato: Lato, sans-serif;
         font-size: xx-large;
         line-height: 40px;
         /* or 89% */
-        margin-left: 4%;
+        margin-left: 15%;
         margin-right: 15%;
 
         text-align: center;
@@ -2457,6 +2466,10 @@ $lato: Lato, sans-serif;
 
        color: #262626;
        padding: 15px 0px 15px 0px;
+
+       @media (max-height: 924px) {
+        margin-left: 4%;
+       }
 
        @include mobileAndTablet{
         padding: 20px 0px 15px 0px;
@@ -2516,12 +2529,16 @@ $lato: Lato, sans-serif;
         text-align: center;
         letter-spacing: 0.03em;
         left: 15%;
-        margin-left: 2%;
+        margin-left: 15%;
         margin-right: 15%;
     
        /* Gideon/Primary text */
        color: #262626;
        padding: 15px 0px 15px 0px;
+
+       @media (max-height: 924px) {
+        margin-left: 2%;
+       }
 
        @include mobileAndTablet {
         padding-bottom: 30px;
@@ -3182,7 +3199,7 @@ $lato: Lato, sans-serif;
 
       .fullsign_paper {
         position: absolute;
-        left: 27%;
+        left: 30%;
         top: 2%;
 
         @media (max-height: 924px) {

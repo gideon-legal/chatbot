@@ -444,8 +444,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
         //need special styling for fullscreen
         if(this.state.isFullscreen ==  true){
             let heightCheck = window.screen.height
-            console.log("height check")
-            console.log(heightCheck)
             if(heightCheck >= 924){
                 return (
                     <div id="presign2">
@@ -661,8 +659,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
         //fullscreen css - need special svg + button adjustments?
          if(isFullscreen == true){
             let heightCheck = window.screen.height
-            console.log("height check")
-            console.log(heightCheck)
             if(heightCheck >= 924){
                  //fullheight css
              esignPopup = (
