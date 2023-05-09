@@ -58,7 +58,7 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                 </div>      
                 <div className="esign__card gideon__node">
                     <div className="esign__card esign__node">
-                        <div className='esign-message-handoff-big2'>
+                        <div className='esign-message-handoff-bigfull'>
                             Congrats! 
                         </div>
                         <div className="esign-message-handoff-small2">
@@ -66,7 +66,7 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                      "Please download your completed representation agreement below. A member of our team will be in touch to advise you on your next steps. Thank you!"}
                           
                         </div>
-                    <div className="fullbutton-test">
+                    <div className="fullbutton-testpost">
                     <div >
                         {this.props.files.length <= 0 ? <a className="gideon-submit-button-download-full" target="_blank" href={sessionStorage.getItem("file")}>{"Download Document"}</a> :
                         this.props.files.map((file: any) => (
