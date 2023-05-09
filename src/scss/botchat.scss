@@ -2031,7 +2031,7 @@ $lato: Lato, sans-serif;
         color: #ffffff;
         min-height: 32px;
         height: auto;
-        width: 80%;
+        //width: 80%;
         white-space: normal;
         overflow-wrap: break-word;
         padding: 18px;
@@ -2409,7 +2409,7 @@ $lato: Lato, sans-serif;
         font-size: xx-large;
         line-height: 40px;
         /* or 89% */
-        margin-left: 15%;
+        margin-left: 4%;
         margin-right: 15%;
 
         text-align: center;
@@ -2478,7 +2478,7 @@ $lato: Lato, sans-serif;
         text-align: center;
         letter-spacing: 0.03em;
         left: 15%;
-        margin-left: 15%;
+        margin-left: 2%;
         margin-right: 15%;
     
        /* Gideon/Primary text */
@@ -3144,8 +3144,12 @@ $lato: Lato, sans-serif;
 
       .fullsign_paper {
         position: absolute;
-        left: 30%;
-        top: 2%
+        left: 25%;
+        top: 2%;
+
+        @media (min-height: 924px) {
+          
+        }
       }
 
       .fullsign_bg {
