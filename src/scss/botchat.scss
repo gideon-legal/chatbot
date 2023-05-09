@@ -2057,9 +2057,47 @@ $lato: Lato, sans-serif;
         color: white !important;
     }
 
+    .gideon-submit-button-presign-fullscreen2 {
+        background-color: #3F6DE1;
+        border: 1px solid #3F6DE1;
+        border-radius: 3px !important;
+        color: #ffffff;
+        min-height: 32px;
+        height: auto;
+        width: 80%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        padding: 18px;
+        text-align: center;
+        font-size: 22px !important;
+        box-shadow: 2px 2px 4px 0px $c_shadow;
+
+        @media (min-height: 924px) {
+            margin-top: 40px;
+        }
+
+    }
+
+    .gideon-submit-button-presign-fullscreen2:hover {
+        background-color: #fff;
+        border-color: #3F6DE1;
+        color: #3F6DE1;
+    }
+
+    .gideon-submit-button-presign-fullscreen2-disabled:hover {
+        background-color: #B5B5B5 !important;
+        cursor: not-allowed !important;
+        color: white !important;
+    }
+
     .fullbutton-test {
         width: 70%;
         margin-left: 18%;
+    }
+
+    .fullbutton-test2 {
+        width: 70%;
+        margin-left: 15%;
     }
 
     .gideon-submit-button-modal {
@@ -3144,11 +3182,12 @@ $lato: Lato, sans-serif;
 
       .fullsign_paper {
         position: absolute;
-        left: 25%;
+        left: 27%;
         top: 2%;
 
-        @media (min-height: 924px) {
-          
+        @media (max-height: 924px) {
+        left: 25%;
+        top: 2%;  
         }
       }
 

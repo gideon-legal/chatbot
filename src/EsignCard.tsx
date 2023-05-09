@@ -443,32 +443,65 @@ class Esign extends React.Component<EsignProps, EsignState> {
     renderStartingScreen() {
         //need special styling for fullscreen
         if(this.state.isFullscreen ==  true){
-            return (
-                <div id="presign2">
-                <div id="presign_card_check" className="esign__card esign__node">
-                <div className= {this.state.validated && !this.state.isPopup ? "esign-checkmark" : "esign-checkmark__disabled"}>
-                         <EsignCheckMark />
+            let heightCheck = window.screen.height
+            console.log("height check")
+            console.log(heightCheck)
+            if(heightCheck >= 924){
+                return (
+                    <div id="presign2">
+                    <div id="presign_card_check" className="esign__card esign__node">
+                    <div className= {this.state.validated && !this.state.isPopup ? "esign-checkmark" : "esign-checkmark__disabled"}>
+                             <EsignCheckMark />
+                        </div>
+                        <div className="esign-message-handoff-bigfull">
+                               You're almost done! 
+                        </div>
+                        <div className="esign-message-handoff-small2">
+                            {this.props.presignText}
+                        </div>
                     </div>
-                    <div className="esign-message-handoff-bigfull">
-                           You're almost done! 
-                    </div>
-                    <div className="esign-message-handoff-small2">
-                        {this.props.presignText}
-                    </div>
+                    <div className="fullbutton-test2">
+                    <button type="button" className="gideon-submit-button-presign-fullscreen2" id="sign_btn" onClick={e => this.handleSign(e)}>
+                         <EsignPen/> Review & Sign
+                    </button>
+                    </div> 
+                     <div>
+                        {/*<button type="button" className={ this.state.isPopup ? "gideon-submit-button-white" : "gideon-submit-button-white__disabled"} onClick={e => this.handleSkip(e)}>
+                             Sign Later
+            </button>*/}
+                    </div> 
                 </div>
-                <div className="fullbutton-test">
-                <button type="button" className="gideon-submit-button-presign-fullscreen" id="sign_btn" onClick={e => this.handleSign(e)}>
-                     <EsignPen/> Review & Sign
-                </button>
-                </div> 
-                 <div>
-                    {/*<button type="button" className={ this.state.isPopup ? "gideon-submit-button-white" : "gideon-submit-button-white__disabled"} onClick={e => this.handleSkip(e)}>
-                         Sign Later
-        </button>*/}
-                </div> 
-            </div>
+    
+                );
 
-            );
+            } else {
+                return (
+                    <div id="presign2">
+                    <div id="presign_card_check" className="esign__card esign__node">
+                    <div className= {this.state.validated && !this.state.isPopup ? "esign-checkmark" : "esign-checkmark__disabled"}>
+                             <EsignCheckMark />
+                        </div>
+                        <div className="esign-message-handoff-bigfull">
+                               You're almost done! 
+                        </div>
+                        <div className="esign-message-handoff-small2">
+                            {this.props.presignText}
+                        </div>
+                    </div>
+                    <div className="fullbutton-test">
+                    <button type="button" className="gideon-submit-button-presign-fullscreen" id="sign_btn" onClick={e => this.handleSign(e)}>
+                         <EsignPen/> Review & Sign
+                    </button>
+                    </div> 
+                     <div>
+                        {/*<button type="button" className={ this.state.isPopup ? "gideon-submit-button-white" : "gideon-submit-button-white__disabled"} onClick={e => this.handleSkip(e)}>
+                             Sign Later
+            </button>*/}
+                    </div> 
+                </div>
+    
+                );
+            }
         }
         return (
             <div>
