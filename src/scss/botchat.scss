@@ -3217,6 +3217,9 @@ $lato: Lato, sans-serif;
         padding: 0px 0px 0px 0px !important;
         height: 25%; 
        // background-size: 50% 100%;
+       @media (max-height: 924px) {
+        margin-left: -10%;  
+        }
       }
 
       .uploaded-files-container {
