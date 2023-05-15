@@ -656,14 +656,17 @@ export class Chat extends React.Component<ChatProps, State> {
     //step function perfoms going back to the previous message
     private step = (messageId?: string|null) => {
         const botConnection: any = this.store.getState().connection.botConnection;
-
-        step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
+        console.log("in stepp")
+         step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
         .then((res: any) => {
+            console.log(res.data)
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, res.data.id)
             .then((res: any) => {
-                
+                console.log("after step")
                 const messages = res.data.messages.reverse();
+                console.log(messages)
                 const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
+                console.log(message_activities)
                 this.props.showConsole === false;
                 this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                 this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
@@ -1333,8 +1336,9 @@ export class Chat extends React.Component<ChatProps, State> {
                                                             sessionStorage.setItem("loading", 'true');
                                                             //console.log("5 " + this.state.loading);
                                                             this.step(); 
-
+                                                            this.reload_messages()
                                                             this.deleteNodeCount(1);
+                                                            this.reload_messages()
 
                                                            
                                                             // var button = this.state; // temp variable in order to change state of clicked
