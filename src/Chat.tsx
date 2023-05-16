@@ -554,6 +554,76 @@ export class Chat extends React.Component<ChatProps, State> {
         })  
     }
 
+    private reload_messages_nocount = (messageId?: string|null) => {
+        const botConnection: any = this.store.getState().connection.botConnection;
+        if(botConnection && botConnection.conversationId){
+            conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
+                .then((res: any) => {
+                    const messages = res.data.messages.reverse();
+
+                  //  this.setState({
+                  //      loading: true
+                  //  })
+
+                    //sessionStorage.setItem("node_count", ((this.state.node_count - 1).toString()) );
+
+                    //filter messages to not include duplicates, check sender type = 1, only 1 per sender type = 1, node progress id
+                    var checked_nodes: any[] = []
+                    var messages_copy: any[] = []
+                    let m: any;
+                    for(m of messages){
+                        if(m.sender_type == "bot" && !checked_nodes.includes(m.node_progress_id) && m.node_progress_id != null){
+                            checked_nodes.push(m.node_progress_id)
+                            messages_copy.push(m)
+                        } else if (m.sender_type == "chatbot_user" || m.node_progress_id == null){
+                            messages_copy.push(m)
+                        }
+                    }
+                    const message_activities = mapMessagesToActivities(messages_copy, this.store.getState().connection.user.id)
+                    
+                   
+                    this.props.showConsole === false;
+                    this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
+                    this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
+
+                    //if(message_activities[message_activities.length - 1].from.id === "") message_activities.pop()
+
+                    this.store.dispatch<ChatActions>({
+                        type: 'Set_Messages',
+                        activities: message_activities
+                    });
+
+                    // reset shell input
+                    this.store.dispatch<ChatActions>(
+                        { type: 'Submit_Date' } as ChatActions
+                    );
+
+                    // have to resend receive_message for input enabled nodes
+                    if(messages.length > 0 && messages[messages.length-1].entities && messages[messages.length-1].entities.length === 0){
+                        this.toggleBackButton(true)
+                        this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: true});
+                        this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
+                        
+                        this.store.dispatch<ChatActions>(
+                            { type: 'Receive_Message',
+                            activity: message_activities[message_activities.length-1]}
+                        )
+                    };
+                
+                    setTimeout(() => {
+                   //     sessionStorage.setItem("loading", 'false');
+                        this.setState({
+                            loading: false
+                        })    
+                    }, 2000); 
+                   // sessionStorage.setItem("loading", 'false');
+                    console.log("finished reload messages")
+                   this.checkActivitiesLength();
+
+            });
+        }
+    }
+
     private reload_messages = (messageId?: string|null) => {
         const botConnection: any = this.store.getState().connection.botConnection;
         if(botConnection && botConnection.conversationId){
@@ -656,14 +726,17 @@ export class Chat extends React.Component<ChatProps, State> {
     //step function perfoms going back to the previous message
     private step = (messageId?: string|null) => {
         const botConnection: any = this.store.getState().connection.botConnection;
-
-        step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
+        console.log("in stepp")
+         step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
         .then((res: any) => {
+            console.log(res.data)
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, res.data.id)
             .then((res: any) => {
-                
+                console.log("after step")
                 const messages = res.data.messages.reverse();
+                console.log(messages)
                 const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
+                console.log(message_activities)
                 this.props.showConsole === false;
                 this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                 this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
@@ -1333,8 +1406,9 @@ export class Chat extends React.Component<ChatProps, State> {
                                                             sessionStorage.setItem("loading", 'true');
                                                             //console.log("5 " + this.state.loading);
                                                             this.step(); 
-
+                                                            this.reload_messages_nocount()
                                                             this.deleteNodeCount(1);
+                                                            this.reload_messages_nocount()
 
                                                            
                                                             // var button = this.state; // temp variable in order to change state of clicked
