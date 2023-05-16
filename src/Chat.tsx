@@ -1406,9 +1406,9 @@ export class Chat extends React.Component<ChatProps, State> {
                                                             sessionStorage.setItem("loading", 'true');
                                                             //console.log("5 " + this.state.loading);
                                                             this.step(); 
-                                                            this.reload_messages_nocount()
+                                                            //this.reload_messages_nocount()
                                                             this.deleteNodeCount(1);
-                                                            this.reload_messages_nocount()
+                                                            //this.reload_messages_nocount()
 
                                                            
                                                             // var button = this.state; // temp variable in order to change state of clicked
