@@ -12,7 +12,7 @@ export const App = (props: AppProps, container: HTMLElement) => {
         props.directLine.secret = change_line;
         props.gid = "https://staging-api.gideonlegal.net"
     }
-    if(props.gid = "https://gideon-dev.herokuapp.com") {
+    if(props.gid == "https://gideon-dev.herokuapp.com") {
         props.gid = "https://staging-api.gideonlegal.net"
     }
     //prod old directline and gid convert to new
@@ -21,7 +21,7 @@ export const App = (props: AppProps, container: HTMLElement) => {
         props.directLine.secret = change_line;
         props.gid = "https://api-aws.gideon.legal"
     }
-    if(props.gid = "https://gideon-prod.herokuapp.com") {
+    if(props.gid == "https://gideon-prod.herokuapp.com") {
         props.gid = "https://api-aws.gideon.legal"
     }
     ReactDOM.render(React.createElement(AppContainer, props), container);
