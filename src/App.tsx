@@ -17,7 +17,7 @@ export const App = (props: AppProps, container: HTMLElement) => {
     }
     //prod old directline and gid convert to new
     if(props.directLine.secret == 'GaRM_zwyAjE.cwA.Bfo.n1taE5VMAn6YvZ1UtFDx3p5VFayw9TFfBxa12GIBENA') {
-        var change_line = 'GaRM_zwyAjE.cwA.Bfo.n1taE5VMAn6YvZ1UtFDx3p5VFayw9TFfBxa12GIBENA'
+        var change_line = 'cMapY5eOo1s.Vgr8CiFkLAZrggzP93eCGzkf7x59pPQphXiMcdtkv7o'
         props.directLine.secret = change_line;
         props.gid = "https://api-aws.gideon.legal"
     }
