@@ -2360,10 +2360,6 @@ $lato: Lato, sans-serif;
        color: #262626;
        padding: 15px 0px 15px 0px;
 
-       @media (max-height: 924px) {
-        margin-left: 4%;
-       }
-
        @include mobileAndTablet{
         padding: 20px 0px 15px 0px;
     }
