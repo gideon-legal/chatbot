@@ -2342,6 +2342,33 @@ $lato: Lato, sans-serif;
     }
     }
 
+    .esign-message-handoff-bigfull {
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 800;
+        font-size: xx-large;
+        line-height: 40px;
+        /* or 89% */
+        margin-left: 15%;
+        margin-right: 15%;
+
+        text-align: center;
+        letter-spacing: 0.04em;
+
+        /* Gideon/Primary text */
+
+       color: #262626;
+       padding: 15px 0px 15px 0px;
+
+       @media (max-height: 924px) {
+        margin-left: 4%;
+       }
+
+       @include mobileAndTablet{
+        padding: 20px 0px 15px 0px;
+    }
+    }
+
     .esign-message-handoff-big2 {
         font-family: 'Lato';
         font-style: normal;
