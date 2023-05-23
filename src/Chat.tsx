@@ -174,9 +174,6 @@ export class Chat extends React.Component<ChatProps, State> {
         let alreadyContains = false;
         //sessionStorage.setItem("loading", 'true');
         //checking if history.activities contains same text and message type as incoming activity
-        console.log("handling incoming activity")
-        console.log("lastActivity:")
-        console.log(lastActivity)
         let i: any;
         let duplicate: any;
         let checked_ids: any[] = []
@@ -235,9 +232,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
                     // if the current activity has no entities, it might be a completion node, in which case we must hide the back button
                     // checkNeedBackButton returns if the current activity corresponds to a completion node or not
-                    console.log("before await case 1")
                     const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)  
-                    console.log("after await case 1")
                     //set convoComplete to true if current convo is finished
                     if(notNode === "handoff") { sessionStorage.setItem("convoComplete", 'true');
                         
@@ -316,8 +311,6 @@ export class Chat extends React.Component<ChatProps, State> {
                 
                 //add case when creating currActivity, if -2 is gideon message start, stick with -1
                 let currActivity = this.store.getState().history.activities[this.store.getState().history.activities.length-1]
-                console.log("need to use currActivity:")
-                console.log(currActivity)
                 if(this.store.getState().history.activities.length >= 2){
                     currActivity = this.store.getState().history.activities[this.store.getState().history.activities.length-2]
                 }
@@ -358,9 +351,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         }
                     } else {
                         const botConnection: any = this.store.getState().connection.botConnection;
-                        console.log("before await case 2")
                         const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, currActivity.text) 
-                        console.log("after await case 2") 
                     //set convoComplete to true if current convo is finished
                     if(notNode === "handoff") { 
                         sessionStorage.setItem("convoComplete", 'true');
@@ -406,9 +397,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     } else if(activity.type == 'message') {
                      
                         const botConnection: any = this.store.getState().connection.botConnection;
-                        console.log("before await case 3")
                         const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text) 
-                        console.log("after await case 3") 
                         //set convoComplete to true if current convo is finished
                         if(notNode === "handoff") sessionStorage.setItem("convoComplete", 'true');
                         if(notNode === "esign") sessionStorage.setItem("convoComplete", 'true');
@@ -617,7 +606,6 @@ export class Chat extends React.Component<ChatProps, State> {
                         })    
                     }, 2000); 
                    // sessionStorage.setItem("loading", 'false');
-                    console.log("finished reload messages")
                    this.checkActivitiesLength();
 
             });
@@ -716,7 +704,6 @@ export class Chat extends React.Component<ChatProps, State> {
                         })    
                     }, 2000); 
                    // sessionStorage.setItem("loading", 'false');
-                    console.log("finished reload messages")
                    this.checkActivitiesLength();
 
             });
@@ -726,17 +713,12 @@ export class Chat extends React.Component<ChatProps, State> {
     //step function perfoms going back to the previous message
     private step = (messageId?: string|null) => {
         const botConnection: any = this.store.getState().connection.botConnection;
-        console.log("in stepp")
          step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
         .then((res: any) => {
-            console.log(res.data)
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, res.data.id)
             .then((res: any) => {
-                console.log("after step")
                 const messages = res.data.messages.reverse();
-                console.log(messages)
                 const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
-                console.log(message_activities)
                 this.props.showConsole === false;
                 this.store.dispatch<ChatActions>({type: 'Toggle_Input', showConsole: false});
                 this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: false});
@@ -784,7 +766,6 @@ export class Chat extends React.Component<ChatProps, State> {
             loading: true
         })
         sessionStorage.setItem("loading", 'true');
-        console.log("1 " + this.state.loading);
         conversationList(this.props.gid, userID, convoId)
         .then((res: any) => {
             this.setState({
@@ -902,7 +883,6 @@ export class Chat extends React.Component<ChatProps, State> {
                       loading: true
             });
             sessionStorage.setItem("loading", 'true');
-            console.log("2 " + this.state.loading);
             botConnection = this.props.directLine ?
                 (this.botConnection = new DirectLine({
                     secret: this.props.directLine.secret,
@@ -1293,7 +1273,6 @@ export class Chat extends React.Component<ChatProps, State> {
            && this.store.getState().connection.botConnection && this.store.getState().connection.botConnection.conversationId
            && this.state.loading == false 
         ) {
-           console.log("calling reload messages")
             this.setState({
                 loading: true
             })
@@ -1406,9 +1385,9 @@ export class Chat extends React.Component<ChatProps, State> {
                                                             sessionStorage.setItem("loading", 'true');
                                                             //console.log("5 " + this.state.loading);
                                                             this.step(); 
-                                                            this.reload_messages_nocount()
+                                                            //this.reload_messages_nocount()
                                                             this.deleteNodeCount(1);
-                                                            this.reload_messages_nocount()
+                                                            //this.reload_messages_nocount()
 
                                                            
                                                             // var button = this.state; // temp variable in order to change state of clicked
