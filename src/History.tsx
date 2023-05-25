@@ -9,6 +9,7 @@ import { activityIsDisclaimer, DisclaimerCard } from './DisclaimerCard';
 import { DisclaimerCardReadOnly } from './DisclaimerCardReadOnly';
 import { FileUploadCardReadOnly } from './FileUploadCardReadOnly';
 import { EsignCardReadOnly } from './EsignCardReadOnly';
+import { DocassembleCard } from './DocassembleCard';
 import * as konsole from './Konsole';
 import { ChatState, FormatState, SizeState } from './Store';
 import { sendMessage } from './Store';
@@ -561,6 +562,23 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                     </div>
                 );
             }
+        } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'docassemble'){
+            //docassembe card case
+            let lastMessageClass = ' ';
+            if (lastMessage && this.props.format.fullscreen && !this.props.inputEnabled) {
+                lastMessageClass += 'wc-fullscreen-last-message';
+            } else if (lastMessage && !this.props.format.fullscreen && !this.props.inputEnabled) {
+                lastMessageClass += 'wc-non-fullscreeen-last-message';
+            }
+            return (
+                <div data-activity-id={activity.id } className={wrapperClassName + lastMessageClass}>
+                    <div className={'wc-message wc-message-from-me wc-message-node wc-message-file' + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
+                        <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
+                           <EsignCardReadOnly files={this.props.files} post_message={activityCopy.entities[0].meta} fullscreen={this.props.format.fullscreen } fullheight={this.props.format.fullHeight }/>
+                        </div>
+                    </div>
+                </div>
+            );
         }
     }
 
