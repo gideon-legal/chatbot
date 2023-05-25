@@ -518,7 +518,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                 <div data-activity-id={activity.id } className={wrapperClassName + lastMessageClass}>
                     <div className={'wc-message wc-message-from-me wc-message-node wc-message-file' + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
                         <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
-                           <EsignCardReadOnly files={this.props.files} post_message={activityCopy.entities[0].meta}/>
+                        <EsignCardReadOnly files={this.props.files} post_message={activityCopy.entities[0].meta} fullscreen={this.props.format.fullscreen } fullheight={this.props.format.fullHeight }/>
                         </div>
                     </div>
                 </div>
