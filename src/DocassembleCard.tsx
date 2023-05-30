@@ -19,7 +19,7 @@ export interface Node {
 }
 
 export interface DocassembleCardProps {
-    files: Array<{ name: string, url: string }>;
+    files: any;
     post_message: any;
     fullscreen: boolean;
     fullheight: boolean;
@@ -33,11 +33,10 @@ export class DocassembleCard extends React.Component<DocassembleCardProps, {}> {
           showDisclaimer: false,
           savedfiles: this.props.files
         };
-        //add files to sessionStorage for refresh?
+
         if(this.props.files.length > 0){
             sessionStorage.setItem("file",this.props.files[0].url)
-        }
-        //need to add call to get correct file from api
+        }      
     }
     
 
@@ -64,15 +63,15 @@ export class DocassembleCard extends React.Component<DocassembleCardProps, {}> {
                             Congrats! 
                         </div>
                         <div className="esign-message-handoff-small2">
-                        {this.props.post_message.postesign_message ||
+                        {this.props.post_message.userdownload_message ||
                      "Please download your completed representation agreement below. A member of our team will be in touch to advise you on your next steps. Thank you!"}
                           
                         </div>
                     <div className="fullbutton-testpost">
                     <div >
                         {this.props.files.length <= 0 ? <a className="gideon-submit-button-download-full" target="_blank" href={sessionStorage.getItem("file")}>{"Download Document"}</a> :
-                        this.props.files.map((file: any) => (
-                            <a className="gideon-submit-button-download-full" target="_blank" href={file.url}>{"Download Document"}</a>
+                        this.props.files.pdf_link.map((file: any) => (
+                            <a className="gideon-submit-button-download-full" target="_blank" href={this.props.files.pdf_link[0]}>{"Download Document"}</a>
                          
                       ))
                         }
@@ -109,15 +108,15 @@ export class DocassembleCard extends React.Component<DocassembleCardProps, {}> {
                             Congrats! 
                         </div>
                         <div className="esign-message-handoff-small2">
-                        {this.props.post_message.postesign_message ||
+                        {this.props.post_message.userdownload_message ||
                      "Please download your completed representation agreement below. A member of our team will be in touch to advise you on your next steps. Thank you!"}
                           
                         </div>
                     <div className="uploaded-files-container2">
                     <div >
                         {this.props.files.length <= 0 ? <a className="gideon-submit-button-download" target="_blank" href={sessionStorage.getItem("file")}>{"Download Document"}</a> :
-                        this.props.files.map((file: any) => (
-                            <a className="gideon-submit-button-download" target="_blank" href={file.url}>{"Download Document"}</a>
+                        this.props.files.pdf_link.map((file: any) => (
+                            <a className="gideon-submit-button-download" target="_blank" href={this.props.files.pdf_link[0]}>{"Download Document"}</a>
                          
                       ))
                         }
