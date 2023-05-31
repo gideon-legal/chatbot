@@ -14,6 +14,7 @@ import { MultipleChoiceCard } from './MultipleChoiceCard';
 import { SchedulerCard } from './SchedulerCard';
 import { FormatState, SizeState } from './Store';
 import { EsignCard} from './EsignCard';
+import { DocassembleCard } from './DocassembleCard';
 
 const Attachments = (props: {
     attachments: Attachment[],
@@ -228,6 +229,10 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
         } else if (type === 'esign') {
           return (
                 <EsignCard{ ...props } activity={activityCopy} />
+          );
+        } else if (type === 'download') {
+          return (
+                <DocassembleCard{ ...props } files={activityCopy.entities[0].pdf_link} post_message={activityCopy.entities[0].meta} fullscreen={this.props.format.fullscreen } fullheight={this.props.format.fullHeight }/>
           );
         }
     }
