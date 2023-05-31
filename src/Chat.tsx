@@ -62,6 +62,7 @@ export interface State {
     loading: boolean;
     clicked: boolean;
     currType: any;
+    messagesCheck: any[];
 }
 
 import { FloatingIcon } from './FloatingIcon';
@@ -87,7 +88,8 @@ export class Chat extends React.Component<ChatProps, State> {
         pastConversations: [] as any,
         messages: [] as any,
         loading: true,
-        currType: ""
+        currType: "",
+        messagesCheck: [] as any
     };
 
    // private clicked: any; // status of if the back button has been clicked already
@@ -351,7 +353,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         }
                     } else {
                         const botConnection: any = this.store.getState().connection.botConnection;
-                        const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, currActivity.text) 
+                        const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, currActivity.text)                        
                     //set convoComplete to true if current convo is finished
                     if(notNode === "handoff") { 
                         sessionStorage.setItem("convoComplete", 'true');
@@ -549,7 +551,6 @@ export class Chat extends React.Component<ChatProps, State> {
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
                 .then((res: any) => {
                     const messages = res.data.messages.reverse();
-
                   //  this.setState({
                   //      loading: true
                   //  })
@@ -568,7 +569,8 @@ export class Chat extends React.Component<ChatProps, State> {
                             messages_copy.push(m)
                         }
                     }
-                    const message_activities = mapMessagesToActivities(messages_copy, this.store.getState().connection.user.id)
+                    var message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
+              
                     
                    
                     this.props.showConsole === false;
@@ -1383,11 +1385,10 @@ export class Chat extends React.Component<ChatProps, State> {
                                                                 loading: true
                                                             })
                                                             sessionStorage.setItem("loading", 'true');
-                                                            //console.log("5 " + this.state.loading);
                                                             this.step(); 
-                                                            //this.reload_messages_nocount()
+                                                            this.reload_messages_nocount()
                                                             this.deleteNodeCount(1);
-                                                            //this.reload_messages_nocount()
+                                                            this.reload_messages_nocount()
 
                                                            
                                                             // var button = this.state; // temp variable in order to change state of clicked
