@@ -23,6 +23,7 @@ export interface DocassembleCardProps {
     post_message: any;
     fullscreen: boolean;
     fullheight: boolean;
+    file_format: string;
 }
 
 export class DocassembleCard extends React.Component<DocassembleCardProps, {}> {
@@ -71,7 +72,7 @@ export class DocassembleCard extends React.Component<DocassembleCardProps, {}> {
                     <div >
                         {this.props.files.length <= 0 ? <a className="gideon-submit-button-download-full" target="_blank" href={sessionStorage.getItem("file")}>{"Download Document"}</a> :
                         this.props.files.pdf_link.map((file: any) => (
-                            <a className="gideon-submit-button-download-full" target="_blank" href={this.props.files.pdf_link[0]}>{"Download Document"}</a>
+                            <a className="gideon-submit-button-download-full" target="_blank" href={this.props.file_format == 'docx' ? this.props.files.docx_link[0] : this.props.files.pdf_link[0]}>{"Download Document"}</a>
                          
                       ))
                         }
@@ -116,7 +117,7 @@ export class DocassembleCard extends React.Component<DocassembleCardProps, {}> {
                     <div >
                         {this.props.files.length <= 0 ? <a className="gideon-submit-button-download" target="_blank" href={sessionStorage.getItem("file")}>{"Download Document"}</a> :
                         this.props.files.pdf_link.map((file: any) => (
-                            <a className="gideon-submit-button-download" target="_blank" href={this.props.files.pdf_link[0]}>{"Download Document"}</a>
+                            <a className="gideon-submit-button-download" target="_blank" href={this.props.file_format == 'docx' ? this.props.files.docx_link[0] : this.props.files.pdf_link[0]}>{"Download Document"}</a>
                          
                       ))
                         }

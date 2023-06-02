@@ -173,6 +173,8 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
     render() {
         const { activity, type, ...props } = this.props;
         const activityCopy: any = activity;
+        console.log("OH hey it's you")
+        console.log(activityCopy.entities)
         const isDisclaimer = activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer';
         if (type === 'message' && activity.type === 'message') {
           if (isDisclaimer === true || this.formatText(activity.text).length > 0) {
@@ -232,7 +234,7 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
           );
         } else if (type === 'download') {
           return (
-                <DocassembleCard{ ...props } files={activityCopy.entities[0].pdf_link} post_message={activityCopy.entities[0].meta} fullscreen={this.props.format.fullscreen } fullheight={this.props.format.fullHeight }/>
+                <DocassembleCard{ ...props } files={activityCopy.entities[0].pdf_link} post_message={activityCopy.entities[0].meta} fullscreen={this.props.format.fullscreen } fullheight={this.props.format.fullHeight } file_format={activityCopy.entities[0].file_format}/>
           );
         }
     }
