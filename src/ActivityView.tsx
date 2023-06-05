@@ -28,6 +28,7 @@ const Attachments = (props: {
     if (!attachments || attachments.length === 0) {
         return null;
     }
+    
     return attachmentLayout === 'carousel' ?
         <Carousel
             attachments={ attachments }
@@ -171,6 +172,7 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
     }
 
     render() {
+    
         const { activity, type, ...props } = this.props;
         const activityCopy: any = activity;
         const isDisclaimer = activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer';
