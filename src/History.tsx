@@ -9,6 +9,7 @@ import { activityIsDisclaimer, DisclaimerCard } from './DisclaimerCard';
 import { DisclaimerCardReadOnly } from './DisclaimerCardReadOnly';
 import { FileUploadCardReadOnly } from './FileUploadCardReadOnly';
 import { EsignCardReadOnly } from './EsignCardReadOnly';
+import { DocassembleCard } from './DocassembleCard';
 import * as konsole from './Konsole';
 import { ChatState, FormatState, SizeState } from './Store';
 import { sendMessage } from './Store';
@@ -463,7 +464,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                 nodeType = activityActions.actions[0].type;
             }
 
-            if (nodeType === 'date' || nodeType === 'handoff' || nodeType === 'esign' || nodeType === 'file' || nodeType === 'imBack' || nodeType === 'contact' || nodeType === 'address' || nodeType === 'disclaimer') {
+            if (nodeType === 'date' || nodeType === 'handoff' || nodeType === 'download' || nodeType === 'esign' || nodeType === 'file' || nodeType === 'imBack' || nodeType === 'contact' || nodeType === 'address' || nodeType === 'disclaimer') {
                 let lastMessageClass = ' ';
                 if (this.props.format.fullscreen && !this.props.inputEnabled) {
                     lastMessageClass += 'wc-fullscreen-last-message';
@@ -561,6 +562,24 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                     </div>
                 );
             }
+        } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'download'){
+            //docassembe card case
+            console.log("hit docassemble")
+            let lastMessageClass = ' ';
+            if (lastMessage && this.props.format.fullscreen && !this.props.inputEnabled) {
+                lastMessageClass += 'wc-fullscreen-last-message';
+            } else if (lastMessage && !this.props.format.fullscreen && !this.props.inputEnabled) {
+                lastMessageClass += 'wc-non-fullscreeen-last-message';
+            }
+            return (
+                <div data-activity-id={activity.id } className={wrapperClassName + lastMessageClass}>
+                    <div className={'wc-message wc-message-from-me wc-message-node wc-message-file' + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
+                        <div className={ contentClassName + contactClassName + ' ' + contentClassName + '-node' }>
+                           <DocassembleCard files={activityCopy.entities[0].pdf_link} post_message={activityCopy.entities[0].meta} fullscreen={this.props.format.fullscreen } fullheight={this.props.format.fullHeight } file_format={activityCopy.entities[0].file_format}/>
+                        </div>
+                    </div>
+                </div>
+            );
         }
     }
 
