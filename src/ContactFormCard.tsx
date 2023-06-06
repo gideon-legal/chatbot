@@ -41,6 +41,12 @@ export interface ContactFormState {
   phone: string;
   phoneError: string;
   formattedMessage: string;
+  first_name: string;
+  firstNameError: string;
+  last_name: string;
+  lastNameError: string;
+  middle_name: string;
+  middleNameError: string;
 }
 
 class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
@@ -61,7 +67,13 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
       emailError: undefined,
       phone: '',
       phoneError: undefined,
-      formattedMessage: ''
+      formattedMessage: '',
+      first_name: '',
+      firstNameError: undefined,
+      last_name: '',
+      lastNameError: undefined,
+      middle_name: '',
+      middleNameError: undefined
     };
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -148,6 +160,18 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
 
   phoneActive = () => {
     return this.props.node.meta && this.props.node.meta.phone || (!this.props.node.meta && this.props.node.validation === 'phone');
+  }
+
+  firstNameActive = () => {
+    return this.props.node.meta && this.props.node.meta.first_name;
+  }
+
+  lastNameActive = () => {
+    return this.props.node.meta && this.props.node.meta.last_name;
+  }
+
+  middleNameActive = () => {
+    return this.props.node.meta && this.props.node.meta.middle_name;
   }
 
   clickToSubmitContactInformation(e: React.MouseEvent<HTMLButtonElement>) {
@@ -252,7 +276,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
           errorOn={this.state.prefixError}
         />)}
 
-        {this.nameActive() && (<NodeInputContainer
+        {this.nameActive() && !(this.firstNameActive() || this.middleNameActive() || this.lastNameActive()) && (<NodeInputContainer
           nodeType="contact__form__card"
 
           title={{
@@ -281,6 +305,99 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
 
           errorOn={
             this.state.nameError
+          }
+        />)}
+        {this.firstNameActive()  && (<NodeInputContainer
+          nodeType="contact__form__card"
+
+          title={{
+            title: 'First Name ',
+            required: true
+          }}
+
+          input={{
+            type: 'text',
+            ref: input => this.textInputName = input,
+            autoFocus: true,
+            value: this.state.first_name,
+            onChange: e => this.setState({
+              ...this.state,
+              first_name: e.target.value
+            }),
+            onKeyPress: e => this.onKeyPress(e),
+            placeholder: 'First Name',
+            ariaLabel: null,
+            ariaLive: 'polite'
+          }}
+
+          error={{
+            message: this.state.firstNameError
+          }}
+
+          errorOn={
+            this.state.firstNameError
+          }
+        />)}
+        {this.middleNameActive()  && (<NodeInputContainer
+          nodeType="contact__form__card"
+
+          title={{
+            title: 'Middle Name ',
+            required: true
+          }}
+
+          input={{
+            type: 'text',
+            ref: input => this.textInputName = input,
+            autoFocus: true,
+            value: this.state.middle_name,
+            onChange: e => this.setState({
+              ...this.state,
+              middle_name: e.target.value
+            }),
+            onKeyPress: e => this.onKeyPress(e),
+            placeholder: 'Middle Name',
+            ariaLabel: null,
+            ariaLive: 'polite'
+          }}
+
+          error={{
+            message: this.state.middleNameError
+          }}
+
+          errorOn={
+            this.state.middleNameError
+          }
+        />)}
+        {this.lastNameActive()  && (<NodeInputContainer
+          nodeType="contact__form__card"
+
+          title={{
+            title: 'Last Name ',
+            required: true
+          }}
+
+          input={{
+            type: 'text',
+            ref: input => this.textInputName = input,
+            autoFocus: true,
+            value: this.state.last_name,
+            onChange: e => this.setState({
+              ...this.state,
+              last_name: e.target.value
+            }),
+            onKeyPress: e => this.onKeyPress(e),
+            placeholder: 'Last Name',
+            ariaLabel: null,
+            ariaLive: 'polite'
+          }}
+
+          error={{
+            message: this.state.lastNameError
+          }}
+
+          errorOn={
+            this.state.lastNameError
           }
         />)}
         {this.emailActive() && (<NodeInputContainer
