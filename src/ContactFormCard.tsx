@@ -76,6 +76,8 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
       middleNameError: undefined
     };
 
+    console.log(this.state)
+
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.onChangeValue = this.onChangeValue.bind(this);
     this.clickToSubmitContactInformation = this.clickToSubmitContactInformation.bind(this);
@@ -105,14 +107,18 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
     let phoneError;
     let emailError;
     let prefixError;
+    let firstNameError;
+    let middleNameError;
+    let lastNameError;
 
     if (this.prefixActive() && !(this.state.prefix && this.state.prefix !== '')) {
       prefixError = 'Please select a prefix';
       validated = false;
     }
 
-    if (this.nameActive() && !(this.state.name && this.state.name !== '')) {
+    if (this.nameActive() && !(this.firstNameActive() || this.lastNameActive() || this.middleNameActive()) && !(this.state.name && this.state.name !== '')) {
       nameError = 'Please enter a name';
+      console.log("checking name validation")
       validated = false;
     }
 
@@ -126,23 +132,47 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
       validated = false;
     }
 
+    if (this.nameActive() && this.firstNameActive() && !(this.state.first_name && this.state.first_name !== '')) {
+      firstNameError = 'Please enter a name';
+      validated = false;
+    }
+
+    if (this.nameActive() && this.middleNameActive() && !(this.state.middle_name && this.state.middle_name !== '')) {
+      middleNameError = 'Please enter a name';
+      validated = false;
+    }
+
+    if (this.nameActive() && this.lastNameActive() && !(this.state.last_name && this.state.last_name !== '')) {
+      lastNameError = 'Please enter a name';
+      validated = false;
+    }
+
     this.setState({
       ...this.state,
       prefixError,
       nameError,
       emailError,
-      phoneError
+      phoneError,
+      firstNameError,
+      middleNameError,
+      lastNameError
     });
+    console.log("in validate")
+    console.log(this.state)
 
     return validated;
   }
 
   getFormattedContact = () => {
+    console.log("getting format contact")
     return JSON.stringify({
       ...this.state.email && { email: this.state.email },
         ...this.state.phone && { phone: this.state.phone },
         ...this.state.prefix && { prefix: this.state.prefix },
-        ...this.state.name && { name: this.state.name }
+        ...this.state.name && { name: this.state.name },
+        ...this.state.first_name && {first_name: this.state.first_name},
+        ...this.state.middle_name && {middle_name: this.state.middle_name},
+        ...this.state.last_name && {last_name: this.state.last_name}
     });
   }
 
@@ -151,7 +181,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
   }
 
   nameActive = () => {
-    return this.props.node.meta && this.props.node.meta.name;
+    return this.props.node.meta && this.props.node.meta.name && (!this.firstNameActive() || !this.middleNameActive() || !this.lastNameActive());
   }
 
   emailActive = () => {
@@ -163,19 +193,21 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
   }
 
   firstNameActive = () => {
-    return this.props.node.meta && this.props.node.meta.first_name;
+    return this.props.node.meta && this.props.node.meta.name && this.props.node.meta.first_name;
   }
 
   lastNameActive = () => {
-    return this.props.node.meta && this.props.node.meta.last_name;
+    return this.props.node.meta && this.props.node.meta.name && this.props.node.meta.last_name;
   }
 
   middleNameActive = () => {
-    return this.props.node.meta && this.props.node.meta.middle_name;
+    return this.props.node.meta && this.props.node.meta.name && this.props.node.meta.middle_name;
   }
 
   clickToSubmitContactInformation(e: React.MouseEvent<HTMLButtonElement>) {
+    console.log("clicked to submiot")
     if (!this.validateContactInformation()) { return; }
+    console.log(this.getFormattedContact())
 
     this.props.sendMessage(this.getFormattedContact());
 
@@ -186,6 +218,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
 
   private onKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === 'Enter' && this.validateContactInformation()) {
+      console.log(this.getFormattedContact())
         this.props.sendMessage(this.getFormattedContact());
         document.removeEventListener('keypress', this.handleKeyDown.bind(this));
     }
@@ -307,7 +340,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
             this.state.nameError
           }
         />)}
-        {this.firstNameActive()  && (<NodeInputContainer
+        {this.nameActive() && this.firstNameActive()  && (<NodeInputContainer
           nodeType="contact__form__card"
 
           title={{
@@ -338,7 +371,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
             this.state.firstNameError
           }
         />)}
-        {this.middleNameActive()  && (<NodeInputContainer
+        {this.nameActive() && this.middleNameActive()  && (<NodeInputContainer
           nodeType="contact__form__card"
 
           title={{
@@ -369,7 +402,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
             this.state.middleNameError
           }
         />)}
-        {this.lastNameActive()  && (<NodeInputContainer
+        {this.nameActive() && this.lastNameActive()  && (<NodeInputContainer
           nodeType="contact__form__card"
 
           title={{
