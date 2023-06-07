@@ -181,7 +181,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
   }
 
   nameActive = () => {
-    return this.props.node.meta && this.props.node.meta.name && (!this.firstNameActive() || !this.middleNameActive() || !this.lastNameActive());
+    return this.props.node.meta && this.props.node.meta.name;
   }
 
   emailActive = () => {
