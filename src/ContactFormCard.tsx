@@ -133,17 +133,17 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
     }
 
     if (this.nameActive() && this.firstNameActive() && !(this.state.first_name && this.state.first_name !== '')) {
-      firstNameError = 'Please enter a name';
+      firstNameError = 'Please enter a first name';
       validated = false;
     }
 
     if (this.nameActive() && this.middleNameActive() && !(this.state.middle_name && this.state.middle_name !== '')) {
-      middleNameError = 'Please enter a name';
+      middleNameError = 'Please enter a middle name';
       validated = false;
     }
 
     if (this.nameActive() && this.lastNameActive() && !(this.state.last_name && this.state.last_name !== '')) {
-      lastNameError = 'Please enter a name';
+      lastNameError = 'Please enter a last name';
       validated = false;
     }
 
@@ -205,7 +205,6 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
   }
 
   clickToSubmitContactInformation(e: React.MouseEvent<HTMLButtonElement>) {
-    console.log("clicked to submiot")
     if (!this.validateContactInformation()) { return; }
     console.log(this.getFormattedContact())
 
