@@ -150,9 +150,12 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
           return blank;
         }
         if (o && typeof o === 'object') {
-          if (('prefix' in o || 'name' in o || 'email' in o || 'phone' in o || 'address' in o)) {
+          if (('prefix' in o || 'name' in o || 'email' in o || 'phone' in o || 'address' in o || 'first_name' in o || 'middle_name' in o || 'last_name' in o)) {
             formattedText = this.addFormattedKey(formattedText, 'prefix', o);
             formattedText = this.addFormattedKey(formattedText, 'name', o);
+            formattedText = this.addFormattedKey(formattedText, 'first_name', o);
+            formattedText = this.addFormattedKey(formattedText, 'middle_name', o);
+            formattedText = this.addFormattedKey(formattedText, 'last_name', o);
             formattedText = this.addFormattedKey(formattedText, 'email', o);
             formattedText = this.addFormattedKey(formattedText, 'phone', o);
             formattedText = this.addFormattedValue(formattedText, 'address', o);
