@@ -76,7 +76,6 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
       middleNameError: undefined
     };
 
-    console.log(this.state)
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.onChangeValue = this.onChangeValue.bind(this);
@@ -118,7 +117,6 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
 
     if (this.nameActive() && !(this.firstNameActive() || this.lastNameActive() || this.middleNameActive()) && !(this.state.name && this.state.name !== '')) {
       nameError = 'Please enter a name';
-      console.log("checking name validation")
       validated = false;
     }
 
@@ -157,22 +155,19 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
       middleNameError,
       lastNameError
     });
-    console.log("in validate")
-    console.log(this.state)
 
     return validated;
   }
 
   getFormattedContact = () => {
-    console.log("getting format contact")
     return JSON.stringify({
       ...this.state.email && { email: this.state.email },
-        ...this.state.phone && { phone: this.state.phone },
-        ...this.state.prefix && { prefix: this.state.prefix },
-        ...this.state.name && { name: this.state.name },
-        ...this.state.first_name && {first_name: this.state.first_name},
-        ...this.state.middle_name && {middle_name: this.state.middle_name},
-        ...this.state.last_name && {last_name: this.state.last_name}
+      ...this.state.phone && { phone: this.state.phone },
+      ...this.state.prefix && { prefix: this.state.prefix },
+      ...this.state.name && { name: this.state.name },
+      ...this.state.first_name && { first_name: this.state.first_name },
+      ...this.state.middle_name && { middle_name: this.state.middle_name },
+      ...this.state.last_name && { last_name: this.state.last_name }
     });
   }
 
@@ -206,7 +201,6 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
 
   clickToSubmitContactInformation(e: React.MouseEvent<HTMLButtonElement>) {
     if (!this.validateContactInformation()) { return; }
-    console.log(this.getFormattedContact())
 
     this.props.sendMessage(this.getFormattedContact());
 
@@ -217,7 +211,6 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
 
   private onKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === 'Enter' && this.validateContactInformation()) {
-      console.log(this.getFormattedContact())
         this.props.sendMessage(this.getFormattedContact());
         document.removeEventListener('keypress', this.handleKeyDown.bind(this));
     }
