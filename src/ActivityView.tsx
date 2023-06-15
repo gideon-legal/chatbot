@@ -99,6 +99,15 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
       return currentText.concat(newLine);
     }
 
+    addFormattedName = (currentText: string, name: string) => {
+      const newLine = "name: " + name;
+      if (currentText !== '') {
+        return currentText.concat('\n', newLine);
+      }
+      return currentText.concat(newLine);
+
+    }
+
     formatSelectedOptions = (json: { [key: string]: string[] }) => {
       const selected = json.selected;
       let frmt = '';
@@ -151,9 +160,25 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
           return blank;
         }
         if (o && typeof o === 'object') {
-          if (('prefix' in o || 'name' in o || 'email' in o || 'phone' in o || 'address' in o)) {
+          if (('prefix' in o || 'name' in o || 'email' in o || 'phone' in o || 'address' in o || 'first_name' in o || 'middle_name' in o || 'last_name' in o)) {
+            var full_name = ""
+            if('first_name' in o){
+              full_name+= o.first_name + " "
+
+            }
+            if('middle_name' in o){
+              full_name+= o.middle_name + " "
+
+            }
+            if('last_name' in o){
+              full_name+= o.last_name + " "
+
+            }
             formattedText = this.addFormattedKey(formattedText, 'prefix', o);
             formattedText = this.addFormattedKey(formattedText, 'name', o);
+            if(full_name != ""){
+              formattedText = this.addFormattedName(formattedText, full_name)
+            }
             formattedText = this.addFormattedKey(formattedText, 'email', o);
             formattedText = this.addFormattedKey(formattedText, 'phone', o);
             formattedText = this.addFormattedValue(formattedText, 'address', o);
