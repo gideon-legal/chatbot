@@ -108,6 +108,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
         }
 
+
         //handleKeyDown here etc
         this.onChangeSignature = this.onChangeSignature.bind(this)
         this.onChangeInitials = this.onChangeInitials.bind(this)
@@ -788,6 +789,7 @@ export const EsignCard = connect(
         sendFiles
     },
      (stateProps: any, dispatchProps: any, ownProps: any): EsignProps => {
+        console.log(ownProps.activity.entities[0].pdf_link)
         return {
             // from stateProps
             node: ownProps.node,
