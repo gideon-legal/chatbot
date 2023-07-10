@@ -46,6 +46,7 @@ interface EsignProps {
 
 export interface EsignState {
     file: any;
+    filePointer: number;
     signature: string;
     signError: string;
     formattedMessage: string;
@@ -79,6 +80,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
         this.state = {
             file: this.props.document,
+            filePointer: 0,
             signature: '',
             signError: '',
             formattedMessage: '',
@@ -239,7 +241,40 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     }
 
+    nextDocument(){
+        var num = this.state.filePointer + 1;
+
+        if( num >= this.state.file.length ){
+            this.setState({
+                ...this.state,
+                filePointer: 0
+            })
+        } else{
+            this.setState({
+                ...this.state,
+                filePointer: num
+            })
+        }
+        
+    }
     
+    prevDocument(){
+        var num = this.state.filePointer - 1;
+    
+        if( num < 0 ){
+            this.setState({
+                ...this.state,
+                filePointer: this.state.file.length - 1
+            })
+        } else{
+            this.setState({
+                ...this.state,
+                filePointer: num
+            })
+        }
+        
+    }
+
     //Handles getting the number of page numbers needed to display the pdf
     onDocumentLoad(pdf: any){
         this.setNumPages(pdf.numPages) 
@@ -260,10 +295,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
                  //mobile view
             let pdfView = (
                 <div className="fullview">
-                    
+
                     <div className="pdfholder-notop">
                     {<div  className='esign-document-holder'>
-                        <Document file={this.state.file} onLoadSuccess={pdf => this.onDocumentLoad(pdf)} >
+                        <Document file={this.state.file[this.state.filePointer]} onLoadSuccess={pdf => this.onDocumentLoad(pdf)} >
                              {
                              Array.apply(null, Array(this.state.numPages)).map(( x: any, i: number)=>i+1).map((page: number) => <Page pageNumber={page} className="esign-document-display2"></Page>)}
                          </Document>
@@ -289,7 +324,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                     </div>
                     <div className="pdfholder-mobile-full">
                     {<div  className='esign-document-holder'>
-                        <Document file={this.state.file} onLoadSuccess={pdf => this.onDocumentLoad(pdf)} >
+                    <Document file={this.state.file[this.state.filePointer]} onLoadSuccess={pdf => this.onDocumentLoad(pdf)} >
                              {
                              Array.apply(null, Array(this.state.numPages)).map(( x: any, i: number)=>i+1).map((page: number) => 
                              <Page pageNumber={page}  className="esign-document-display-mobile"></Page>)}
@@ -312,7 +347,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <div className="fullview" id="fullpdf">
                     <div className="pdfholder" id="pdfarea">
                         {<div  className='esign-document-holder'>
-                        <Document file={this.state.file} onLoadSuccess={pdf => this.onDocumentLoad(pdf)} >
+                        <Document file={this.state.file[this.state.filePointer]} onLoadSuccess={pdf => this.onDocumentLoad(pdf)} >
                              {
                              Array.apply(null, Array(this.state.numPages)).map(( x: any, i: number)=>i+1).map((page: number) => <Page pageNumber={page} className="esign-document-display2"></Page>)}
                          </Document>
@@ -444,6 +479,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
     renderStartingScreen() {
         //need special styling for fullscreen
         if(this.state.isFullscreen ==  true){
+            console.log("file lngth" + this.state.file.length)
             let heightCheck = window.screen.height
             if(heightCheck >= 924){
                 return (
@@ -598,14 +634,21 @@ class Esign extends React.Component<EsignProps, EsignState> {
             let sig = (
                 <footer className="signature-box-area">
                 <div className="submit-area2">
-                <div className = "esign-black-text" style={{ display: "block"}}> <br></br>
-                    Add Your Signature
+                    <div className='esign-upper'>
+                        <div className = "esign-black-text" > <br></br>
+                            Add Your Signature
+                        </div>
+                        <div className='upper-button-area'> 
+                            <button className="navigate-button" onClick={e => this.prevDocument()}> Prev  </button>
+                            <button className="navigate-button" onClick={e => this.nextDocument()} > Next  </button>
+                        </div>
+                        
                 </div>
                 <div className='submit-area'> 
-                <input className="esign-initial-box" placeholder="Your Initials" type="text" value={this.state.initials} onKeyPress={this.handleKeyDown} onChange={this.onChangeInitials} id="initial"></input>
+                    <input className="esign-initial-box" placeholder="Your Initials" type="text" value={this.state.initials} onKeyPress={this.handleKeyDown} onChange={this.onChangeInitials} id="initial"></input>
                     <input className="esign-input-box" placeholder="Type in Full Name to Create Signature" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
-                    <div className="button-area">
-                        <button  id="sign-btn" className="gideon-submit-button" style={{width: "80%" }} onClick={e => this.clickToSubmitSignature(e)}> Sign Now  </button>
+                        <div className="button-area">
+                            <button  id="sign-btn" className="gideon-submit-button" style={{width: "80%" }} onClick={e => this.clickToSubmitSignature(e)}> Sign Now  </button>
                     </div>
                 </div>
                 </div>
@@ -799,7 +842,7 @@ export const EsignCard = connect(
             gid: ownProps.gid,
             directLine: ownProps.directLine,
             conversationId: stateProps.conversationId,
-            document: ownProps.activity.entities[0].pdf_link.pdf_link[0],
+            document: ownProps.activity.entities[0].pdf_link.pdf_link,
             docx: ownProps.activity.entities[0].pdf_link.docx_link[0],
             prompt: ownProps.text,
             addFilesToState: ownProps.addFilesToState,

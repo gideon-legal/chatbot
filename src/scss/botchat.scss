@@ -2686,6 +2686,12 @@ $lato: Lato, sans-serif;
         margin-bottom: 5px;
     }
     
+
+    esign-upper{
+        display:inline-block;
+        width: $chatWidth
+    }
+    
     .esign-black-text{
         font-family: 'Lato';
         font-style: normal;
@@ -2694,14 +2700,27 @@ $lato: Lato, sans-serif;
         line-height: 17px;
         /* identical to box height */
         //padding-left: 15px;
-        display: block;
+        display: inline-block;
         align-items: center;
         text-align: left;
         color: #000000 !important;
         margin-bottom: 5px;
-        display: block;
-        margin-left: 3%;
-    
+        //display: block;
+        margin-left: 2%;
+        width: 89%
+    }
+
+    esign-buttons{
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 17px;
+        text-align: left;
+        color: #000000 !important;
+        margin-bottom: 5px;
+        //display: block;
+       
     }
 
     .esign-black-text-mobile{
@@ -3284,6 +3303,18 @@ $lato: Lato, sans-serif;
             width: 100%;
             padding: 18px 20px 0px 18px;
         }
+      }
+
+      .upper-button-area{
+        width:fit-content;
+        display:inline-block;
+        padding: 0px
+      }
+
+      .navigate-buttons{
+        width: fit-content;
+        align-self: right;
+        
       }
 
       .button-area-modal{
