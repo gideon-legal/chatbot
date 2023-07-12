@@ -2456,7 +2456,7 @@ $lato: Lato, sans-serif;
         font-size: xx-large;
         line-height: 40px;
         /* or 89% */
-        margin-left: 15%;
+        margin-left: 5%;
         margin-right: 15%;
 
         text-align: center;
@@ -2686,11 +2686,16 @@ $lato: Lato, sans-serif;
         margin-bottom: 5px;
     }
     
+    
 
-    esign-upper{
-        display:inline-block;
-        width: $chatWidth
+    .esign-upper{
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        display: flex;
+
     }
+    
     
     .esign-black-text{
         font-family: 'Lato';
@@ -2706,8 +2711,8 @@ $lato: Lato, sans-serif;
         color: #000000 !important;
         margin-bottom: 5px;
         //display: block;
-        margin-left: 2%;
-        width: 89%
+        margin-left: 3%;
+        width: 85%
     }
 
     esign-buttons{
@@ -3306,7 +3311,8 @@ $lato: Lato, sans-serif;
       }
 
       .upper-button-area{
-        width:fit-content;
+        margin-bottom: -20px;
+        width:20%;
         display:inline-block;
         padding: 0px
       }
@@ -3314,6 +3320,8 @@ $lato: Lato, sans-serif;
       .navigate-buttons{
         width: fit-content;
         align-self: right;
+        padding: 5px 10px 5px 10px;
+        margin-right:5px;
         
       }
 

@@ -6,7 +6,7 @@ import { ChatState } from './Store';
 import { ChatActions, sendMessage, sendFiles } from './Store';
 import { connect } from 'react-redux';
 import { isMobile } from 'react-device-detect';
-import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign, EsignPen, EsignPreSignFull, EsignFullTest, EsignFullTestPaper, EsignFullTestPaperSmall } from './assets/icons/EsignIcons';
+import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign, EsignPen, EsignPreSignFull, EsignFullTest, EsignFullTestPaper, EsignFullTestPaperSmall, EsignDocumentNext, EsignDocumentPrev } from './assets/icons/EsignIcons';
 import { sendSignature } from './api/bot';
 import { Hidden } from '@material-ui/core';
 import { any } from 'bluebird';
@@ -639,8 +639,13 @@ class Esign extends React.Component<EsignProps, EsignState> {
                             Add Your Signature
                         </div>
                         <div className='upper-button-area'> 
-                            <button className="navigate-button" onClick={e => this.prevDocument()}> Prev  </button>
-                            <button className="navigate-button" onClick={e => this.nextDocument()} > Next  </button>
+                            <label onClick={e => this.prevDocument()}>
+                            <EsignDocumentPrev />
+                            </label>
+                            <label  onClick={e => this.prevDocument()}>
+                            <EsignDocumentNext />
+                            </label>
+                            
                         </div>
                         
                 </div>
@@ -648,7 +653,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                     <input className="esign-initial-box" placeholder="Your Initials" type="text" value={this.state.initials} onKeyPress={this.handleKeyDown} onChange={this.onChangeInitials} id="initial"></input>
                     <input className="esign-input-box" placeholder="Type in Full Name to Create Signature" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
                         <div className="button-area">
-                            <button  id="sign-btn" className="gideon-submit-button" style={{width: "80%" }} onClick={e => this.clickToSubmitSignature(e)}> Sign Now  </button>
+                            <button  id="sign-btn" className="gideon-submit-button" onClick={e => this.clickToSubmitSignature(e)}> Sign Now  </button>
                     </div>
                 </div>
                 </div>
