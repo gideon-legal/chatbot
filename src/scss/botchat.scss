@@ -2690,10 +2690,8 @@ $lato: Lato, sans-serif;
 
     .esign-upper{
         width: 100%;
-        justify-content: space-between;
-        align-items: center;
+        align-items: right;
         display: flex;
-
     }
     
     
@@ -3087,10 +3085,25 @@ $lato: Lato, sans-serif;
         }  
     }
 
-      
+        .esign-top-text{
+            width: 100%;
+            margin-top: 2%;
+            margin-right: 1%;
+            display: block;
+            font-family: 'Lato';
+            font-style: normal;
+            font-size: small;
+            line-height: 19px;
+            /* identical to box height */
+            //padding-left: 15px;
+            text-align: right;
+            color: #575757 !important;
+        }
 
       .esign-topbar-buttons {
-        margin: 0 auto;
+        margin-top: 20px;
+        right: 11%;
+        position: absolute;
         display: inline-block;
 
       }

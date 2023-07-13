@@ -13,6 +13,7 @@ import { any } from 'bluebird';
 import { FileslistFormatter } from 'tslint/lib/formatters';
 import { pdfjs, Document, Page} from 'react-pdf';
 import { PDFDocumentProxy } from 'pdfjs-dist/types/src/display/api' //or node_modules/@types/react-pdf/node_modules/pdfjs-dist/types/src/display/api
+import { Visibility } from '@material-ui/icons';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/build/pdf.worker.js`;
 
 
@@ -290,6 +291,13 @@ class Esign extends React.Component<EsignProps, EsignState> {
     }
 
     renderLargerPdf = () => {
+
+        // if( this.state.file.length == 1 ){
+        //     document.getElementById('docCount').style.visibility = 'hidden'
+        // } else {
+        //     document.getElementById('docCount').style.visibility = 'visible'
+        // }
+
         if(isMobile == true){
             if(this.state.isSignature == true && this.state.isModal == false) {
                  //mobile view
@@ -345,6 +353,19 @@ class Esign extends React.Component<EsignProps, EsignState> {
         } else {
             let pdfView = (
                 <div className="fullview" id="fullpdf">
+                    <div className='esign_topbar'>
+                        <div className='esign-top-text'>
+                        Document {this.state.filePointer + 1} out of {this.state.file.length}
+                        </div>
+                        <div id="docCount" className='esign-topbar-buttons'>
+                            <label onClick={this.prevDocument}>
+                            <EsignDocumentPrev />
+                            </label>
+                            <label onClick={this.nextDocument}>
+                            <EsignDocumentNext />
+                            </label>
+                        </div>
+                    </div>
                     <div className="pdfholder" id="pdfarea">
                         {<div  className='esign-document-holder'>
                         <Document file={this.state.file[this.state.filePointer]} onLoadSuccess={pdf => this.onDocumentLoad(pdf)} >
@@ -637,15 +658,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
                     <div className='esign-upper'>
                         <div className = "esign-black-text" > <br></br>
                             Add Your Signature
-                        </div>
-                        <div className='upper-button-area'> 
-                            <label onClick={e => this.prevDocument()}>
-                            <EsignDocumentPrev />
-                            </label>
-                            <label  onClick={e => this.prevDocument()}>
-                            <EsignDocumentNext />
-                            </label>
-                            
                         </div>
                         
                 </div>
