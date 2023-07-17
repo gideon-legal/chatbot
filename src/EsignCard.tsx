@@ -380,10 +380,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         Document {this.state.filePointer + 1} out of {this.state.file.length}
                         </div>
                         <div id="docCount" className='esign-topbar-buttons'>
-                            <label onClick={this.prevDocument}>
+                            <label onClick={e => this.prevDocument}>
                             <EsignDocumentPrev />
                             </label>
-                            <label onClick={this.nextDocument}>
+                            <label onClick={e => this.nextDocument}>
                             <EsignDocumentNext />
                             </label>
                         </div>
