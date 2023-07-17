@@ -34,6 +34,7 @@ interface EsignProps {
     gid: string;
     conversationId: string;
     document: string;
+    documents: any;
     docx: string;
     prompt: string;
     addFilesToState: (index: number, files: Array<{ name: string, url: string }>) => void;
@@ -47,6 +48,7 @@ interface EsignProps {
 
 export interface EsignState {
     file: any;
+    documents: any;
     filePointer: number;
     signature: string;
     signError: string;
@@ -56,6 +58,7 @@ export interface EsignState {
     handoff_message: string;
     willSubmit: boolean;
     signedfile: any;
+    signedfiles: any;
     completedDoc: boolean;
     validated: boolean;
     isPopup: boolean;
@@ -81,6 +84,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
         this.state = {
             file: this.props.document,
+            documents: this.props.documents,
             filePointer: 0,
             signature: '',
             signError: '',
@@ -90,6 +94,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
             handoff_message: "",
             willSubmit: false,
             signedfile: '',
+            signedfiles: [],
             completedDoc: false,
             validated: false,
             isPopup: true,
@@ -121,8 +126,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>){
         if (e.key === 'Enter' && this.validateSignature()){
-            sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx,this.state.initials, this.state.bankNum)
+            sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, 
+                this.props.docx,this.state.initials, this.state.bankNum, this.state.documents)
             .then((res: any) => {
+                console.log(res)
                 this.setState({
                     ...this.state,
                     signedfile: res.data.link
@@ -195,11 +202,26 @@ class Esign extends React.Component<EsignProps, EsignState> {
     
             //need to send to api so it can be used to populate document
             //send to api and wait to receive signed pdf link, set to this.state.signedfile
-            sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx, this.state.initials, this.state.bankNum)
+            console.log("files being sent")
+            console.log(this.state.documents)
+            sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx, this.state.initials, 
+                this.state.bankNum, this.state.documents)
             .then((res: any) => {
+                console.log(res.data)
                 this.setState({
                     ...this.state,
-                    signedfile: res.data.pdf_link
+                    signedfile: res.data[0],
+                    signedfiles: res.data
+                })
+                
+                var pdf_files: any[] = []
+                this.state.signedfiles.forEach( (fi: any) => {
+                    var try_pdf = JSON.parse(''+fi)
+                    pdf_files.push(try_pdf.pdf_link)
+                })
+                this.setState({
+                    ...this.state,
+                    signedfile: pdf_files
                 })
                 //once document is confirmed and received, set to this.state.signedfile, set completedDoc to true
             //send signal to move on from node? - need readonly version of card
@@ -860,6 +882,7 @@ export const EsignCard = connect(
             directLine: ownProps.directLine,
             conversationId: stateProps.conversationId,
             document: ownProps.activity.entities[0].pdf_link.pdf_link,
+            documents: ownProps.activity.entities[0].pdf_link.docx_link,
             docx: ownProps.activity.entities[0].pdf_link.docx_link[0],
             prompt: ownProps.text,
             addFilesToState: ownProps.addFilesToState,

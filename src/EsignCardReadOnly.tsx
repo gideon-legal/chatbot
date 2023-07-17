@@ -35,9 +35,29 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
         };
         //add files to sessionStorage for refresh?
         if(this.props.files.length > 0){
-            sessionStorage.setItem("file",this.props.files[0].url)
+            var file = this.props.files[0]
+                console.log(file)
+                if(file.url.length > 0){
+                    sessionStorage.setItem("files", JSON.stringify(file.url))
+
+                }
         }
+        console.log(this.props.files)
+        console.log(sessionStorage.getItem("files"))
+       
     }
+
+   clickDownloadLinks(){
+      var files = JSON.parse(sessionStorage.getItem("files"))
+      console.log("getting download linkes")
+      console.log(files)
+      files.forEach((f: string) => {
+        window.open(f)
+      })
+
+
+      
+   } 
 
     //change list view to button
     render() {
@@ -68,12 +88,9 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                         </div>
                     <div className="fullbutton-testpost">
                     <div >
-                        {this.props.files.length <= 0 ? <a className="gideon-submit-button-download-full" target="_blank" href={sessionStorage.getItem("file")}>{"Download Document"}</a> :
-                        this.props.files.map((file: any) => (
-                            <a className="gideon-submit-button-download-full" target="_blank" href={file.url}>{"Download Document"}</a>
-                         
-                      ))
-                        }
+                        <a className="gideon-submit-button-download-full" target="_blank" onClick={this.clickDownloadLinks} href="#">{"Download Document"}</a> 
+                        
+                        
                   
                     </div>
                 </div>
@@ -113,12 +130,8 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                         </div>
                     <div className="uploaded-files-container2">
                     <div >
-                        {this.props.files.length <= 0 ? <a className="gideon-submit-button-download" target="_blank" href={sessionStorage.getItem("file")}>{"Download Document"}</a> :
-                        this.props.files.map((file: any) => (
-                            <a className="gideon-submit-button-download" target="_blank" href={file.url}>{"Download Document"}</a>
-                         
-                      ))
-                        }
+                        <a className="gideon-submit-button-download" target="_blank" onClick={this.clickDownloadLinks} href="#">{"Download Document"}</a> 
+                       
                   
                     </div>
                 </div>
