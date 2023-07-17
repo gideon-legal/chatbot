@@ -266,7 +266,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     nextDocument(){
         var num = this.state.filePointer + 1;
-
+        console.log("filepointer before " + num)
         if( num >= this.state.file.length ){
             this.setState({
                 ...this.state,
@@ -278,12 +278,14 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 filePointer: num
             })
         }
+
+        console.log("filepointer after " + this.state.filePointer)
         
     }
     
     prevDocument(){
         var num = this.state.filePointer - 1;
-    
+        
         if( num < 0 ){
             this.setState({
                 ...this.state,
@@ -380,10 +382,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         Document {this.state.filePointer + 1} out of {this.state.file.length}
                         </div>
                         <div id="docCount" className='esign-topbar-buttons'>
-                            <label onClick={e => this.prevDocument}>
+                            <label onClick={() => this.prevDocument()}>
                             <EsignDocumentPrev />
                             </label>
-                            <label onClick={e => this.nextDocument}>
+                            <label onClick={() => this.nextDocument()}>
                             <EsignDocumentNext />
                             </label>
                         </div>
