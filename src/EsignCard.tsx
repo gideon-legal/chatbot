@@ -356,14 +356,14 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         <div className='esign-top-text'>
                         Document {this.state.filePointer + 1} out of {this.state.file.length}
                         </div>
-                        <div id="docCount" className='esign-topbar-buttons'>
+                        {this.state.file.length > 2 ? <div id="docCount" className='esign-topbar-buttons'>
                             <label onClick={() => this.prevDocument()}>
-                            <EsignDocumentPrevMobile />
+                            <EsignDocumentPrev />
                             </label>
                             <label onClick={() => this.nextDocument()}>
-                            <EsignDocumentNextMobile />
+                            <EsignDocumentNext />
                             </label>
-                        </div>
+                        </div>: <div></div>}
                     </div>
                     <div className="pdfholder-mobile-full">
                     {<div  className='esign-document-holder'>
@@ -392,14 +392,15 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         <div className='esign-top-text'>
                         Document {this.state.filePointer + 1} out of {this.state.file.length}
                         </div>
-                        <div id="docCount" className='esign-topbar-buttons'>
+                        
+                        {this.state.file.length > 2 ? <div id="docCount" className='esign-topbar-buttons'>
                             <label onClick={() => this.prevDocument()}>
                             <EsignDocumentPrev />
                             </label>
                             <label onClick={() => this.nextDocument()}>
                             <EsignDocumentNext />
                             </label>
-                        </div>
+                        </div>: <div></div>}
                     </div>
                     <div className="pdfholder" id="pdfarea">
                         {<div  className='esign-document-holder'>
