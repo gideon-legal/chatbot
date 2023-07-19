@@ -88,7 +88,7 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                         </div>
                     <div className="fullbutton-testpost">
                     <div >
-                        <a className="gideon-submit-button-download-full" target="_blank" onClick={this.clickDownloadLinks} href="#">{"Download Document"}</a> 
+                        <a className="gideon-submit-button-download-full" target="_blank" onClick={this.clickDownloadLinks}>{"Download Document"}</a> 
                         
                         
                   
@@ -130,7 +130,7 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                         </div>
                     <div className="uploaded-files-container2">
                     <div >
-                        <a className="gideon-submit-button-download" target="_blank" onClick={this.clickDownloadLinks} href="#">{"Download Document"}</a> 
+                        <a className="gideon-submit-button-download" target="_blank" onClick={this.clickDownloadLinks} >{"Download Document"}</a> 
                        
                   
                     </div>
