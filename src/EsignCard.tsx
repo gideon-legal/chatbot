@@ -6,13 +6,14 @@ import { ChatState } from './Store';
 import { ChatActions, sendMessage, sendFiles } from './Store';
 import { connect } from 'react-redux';
 import { isMobile } from 'react-device-detect';
-import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign, EsignPen, EsignPreSignFull, EsignFullTest, EsignFullTestPaper, EsignFullTestPaperSmall } from './assets/icons/EsignIcons';
+import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign, EsignPen, EsignPreSignFull, EsignFullTest, EsignFullTestPaper, EsignFullTestPaperSmall, EsignDocumentNext, EsignDocumentPrev, EsignDocumentNextMobile, EsignDocumentPrevMobile } from './assets/icons/EsignIcons';
 import { sendSignature } from './api/bot';
 import { Hidden } from '@material-ui/core';
 import { any } from 'bluebird';
 import { FileslistFormatter } from 'tslint/lib/formatters';
 import { pdfjs, Document, Page} from 'react-pdf';
 import { PDFDocumentProxy } from 'pdfjs-dist/types/src/display/api' //or node_modules/@types/react-pdf/node_modules/pdfjs-dist/types/src/display/api
+import { Visibility } from '@material-ui/icons';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/build/pdf.worker.js`;
 
 
@@ -33,6 +34,7 @@ interface EsignProps {
     gid: string;
     conversationId: string;
     document: string;
+    documents: any;
     docx: string;
     prompt: string;
     addFilesToState: (index: number, files: Array<{ name: string, url: string }>) => void;
@@ -46,6 +48,8 @@ interface EsignProps {
 
 export interface EsignState {
     file: any;
+    documents: any;
+    filePointer: number;
     signature: string;
     signError: string;
     formattedMessage: string;
@@ -54,6 +58,7 @@ export interface EsignState {
     handoff_message: string;
     willSubmit: boolean;
     signedfile: any;
+    signedfiles: any;
     completedDoc: boolean;
     validated: boolean;
     isPopup: boolean;
@@ -79,6 +84,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
         this.state = {
             file: this.props.document,
+            documents: this.props.documents,
+            filePointer: 0,
             signature: '',
             signError: '',
             formattedMessage: '',
@@ -87,6 +94,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
             handoff_message: "",
             willSubmit: false,
             signedfile: '',
+            signedfiles: [],
             completedDoc: false,
             validated: false,
             isPopup: true,
@@ -108,6 +116,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
         }
 
+
         //handleKeyDown here etc
         this.onChangeSignature = this.onChangeSignature.bind(this)
         this.onChangeInitials = this.onChangeInitials.bind(this)
@@ -117,7 +126,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>){
         if (e.key === 'Enter' && this.validateSignature()){
-            sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx,this.state.initials, this.state.bankNum)
+            sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, 
+                this.props.docx,this.state.initials, this.state.bankNum, this.state.documents)
             .then((res: any) => {
                 this.setState({
                     ...this.state,
@@ -191,11 +201,23 @@ class Esign extends React.Component<EsignProps, EsignState> {
     
             //need to send to api so it can be used to populate document
             //send to api and wait to receive signed pdf link, set to this.state.signedfile
-            sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx, this.state.initials, this.state.bankNum)
+            sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx, this.state.initials, 
+                this.state.bankNum, this.state.documents)
             .then((res: any) => {
                 this.setState({
                     ...this.state,
-                    signedfile: res.data.pdf_link
+                    signedfile: res.data[0],
+                    signedfiles: res.data
+                })
+                
+                var pdf_files: any[] = []
+                this.state.signedfiles.forEach( (fi: any) => {
+                    var try_pdf = JSON.parse(''+fi)
+                    pdf_files.push(try_pdf.pdf_link)
+                })
+                this.setState({
+                    ...this.state,
+                    signedfile: pdf_files
                 })
                 //once document is confirmed and received, set to this.state.signedfile, set completedDoc to true
             //send signal to move on from node? - need readonly version of card
@@ -238,7 +260,38 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     }
 
+    nextDocument(){
+        var num = this.state.filePointer + 1;
+        if( num >= this.state.file.length ){
+            this.setState({
+                ...this.state,
+                filePointer: 0
+            })
+        } else{
+            this.setState({
+                ...this.state,
+                filePointer: num
+            })
+        }
+    }
     
+    prevDocument(){
+        var num = this.state.filePointer - 1;
+        
+        if( num < 0 ){
+            this.setState({
+                ...this.state,
+                filePointer: this.state.file.length - 1
+            })
+        } else{
+            this.setState({
+                ...this.state,
+                filePointer: num
+            })
+        }
+        
+    }
+
     //Handles getting the number of page numbers needed to display the pdf
     onDocumentLoad(pdf: any){
         this.setNumPages(pdf.numPages) 
@@ -254,15 +307,22 @@ class Esign extends React.Component<EsignProps, EsignState> {
     }
 
     renderLargerPdf = () => {
+
+        // if( this.state.file.length == 1 ){
+        //     document.getElementById('docCount').style.visibility = 'hidden'
+        // } else {
+        //     document.getElementById('docCount').style.visibility = 'visible'
+        // }
+
         if(isMobile == true){
             if(this.state.isSignature == true && this.state.isModal == false) {
                  //mobile view
             let pdfView = (
                 <div className="fullview">
-                    
+
                     <div className="pdfholder-notop">
                     {<div  className='esign-document-holder'>
-                        <Document file={this.state.file} onLoadSuccess={pdf => this.onDocumentLoad(pdf)} >
+                        <Document file={this.state.file[this.state.filePointer]} onLoadSuccess={pdf => this.onDocumentLoad(pdf)} >
                              {
                              Array.apply(null, Array(this.state.numPages)).map(( x: any, i: number)=>i+1).map((page: number) => <Page pageNumber={page} className="esign-document-display2"></Page>)}
                          </Document>
@@ -284,11 +344,22 @@ class Esign extends React.Component<EsignProps, EsignState> {
                  //mobile view
             let pdfView = (
                 <div className="fullview">
-                     <div className= "pdfholder-notop">
+                     <div className='esign_topbar'>
+                        <div className='esign-top-text'>
+                        Document {this.state.filePointer + 1} out of {this.state.file.length}
+                        </div>
+                        {this.state.file.length > 1 ? <div id="docCount" className='esign-topbar-buttons'>
+                            <label onClick={() => this.prevDocument()}>
+                            <EsignDocumentPrev />
+                            </label>
+                            <label onClick={() => this.nextDocument()}>
+                            <EsignDocumentNext />
+                            </label>
+                        </div>: <div></div>}
                     </div>
                     <div className="pdfholder-mobile-full">
                     {<div  className='esign-document-holder'>
-                        <Document file={this.state.file} onLoadSuccess={pdf => this.onDocumentLoad(pdf)} >
+                    <Document file={this.state.file[this.state.filePointer]} onLoadSuccess={pdf => this.onDocumentLoad(pdf)} >
                              {
                              Array.apply(null, Array(this.state.numPages)).map(( x: any, i: number)=>i+1).map((page: number) => 
                              <Page pageNumber={page}  className="esign-document-display-mobile"></Page>)}
@@ -309,9 +380,23 @@ class Esign extends React.Component<EsignProps, EsignState> {
         } else {
             let pdfView = (
                 <div className="fullview" id="fullpdf">
+                    <div className='esign_topbar'>
+                        <div className='esign-top-text'>
+                        Document {this.state.filePointer + 1} out of {this.state.file.length}
+                        </div>
+                        
+                        {this.state.file.length > 1 ? <div id="docCount" className='esign-topbar-buttons'>
+                            <label onClick={() => this.prevDocument()}>
+                            <EsignDocumentPrev />
+                            </label>
+                            <label onClick={() => this.nextDocument()}>
+                            <EsignDocumentNext />
+                            </label>
+                        </div>: <div></div>}
+                    </div>
                     <div className="pdfholder" id="pdfarea">
                         {<div  className='esign-document-holder'>
-                        <Document file={this.state.file} onLoadSuccess={pdf => this.onDocumentLoad(pdf)} >
+                        <Document file={this.state.file[this.state.filePointer]} onLoadSuccess={pdf => this.onDocumentLoad(pdf)} >
                              {
                              Array.apply(null, Array(this.state.numPages)).map(( x: any, i: number)=>i+1).map((page: number) => <Page pageNumber={page} className="esign-document-display2"></Page>)}
                          </Document>
@@ -443,6 +528,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
     renderStartingScreen() {
         //need special styling for fullscreen
         if(this.state.isFullscreen ==  true){
+            console.log("file lngth" + this.state.file.length)
             let heightCheck = window.screen.height
             if(heightCheck >= 924){
                 return (
@@ -454,7 +540,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         <div className="esign-message-handoff-bigfull">
                                You're almost done! 
                         </div>
-                        <div className="esign-message-handoff-small2">
+                        <div className="esign-message-handoff-small">
                             {this.props.presignText}
                         </div>
                     </div>
@@ -482,7 +568,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         <div className="esign-message-handoff-bigfull">
                                You're almost done! 
                         </div>
-                        <div className="esign-message-handoff-small2">
+                        <div className="esign-message-handoff-small">
                             {this.props.presignText}
                         </div>
                     </div>
@@ -508,10 +594,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <div className= {this.state.validated && !this.state.isPopup ? "esign-checkmark" : "esign-checkmark__disabled"}>
                          <EsignCheckMark />
                     </div>
-                    <div className="esign-message-handoff-bigfull">
+                    <div className="esign-message-handoff-big">
                            You're almost done! 
                     </div>
-                    <div className="esign-message-handoff-small">
+                    <div className="esign-message-handoff-small2">
                         {this.props.presignText}
                     </div>
                 </div> 
@@ -597,14 +683,17 @@ class Esign extends React.Component<EsignProps, EsignState> {
             let sig = (
                 <footer className="signature-box-area">
                 <div className="submit-area2">
-                <div className = "esign-black-text" style={{ display: "block"}}> <br></br>
-                    Add Your Signature
+                    <div className='esign-upper'>
+                        <div className = "esign-black-text" > <br></br>
+                            Add Your Signature
+                        </div>
+                        
                 </div>
                 <div className='submit-area'> 
-                <input className="esign-initial-box" placeholder="Your Initials" type="text" value={this.state.initials} onKeyPress={this.handleKeyDown} onChange={this.onChangeInitials} id="initial"></input>
+                    <input className="esign-initial-box" placeholder="Your Initials" type="text" value={this.state.initials} onKeyPress={this.handleKeyDown} onChange={this.onChangeInitials} id="initial"></input>
                     <input className="esign-input-box" placeholder="Type in Full Name to Create Signature" type="text" value={this.state.signature} onKeyPress={this.handleKeyDown} onChange={this.onChangeSignature} id="signature"></input>
-                    <div className="button-area">
-                        <button  id="sign-btn" className="gideon-submit-button" style={{width: "80%" }} onClick={e => this.clickToSubmitSignature(e)}> Sign Now  </button>
+                        <div className="button-area">
+                            <button  id="sign-btn" className="gideon-submit-button" onClick={e => this.clickToSubmitSignature(e)}> Sign Now  </button>
                     </div>
                 </div>
                 </div>
@@ -797,7 +886,8 @@ export const EsignCard = connect(
             gid: ownProps.gid,
             directLine: ownProps.directLine,
             conversationId: stateProps.conversationId,
-            document: ownProps.activity.entities[0].pdf_link.pdf_link[0],
+            document: ownProps.activity.entities[0].pdf_link.pdf_link,
+            documents: ownProps.activity.entities[0].pdf_link.docx_link,
             docx: ownProps.activity.entities[0].pdf_link.docx_link[0],
             prompt: ownProps.text,
             addFilesToState: ownProps.addFilesToState,
