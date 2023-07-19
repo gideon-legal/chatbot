@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { EsignNode, EsignPopup, EsignCheckMark } from './assets/icons/EsignIcons';
 import { sendSignature } from './api/bot';
 import { Hidden } from '@material-ui/core';
+import { isMobile } from 'react-device-detect';
 //will most likely need read only card too for after signing
 //need to add fullscreen variable to check
 export interface Node {
@@ -61,7 +62,7 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
 
     //change list view to button
     render() {
-        if(this.props.fullscreen == true){
+        if(this.props.fullscreen == true && isMobile == false){
             // do fullscreen version -> modify srtyling
             if(document.getElementById('btn3') != null){
                 document.getElementById('btn3').style.display = "none"
