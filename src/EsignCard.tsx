@@ -129,7 +129,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
             sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, 
                 this.props.docx,this.state.initials, this.state.bankNum, this.state.documents)
             .then((res: any) => {
-                console.log(res)
                 this.setState({
                     ...this.state,
                     signedfile: res.data.link
@@ -202,12 +201,9 @@ class Esign extends React.Component<EsignProps, EsignState> {
     
             //need to send to api so it can be used to populate document
             //send to api and wait to receive signed pdf link, set to this.state.signedfile
-            console.log("files being sent")
-            console.log(this.state.documents)
             sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx, this.state.initials, 
                 this.state.bankNum, this.state.documents)
             .then((res: any) => {
-                console.log(res.data)
                 this.setState({
                     ...this.state,
                     signedfile: res.data[0],
@@ -266,7 +262,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     nextDocument(){
         var num = this.state.filePointer + 1;
-        console.log("filepointer before " + num)
         if( num >= this.state.file.length ){
             this.setState({
                 ...this.state,
@@ -278,9 +273,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 filePointer: num
             })
         }
-
-        console.log("filepointer after " + this.state.filePointer)
-        
     }
     
     prevDocument(){
@@ -356,7 +348,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         <div className='esign-top-text'>
                         Document {this.state.filePointer + 1} out of {this.state.file.length}
                         </div>
-                        {this.state.file.length > 2 ? <div id="docCount" className='esign-topbar-buttons'>
+                        {this.state.file.length > 1 ? <div id="docCount" className='esign-topbar-buttons'>
                             <label onClick={() => this.prevDocument()}>
                             <EsignDocumentPrev />
                             </label>
@@ -393,7 +385,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         Document {this.state.filePointer + 1} out of {this.state.file.length}
                         </div>
                         
-                        {this.state.file.length > 2 ? <div id="docCount" className='esign-topbar-buttons'>
+                        {this.state.file.length > 1 ? <div id="docCount" className='esign-topbar-buttons'>
                             <label onClick={() => this.prevDocument()}>
                             <EsignDocumentPrev />
                             </label>
@@ -885,7 +877,6 @@ export const EsignCard = connect(
         sendFiles
     },
      (stateProps: any, dispatchProps: any, ownProps: any): EsignProps => {
-        console.log(ownProps.activity.entities[0].pdf_link)
         return {
             // from stateProps
             node: ownProps.node,
