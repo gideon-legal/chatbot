@@ -2093,6 +2093,10 @@ $lato: Lato, sans-serif;
     .fullbutton-test {
         width: 70%;
         margin-left: 18%;
+
+        @include mobileAndTablet {
+            margin-left: 15%;
+        }
     }
 
     .fullbutton-testpost {
@@ -2468,7 +2472,7 @@ $lato: Lato, sans-serif;
        padding: 15px 0px 15px 0px;
 
        @include mobileAndTablet{
-        padding: 20px 0px 15px 0px;
+        padding: 20px 0px 15px 40px;
     }
     }
 
@@ -2525,15 +2529,15 @@ $lato: Lato, sans-serif;
         text-align: center;
         letter-spacing: 0.03em;
         left: 15%;
-        margin-left: 15%;
+        margin-left: 2%;
         margin-right: 15%;
     
        /* Gideon/Primary text */
        color: #262626;
        padding: 15px 0px 15px 0px;
 
-       @media (max-height: 924px) {
-        margin-left: 2%;
+       @include mobileAndTablet {
+        margin-left: 15%;
        }
 
        @include mobileAndTablet {
@@ -3098,6 +3102,12 @@ $lato: Lato, sans-serif;
             //padding-left: 15px;
             text-align: right;
             color: #575757 !important;
+
+            @include mobileAndTablet {
+                font-size: x-small;
+                margin-top: 8%;
+                width: 98%;
+            }
         }
 
       .esign-topbar-buttons {
@@ -3108,6 +3118,10 @@ $lato: Lato, sans-serif;
         @media (max-height: 920px) {
             margin-top: 20px; 
             }
+        @include mobileAndTablet {
+            margin-top: 25px;
+            right:30%;
+        }
 
       }
 

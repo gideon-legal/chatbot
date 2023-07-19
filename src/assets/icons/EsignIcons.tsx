@@ -1124,3 +1124,23 @@ export class EsignDocumentNext extends React.Component<{}, {}> {
      
 }
 }
+
+export class EsignDocumentPrevMobile extends React.Component<{}, {}> {
+    render(){
+     return <svg width="30" height="30" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+     <rect x="0.5" y="0.5" width="41" height="41" rx="3.5" fill="white"/>
+     <path fill-rule="evenodd" clip-rule="evenodd" d="M21.2583 16.5917C20.9333 16.2667 20.4083 16.2667 20.0833 16.5917L16.2583 20.4167C15.9333 20.7417 15.9333 21.2667 16.2583 21.5917L20.0833 25.4166C20.4083 25.7416 20.9333 25.7416 21.2583 25.4166C21.5833 25.0916 21.5833 24.5667 21.2583 24.2417L18.025 21L21.2583 17.7667C21.5833 17.4417 21.575 16.9083 21.2583 16.5917Z" fill="#969696"/>
+     <rect x="0.5" y="0.5" width="41" height="41" rx="3.5" stroke="#EBEBEB"/>
+     </svg>
+}
+}
+
+export class EsignDocumentNextMobile extends React.Component<{}, {}> {
+    render(){
+     return <svg width="30" height="30" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+     <rect x="0.5" y="0.5" width="41" height="41" rx="3.5" fill="white"/>
+     <path fill-rule="evenodd" clip-rule="evenodd" d="M20.7438 16.2448C20.4187 16.5698 20.4187 17.0948 20.7438 17.4198L23.9771 20.6531L20.7438 23.8865C20.4187 24.2115 20.4187 24.7365 20.7438 25.0615C21.0688 25.3865 21.5938 25.3865 21.9188 25.0615L25.7438 21.2365C26.0688 20.9115 26.0688 20.3865 25.7438 20.0615L21.9188 16.2365C21.6021 15.9198 21.0688 15.9198 20.7438 16.2448Z" fill="#969696"/>
+     <rect x="0.5" y="0.5" width="41" height="41" rx="3.5" stroke="#EBEBEB"/>
+     </svg>     
+}
+}

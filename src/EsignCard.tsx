@@ -6,7 +6,7 @@ import { ChatState } from './Store';
 import { ChatActions, sendMessage, sendFiles } from './Store';
 import { connect } from 'react-redux';
 import { isMobile } from 'react-device-detect';
-import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign, EsignPen, EsignPreSignFull, EsignFullTest, EsignFullTestPaper, EsignFullTestPaperSmall, EsignDocumentNext, EsignDocumentPrev } from './assets/icons/EsignIcons';
+import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign, EsignPen, EsignPreSignFull, EsignFullTest, EsignFullTestPaper, EsignFullTestPaperSmall, EsignDocumentNext, EsignDocumentPrev, EsignDocumentNextMobile, EsignDocumentPrevMobile } from './assets/icons/EsignIcons';
 import { sendSignature } from './api/bot';
 import { Hidden } from '@material-ui/core';
 import { any } from 'bluebird';
@@ -352,7 +352,18 @@ class Esign extends React.Component<EsignProps, EsignState> {
                  //mobile view
             let pdfView = (
                 <div className="fullview">
-                     <div className= "pdfholder-notop">
+                     <div className='esign_topbar'>
+                        <div className='esign-top-text'>
+                        Document {this.state.filePointer + 1} out of {this.state.file.length}
+                        </div>
+                        <div id="docCount" className='esign-topbar-buttons'>
+                            <label onClick={() => this.prevDocument()}>
+                            <EsignDocumentPrevMobile />
+                            </label>
+                            <label onClick={() => this.nextDocument()}>
+                            <EsignDocumentNextMobile />
+                            </label>
+                        </div>
                     </div>
                     <div className="pdfholder-mobile-full">
                     {<div  className='esign-document-holder'>
