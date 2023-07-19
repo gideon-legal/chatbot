@@ -82,7 +82,7 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                         <div className='esign-message-handoff-bigfull'>
                             Congrats! 
                         </div>
-                        <div className="esign-message-handoff-small2">
+                        <div className="esign-message-handoff-small">
                         {this.props.post_message.postesign_message ||
                      "Please download your completed representation agreement below. A member of our team will be in touch to advise you on your next steps. Thank you!"}
                           

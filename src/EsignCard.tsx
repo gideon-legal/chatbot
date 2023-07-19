@@ -548,7 +548,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         <div className="esign-message-handoff-bigfull">
                                You're almost done! 
                         </div>
-                        <div className="esign-message-handoff-small2">
+                        <div className="esign-message-handoff-small">
                             {this.props.presignText}
                         </div>
                     </div>
@@ -576,7 +576,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         <div className="esign-message-handoff-bigfull">
                                You're almost done! 
                         </div>
-                        <div className="esign-message-handoff-small2">
+                        <div className="esign-message-handoff-small">
                             {this.props.presignText}
                         </div>
                     </div>
@@ -602,10 +602,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 <div className= {this.state.validated && !this.state.isPopup ? "esign-checkmark" : "esign-checkmark__disabled"}>
                          <EsignCheckMark />
                     </div>
-                    <div className="esign-message-handoff-bigfull">
+                    <div className="esign-message-handoff-big">
                            You're almost done! 
                     </div>
-                    <div className="esign-message-handoff-small">
+                    <div className="esign-message-handoff-small2">
                         {this.props.presignText}
                     </div>
                 </div> 
