@@ -2166,6 +2166,7 @@ $lato: Lato, sans-serif;
         position: absolute;
         left: 15%;
         font-size: 22px !important;
+        cursor: pointer;
 
         @media (min-height: 924px) {
             margin-top: 40px;
@@ -2192,6 +2193,7 @@ $lato: Lato, sans-serif;
         box-shadow: 2px 2px 4px 0px $c_shadow;
         position: absolute;
         font-size: 22px !important;
+        cursor: pointer;
 
         @media (min-height: 924px) {
             margin-top: 40px;
