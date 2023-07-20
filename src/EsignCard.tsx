@@ -381,10 +381,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         Document {this.state.filePointer + 1} out of {this.state.file.length}
                         </div>
                         {this.state.file.length > 1 ? <div id="docCount" className='esign-topbar-buttons'>
-                            <label onClick={() => this.prevDocument()}>
+                            <label style={{cursor: 'pointer'}} onClick={() => this.prevDocument()}>
                                 {heightCheck >= 924 ? <EsignDocumentPrevFull /> : <EsignDocumentPrev /> }
                             </label>
-                            <label onClick={() => this.nextDocument()}>
+                            <label style={{cursor: 'pointer'}} onClick={() => this.nextDocument()}>
                                 {heightCheck >= 924 ? <EsignDocumentNextFull /> : <EsignDocumentNext /> }
                             </label>
                         </div>: <div></div>}
