@@ -6,7 +6,7 @@ import { ChatState } from './Store';
 import { ChatActions, sendMessage, sendFiles } from './Store';
 import { connect } from 'react-redux';
 import { isMobile } from 'react-device-detect';
-import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign, EsignPen, EsignPreSignFull, EsignFullTest, EsignFullTestPaper, EsignFullTestPaperSmall, EsignDocumentNext, EsignDocumentPrev, EsignDocumentNextMobile, EsignDocumentPrevMobile } from './assets/icons/EsignIcons';
+import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign, EsignPen, EsignPreSignFull, EsignFullTest, EsignFullTestPaper, EsignFullTestPaperSmall, EsignDocumentNext, EsignDocumentPrev, EsignDocumentNextMobile, EsignDocumentPrevMobile, EsignDocumentPrevFull, EsignDocumentNextFull } from './assets/icons/EsignIcons';
 import { sendSignature } from './api/bot';
 import { Hidden } from '@material-ui/core';
 import { any } from 'bluebird';
@@ -308,12 +308,6 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
     renderLargerPdf = () => {
 
-        // if( this.state.file.length == 1 ){
-        //     document.getElementById('docCount').style.visibility = 'hidden'
-        // } else {
-        //     document.getElementById('docCount').style.visibility = 'visible'
-        // }
-
         if(isMobile == true){
             if(this.state.isSignature == true && this.state.isModal == false) {
                  //mobile view
@@ -350,10 +344,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         </div>
                         {this.state.file.length > 1 ? <div id="docCount" className='esign-topbar-buttons'>
                             <label onClick={() => this.prevDocument()}>
-                            <EsignDocumentPrev />
+                            <EsignDocumentPrevMobile />
                             </label>
                             <label onClick={() => this.nextDocument()}>
-                            <EsignDocumentNext />
+                            <EsignDocumentNextMobile />
                             </label>
                         </div>: <div></div>}
                     </div>
@@ -378,19 +372,20 @@ class Esign extends React.Component<EsignProps, EsignState> {
 
             }
         } else {
+            let heightCheck = window.screen.height
+        
             let pdfView = (
                 <div className="fullview" id="fullpdf">
                     <div className='esign_topbar'>
                         <div className='esign-top-text'>
                         Document {this.state.filePointer + 1} out of {this.state.file.length}
                         </div>
-                        
                         {this.state.file.length > 1 ? <div id="docCount" className='esign-topbar-buttons'>
-                            <label onClick={() => this.prevDocument()}>
-                            <EsignDocumentPrev />
+                            <label style={{cursor: 'pointer'}} onClick={() => this.prevDocument()}>
+                                {heightCheck >= 924 ? <EsignDocumentPrevFull /> : <EsignDocumentPrev /> }
                             </label>
-                            <label onClick={() => this.nextDocument()}>
-                            <EsignDocumentNext />
+                            <label style={{cursor: 'pointer'}} onClick={() => this.nextDocument()}>
+                                {heightCheck >= 924 ? <EsignDocumentNextFull /> : <EsignDocumentNext /> }
                             </label>
                         </div>: <div></div>}
                     </div>
