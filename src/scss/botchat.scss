@@ -3119,6 +3119,9 @@ $lato: Lato, sans-serif;
             @media (max-height: 920px) {
                 margin-top: 2%; 
                 }
+            @media (max-height: 918px) {
+                margin-top: 2%; 
+                }
 
             @include mobileAndTablet {
                 font-size: x-small;
@@ -3134,7 +3137,10 @@ $lato: Lato, sans-serif;
         display: inline-block;
         
          /*change for different screen size */
-        @media (max-height: 920px) {
+         @media (max-height: 920px) {
+            margin-top: 25px; 
+            }
+        @media (max-height: 918px) {
             margin-top: 20px; 
             }
         @include mobileAndTablet {
