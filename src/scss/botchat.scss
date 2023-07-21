@@ -3103,7 +3103,7 @@ $lato: Lato, sans-serif;
             right: 0;
             // width: 100%;
             /*change for different screen size */
-            margin-top: 2%;
+            margin-top: 45px;
 
             margin-right: 1%;
             display: block;
@@ -3117,6 +3117,9 @@ $lato: Lato, sans-serif;
             color: #575757 !important;
 
             @media (max-height: 920px) {
+                margin-top: 2%; 
+                }
+            @media (max-height: 918px) {
                 margin-top: 2%; 
                 }
 
@@ -3134,7 +3137,10 @@ $lato: Lato, sans-serif;
         display: inline-block;
         
          /*change for different screen size */
-        @media (max-height: 920px) {
+         @media (max-height: 920px) {
+            margin-top: 25px; 
+            }
+        @media (max-height: 918px) {
             margin-top: 20px; 
             }
         @include mobileAndTablet {
