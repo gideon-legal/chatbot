@@ -199,6 +199,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
             if(!this.validateSignature()) { return;}
             
     
+            console.log("Work to be done!")
+            console.log(this.props.document)
             //need to send to api so it can be used to populate document
             //send to api and wait to receive signed pdf link, set to this.state.signedfile
             sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx, this.state.initials, 
