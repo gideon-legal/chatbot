@@ -206,6 +206,8 @@ class Esign extends React.Component<EsignProps, EsignState> {
             sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx, this.state.initials, 
                 this.state.bankNum, this.state.documents)
             .then((res: any) => {
+                console.log("trying to work")
+                console.log(res);
                 this.setState({
                     ...this.state,
                     signedfile: res.data[0],
@@ -215,6 +217,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 var pdf_files: any[] = []
                 this.state.signedfiles.forEach( (fi: any) => {
                     var try_pdf = JSON.parse(''+fi)
+                    console.log(try_pdf)
                     pdf_files.push(try_pdf.pdf_link)
                 })
                 this.setState({
