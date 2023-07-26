@@ -36,11 +36,13 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
         };
         //add files to sessionStorage for refresh?
         if(this.props.files.length > 0){
+            console.log("oh good lord")
+            console.log(this.props)
             var file = this.props.files[0]
                 if(file.url.length > 0){
                     sessionStorage.setItem("files", JSON.stringify(file.url))
                 }
-        }  
+        } 
     }
 
    clickDownloadLinks(){
