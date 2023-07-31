@@ -534,7 +534,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                              <EsignCheckMark />
                         </div>
                         <div className="esign-message-handoff-bigfull">
-                               You're done! 
+                               You're almost done! 
                         </div>
                         <div className="esign-message-handoff-small">
                             {this.props.presignText}
@@ -595,7 +595,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                          <EsignCheckMark />
                     </div>
                     <div className="esign-message-handoff-big">
-                           You're not done! 
+                           You're almost done! 
                     </div>
                     <div className="esign-message-handoff-small2">
                         {this.props.presignText}
