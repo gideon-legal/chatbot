@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { EsignNode, EsignPopup, EsignCheckMark } from './assets/icons/EsignIcons';
 import { sendSignature } from './api/bot';
 import { Hidden } from '@material-ui/core';
+import { isMobile } from 'react-device-detect';
 //will most likely need read only card too for after signing
 //need to add fullscreen variable to check
 export interface Node {
@@ -35,13 +36,31 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
         };
         //add files to sessionStorage for refresh?
         if(this.props.files.length > 0){
-            sessionStorage.setItem("file",this.props.files[0].url)
-        }
+            console.log("oh good lord")
+            console.log(this.props)
+            var file = this.props.files[0]
+                if(file.url.length > 0){
+                    sessionStorage.setItem("files", JSON.stringify(file.url))
+                }
+        } 
     }
+
+   clickDownloadLinks(){
+      var files = JSON.parse(sessionStorage.getItem("files"))
+      console.log("getting download linkes")
+      console.log(files)
+      files.forEach((f: string) => {
+        window.open(f)
+      })
+
+
+      
+   } 
 
     //change list view to button
     render() {
-        if(this.props.fullscreen == true){
+        if(this.props.fullscreen == true && isMobile == false){
+            // do fullscreen version -> modify srtyling
             if(document.getElementById('btn3') != null){
                 document.getElementById('btn3').style.display = "none"
             }
@@ -60,17 +79,15 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                         <div className='esign-message-handoff-bigfull'>
                             Congrats! 
                         </div>
-                        <div className="esign-message-handoff-small2">
+                        <div className="esign-message-handoff-small">
                         {this.props.post_message.postesign_message ||
                      "Please download your completed representation agreement below. A member of our team will be in touch to advise you on your next steps. Thank you!"}
                         </div>
                     <div className="fullbutton-testpost">
                     <div >
-                        {this.props.files.length <= 0 ? <a className="gideon-submit-button-download-full" target="_blank" href={sessionStorage.getItem("file")}>{"Download Document"}</a> :
-                        this.props.files.map((file: any) => (
-                            <a className="gideon-submit-button-download-full" target="_blank" href={file.url}>{"Download Document"}</a>  
-                      ))
-                        }
+                        <a className="gideon-submit-button-download-full" target="_blank" onClick={this.clickDownloadLinks}>{"Download Document"}</a> 
+                        
+                        
                   
                     </div>
                 </div>
@@ -107,12 +124,8 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                         </div>
                     <div className="uploaded-files-container2">
                     <div >
-                        {this.props.files.length <= 0 ? <a className="gideon-submit-button-download" target="_blank" href={sessionStorage.getItem("file")}>{"Download Document"}</a> :
-                        this.props.files.map((file: any) => (
-                            <a className="gideon-submit-button-download" target="_blank" href={file.url}>{"Download Document"}</a>
-                         
-                      ))
-                        }
+                        <a className="gideon-submit-button-download" target="_blank" onClick={this.clickDownloadLinks} >{"Download Document"}</a> 
+                       
                   
                     </div>
                 </div>

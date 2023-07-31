@@ -2093,6 +2093,10 @@ $lato: Lato, sans-serif;
     .fullbutton-test {
         width: 70%;
         margin-left: 18%;
+
+        @include mobileAndTablet {
+            margin-left: 15%;
+        }
     }
 
     .fullbutton-testpost {
@@ -2160,11 +2164,16 @@ $lato: Lato, sans-serif;
         text-align: center;
         box-shadow: 2px 2px 4px 0px $c_shadow;
         position: absolute;
-        left: 13%;
+        left: 15%;
         font-size: 22px !important;
+        cursor: pointer;
 
         @media (min-height: 924px) {
             margin-top: 40px;
+        }
+
+        &-fullscreen {
+            left: 13%;
         }
     }
 
@@ -2184,6 +2193,7 @@ $lato: Lato, sans-serif;
         box-shadow: 2px 2px 4px 0px $c_shadow;
         position: absolute;
         font-size: 22px !important;
+        cursor: pointer;
 
         @media (min-height: 924px) {
             margin-top: 40px;
@@ -2436,6 +2446,7 @@ $lato: Lato, sans-serif;
         line-height: 40px;
         /* or 89% */
 
+        margin-left: 5%;
         text-align: center;
         letter-spacing: 0.04em;
 
@@ -2456,7 +2467,7 @@ $lato: Lato, sans-serif;
         font-size: xx-large;
         line-height: 40px;
         /* or 89% */
-        margin-left: 15%;
+        margin-left: 5%;
         margin-right: 15%;
 
         text-align: center;
@@ -2468,7 +2479,8 @@ $lato: Lato, sans-serif;
        padding: 15px 0px 15px 0px;
 
        @include mobileAndTablet{
-        padding: 20px 0px 15px 0px;
+        padding: 20px 0px 15px 40px;
+        margin-left: 0%;
     }
     }
 
@@ -2479,8 +2491,8 @@ $lato: Lato, sans-serif;
         font-size: xx-large;
         line-height: 40px;
         /* or 89% */
-        margin-left: 15%;
-        margin-right: 15%;
+        //margin-left: 15%;
+        //margin-right: 15%;
 
         text-align: center;
         letter-spacing: 0.04em;
@@ -2504,14 +2516,16 @@ $lato: Lato, sans-serif;
         line-height: 19px;
         text-align: center;
         letter-spacing: 0.03em;
-    
+        margin-right: 15%;
+        margin-left: 2%;
        /* Gideon/Primary text */
        color: #262626;
        padding: 15px 0px 15px 0px;
 
        @include mobileAndTablet {
         padding-bottom: 30px;
-        padding-top: 50px
+        padding-top: 50px;
+        margin-right: 0%
        }
     }
 
@@ -2525,21 +2539,20 @@ $lato: Lato, sans-serif;
         text-align: center;
         letter-spacing: 0.03em;
         left: 15%;
-        margin-left: 15%;
-        margin-right: 15%;
+        margin-left: 2%;
+        //margin-right: 15%;
     
        /* Gideon/Primary text */
        color: #262626;
        padding: 15px 0px 15px 0px;
 
-       //@media (max-height: 924px) {
-       // margin-left: 2%;
-       //}
 
        @include mobileAndTablet {
+        margin-left: 0%;
         padding-bottom: 30px;
         padding-top: 50px
        }
+
     }
     
     
@@ -2686,6 +2699,15 @@ $lato: Lato, sans-serif;
         margin-bottom: 5px;
     }
     
+    
+
+    .esign-upper{
+        width: 100%;
+        align-items: right;
+        display: flex;
+    }
+    
+    
     .esign-black-text{
         font-family: 'Lato';
         font-style: normal;
@@ -2694,14 +2716,27 @@ $lato: Lato, sans-serif;
         line-height: 17px;
         /* identical to box height */
         //padding-left: 15px;
-        display: block;
+        display: inline-block;
         align-items: center;
         text-align: left;
         color: #000000 !important;
         margin-bottom: 5px;
-        display: block;
+        //display: block;
         margin-left: 3%;
-    
+        width: 85%
+    }
+
+    esign-buttons{
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 17px;
+        text-align: left;
+        color: #000000 !important;
+        margin-bottom: 5px;
+        //display: block;
+       
     }
 
     .esign-black-text-mobile{
@@ -3051,11 +3086,55 @@ $lato: Lato, sans-serif;
         }  
     }
 
-      
+        .esign-top-text{
+            position: fixed;
+            right: 0;
+            // width: 100%;
+            /*change for different screen size */
+            margin-top: 45px;
+
+            margin-right: 1%;
+            display: block;
+            font-family: 'Lato';
+            font-style: normal;
+            font-size: small;
+            line-height: 19px;
+            /* identical to box height */
+            //padding-left: 15px;
+            text-align: right;
+            color: #575757 !important;
+
+            @media (max-height: 920px) {
+                margin-top: 2%; 
+                }
+            @media (max-height: 918px) {
+                margin-top: 2%; 
+                }
+
+            @include mobileAndTablet {
+                font-size: x-small;
+                margin-top: 8%;
+                width: 98%;
+            }
+        }
 
       .esign-topbar-buttons {
-        margin: 0 auto;
+        margin-top: 2%;
+        right: 11%;
+        position: absolute;
         display: inline-block;
+        
+         /*change for different screen size */
+         @media (max-height: 920px) {
+            margin-top: 25px; 
+            }
+        @media (max-height: 918px) {
+            margin-top: 20px; 
+            }
+        @include mobileAndTablet {
+            margin-top: 25px;
+            right:30%;
+        }
 
       }
 
@@ -3250,9 +3329,13 @@ $lato: Lato, sans-serif;
       .submit-area2{
         width: 100%;
         justify-content: space-between;
-
         //align-items: center;
        // display: flex;
+
+       @media (max-height: 924px) {
+        box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(5px); 
+        }
       }
 
       .sign-area{
@@ -3271,6 +3354,21 @@ $lato: Lato, sans-serif;
             width: 100%;
             padding: 18px 20px 0px 18px;
         }
+      }
+
+      .upper-button-area{
+        margin-bottom: -20px;
+        width:20%;
+        display:inline-block;
+        padding: 0px
+      }
+
+      .navigate-buttons{
+        width: fit-content;
+        align-self: right;
+        padding: 5px 10px 5px 10px;
+        margin-right:5px;
+        
       }
 
       .button-area-modal{
