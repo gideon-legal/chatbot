@@ -530,6 +530,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
         if(this.state.isFullscreen ==  true){
             console.log("file lngth" + this.state.file.length)
             let heightCheck = window.screen.height
+            // not being used on Ravens screen at all
             if(heightCheck >= 924){
                 return (
                     <div id="presign2">
@@ -559,6 +560,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 );
 
             } else {
+                // normal fullscreen bot
                 return (
                     <div id="presign2">
                     <div id="presign_card_check" className="esign__card esign__node">
@@ -568,7 +570,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                         <div className="esign-message-handoff-bigfull">
                                You're almost done! 
                         </div>
-                        <div className="esign-message-handoff-small">
+                        <div className= "esign-message-handoff-small">
                             {this.props.presignText}
                         </div>
                     </div>
@@ -586,7 +588,10 @@ class Esign extends React.Component<EsignProps, EsignState> {
     
                 );
             }
+            
         }
+        // normal mobile bot
+        // normal bot
         return (
             <div>
                  
