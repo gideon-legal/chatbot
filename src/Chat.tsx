@@ -953,7 +953,7 @@ export class Chat extends React.Component<ChatProps, State> {
                      
                     checkSite(this.props.gid, window.location.toString(), 
                     conversationId, this.props.directLine.secret, user.id ).then((res: any) => {
-                        console.log("returnr from check site")
+                        console.log("return from check site")
                         console.log(res.data)
                         if(res.data.valid_site == true){
                             verifyConversation(
