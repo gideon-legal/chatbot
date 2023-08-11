@@ -116,3 +116,14 @@ export const sendSignature = (
  
 }
 
+export const checkSite = (
+    baseUrl: string,
+    originatingUrl: string,
+    msftConversationId: string,
+    directLine: string,
+    msft_user_id: string
+): any => {
+    return axios.get(`${baseUrl}/api/v1/bot/site?directLine=${directLine}&?msft_user_id=${msft_user_id}&msft_conversation_id=${msftConversationId}&originating_url=${originatingUrl}`);
+
+}
+
