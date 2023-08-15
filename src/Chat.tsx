@@ -14,7 +14,7 @@ import { HistoryInline } from './assets/icons/HistoryInline'
 import { Activity, CardActionTypes, DirectLine, DirectLineOptions, IBotConnection, User, Conversation } from 'botframework-directlinejs';
 import { isMobile } from 'react-device-detect';
 import { connect, Provider } from 'react-redux';
-import { conversationHistory, mapMessagesToActivities, ping, step, verifyConversation, checkNeedBackButton, conversationList } from './api/bot';
+import { conversationHistory, mapMessagesToActivities, ping, step, verifyConversation, checkNeedBackButton, conversationList, checkSite } from './api/bot';
 import { getTabIndex } from './getTabIndex';
 import { guid } from './GUID';
 import * as konsole from './Konsole';
@@ -955,139 +955,149 @@ export class Chat extends React.Component<ChatProps, State> {
                     });
 
                     const campaign = parseReferrer(document.referrer, window.location.href.toLowerCase());
-
-                    verifyConversation(
-                        this.props.gid,
-                        conversationId,
-                        user.id,
-                        this.props.directLine.secret,
-                        window.location.toString(),
-                        campaign
-                    )
-                    .then((res: any) => {
-                        // Only save these when we successfully connect
-                        // uncomment when re-enabling chat history
-                        if(isNew && conversationId !== sessionStorage.getItem("pastConvoID")) {
-                            window.sessionStorage.setItem('msft_conversation_id', conversationId);
-                            window.localStorage.setItem('gid', this.props.gid);
-                            window.localStorage.setItem('msft_user_id', user.id);
-                        }
-
-                        this.setState({
-                            display: true
-                        });
-
-                        const { bot_display_options } = res.data;
-
-                        if (bot_display_options && bot_display_options.display_title) {
-                            this.store.dispatch<ChatActions>({
-                                type: 'Set_Chat_Title',
-                                chatTitle: bot_display_options.display_title
-                            });
-                        }
-
-                        if (bot_display_options && bot_display_options.color) {
-                            this.store.dispatch<ChatActions>({
-                                type: 'Set_Theme_Color',
-                                themeColor: bot_display_options.color
-                            });
-                        }
-
-                        if (bot_display_options) {
-                            const { alignment, bottomOffset, topOffset, leftOffset, rightOffset, full_height, display_name, widget_url, widget_same_as_logo, open_fullscreen  } = bot_display_options;
-
-                            this.store.dispatch({
-                                type: 'Set_Format_Options',
-                                formatOptions: {
-                                    alignment,
-                                    bottomOffset,
-                                    topOffset,
-                                    leftOffset,
-                                    rightOffset,
-                                    display_name,
-                                    widgetSameAsLogo: widget_same_as_logo,
-                                    widgetUrl: widget_url,
-                                    fullscreen: open_fullscreen || false,
-                                    full_height: full_height || false
-                                }
-                            });
-                        }
-
-                        if (bot_display_options && bot_display_options.logo_url) {
-                            this.store.dispatch<ChatActions>({
-                                type: 'Set_Logo_Img',
-                                logoUrl: bot_display_options.logo_url
-                            });
-                        }
-
-                        if (!isMobile && bot_display_options && bot_display_options.open_on_load) {
-                            this.toggle();
-                        }
-
-                        if (bot_display_options && bot_display_options.open_fullscreen) {
-                            if (bot_display_options.fullscreen_url) {
-                                this.store.dispatch<ChatActions>({
-                                    type: 'Set_Fullscreen_Img',
-                                    fullscreenImageUrl: bot_display_options.fullscreen_url
-                                });
-                            }
-                            this.toggleFullscreen();
-                        }
-
-                        if (bot_display_options && bot_display_options.full_height) {
-                            this.toggleFullHeight();
-                        }
-
-                        this.store.dispatch<ChatActions>({
-                            type: 'Set_Verification',
-                            verification: {
-                                status: 1
-                            }
-                        });
-
-                        conversationHistory(this.props.gid, this.props.directLine.secret, conversationId)
-                        .then((res: any) => {
-                            const state = this.store.getState();
-                            const messages = res.data.messages.reverse();
-                    
-                            if(isNew && messages.length === 0) isNew = true;
-
-                            this.store.dispatch<ChatActions>({
-                                type: 'Set_Messages',
-                                activities: mapMessagesToActivities(messages, state.connection.user.id)
-                            });
-
-                        });
-
-                        // Ping server with activity every 30 seconds
-                        setInterval(() => {
-                            ping(
+                     
+                    checkSite(this.props.gid, window.location.toString(), 
+                    conversationId, this.props.directLine.secret, user.id ).then((res: any) => {
+                        console.log("return from check site")
+                        console.log(res.data)
+                        if(res.data.valid_site == true){
+                            verifyConversation(
                                 this.props.gid,
                                 conversationId,
-                                this.props.directLine.secret
-                            );
-                        }, 10000);
+                                user.id,
+                                this.props.directLine.secret,
+                                window.location.toString(),
+                                campaign
+                            )
+                            .then((res: any) => {
+                                // Only save these when we successfully connect
+                                // uncomment when re-enabling chat history
+                                if(isNew && conversationId !== sessionStorage.getItem("pastConvoID")) {
+                                    window.sessionStorage.setItem('msft_conversation_id', conversationId);
+                                    window.localStorage.setItem('gid', this.props.gid);
+                                    window.localStorage.setItem('msft_user_id', user.id);
+                                }
+        
+                                this.setState({
+                                    display: true
+                                });
+        
+                                const { bot_display_options } = res.data;
+        
+                                if (bot_display_options && bot_display_options.display_title) {
+                                    this.store.dispatch<ChatActions>({
+                                        type: 'Set_Chat_Title',
+                                        chatTitle: bot_display_options.display_title
+                                    });
+                                }
+        
+                                if (bot_display_options && bot_display_options.color) {
+                                    this.store.dispatch<ChatActions>({
+                                        type: 'Set_Theme_Color',
+                                        themeColor: bot_display_options.color
+                                    });
+                                }
+        
+                                if (bot_display_options) {
+                                    const { alignment, bottomOffset, topOffset, leftOffset, rightOffset, full_height, display_name, widget_url, widget_same_as_logo, open_fullscreen  } = bot_display_options;
+        
+                                    this.store.dispatch({
+                                        type: 'Set_Format_Options',
+                                        formatOptions: {
+                                            alignment,
+                                            bottomOffset,
+                                            topOffset,
+                                            leftOffset,
+                                            rightOffset,
+                                            display_name,
+                                            widgetSameAsLogo: widget_same_as_logo,
+                                            widgetUrl: widget_url,
+                                            fullscreen: open_fullscreen || false,
+                                            full_height: full_height || false
+                                        }
+                                    });
+                                }
+        
+                                if (bot_display_options && bot_display_options.logo_url) {
+                                    this.store.dispatch<ChatActions>({
+                                        type: 'Set_Logo_Img',
+                                        logoUrl: bot_display_options.logo_url
+                                    });
+                                }
+        
+                                if (!isMobile && bot_display_options && bot_display_options.open_on_load) {
+                                    this.toggle();
+                                }
+        
+                                if (bot_display_options && bot_display_options.open_fullscreen) {
+                                    if (bot_display_options.fullscreen_url) {
+                                        this.store.dispatch<ChatActions>({
+                                            type: 'Set_Fullscreen_Img',
+                                            fullscreenImageUrl: bot_display_options.fullscreen_url
+                                        });
+                                    }
+                                    this.toggleFullscreen();
+                                }
+        
+                                if (bot_display_options && bot_display_options.full_height) {
+                                    this.toggleFullHeight();
+                                }
+        
+                                this.store.dispatch<ChatActions>({
+                                    type: 'Set_Verification',
+                                    verification: {
+                                        status: 1
+                                    }
+                                });
+        
+                                conversationHistory(this.props.gid, this.props.directLine.secret, conversationId)
+                                .then((res: any) => {
+                                    const state = this.store.getState();
+                                    const messages = res.data.messages.reverse();
+                            
+                                    if(isNew && messages.length === 0) isNew = true;
+        
+                                    this.store.dispatch<ChatActions>({
+                                        type: 'Set_Messages',
+                                        activities: mapMessagesToActivities(messages, state.connection.user.id)
+                                    });
+        
+                                });
+        
+                                // Ping server with activity every 30 seconds
+                                setInterval(() => {
+                                    ping(
+                                        this.props.gid,
+                                        conversationId,
+                                        this.props.directLine.secret
+                                    );
+                                }, 10000);
+        
+                                // this.setState({
+                                //     loading: false
+                                // });
+        
+                                // Only initialize convo for user if it's their first time
+                                // interacting with the chatbot
+                                if (isNew) {
+                                    // Send initial message to start conversation
+                                    this.store.dispatch(sendMessage(state.format.strings.pingMessage, state.connection.user, state.format.locale));
+                                }
+        
+                            })
+                            .catch((err: any) => {
+                                this.store.dispatch<ChatActions>({
+                                    type: 'Set_Verification',
+                                    verification: {
+                                        status: 2
+                                    }
+                                });
+                            });
 
-                        // this.setState({
-                        //     loading: false
-                        // });
-
-                        // Only initialize convo for user if it's their first time
-                        // interacting with the chatbot
-                        if (isNew) {
-                            // Send initial message to start conversation
-                            this.store.dispatch(sendMessage(state.format.strings.pingMessage, state.connection.user, state.format.locale));
                         }
-
                     })
-                    .catch((err: any) => {
-                        this.store.dispatch<ChatActions>({
-                            type: 'Set_Verification',
-                            verification: {
-                                status: 2
-                            }
-                        });
-                    });
+
+                    
                 }
             }
 
