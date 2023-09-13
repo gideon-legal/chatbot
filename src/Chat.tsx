@@ -1127,7 +1127,8 @@ export class Chat extends React.Component<ChatProps, State> {
         this.initialOpen = this.state.open;
 
         //open === true if new convo or past convo
-        if(Boolean(sessionStorage.getItem('newConvo')) || sessionStorage.getItem('pastConvoID') || (!sessionStorage.getItem('pastConvoID') && sessionStorage.getItem('emptyChat') && reloaded)) {
+        if(Boolean(sessionStorage.getItem('newConvo')) || sessionStorage.getItem('pastConvoID') || (!sessionStorage.getItem('pastConvoID') && sessionStorage.getItem('emptyChat') 
+        && reloaded && this.initialOpen != false)) {
             this.initialOpen = true;
         }
 
