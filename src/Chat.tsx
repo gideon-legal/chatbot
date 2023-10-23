@@ -1132,7 +1132,7 @@ export class Chat extends React.Component<ChatProps, State> {
             this.initialOpen = true;
         }
 
-        this.getConvoList(localStorage.getItem('msft_user_id'),sessionStorage.getItem('msft_conversation_id'));
+        //this.getConvoList(localStorage.getItem('msft_user_id'),sessionStorage.getItem('msft_conversation_id'));
     }
 
     componentWillUnmount() {
@@ -1243,7 +1243,7 @@ export class Chat extends React.Component<ChatProps, State> {
         sessionStorage.setItem("convoComplete", convo.is_complete);
         //viewing current convo
         if(currentConvoID === sessionStorage.getItem("msft_conversation_id")) {
-            this.handleHistory(false);
+            //this.handleHistory(false);
         } else {
             sessionStorage.setItem("pastConvoID", currentConvoID);
             window.location.reload();
@@ -1291,9 +1291,9 @@ export class Chat extends React.Component<ChatProps, State> {
             })
             sessionStorage.setItem("loading", 'true');
             //console.log("4 " + this.state.loading);
-            this.reload_messages();
+            //this.reload_messages();
             // sessionStorage.setItem("loading", 'false');
-            this.reloadMsgsCalled = true;
+            //this.reloadMsgsCalled = true;
         
         }
 
@@ -1393,12 +1393,12 @@ export class Chat extends React.Component<ChatProps, State> {
                                                             this.clicked(true)
 
                                                             this.setState({
-                                                                loading: true
+                                                                //loading: true
                                                             })
-                                                            sessionStorage.setItem("loading", 'true');
-                                                            this.step(); 
+                                                            //sessionStorage.setItem("loading", 'true');
+                                                            //this.step(); 
                                                             //this.reload_messages_nocount()
-                                                            this.deleteNodeCount(1);
+                                                            //this.deleteNodeCount(1);
                                                            // this.reload_messages_nocount()
 
                                                            

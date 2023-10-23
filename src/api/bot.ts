@@ -9,7 +9,7 @@ export const verifyConversation = (
     originatingUrl: string,
     campaignParams: object
 ): any => {
-    return axios.post(`${baseUrl}/api/v1/bot/conversations`, {
+    return axios.post(`${baseUrl}/bot/conversation`, {
         msft_conversation_id: msftConversationId,
         originating_url: originatingUrl,
         msft_user_id: msftUserId,
@@ -24,7 +24,7 @@ export const step = (
     directLine: string,
     messageId: string
 ): any => {
-    return axios.post(`${baseUrl}/api/v1/bot/step`, {
+    return axios.post(`${baseUrl}/bot/step`, {
         msft_conversation_id: msftConversationId,
         directLine,
         message_id: messageId
@@ -37,7 +37,7 @@ export const conversationHistory = (
     conversationId: string,
     lastMessageId: string = null
 ): any => {
-    return axios.get(`${baseUrl}/api/v1/conversations/history?conversation_id=${conversationId}&directLine=${directLine}&last=${lastMessageId}`);
+    return axios.get(`${baseUrl}/conversations/history?conversation_id=${conversationId}&directLine=${directLine}&last=${lastMessageId}`);
 };
 
 export const ping = (
@@ -45,7 +45,7 @@ export const ping = (
     msftConversationId: string,
     directLine: string
 ): any => {
-    return axios.post(`${baseUrl}/api/v1/leads/ping`, {
+    return axios.post(`${baseUrl}/leads/ping`, {
         msft_conversation_id: msftConversationId,
         directLine
     });
@@ -57,7 +57,7 @@ export const availableTimes = (
     conversationId: string,
     startDate: string
 ): any => {
-    return axios.get(`${baseUrl}/api/v1/availabilities/available_times?directLine=${directLine}&conversation_id=${conversationId}&start_date=${startDate}`);
+    return axios.get(`${baseUrl}/availabilities/available_times?directLine=${directLine}&conversation_id=${conversationId}&start_date=${startDate}`);
 };
 
 export const mapMessagesToActivities = (messages: any, userId: any): Activity[] => {
@@ -77,7 +77,7 @@ export const mapMessagesToActivities = (messages: any, userId: any): Activity[] 
 
 // checkNeedBackButton - checks if the current activity corresponds to acompletion node, returns a boolean
 export const checkNeedBackButton = async (baseUrl: string, directLine: string, msftConversationId: string, messageText: string): Promise<any> => {
-    const temp = axios.get(`${baseUrl}/api/v1/bot/checkbackbutton?msft_conversation_id=${msftConversationId}&directLine=${directLine}`);
+    const temp = axios.get(`${baseUrl}/bot/checkbackbutton?msft_conversation_id=${msftConversationId}&directLine=${directLine}`);
     const attempt = (await temp).data
     return attempt;
 };
@@ -88,7 +88,7 @@ export const conversationList = (
     user_id: string,
     convo_id: string
 ): any => {
-    return axios.get(`${baseUrl}/api/v1/conversations/list?user_id=${user_id}&convo_id=${convo_id}`);
+    return axios.get(`${baseUrl}/conversations/list?user_id=${user_id}&convo_id=${convo_id}`);
 }
 
 //sends signature from esign card to populate document, expects signed document in return?
@@ -104,7 +104,7 @@ export const sendSignature = (
 ): any => {
     console.log(documents)
     console.log(typeof documents)
-   return axios.post(`${baseUrl}/api/v1/bot/esign`, {
+   return axios.post(`${baseUrl}/bot/esign`, {
        link: document,
        signature: signature,
        msft_conversation_id: conversationId,
@@ -123,7 +123,7 @@ export const checkSite = (
     directLine: string,
     msft_user_id: string
 ): any => {
-    return axios.get(`${baseUrl}/api/v1/bot/site?directLine=${directLine}&?msft_user_id=${msft_user_id}&msft_conversation_id=${msftConversationId}&originating_url=${originatingUrl}`);
+    return axios.get(`${baseUrl}/bot/site?directLine=${directLine}&?msft_user_id=${msft_user_id}&msft_conversation_id=${msftConversationId}&originating_url=${originatingUrl}`);
 
 }
 
