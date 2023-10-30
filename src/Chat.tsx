@@ -174,6 +174,7 @@ export class Chat extends React.Component<ChatProps, State> {
         const state = this.store.getState();
         this.toggleBackButton(false);
         let alreadyContains = false;
+        console.log("Please let me handle my biz :)")
         //sessionStorage.setItem("loading", 'true');
         //checking if history.activities contains same text and message type as incoming activity
         let i: any;
@@ -190,7 +191,7 @@ export class Chat extends React.Component<ChatProps, State> {
             //(lastActivity && lastActivity.text !== activityCopy.text || lastActivity.type !== activityCopy.type && "GIDEON_MESSAGE_START" !== activityCopy.text) ){
             !alreadyContains ||
             (lastActivity && lastActivity.text === activityCopy.text && lastActivity.type !== activityCopy.type && "GIDEON_MESSAGE_START" !== activityCopy.text && !alreadyContains)){
-               
+               console.log("trying something give me a sec lol")
             switch (activity.type) {
                 case 'message':
                     // adding node count to check if first node, need to grey out back button
