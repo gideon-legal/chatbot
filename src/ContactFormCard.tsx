@@ -172,31 +172,31 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
   }
 
   prefixActive = () => {
-    return this.props.node.meta && this.props.node.meta.prefix;
+    return this.props.node.meta && (this.props.node.meta.prefix || this.props.node.meta.showPrefix);
   }
 
   nameActive = () => {
-    return this.props.node.meta && this.props.node.meta.name;
+    return this.props.node.meta && (this.props.node.meta.name || this.props.node.meta.showFirstName || this.props.node.meta.showLastName || this.props.node.meta.showMiddleName);
   }
 
   emailActive = () => {
-    return this.props.node.meta && this.props.node.meta.email || (!this.props.node.meta && this.props.node.validation === 'email');
+    return this.props.node.meta && this.props.node.meta.email || (!this.props.node.meta && this.props.node.validation === 'email') || this.props.node.meta.showEmail;
   }
 
   phoneActive = () => {
-    return this.props.node.meta && this.props.node.meta.phone || (!this.props.node.meta && this.props.node.validation === 'phone');
+    return this.props.node.meta && this.props.node.meta.phone || (!this.props.node.meta && this.props.node.validation === 'phone') || this.props.node.meta.showPhone;
   }
 
   firstNameActive = () => {
-    return this.props.node.meta && this.props.node.meta.name && this.props.node.meta.first_name;
+    return this.props.node.meta && ((this.props.node.meta.name && this.props.node.meta.first_name) || this.props.node.meta.showFirstName);
   }
 
   lastNameActive = () => {
-    return this.props.node.meta && this.props.node.meta.name && this.props.node.meta.last_name;
+    return this.props.node.meta && ((this.props.node.meta.name && this.props.node.meta.last_name) || this.props.node.meta.showLastName);
   }
 
   middleNameActive = () => {
-    return this.props.node.meta && this.props.node.meta.name && this.props.node.meta.middle_name;
+    return this.props.node.meta && ((this.props.node.meta.name && this.props.node.meta.middle_name) || this.props.node.meta.showMiddleName);
   }
 
   clickToSubmitContactInformation(e: React.MouseEvent<HTMLButtonElement>) {
