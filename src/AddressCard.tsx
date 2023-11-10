@@ -117,7 +117,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
     }
 
     apartmentActive = () => {
-        return this.props.node.meta && this.props.node.meta.apartment;
+        return this.props.node.meta && (this.props.node.meta.apartment || this.props.node.meta.collectAptNumber);
     }
 
     private handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>): any {
