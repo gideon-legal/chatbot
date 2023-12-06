@@ -7,21 +7,25 @@ export interface Node {
   meta: any;
 }
 
-export interface DisclaimerCardReadOnlyProps {
+export interface VideoCardProps {
   text: string;
+  video_url: string; //for now have video as string
 }
 
-export interface DisclaimerCardReadOnlyState {
-  showDisclaimer: boolean;
+export interface VideoCardState {
+  isFullscreen: boolean;
+  isSidebar: boolean;
 }
 
-export class DisclaimerCardReadOnly extends React.Component<DisclaimerCardReadOnlyProps, DisclaimerCardReadOnlyState> {
-  constructor(props: DisclaimerCardReadOnlyProps) {
+//NOTE - handling of fullscreen and sidebar version requires options checks?
+//DESIGN NOTE - plain card w/ no text, just color matched header. ability to fullscreen video + account for mobile ver
+export class VideoCard extends React.Component<VideoCardProps, VideoCardState> {
+  constructor(props: VideoCardProps) {
     super(props);
 
-    this.state = {
-      showDisclaimer: false
-    };
+    //this.state = {
+   //   // have checks for fullscreen and/or sidebar video
+   // };
   }
 
   render() {
