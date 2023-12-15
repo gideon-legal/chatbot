@@ -15,6 +15,7 @@ import { SchedulerCard } from './SchedulerCard';
 import { FormatState, SizeState } from './Store';
 import { EsignCard} from './EsignCard';
 import { DocassembleCard } from './DocassembleCard';
+import { VideoCard } from './VideoCard';
 
 const Attachments = (props: {
     attachments: Attachment[],
@@ -195,12 +196,28 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
       }
     }
 
+    addVideo = () => {
+      
+    }
+
     render() {
         const { activity, type, ...props } = this.props;
         const activityCopy: any = activity;
+        console.log("here")
+        console.log(activityCopy)
         const isDisclaimer = activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer';
         if (type === 'message' && activity.type === 'message') {
           if (isDisclaimer === true || this.formatText(activity.text).length > 0) {
+            console.log("here 4")
+            activity.entities[0].video
+            if(activity.entities[0].video != ""){
+              console.log("here 5")
+
+              return (
+                <VideoCard { ...props } activity={activityCopy} />
+                );
+
+            }
             return (
               <div>
                   <FormattedText
