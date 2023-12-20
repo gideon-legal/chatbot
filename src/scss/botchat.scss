@@ -1508,6 +1508,30 @@ $lato: Lato, sans-serif;
         left: -6px;
     }
 
+    .wc-message-from-bot-video {
+        float: left;
+        margin-left: $fromBotMargin;
+        max-width: 75%;
+    }
+
+    .wc-message-from-bot-video .wc-message-content {
+        background-color: #3F6DE1;
+        color: $c01;
+        border-radius: 3px 3px 0px 3px;
+    }
+
+    .wc-message-from-bot-video svg.wc-message-callout path {
+        fill: $c_messageFromThem;
+    }
+
+    .wc-message-from-bot-video svg.wc-message-callout path.point-right {
+        display: none;
+    }
+
+    .wc-message-from-bot-video svg.wc-message-callout {
+        left: -6px;
+    }
+
     .wc-message-node {
       margin-left: auto;
       border: none;
@@ -3528,5 +3552,10 @@ $lato: Lato, sans-serif;
         margin-top: 1%;
         white-space: nowrap;
         margin-left: 1%;
+      }
+
+      .video__card {
+       
+        
       }
    

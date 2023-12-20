@@ -55,7 +55,7 @@ export class Video extends React.Component<VideoProps, VideoState> {
   render() {
     return (
       <div>
-        <div className="video__card">
+        <div className="video__card gideon__node">
           
 
           <video controls>

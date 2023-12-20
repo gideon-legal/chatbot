@@ -477,7 +477,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                         }
                         return (
                             <div data-activity-id={activity.id } className={wrapperClassName + lastMessageClass}>
-                                <div className={'wc-message wc-message-from-bot wc-message-' + 'video' + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
+                                <div className={'wc-message wc-message-from-bot-video wc-message-' + 'video' + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
                                     <div className={ contentClassName + ' wc-message-content-video' + ' ' + contentClassName + '-node' }>
                                         <VideoCard props={this.props} activity={activityCopy} />
                                     </div>
