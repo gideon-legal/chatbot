@@ -22,8 +22,8 @@ export interface VideoProps {
   conversationId: number,
   prompt: string,
 
-  fullheight: boolean;
-  fullscreen: boolean;
+  //fullheight: boolean;
+  //fullscreen: boolean;
 }
 
 export interface VideoState {
@@ -55,7 +55,7 @@ export class Video extends React.Component<VideoProps, VideoState> {
   render() {
     return (
       <div>
-        <div className="video__card gideon__node">
+        <div className="video__card">
           
 
           <video controls>
@@ -91,8 +91,8 @@ export const VideoCard = connect(
             directLine: ownProps.directLine,
             conversationId: stateProps.conversationId,
             prompt: ownProps.text,
-            fullheight: ownProps.format.full_height,
-            fullscreen: ownProps.format.fullscreen,
+           // fullheight: ownProps.format.fullheight,
+          //  fullscreen: ownProps.format.fullscreen,
             video_url: ownProps.activity.entities[0].video
         }
     }

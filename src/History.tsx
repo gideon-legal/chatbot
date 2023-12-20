@@ -13,6 +13,7 @@ import { DocassembleCard } from './DocassembleCard';
 import * as konsole from './Konsole';
 import { ChatState, FormatState, SizeState } from './Store';
 import { sendMessage } from './Store';
+import { VideoCard } from './VideoCard';
 
 export interface HistoryProps {
     format: FormatState;
@@ -206,10 +207,12 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                 this.largeWidth = this.props.size.width * 2;
                 content = <this.measurableCarousel/>;
             } else {
+                console.log("history else")
                 const activities = filteredActivities(this.props.activities, this.props.format.strings.pingMessage);
                 activityDisclaimer = activities.length > 0 ? activities[activities.length - 1] : undefined;
                 lastActivityIsDisclaimer = activityDisclaimer && activityDisclaimer.entities && activityDisclaimer.entities.length > 0 && activityDisclaimer.entities[0].node_type === 'disclaimer';
-                //console.log(activities);
+                console.log("history activites")
+                console.log(activities);
                 content = activities
                 .map((activity, index) => {
                         // for cases where user refreshes before any messages appear
@@ -222,6 +225,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                         }
                         
                         return (
+                          
                             ((activity.type !== 'message' || activity.text || (activity.attachments && !!activity.attachments.length))) &&
                                 <WrappedActivity
                                     format={ this.props.format }
@@ -439,6 +443,58 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
         super(props);
     }
 
+    videoCheck(contentClassName: string, wrapperClassName: string) {
+
+        const { lastMessage, activity, doCardAction } = this.props;
+        if(activity){
+            const activityCopy: any = activity;
+
+            if(activityCopy && activityCopy.entities && activityCopy.entities.length > 0){
+
+                const activityRequiresAdditionalInput = activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type !== null;
+    
+                const activityActions = activityCopy.suggestedActions;
+                // Check if there are suggessted acctions in the activity
+                const activityHasSuggestedActions = activityActions && activityActions.actions && activityActions.actions.length > 0;
+        
+                const contactClassName = activityRequiresAdditionalInput ? (' ' + contentClassName + '-' + activityCopy.entities[0].node_type) : '';
+                let has_video = false;
+                    //check if entities has video attached
+                    for (const i of activityCopy.entities){
+                        if (i.node_type === 'video'){
+                            console.log("has video")
+                            has_video = true;
+        
+                        }
+                    }
+        
+                    if(has_video == true){
+                        let lastMessageClass = ' ';
+                        if (this.props.format.fullscreen && !this.props.inputEnabled) {
+                            lastMessageClass += 'wc-fullscreen-last-message';
+                        } else if (!this.props.format.fullscreen && !this.props.inputEnabled) {
+                            lastMessageClass += 'wc-non-fullscreeen-last-message';
+                        }
+                        return (
+                            <div data-activity-id={activity.id } className={wrapperClassName + lastMessageClass}>
+                                <div className={'wc-message wc-message-from-bot wc-message-' + 'video' + (this.props.format.fullscreen ? ' wc-node-fullscreen' : '')} ref={ div => this.messageDiv = div }>
+                                    <div className={ contentClassName + ' wc-message-content-video' + ' ' + contentClassName + '-node' }>
+                                        <VideoCard props={this.props} activity={activityCopy} />
+                                    </div>
+                                </div>
+                            </div>
+                        );
+        
+                    }
+
+            }
+
+           
+
+        }
+       
+
+    }
     /**
      * In cases of having a date picker/custom interaction cmp., this
      * method will handle rendering the additional cmp.
@@ -463,6 +519,11 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
             } else if (activityHasSuggestedActions) {
                 nodeType = activityActions.actions[0].type;
             }
+
+            
+
+
+           
 
             if (nodeType === 'date' || nodeType === 'handoff' || nodeType === 'download' || nodeType === 'esign' || nodeType === 'file' || nodeType === 'imBack' || nodeType === 'contact' || nodeType === 'address' || nodeType === 'disclaimer') {
                 let lastMessageClass = ' ';
@@ -686,7 +747,9 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                     {/* <div className={ 'wc-message-from wc-message-from-' + who }>{ timeLine }</div> */}
                 </div>
 
+                {this.videoCheck(contentClassName, wrapperClassName)}
                 {this.renderAdditionalActivity(contentClassName, wrapperClassName)}
+                {}
             </div>
         );
     }
