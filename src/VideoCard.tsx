@@ -8,6 +8,7 @@ import { filteredActivities } from './History';
 import { connect } from 'react-redux';
 import { activityWithSuggestedActions } from './activityWithSuggestedActions';
 import { doCardAction, IDoCardAction } from './Chat';
+import { VideoFullScreenIcon, VideoPlayIcon } from './assets/icons/VideoIcons'
 
 export interface Node {
   node_type: string;
@@ -44,11 +45,7 @@ export class Video extends React.Component<VideoProps, VideoState> {
    // };
   }
 
-
-  getVideoUrl = () => {
-
-
-  }
+  
 
   //just need to display video in card or if for sidebar case, message saying to watch in sidebar
   //for now testing with basic <video> - need to check if controls are editable to have in top part of screen
@@ -56,13 +53,17 @@ export class Video extends React.Component<VideoProps, VideoState> {
     return (
       <div>
         <div className="video__card gideon__node">
-          
-
-          <video controls>
+          <div className='vid-container'>
+          <video controls id="video">
             <source src={this.props.video_url} type="video/mp4"></source>
-
-
           </video>
+
+          </div>
+          <div className='vid-controls' id="video-controls">
+                <div className="play-vid"  id="play-pause"> <VideoPlayIcon/> </div>
+                <div className="full-vid"  id="fullscreen"> <VideoFullScreenIcon/> </div>
+
+            </div>
 
          
           

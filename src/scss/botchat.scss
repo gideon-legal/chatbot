@@ -3554,8 +3554,55 @@ $lato: Lato, sans-serif;
         margin-left: 1%;
       }
 
-      .video__card {
-       
-        
+      .play-vid {
+        z-index: 100;
+        position: absolute;
+        background-color: transparent;
+        background: transparent;
+        top: 30%;
+        cursor: pointer;
+        outline: none;
+        overflow: hidden;
+        border: none;
+        left: 45%;
+      }
+
+      .play-vid button {
+        cursor: pointer;
+        outline: none;
+        overflow: hidden;
+        border: none;
+        background-color: transparent;
+        background: transparent;
+
+
+      }
+
+      .full-vid {
+        z-index: 100;
+        position: absolute;
+        background-color: transparent;
+        background: transparent;
+        top: 6%;
+        width: 44%;
+        cursor: pointer;
+        outline: none;
+        overflow: hidden;
+        border: none;
+        left: 85%;
+      }
+
+      .full-vid button {
+        cursor: pointer;
+        outline: none;
+        overflow: hidden;
+        border: none;
+        background-color: transparent;
+        background: transparent;
+
+      }
+
+      .vid-container {
+        position: relative;
       }
    
