@@ -30,8 +30,10 @@ export interface VideoProps {
 }
 
 export interface VideoState {
-  isFullscreen: boolean;
-  isSidebar: boolean;
+  //isFullscreen: boolean;
+  //isSidebar: boolean;
+  videoPlaying: boolean;  //for play icon
+  videoFullscreen: boolean; //for fullscreen icon
 }
 
 //NOTE - handling of fullscreen and sidebar version requires options checks?
@@ -42,9 +44,11 @@ export class Video extends React.Component<VideoProps, VideoState> {
 
     console.log(this.props.video_url)
 
-    //this.state = {
-   //   // have checks for fullscreen and/or sidebar video
-   // };
+    this.state = { 
+      // have checks for fullscreen and/or sidebar video
+      videoPlaying: false,   
+      videoFullscreen: false
+    };
   }
 
 
@@ -65,8 +69,8 @@ export class Video extends React.Component<VideoProps, VideoState> {
   //render of video card - using ReactHlsPlayer instead of original <video>
   //package info: https://www.npmjs.com/package/react-hls-player 
   //custom fullscreen and play buttons in vid-controls div - note: controls initially styled using dimensions of <video>
+  //                                                               fullscreen and play icons use div and not button due to default styling
   render() {
-    
     return (
       <div>
         <div className="video__card gideon__node">
@@ -82,20 +86,12 @@ export class Video extends React.Component<VideoProps, VideoState> {
                 }}
                  src={this.props.video_url}
                   />
-              
-
-            
-
-           
           </div>
           <div className='vid-controls' id="video-controls">
                 <div className="play-vid"  id="play-pause" onClick={this.handlePlay}> <VideoPlayIcon/> </div>
                 <div className="full-vid"  id="fullscreen" onClick={this.handleFullscreen}> <VideoFullScreenIcon/> </div>
 
-            </div>
-
-         
-          
+            </div> 
         </div>
       </div>
     );
