@@ -443,6 +443,8 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
         super(props);
     }
 
+    //a check for if the incoming activity contains video in activity.entities,
+    // if present, then video card will populate after message bubble and before node card
     videoCheck(contentClassName: string, wrapperClassName: string) {
 
         const { lastMessage, activity, doCardAction } = this.props;

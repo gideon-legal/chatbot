@@ -9,6 +9,8 @@ import { connect } from 'react-redux';
 import { activityWithSuggestedActions } from './activityWithSuggestedActions';
 import { doCardAction, IDoCardAction } from './Chat';
 import { VideoFullScreenIcon, VideoPlayIcon } from './assets/icons/VideoIcons'
+import ReactHlsPlayer from 'react-hls-player';
+//import { useRef } from 'react'
 
 export interface Node {
   node_type: string;
@@ -45,23 +47,50 @@ export class Video extends React.Component<VideoProps, VideoState> {
    // };
   }
 
-  
 
-  //just need to display video in card or if for sidebar case, message saying to watch in sidebar
-  //for now testing with basic <video> - need to check if controls are editable to have in top part of screen
+  //for onClick of play-pause in vid-controls
+  handlePlay(){
+
+  }
+
+  //for onClick of fullscreen in vid-controls
+  handleFullscreen(){
+
+  }
+
+  videoTest(){
+   // const refCheck = React.useRef();
+  }
+
+  //render of video card - using ReactHlsPlayer instead of original <video>
+  //package info: https://www.npmjs.com/package/react-hls-player 
+  //custom fullscreen and play buttons in vid-controls div - note: controls initially styled using dimensions of <video>
   render() {
+    
     return (
       <div>
         <div className="video__card gideon__node">
           <div className='vid-container'>
-          <video controls id="video">
-            <source src={this.props.video_url} type="video/mp4"></source>
-          </video>
 
+            
+                 <ReactHlsPlayer 
+                 playerRef={this.props}
+                 hlsConfig={{
+                  maxLoadingDelay: 4,
+                  minAutoBitrate: 0,
+                  lowLatencyMode: true,
+                }}
+                 src={this.props.video_url}
+                  />
+              
+
+            
+
+           
           </div>
           <div className='vid-controls' id="video-controls">
-                <div className="play-vid"  id="play-pause"> <VideoPlayIcon/> </div>
-                <div className="full-vid"  id="fullscreen"> <VideoFullScreenIcon/> </div>
+                <div className="play-vid"  id="play-pause" onClick={this.handlePlay}> <VideoPlayIcon/> </div>
+                <div className="full-vid"  id="fullscreen" onClick={this.handleFullscreen}> <VideoFullScreenIcon/> </div>
 
             </div>
 
