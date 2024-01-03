@@ -71,21 +71,19 @@ export class Video extends React.Component<VideoProps, VideoState> {
   //custom fullscreen and play buttons in vid-controls div - note: controls initially styled using dimensions of <video>
   //                                                               fullscreen and play icons use div and not button due to default styling
   render() {
+    const player = this.refs;
     return (
       <div>
         <div className="video__card gideon__node">
           <div className='vid-container'>
 
-            
-                 <ReactHlsPlayer 
-                 playerRef={this.props}
-                 hlsConfig={{
-                  maxLoadingDelay: 4,
-                  minAutoBitrate: 0,
-                  lowLatencyMode: true,
-                }}
+           
+                <ReactHlsPlayer 
                  src={this.props.video_url}
+                 playerRef={player}
                   />
+            
+                 
           </div>
           <div className='vid-controls' id="video-controls">
                 <div className="play-vid"  id="play-pause" onClick={this.handlePlay}> <VideoPlayIcon/> </div>
