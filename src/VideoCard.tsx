@@ -72,6 +72,15 @@ export class Video extends React.Component<VideoProps, VideoState> {
   //                                                               fullscreen and play icons use div and not button due to default styling
   render() {
     const player = this.refs;
+   // const video_source = fetch("https://www.youtube.com/watch?v=cytJLvf-eVs")
+    const video_source = fetch(this.props.video_url)
+    video_source.then((response) => {
+        if(!response.ok){
+            //err
+        }
+
+        console.log(response)
+    })
     return (
       <div>
         <div className="video__card gideon__node">
@@ -79,8 +88,11 @@ export class Video extends React.Component<VideoProps, VideoState> {
 
            
                 <ReactHlsPlayer 
-                 src={this.props.video_url}
-                 playerRef={player}
+                 url={video_source.toString()}
+                 autoplay={false}
+                 controls={false}
+                 width="100%"
+                 height="auto"
                   />
             
                  
