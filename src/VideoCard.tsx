@@ -10,6 +10,8 @@ import { activityWithSuggestedActions } from './activityWithSuggestedActions';
 import { doCardAction, IDoCardAction } from './Chat';
 import { VideoFullScreenIcon, VideoPlayIcon } from './assets/icons/VideoIcons'
 import ReactHlsPlayer from 'react-hls-player';
+import LiteYouTubeEmbed from 'react-lite-youtube-embed';
+import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
 //import { useRef } from 'react'
 
 export interface Node {
@@ -73,7 +75,8 @@ export class Video extends React.Component<VideoProps, VideoState> {
   render() {
     const player = this.refs;
    // const video_source = fetch("https://www.youtube.com/watch?v=cytJLvf-eVs")
-    const video_source = fetch(this.props.video_url)
+    const string_vid = (this.props.video_url).toString()
+    const video_source = fetch(this.props.video_url, {mode: 'no-cors'})
     video_source.then((response) => {
         if(!response.ok){
             //err
@@ -88,12 +91,19 @@ export class Video extends React.Component<VideoProps, VideoState> {
 
            
                 <ReactHlsPlayer 
-                 url={video_source.toString()}
+                 url={string_vid}
                  autoplay={false}
                  controls={false}
                  width="100%"
                  height="auto"
                   />
+
+<div>
+    <LiteYouTubeEmbed 
+        id="cytJLvf-eVs"
+        title="What’s new in Material Design for the web (Chrome Dev Summit 2019)"
+    />
+  </div>
             
                  
           </div>
