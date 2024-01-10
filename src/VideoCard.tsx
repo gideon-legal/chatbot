@@ -72,9 +72,13 @@ export class Video extends React.Component<VideoProps, VideoState> {
   //package info: https://www.npmjs.com/package/react-hls-player 
   //custom fullscreen and play buttons in vid-controls div - note: controls initially styled using dimensions of <video>
   //                                                               fullscreen and play icons use div and not button due to default styling
+  
   render() {
     const player = this.refs;
-   // const video_source = fetch("https://www.youtube.com/watch?v=cytJLvf-eVs")
+
+    // need to check if video url is youtube embed or upload - check if contains youtu.be?
+    if(this.props.video_url && !this.props.video_url.includes("youtu.be")){
+      // const video_source = fetch("https://www.youtube.com/watch?v=cytJLvf-eVs")
     const string_vid = (this.props.video_url).toString()
     const video_source = fetch(this.props.video_url, {mode: 'no-cors'})
     video_source.then((response) => {
@@ -96,16 +100,7 @@ export class Video extends React.Component<VideoProps, VideoState> {
                  controls={false}
                  width="100%"
                  height="auto"
-                  />
-
-<div>
-    <LiteYouTubeEmbed 
-        id="cytJLvf-eVs"
-        title="What’s new in Material Design for the web (Chrome Dev Summit 2019)"
-    />
-  </div>
-            
-                 
+                  />    
           </div>
           <div className='vid-controls' id="video-controls">
                 <div className="play-vid"  id="play-pause" onClick={this.handlePlay}> <VideoPlayIcon/> </div>
@@ -115,6 +110,39 @@ export class Video extends React.Component<VideoProps, VideoState> {
         </div>
       </div>
     );
+
+    } else {
+      // const video_source = fetch("https://www.youtube.com/watch?v=cytJLvf-eVs")
+    const string_vid = (this.props.video_url).toString()
+    const video_source = fetch(this.props.video_url, {mode: 'no-cors'})
+    video_source.then((response) => {
+        if(!response.ok){
+            //err
+        }
+
+        console.log(response)
+    })
+    return (
+      <div>
+        <div className="video__card gideon__node">
+          <div className='vid-container'>
+    <LiteYouTubeEmbed 
+        id="cytJLvf-eVs"
+        title="What’s new in Material Design for the web (Chrome Dev Summit 2019)"
+    />
+           
+          </div>
+          <div className='vid-controls' id="video-controls">
+                <div className="play-vid"  id="play-pause" onClick={this.handlePlay}> <VideoPlayIcon/> </div>
+                <div className="full-vid"  id="fullscreen" onClick={this.handleFullscreen}> <VideoFullScreenIcon/> </div>
+
+            </div> 
+        </div>
+      </div>
+    );
+
+    }
+   
   }
 }
 
