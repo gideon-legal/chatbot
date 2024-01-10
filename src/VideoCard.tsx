@@ -97,16 +97,11 @@ export class Video extends React.Component<VideoProps, VideoState> {
                 <ReactHlsPlayer 
                  url={string_vid}
                  autoplay={false}
-                 controls={false}
+                 controls={true}
                  width="100%"
                  height="auto"
                   />    
           </div>
-          <div className='vid-controls' id="video-controls">
-                <div className="play-vid"  id="play-pause" onClick={this.handlePlay}> <VideoPlayIcon/> </div>
-                <div className="full-vid"  id="fullscreen" onClick={this.handleFullscreen}> <VideoFullScreenIcon/> </div>
-
-            </div> 
         </div>
       </div>
     );
