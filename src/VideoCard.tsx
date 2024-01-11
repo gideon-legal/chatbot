@@ -11,7 +11,9 @@ import { doCardAction, IDoCardAction } from './Chat';
 import { VideoFullScreenIcon, VideoPlayIcon } from './assets/icons/VideoIcons'
 import ReactHlsPlayer from 'react-hls-player';
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
-import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
+import { YouTubeEmbed } from 'react-social-media-embed';
+
+
 //import { useRef } from 'react'
 
 export interface Node {
@@ -77,17 +79,12 @@ export class Video extends React.Component<VideoProps, VideoState> {
     const player = this.refs;
 
     // need to check if video url is youtube embed or upload - check if contains youtu.be?
-    if(this.props.video_url && !this.props.video_url.includes("youtu.be")){
-      // const video_source = fetch("https://www.youtube.com/watch?v=cytJLvf-eVs")
+    if(this.props.video_url && !this.props.video_url.includes("https://youtu.be") && !this.props.video_url.includes("https://youtube") ){
+      console.log("checking vid 2")
+    console.log(this.props.video_url)
     const string_vid = (this.props.video_url).toString()
-    const video_source = fetch(this.props.video_url, {mode: 'no-cors'})
-    video_source.then((response) => {
-        if(!response.ok){
-            //err
-        }
-
-        console.log(response)
-    })
+    console.log(string_vid)
+      // const video_source = fetch("https://www.youtube.com/watch?v=cytJLvf-eVs")
     return (
       <div>
         <div className="video__card gideon__node">
@@ -108,30 +105,55 @@ export class Video extends React.Component<VideoProps, VideoState> {
 
     } else {
       // const video_source = fetch("https://www.youtube.com/watch?v=cytJLvf-eVs")
-    const string_vid = (this.props.video_url).toString()
-    const video_source = fetch(this.props.video_url, {mode: 'no-cors'})
-    video_source.then((response) => {
-        if(!response.ok){
-            //err
-        }
+      console.log("checking vid 2")
+    console.log(this.props.video_url)
+    var string_vid = this.props.video_url
+    var vid_id = ""
+    //console.log(string_vid.split("be/"))
 
-        console.log(response)
-    })
+    //for .be/ id is between .be/ and ?si
+    //need to just get id from link - split different depending on /watch or .be/
+    if(this.props.video_url.includes("https://youtu.be")){
+      //need to get portion between .be/ and ?si
+      vid_id = (string_vid.split('.be/')[1]).split('?si')[0]
+      console.log("after split")
+      console.log(vid_id)
+
+      
+    } else {
+      //get portion after v=
+      vid_id = string_vid.split('v=')[1];
+      console.log("after split")
+      console.log(vid_id)
+    }
+
+      
     return (
       <div>
         <div className="video__card gideon__node">
           <div className='vid-container'>
     <LiteYouTubeEmbed 
         id="cytJLvf-eVs"
-        title="What’s new in Material Design for the web (Chrome Dev Summit 2019)"
+        title="Youtube Video"
+        activatedClass='vid-container'
+        wrapperClass='vid-container'
+        iframeClass='vid-container'
+        playerClass=''
+        aspectHeight={100}
+        aspectWidth={100}
+        autoplay={true}
+    />
+
+    <YouTubeEmbed
+    url={this.props.video_url}
+    width={350}
+    height={350}
+
     />
            
+    
+           
           </div>
-          <div className='vid-controls' id="video-controls">
-                <div className="play-vid"  id="play-pause" onClick={this.handlePlay}> <VideoPlayIcon/> </div>
-                <div className="full-vid"  id="fullscreen" onClick={this.handleFullscreen}> <VideoFullScreenIcon/> </div>
-
-            </div> 
         </div>
       </div>
     );
