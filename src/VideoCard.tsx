@@ -10,7 +10,6 @@ import { activityWithSuggestedActions } from './activityWithSuggestedActions';
 import { doCardAction, IDoCardAction } from './Chat';
 import { VideoFullScreenIcon, VideoPlayIcon } from './assets/icons/VideoIcons'
 import ReactHlsPlayer from 'react-hls-player';
-import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import { YouTubeEmbed } from 'react-social-media-embed';
 
 
@@ -45,14 +44,16 @@ export interface VideoState {
 export class Video extends React.Component<VideoProps, VideoState> {
   constructor(props: VideoProps) {
     super(props);
-
-    console.log(this.props.video_url)
+    console.log(props)
+    
 
     this.state = { 
       // have checks for fullscreen and/or sidebar video
       videoPlaying: false,   
       videoFullscreen: false
     };
+
+    console.log(this.state)
   }
 
 
@@ -76,7 +77,6 @@ export class Video extends React.Component<VideoProps, VideoState> {
   //                                                               fullscreen and play icons use div and not button due to default styling
   
   render() {
-    const player = this.refs;
 
     // need to check if video url is youtube embed or upload - check if contains youtu.be?
     if(this.props.video_url && !this.props.video_url.includes("https://youtu.be") && !this.props.video_url.includes("https://youtube") ){
@@ -105,7 +105,7 @@ export class Video extends React.Component<VideoProps, VideoState> {
 
     } else {
       // const video_source = fetch("https://www.youtube.com/watch?v=cytJLvf-eVs")
-      console.log("checking vid 2")
+      console.log("checking vid 3")
     console.log(this.props.video_url)
     var string_vid = this.props.video_url
     var vid_id = ""
@@ -132,27 +132,12 @@ export class Video extends React.Component<VideoProps, VideoState> {
       <div>
         <div className="video__card gideon__node">
           <div className='vid-container'>
-    <LiteYouTubeEmbed 
-        id="cytJLvf-eVs"
-        title="Youtube Video"
-        activatedClass='vid-container'
-        wrapperClass='vid-container'
-        iframeClass='vid-container'
-        playerClass=''
-        aspectHeight={100}
-        aspectWidth={100}
-        autoplay={true}
-    />
-
     <YouTubeEmbed
     url={this.props.video_url}
     width={350}
     height={350}
 
-    />
-           
-    
-           
+    />    
           </div>
         </div>
       </div>
