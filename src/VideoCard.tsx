@@ -134,8 +134,8 @@ export class Video extends React.Component<VideoProps, VideoState> {
           <div className='vid-container'>
     <YouTubeEmbed
     url={this.props.video_url}
-    width={350}
-    height={350}
+    width={325}
+    height={320}
 
     />    
           </div>
