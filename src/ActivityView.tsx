@@ -15,6 +15,7 @@ import { SchedulerCard } from './SchedulerCard';
 import { FormatState, SizeState } from './Store';
 import { EsignCard} from './EsignCard';
 import { DocassembleCard } from './DocassembleCard';
+import { VideoCard } from './VideoCard';
 
 const Attachments = (props: {
     attachments: Attachment[],
@@ -195,12 +196,35 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
       }
     }
 
+    addVideo = (activity: any, props: any) => {
+      <div>
+                  <FormattedText
+                      text={ this.formatText(activity.text) }
+                      format={activity.textFormat}
+                      onImageLoad={ props.onImageLoad }
+                  />
+                  <Attachments
+                      attachments={ activity.attachments }
+                      attachmentLayout={ activity.attachmentLayout }
+                      format={ props.format }
+                      onCardAction={ props.onCardAction }
+                      onImageLoad={ props.onImageLoad }
+                      size={ props.size }
+                  />
+              </div>
+      
+    }
+
     render() {
         const { activity, type, ...props } = this.props;
         const activityCopy: any = activity;
+        console.log("here")
+        console.log(activityCopy)
         const isDisclaimer = activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer';
         if (type === 'message' && activity.type === 'message') {
           if (isDisclaimer === true || this.formatText(activity.text).length > 0) {
+            console.log("here 4")
+           
             return (
               <div>
                   <FormattedText
@@ -223,7 +247,13 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
           }
         } else if (activity.type === 'typing') {
             return <div className="wc-typing"/>;
-        } else if (type === 'date') {
+        } else if (type === 'video') {
+          console.log("here 6")
+          return (
+            <VideoCard { ...props } activity={activityCopy} />
+          )
+        }
+        else if (type === 'date') {
             return (
                 <DatePickerCard { ...props } node={activityCopy.entities[0]} />
             );
@@ -259,6 +289,6 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
           return (
                 <DocassembleCard{ ...props } files={activityCopy.entities[0].pdf_link} post_message={activityCopy.entities[0].meta} fullscreen={this.props.format.fullscreen } fullheight={this.props.format.fullHeight } file_format={activityCopy.entities[0].file_format}/>
           );
-        }
+        } 
     }
 }
