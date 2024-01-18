@@ -79,7 +79,7 @@ export class Video extends React.Component<VideoProps, VideoState> {
   render() {
 
     // need to check if video url is youtube embed or upload - check if contains youtu.be?
-    if(this.props.video_url && !this.props.video_url.includes("https://youtu.be") && !this.props.video_url.includes("https://youtube") ){
+    if(this.props.video_url && !this.props.video_url.includes("https://youtu.be") && !this.props.video_url.includes("https://youtube") && !this.props.video_url.includes("https://www.youtube") && !this.props.video_url.includes("https://www.youtu.be")   ){
       console.log("checking vid 2")
     console.log(this.props.video_url)
     const string_vid = (this.props.video_url).toString()
