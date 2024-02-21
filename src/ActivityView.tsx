@@ -14,6 +14,7 @@ import { MultipleChoiceCard } from './MultipleChoiceCard';
 import { SchedulerCard } from './SchedulerCard';
 import { FormatState, SizeState } from './Store';
 import { EsignCard} from './EsignCard';
+import { EndingCard } from './EndingCard'
 import { DocassembleCard } from './DocassembleCard';
 import { VideoCard } from './VideoCard';
 
@@ -259,7 +260,7 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
             );
         } else if (type === 'handoff') {
             return(
-              <SchedulerCard { ...props } node={activityCopy.entities[0]} />
+              <EndingCard { ...props } post_message={activityCopy.entities[0].message} post_meta={activityCopy.entities[0].meta} fullscreen={this.props.format.fullscreen } fullheight={this.props.format.fullHeight } />
             );
         } else if (type === 'file') {
             return (
