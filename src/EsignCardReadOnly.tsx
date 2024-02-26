@@ -22,6 +22,9 @@ export interface Node {
 export interface EsignCardReadOnlyProps {
     files: Array<{ name: string, url: string }>;
     post_message: any;
+    post_meta: any;
+    pre_message: any;
+    pre_meta: any;
     fullscreen: boolean;
     fullheight: boolean;
 }
@@ -77,16 +80,16 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                 <div className="esign__card gideon__node">
                     <div className="esign__card esign__node">
                         <div className='esign-message-handoff-bigfull'>
-                            Congrats! 
+                            { this.props.post_meta.header || "Congrats!"  }
                         </div>
                         <div className="esign-message-handoff-small">
-                        {this.props.post_message.postesign_message ||
+                        {this.props.post_message ||
                      "Please download your completed representation agreement below. A member of our team will be in touch to advise you on your next steps. Thank you!"}
                           
                         </div>
                     <div className="fullbutton-testpost">
                     <div >
-                        <a className="gideon-submit-button-download-full" target="_blank" onClick={this.clickDownloadLinks}>{"Download Document"}</a> 
+                        <a className="gideon-submit-button-download-full" target="_blank" onClick={this.clickDownloadLinks}>{this.props.post_meta.cta ||"Download Document"}</a> 
                         
                         
                   
@@ -119,16 +122,16 @@ export class EsignCardReadOnly extends React.Component<EsignCardReadOnlyProps, {
                             <EsignNode />
                         </div>
                         <div className='esign-message-handoff-big2'>
-                            Congrats! 
+                            { this.props.post_meta.header || "Congrats!"  } 
                         </div>
                         <div className="esign-message-handoff-small2">
-                        {this.props.post_message.postesign_message ||
+                        {this.props.post_message ||
                      "Please download your completed representation agreement below. A member of our team will be in touch to advise you on your next steps. Thank you!"}
                           
                         </div>
                     <div className="uploaded-files-container2">
                     <div >
-                        <a className="gideon-submit-button-download" target="_blank" onClick={this.clickDownloadLinks} >{"Download Document"}</a> 
+                        <a className="gideon-submit-button-download" target="_blank" onClick={this.clickDownloadLinks} >{this.props.post_meta.cta ||"Download Document"}</a> 
                        
                   
                     </div>

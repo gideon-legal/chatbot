@@ -43,6 +43,11 @@ interface EsignProps {
     fullscreen: boolean;
     accountNum: boolean;
     presignText: string;
+    presignHeader: string;
+    presignButton: string;
+    postsignText: string;
+    postsignHeader: string;
+    postsignButton: string;
 
 }
 
@@ -539,7 +544,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                              <EsignCheckMark />
                         </div>
                         <div className="esign-message-handoff-bigfull">
-                               You're almost done! 
+                               { this.props.presignHeader || "You're almost done!" }
                         </div>
                         <div className="esign-message-handoff-small">
                             {this.props.presignText}
@@ -547,7 +552,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                     </div>
                     <div className="fullbutton-test2">
                     <button type="button" className="gideon-submit-button-presign-fullscreen2" id="sign_btn" onClick={e => this.handleSign(e)}>
-                         <EsignPen/> Review & Sign
+                         <EsignPen/> {this.props.presignButton || "Review & Sign"}
                     </button>
                     </div> 
                      <div>
@@ -568,7 +573,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                              <EsignCheckMark />
                         </div>
                         <div className="esign-message-handoff-bigfull">
-                               You're almost done! 
+                            { this.props.presignHeader || "You're almost done!" }
                         </div>
                         <div className= "esign-message-handoff-small">
                             {this.props.presignText}
@@ -576,7 +581,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                     </div>
                     <div className="fullbutton-test">
                     <button type="button" className="gideon-submit-button-presign-fullscreen" id="sign_btn" onClick={e => this.handleSign(e)}>
-                         <EsignPen/> Review & Sign
+                         <EsignPen/> {this.props.presignButton || "Review & Sign"}
                     </button>
                     </div> 
                      <div>
@@ -600,14 +605,14 @@ class Esign extends React.Component<EsignProps, EsignState> {
                          <EsignCheckMark />
                     </div>
                     <div className="esign-message-handoff-big">
-                           You're almost done! 
+                        { this.props.presignHeader || "You're almost done!" }
                     </div>
                     <div className="esign-message-handoff-small2">
                         {this.props.presignText}
                     </div>
                 </div> 
                 <button type="button" className="gideon-submit-button-presign" id="sign_btn" onClick={e => this.handleSign(e)}>
-                     <EsignPen/> Review & Sign 
+                     <EsignPen/> {this.props.presignButton || "Review & Sign"}
                 </button>
                  <div>
                     {/*<button type="button" className={ this.state.isPopup ? "gideon-submit-button-white" : "gideon-submit-button-white__disabled"} onClick={e => this.handleSkip(e)}>
@@ -900,7 +905,12 @@ export const EsignCard = connect(
             fullheight: ownProps.format.full_height,
             fullscreen: ownProps.format.fullscreen,
             accountNum: ownProps.activity.entities[0].pdf_link.account_num,
-            presignText: ownProps.activity.text
+            presignText: ownProps.activity.entities[0].message,
+            presignHeader: ownProps.activity.entities[0].meta.header,
+            presignButton: ownProps.activity.entities[0].meta.header.cta,
+            postsignText: ownProps.activity.entities[0].part2_message,
+            postsignHeader: ownProps.activity.entities[0].part2_meta.header,
+            postsignButton: ownProps.activity.entities[0].part2_meta.header.cta
         }
     }
 )(Esign);

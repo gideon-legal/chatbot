@@ -22,6 +22,8 @@ export interface Node {
 export interface EndingCardProps {
     post_message: any;
     post_meta: any;
+    pre_message: any;
+    pre_meta: any;
     fullscreen: boolean;
     fullheight: boolean;
 }

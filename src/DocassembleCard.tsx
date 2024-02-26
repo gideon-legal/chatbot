@@ -22,6 +22,7 @@ export interface Node {
 export interface DocassembleCardProps {
     files: any;
     post_message: any;
+    post_meta: any;
     fullscreen: boolean;
     fullheight: boolean;
     file_format: string;
@@ -62,16 +63,16 @@ export class DocassembleCard extends React.Component<DocassembleCardProps, {}> {
                 <div className="esign__card gideon__node">
                     <div className="esign__card esign__node">
                         <div className='esign-message-handoff-bigfull'>
-                            Congrats! 
+                            { this.props.post_meta.header ||"Congrats!" }
                         </div>
                         <div className="esign-message-handoff-small2">
-                        {this.props.post_message.userdownload_message ||
+                        {this.props.post_message ||
                      "Please download your completed representation agreement below. A member of our team will be in touch to advise you on your next steps. Thank you!"}
                           
                         </div>
                     <div className="fullbutton-testpost">
                     <div >
-                        {this.props.files.length <= 0 ? <a className="gideon-submit-button-download-full" target="_blank" href={sessionStorage.getItem("file")}>{"Download Document"}</a> :
+                        {this.props.files.length <= 0 ? <a className="gideon-submit-button-download-full" target="_blank" href={sessionStorage.getItem("file")}>{ this.props.post_meta.cta ||"Download Document"}</a> :
                         this.props.files.pdf_link.map((file: any) => (
                             <a className="gideon-submit-button-download-full" target="_blank" href={this.props.file_format == 'docx' ? this.props.files.docx_link[0] : this.props.files.pdf_link[0]}>{"Download Document"}</a>
                          
@@ -107,16 +108,16 @@ export class DocassembleCard extends React.Component<DocassembleCardProps, {}> {
                             <EsignNode />
                         </div>
                         <div className='esign-message-handoff-big2'>
-                            Congrats! 
+                            { this.props.post_meta.header ||"Congrats!" }
                         </div>
                         <div className="esign-message-handoff-small2">
-                        {this.props.post_message.userdownload_message ||
+                        {this.props.post_message ||
                      "Please download your completed representation agreement below. A member of our team will be in touch to advise you on your next steps. Thank you!"}
                           
                         </div>
                     <div className="uploaded-files-container2">
                     <div >
-                        {this.props.files.length <= 0 ? <a className="gideon-submit-button-download" target="_blank" href={sessionStorage.getItem("file")}>{"Download Document"}</a> :
+                        {this.props.files.length <= 0 ? <a className="gideon-submit-button-download" target="_blank" href={sessionStorage.getItem("file")}>{this.props.post_meta.cta ||"Download Document"}</a> :
                         this.props.files.pdf_link.map((file: any) => (
                             <a className="gideon-submit-button-download" target="_blank" href={this.props.file_format == 'docx' ? this.props.files.docx_link[0] : this.props.files.pdf_link[0]}>{"Download Document"}</a>
                          
