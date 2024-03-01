@@ -14,18 +14,14 @@ import { isMobile } from 'react-device-detect';
 //need to add fullscreen variable to check
 export interface Node {
     node_type: string;
-    document: any;
     meta: any;
     
 }
 
 export interface WelcomeCardProps {
-    post_message: any;
-    post_meta: any;
-    pre_message: any;
-    pre_meta: any;
-    fullscreen: boolean;
-    fullheight: boolean;
+    meta: any;
+    activity: any;
+    
 }
 
 export class WelcomeCard extends React.Component<WelcomeCardProps, {}> {
@@ -40,7 +36,7 @@ export class WelcomeCard extends React.Component<WelcomeCardProps, {}> {
 
     //change list view to button
     render() {
-        if(this.props.fullscreen == true && isMobile == false){
+        if(this.props.meta.fullscreen == true && isMobile == false){
             // do fullscreen version -> modify srtyling
             if(document.getElementById('btn3') != null){
                 //document.getElementById('btn3').style.display = "none"
@@ -58,14 +54,15 @@ export class WelcomeCard extends React.Component<WelcomeCardProps, {}> {
                 <div className="esign__card gideon__node">
                     <div className="esign__card esign__node">
                         <div className='esign-message-handoff-bigfull'>
-                            {this.props.post_meta.header || "Thank you for your time!" }
+                            {this.props.meta.header || "Header" }
                         </div>
                         <div className="esign-message-handoff-small2">
-                        {this.props.post_message ||
-                     "We appreciate you taking the time out of your day to answer our questions!"}
+                        {this.props.meta.message ||
+                     "Welcome page"}
                           
                         </div>
                     </div>
+                    <button>button here </button>
                 
     
                 </div>
@@ -92,14 +89,16 @@ export class WelcomeCard extends React.Component<WelcomeCardProps, {}> {
                             <EsignNode />
                         </div>
                         <div className='esign-message-handoff-big2'>
-                            {this.props.post_meta.header || "Thank you for your time!" }
+                            {this.props.meta.header || "Header" }
                         </div>
                         <div className="esign-message-handoff-small2">
-                        {this.props.post_message ||
-                     "We appreciate you taking the time out of your day to answer our questions!"}
+                        {this.props.meta.message ||
+                     "Welcome page"}
                           
                         </div>
+                        <button>button here </button>
                     </div>
+
                 </div>
     
                 </div>
