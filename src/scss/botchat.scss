@@ -3605,4 +3605,71 @@ $lato: Lato, sans-serif;
       .vid-container {
         position: relative;
       }
+
+      .welcome-button {
+       
+        left: 15%;
+        margin-right: 10%;
+        margin-left: 10%;
+        margin-top: 30%;
+        align-items: center;
+
+      }
+
+      .welcome-card {
+        background-color: white;
+            width: 100% ;
+            color: $gideon-black;
+           // margin-top: 40%;
+
+      }
+
+      .welcome-bigtext{
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 800;
+        font-size: xx-large;
+        line-height: 40px;
+        /* or 89% */
+        //margin-left: 15%;
+        //margin-right: 15%;
+
+        text-align: center;
+        letter-spacing: 0.04em;
+
+        /* Gideon/Primary text */
+        margin-top: 20%;
+
+       color: #262626;
+        padding: 15px 0px 15px 0px;
+        margin-top: 20%;
+
+    @include mobileAndTablet{
+        padding: 20px 0px 15px 0px;
+    }
+
+      }
+
+      .welcome-smalltext{
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 500;
+        font-size: medium;
+        line-height: 19px;
+        text-align: center;
+        letter-spacing: 0.03em;
+        margin-right: 10%;
+        margin-left: 10%;
+       /* Gideon/Primary text */
+       color: #262626;
+       padding: 15px 0px 15px 0px;
+       //margin-top: 20%;
+
+       @include mobileAndTablet {
+        padding-bottom: 30px;
+        padding-top: 50px;
+        margin-right: 0%
+       }
+
+      }
    

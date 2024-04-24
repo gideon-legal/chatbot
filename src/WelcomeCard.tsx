@@ -32,10 +32,15 @@ export class WelcomeCard extends React.Component<WelcomeCardProps, {}> {
           showDisclaimer: false
         };
     }
+
+    
     
 
     //change list view to button
     render() {
+        console.log("props: ")
+        console.log(this.props)
+        console.log(this.props.activity.text)
         if(this.props.meta.fullscreen == true && isMobile == false){
             // do fullscreen version -> modify srtyling
             if(document.getElementById('btn3') != null){
@@ -52,17 +57,24 @@ export class WelcomeCard extends React.Component<WelcomeCardProps, {}> {
                     <EsignNode />
                 </div>      
                 <div className="esign__card gideon__node">
-                    <div className="esign__card esign__node">
-                        <div className='esign-message-handoff-bigfull'>
-                            {this.props.meta.header || "Header" }
+                    <div className="welcome-card gideon__node">
+                        <div>
+                            
                         </div>
-                        <div className="esign-message-handoff-small2">
+                        <div className="vid_area"></div>
+                        <div className='welcome-bigtext'>
+                            {this.props.meta.header || "Custom Header" }
+                        </div>
+                        <div className="welcome-smalltext">
                         {this.props.meta.message ||
                      "Welcome page"}
+                    
                           
                         </div>
                     </div>
-                    <button>button here </button>
+                    <div className="welcome-button">
+                        <button className="gideon-submit-button">{"Continue" || this.props.meta.cta}</button>
+                        </div>
                 
     
                 </div>
@@ -83,20 +95,23 @@ export class WelcomeCard extends React.Component<WelcomeCardProps, {}> {
                 <div className="modal-normal">
                 <div className="modal-content">
                 <div className="esign__card gideon__node">
-                    <div>
+                    <div className="welcome-card">
                     
-                        <div className="document_area2">
-                            <EsignNode />
+                        <div className="vid_area">
+                            
                         </div>
-                        <div className='esign-message-handoff-big2'>
-                            {this.props.meta.header || "Header" }
+                        <div className='welcome-bigtext'>
+                            {this.props.meta.header || "Custom Header" }
                         </div>
-                        <div className="esign-message-handoff-small2">
+                        <div className="welcome-smalltext">
                         {this.props.meta.message ||
                      "Welcome page"}
                           
                         </div>
-                        <button>button here </button>
+                        <div className="welcome-button">
+                        <button className="gideon-submit-button">{"Continue" || this.props.meta.cta}</button>
+                        </div>
+                       
                     </div>
 
                 </div>
