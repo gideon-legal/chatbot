@@ -192,14 +192,15 @@ export class Chat extends React.Component<ChatProps, State> {
             !alreadyContains ||
             (lastActivity && lastActivity.text === activityCopy.text && lastActivity.type !== activityCopy.type && "GIDEON_MESSAGE_START" !== activityCopy.text && !alreadyContains)){
                console.log("trying something give me a sec lol")
+               console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAA")
             switch (activity.type) {
                 case 'message':
                     // adding node count to check if first node, need to grey out back button
                     
 
-              
+                console.log("well hello")
                     if(activity.entities) {
-                        
+                        console.log("activities")
 
                         if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
                             this.addNodeCount();
@@ -267,6 +268,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
                     }
                 }
+                    console.log("im fuckin cooked man")
                     this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
                     break;
                     
@@ -616,15 +618,16 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private reload_messages = (messageId?: string|null) => {
+        console.log("reload me")
         const botConnection: any = this.store.getState().connection.botConnection;
         if(botConnection && botConnection.conversationId){
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
                 .then((res: any) => {
                     const messages = res.data.messages.reverse();
 
-                  //  this.setState({
-                  //      loading: true
-                  //  })
+                    this.setState({
+                        loading: true
+                    })
 
                     this.setState({
                         node_count: 0
@@ -951,12 +954,15 @@ export class Chat extends React.Component<ChatProps, State> {
                     });
 
                     const campaign = parseReferrer(document.referrer, window.location.href.toLowerCase());
+                    console.log("OH COME ON MAN")
+                    console.log(this.props.gid)
                      
                     checkSite(this.props.gid, window.location.toString(), 
                     conversationId, this.props.directLine.secret, user.id ).then((res: any) => {
                         console.log("return from check site")
                         console.log(res.data)
                         if(res.data.valid_site == true){
+                            console.log("sucks to be me")
                             verifyConversation(
                                 this.props.gid,
                                 conversationId,
@@ -966,9 +972,12 @@ export class Chat extends React.Component<ChatProps, State> {
                                 campaign
                             )
                             .then((res: any) => {
+                                console.log(res)
                                 // Only save these when we successfully connect
                                 // uncomment when re-enabling chat history
+                                console.log("My ass does not know what im doing")
                                 if(isNew && conversationId !== sessionStorage.getItem("pastConvoID")) {
+                                    console.log("isNew?")
                                     window.sessionStorage.setItem('msft_conversation_id', conversationId);
                                     window.localStorage.setItem('gid', this.props.gid);
                                     window.localStorage.setItem('msft_user_id', user.id);
@@ -1048,6 +1057,7 @@ export class Chat extends React.Component<ChatProps, State> {
         
                                 conversationHistory(this.props.gid, this.props.directLine.secret, conversationId)
                                 .then((res: any) => {
+                                    console.log("What the hell")
                                     const state = this.store.getState();
                                     const messages = res.data.messages.reverse();
                             
@@ -1057,6 +1067,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                         type: 'Set_Messages',
                                         activities: mapMessagesToActivities(messages, state.connection.user.id)
                                     });
+                                    console.log("drat")
         
                                 });
         
@@ -1090,6 +1101,8 @@ export class Chat extends React.Component<ChatProps, State> {
                                 });
                             });
 
+                        } else {
+                            console.log("Hey it's jason from development")
                         }
                     })
 
@@ -1133,7 +1146,7 @@ export class Chat extends React.Component<ChatProps, State> {
             this.initialOpen = true;
         }
 
-        //this.getConvoList(localStorage.getItem('msft_user_id'),sessionStorage.getItem('msft_conversation_id'));
+        this.getConvoList(localStorage.getItem('msft_user_id'),sessionStorage.getItem('msft_conversation_id'));
     }
 
     componentWillUnmount() {
@@ -1292,9 +1305,9 @@ export class Chat extends React.Component<ChatProps, State> {
             })
             sessionStorage.setItem("loading", 'true');
             //console.log("4 " + this.state.loading);
-            //this.reload_messages();
-            // sessionStorage.setItem("loading", 'false');
-            //this.reloadMsgsCalled = true;
+            this.reload_messages();
+            sessionStorage.setItem("loading", 'false');
+            this.reloadMsgsCalled = true;
         
         }
 
@@ -1370,9 +1383,12 @@ export class Chat extends React.Component<ChatProps, State> {
                                                 null}
                                 />
                             </div>}
-                            {/* current convo or history? */}
+                            {/* current convo or history? */
+                            console.log(this.state.showConvoHistory)
+                            }
                             {!this.state.showConvoHistory ?
                                 ((this.state.loading== true && sessionStorage.getItem("loading" ) == "true")?
+                                    
                                     <div className="wc-chatbot-content-right">
                                         <div id="loading-bar-spinner" className="spinner"><div className="spinner-icon"></div></div>
                                     </div>
@@ -1394,18 +1410,18 @@ export class Chat extends React.Component<ChatProps, State> {
                                                             this.clicked(true)
 
                                                             this.setState({
-                                                                //loading: true
+                                                                loading: true
                                                             })
-                                                            //sessionStorage.setItem("loading", 'true');
-                                                            //this.step(); 
+                                                            sessionStorage.setItem("loading", 'true');
+                                                            this.step(); 
                                                             //this.reload_messages_nocount()
-                                                            //this.deleteNodeCount(1);
-                                                           // this.reload_messages_nocount()
+                                                            this.deleteNodeCount(1);
+                                                            //this.reload_messages_nocount()
 
                                                            
-                                                            // var button = this.state; // temp variable in order to change state of clicked
-                                                            // button.clicked = true; // changes state within variable to true
-                                                            // this.setState(button); // passes updated boolean back to state
+                                                             //var button = this.state; // temp variable in order to change state of clicked
+                                                             //button.clicked = true; // changes state within variable to true
+                                                             //this.setState(button); // passes updated boolean back to state
                                                         
                                                     }}>
 
@@ -1441,6 +1457,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                     </div>)
                                 :
                                 (<div className="wc-chatbot-content-right" style={{paddingTop:'67px'}}>
+                                    {console.log("bload")}
                                     { this.state.loading ? 
                                         <div id="loading-bar-spinner" className="spinner"><div className="spinner-icon"></div></div>
                                         :

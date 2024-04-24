@@ -61,7 +61,19 @@ export const availableTimes = (
 };
 
 export const mapMessagesToActivities = (messages: any, userId: any): Activity[] => {
+    console.log("foodies unite")
+    
     return messages.map((m: any, i: number) => {
+        console.log({
+            id: m.id,
+            type: 'message',
+            entities: m.entities,
+            suggestedActions: m.suggestedActions,
+            from: {
+                id: m.sender_type === 'bot' ? '' : userId
+            },
+            text: m.message
+        })
         return {
             id: m.id,
             type: 'message',
@@ -77,9 +89,9 @@ export const mapMessagesToActivities = (messages: any, userId: any): Activity[] 
 
 // checkNeedBackButton - checks if the current activity corresponds to acompletion node, returns a boolean
 export const checkNeedBackButton = async (baseUrl: string, directLine: string, msftConversationId: string, messageText: string): Promise<any> => {
-    //const temp = axios.get(`${baseUrl}/bot/checkbackbutton?msft_conversation_id=${msftConversationId}&directLine=${directLine}`);
-    //const attempt = (await temp).data
-    return "open";
+    const temp = axios.get(`${baseUrl}/bot/checkbackbutton?msft_conversation_id=${msftConversationId}&directLine=${directLine}`);
+    const attempt = (await temp).data
+    return attempt;
 };
 
 //
