@@ -12,12 +12,12 @@ import { FileUploadCard } from './FileUploadCard';
 import { FormattedText } from './FormattedText';
 import { MultipleChoiceCard } from './MultipleChoiceCard';
 import { SchedulerCard } from './SchedulerCard';
-import { FormatState, SizeState } from './Store';
+import { FormatState, SizeState, sendMessage } from './Store';
 import { EsignCard} from './EsignCard';
 import { EndingCard } from './EndingCard'
 import { DocassembleCard } from './DocassembleCard';
 import { VideoCard } from './VideoCard';
-import { WelcomeCard} from './WelcomeCard'
+import {  WelcomeNode} from './WelcomeCard'
 
 const Attachments = (props: {
     attachments: Attachment[],
@@ -230,7 +230,7 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
           if(activity.entities && activityCopy.entities.length > 0 && activity.entities[0].node_type === "welcome"){
             console.log("welcome page")
             return (
-              <WelcomeCard{ ...props } meta={activityCopy.entities[0].meta} activity={activityCopy}  />
+              <WelcomeNode{ ...props } meta={activityCopy.entities[0].meta} activity={activityCopy}  />
               
             )
 
@@ -304,7 +304,7 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
           );
         } else if (type === 'welcome'){
           return (
-            <WelcomeCard{ ...props } meta={activityCopy.entities[0].meta} activity={activityCopy}  />
+            <WelcomeNode{ ...props } meta={activityCopy.entities[0].meta} activity={activityCopy}  />
             
           )
 

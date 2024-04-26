@@ -21,10 +21,12 @@ export interface Node {
 export interface WelcomeCardProps {
     meta: any;
     activity: any;
+    sendMessage: (inputText: string) => void;
+    
     
 }
 
-export class WelcomeCard extends React.Component<WelcomeCardProps, {}> {
+class WelcomeCard extends React.Component<WelcomeCardProps, {}> {
     constructor(props: WelcomeCardProps) {
         super(props);
 
@@ -51,7 +53,7 @@ export class WelcomeCard extends React.Component<WelcomeCardProps, {}> {
               
             }
             return (
-                <div className="modal-fullscreen">
+                <div  id="welcome" className="modal-fullscreen">
                 <div className="modal-content-full">
                 <div className='presign_area_full_post'>
                     <EsignNode />
@@ -66,14 +68,14 @@ export class WelcomeCard extends React.Component<WelcomeCardProps, {}> {
                             {this.props.meta.header || "Custom Header" }
                         </div>
                         <div className="welcome-smalltext">
-                        {this.props.meta.message ||
+                        {this.props.activity.text ||
                      "Welcome page"}
                     
                           
                         </div>
                     </div>
                     <div className="welcome-button">
-                        <button className="gideon-submit-button">{"Continue" || this.props.meta.cta}</button>
+                        <button className="gideon-submit-button" onClick={e => this.handleContinue(e)}>{"Continue" || this.props.meta.cta}</button>
                         </div>
                 
     
@@ -92,7 +94,7 @@ export class WelcomeCard extends React.Component<WelcomeCardProps, {}> {
               
             }
             return (
-                <div className="modal-normal">
+                <div id="welcome" className="modal-normal">
                 <div className="modal-content">
                 <div className="esign__card gideon__node">
                     <div className="welcome-card">
@@ -104,12 +106,12 @@ export class WelcomeCard extends React.Component<WelcomeCardProps, {}> {
                             {this.props.meta.header || "Custom Header" }
                         </div>
                         <div className="welcome-smalltext">
-                        {this.props.meta.message ||
+                        {this.props.activity.text ||
                      "Welcome page"}
                           
                         </div>
                         <div className="welcome-button">
-                        <button className="gideon-submit-button">{"Continue" || this.props.meta.cta}</button>
+                        <button className="gideon-submit-button" onClick={e => this.handleContinue(e)}>{"Continue" || this.props.meta.cta}</button>
                         </div>
                        
                     </div>
@@ -124,4 +126,39 @@ export class WelcomeCard extends React.Component<WelcomeCardProps, {}> {
         }
        
     }
+
+    handleContinue(e: React.MouseEvent<HTMLButtonElement>) {
+        //handles click of the button
+        this.props.sendMessage("welcome page complete")
+        document.getElementById("welcome").innerHTML = "";
+
+       
+        
+    }
 }
+
+export const WelcomeNode = connect(
+    (state: ChatState) => 
+    {
+        return {
+            // passed down to MessagePaneView
+            locale: state.format.locale,
+            user: state.connection.user,
+            conversationId: state.connection.botConnection.conversationId
+        }; 
+    }, {
+        sendMessage 
+    }, (stateProps: any, dispatchProps: any, ownProps: any): WelcomeCardProps => {
+        return {
+            // from stateProps
+            meta: ownProps.activity.entities[0].meta,
+            activity: ownProps.activity,
+            // from dispatchProps
+            sendMessage: (text: string) => dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),
+           
+        };
+    }
+
+)(WelcomeCard);
+
+
