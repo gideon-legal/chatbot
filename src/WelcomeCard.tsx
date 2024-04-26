@@ -130,7 +130,7 @@ class WelcomeCard extends React.Component<WelcomeCardProps, {}> {
     handleContinue(e: React.MouseEvent<HTMLButtonElement>) {
         //handles click of the button
         this.props.sendMessage("welcome page complete")
-        document.getElementById("welcome").innerHTML = "";
+        document.getElementById("welcome").remove();
 
        
         
