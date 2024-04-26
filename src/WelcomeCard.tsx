@@ -10,6 +10,7 @@ import { EsignNode, EsignPopup, EsignCheckMark } from './assets/icons/EsignIcons
 import { sendSignature } from './api/bot';
 import { Hidden } from '@material-ui/core';
 import { isMobile } from 'react-device-detect';
+import { YouTubeEmbed } from 'react-social-media-embed';
 //will most likely need read only card too for after signing
 //need to add fullscreen variable to check
 export interface Node {
@@ -63,7 +64,10 @@ class WelcomeCard extends React.Component<WelcomeCardProps, {}> {
                         <div>
                             
                         </div>
-                        <div className="vid_area"></div>
+                        <div className="vid_container">
+                            {this.checkVid()}
+                            
+                        </div>
                         <div className='welcome-bigtext'>
                             {this.props.meta.header || "Custom Header" }
                         </div>
@@ -99,7 +103,8 @@ class WelcomeCard extends React.Component<WelcomeCardProps, {}> {
                 <div className="esign__card gideon__node">
                     <div className="welcome-card">
                     
-                        <div className="vid_area">
+                        <div className="vid_container">
+                            {this.checkVid()}
                             
                         </div>
                         <div className='welcome-bigtext'>
@@ -134,6 +139,21 @@ class WelcomeCard extends React.Component<WelcomeCardProps, {}> {
 
        
         
+    }
+
+    checkVid(){
+        if(this.props.meta && this.props.meta.video_url){
+            return (
+                <YouTubeEmbed
+                 url={this.props.meta.video_url}
+                 width={325}
+                 height={320}
+                 /> 
+            )
+
+        } else {
+            return
+        }
     }
 }
 
