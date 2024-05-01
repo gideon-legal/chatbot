@@ -12,11 +12,12 @@ import { FileUploadCard } from './FileUploadCard';
 import { FormattedText } from './FormattedText';
 import { MultipleChoiceCard } from './MultipleChoiceCard';
 import { SchedulerCard } from './SchedulerCard';
-import { FormatState, SizeState } from './Store';
+import { FormatState, SizeState, sendMessage } from './Store';
 import { EsignCard} from './EsignCard';
 import { EndingCard } from './EndingCard'
 import { DocassembleCard } from './DocassembleCard';
 import { VideoCard } from './VideoCard';
+import {  WelcomeNode} from './WelcomeCard'
 
 const Attachments = (props: {
     attachments: Attachment[],
@@ -221,8 +222,20 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
         const activityCopy: any = activity;
         console.log("here")
         console.log(activityCopy)
+        console.log("type: ")
+        console.log(type)
         const isDisclaimer = activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer';
-        if (type === 'message' && activity.type === 'message') {
+        if (type === 'message' &&  activity.type === 'message') {
+          console.log("here is message")
+          if(activity.entities && activityCopy.entities.length > 0 && activity.entities[0].node_type === "welcome"){
+            console.log("welcome page")
+            return (
+              <WelcomeNode{ ...props } meta={activityCopy.entities[0].meta} activity={activityCopy}  />
+              
+            )
+
+
+          }
           if (isDisclaimer === true || this.formatText(activity.text).length > 0) {
             console.log("here 4")
            
@@ -249,7 +262,6 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
         } else if (activity.type === 'typing') {
             return <div className="wc-typing"/>;
         } else if (type === 'video') {
-          console.log("here 6")
           return (
             <VideoCard { ...props } activity={activityCopy} />
           )
@@ -290,6 +302,12 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
           return (
                 <DocassembleCard{ ...props } files={activityCopy.entities[0].pdf_link} post_message={activityCopy.entities[0].message} post_meta={activityCopy.entities[0].meta} fullscreen={this.props.format.fullscreen } fullheight={this.props.format.fullHeight } file_format={activityCopy.entities[0].file_format}/>
           );
-        } 
+        } else if (type === 'welcome'){
+          return (
+            <WelcomeNode{ ...props } meta={activityCopy.entities[0].meta} activity={activityCopy}  />
+            
+          )
+
+        }
     }
 }
