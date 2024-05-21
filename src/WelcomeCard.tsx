@@ -27,12 +27,16 @@ export interface WelcomeCardProps {
     
 }
 
-class WelcomeCard extends React.Component<WelcomeCardProps, {}> {
+export interface WelcomeCardState {
+    is_welcome: boolean;
+}
+
+class WelcomeCard extends React.Component<WelcomeCardProps, WelcomeCardState> {
     constructor(props: WelcomeCardProps) {
         super(props);
 
         this.state = {
-          showDisclaimer: false
+          is_welcome: true
         };
     }
 
@@ -41,7 +45,8 @@ class WelcomeCard extends React.Component<WelcomeCardProps, {}> {
 
     //change list view to button
     render() {
-        console.log("props: ")
+        if(this.state.is_welcome == true){
+            console.log("props: ")
         console.log(this.props)
         console.log(this.props.activity.text)
         if(this.props.meta.fullscreen == true && isMobile == false){
@@ -129,13 +134,21 @@ class WelcomeCard extends React.Component<WelcomeCardProps, {}> {
             )
             
         }
+
+        }
+        
        
     }
 
     handleContinue(e: React.MouseEvent<HTMLButtonElement>) {
         //handles click of the button
-        this.props.sendMessage("welcome page complete")
+        this.setState({
+            ...this.state,
+            is_welcome: false
+        })
         document.getElementById("welcome").remove();
+        this.props.sendMessage("welcome page complete")
+        //document.getElementById("welcome").remove();
 
        
         
