@@ -32,6 +32,8 @@ export interface ChatProps {
     activities: Activity[];
     strings: Strings;
     gid: string;
+    tenant: string;
+    form_id: number;
     botConnection?: IBotConnection;
     directLine?: DirectLineOptions;
     speechOptions?: SpeechOptions;
@@ -236,7 +238,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
                     // if the current activity has no entities, it might be a completion node, in which case we must hide the back button
                     // checkNeedBackButton returns if the current activity corresponds to a completion node or not
-                    const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text)  
+                    const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text, this.props.tenant)  
                     //set convoComplete to true if current convo is finished
                     if(notNode === "handoff") { sessionStorage.setItem("convoComplete", 'true');
                         
@@ -356,7 +358,7 @@ export class Chat extends React.Component<ChatProps, State> {
                         }
                     } else {
                         const botConnection: any = this.store.getState().connection.botConnection;
-                        const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, currActivity.text)                        
+                        const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, currActivity.text, this.props.tenant)                        
                     //set convoComplete to true if current convo is finished
                     if(notNode === "handoff") { 
                         sessionStorage.setItem("convoComplete", 'true');
@@ -402,7 +404,7 @@ export class Chat extends React.Component<ChatProps, State> {
                     } else if(activity.type == 'message') {
                      
                         const botConnection: any = this.store.getState().connection.botConnection;
-                        const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text) 
+                        const notNode =  await checkNeedBackButton(this.props.gid, this.props.directLine.secret,botConnection.conversationId, activity.text, this.props.tenant) 
                         //set convoComplete to true if current convo is finished
                         if(notNode === "handoff") sessionStorage.setItem("convoComplete", 'true');
                         if(notNode === "esign") sessionStorage.setItem("convoComplete", 'true');
@@ -551,7 +553,7 @@ export class Chat extends React.Component<ChatProps, State> {
     private reload_messages_nocount = (messageId?: string|null) => {
         const botConnection: any = this.store.getState().connection.botConnection;
         if(botConnection && botConnection.conversationId){
-            conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
+            conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId, this.props.tenant)
                 .then((res: any) => {
                     const messages = res.data.messages.reverse();
                   //  this.setState({
@@ -621,7 +623,7 @@ export class Chat extends React.Component<ChatProps, State> {
         console.log("reload me")
         const botConnection: any = this.store.getState().connection.botConnection;
         if(botConnection && botConnection.conversationId){
-            conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId)
+            conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId, this.props.tenant)
                 .then((res: any) => {
                     const messages = res.data.messages.reverse();
 
@@ -719,9 +721,9 @@ export class Chat extends React.Component<ChatProps, State> {
     //step function perfoms going back to the previous message
     private step = (messageId?: string|null) => {
         const botConnection: any = this.store.getState().connection.botConnection;
-         step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId)
+         step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId, this.props.tenant)
         .then((res: any) => {
-            conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, res.data.id)
+            conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, res.data.id, this.props.tenant)
             .then((res: any) => {
                 const messages = res.data.messages.reverse();
                 const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
@@ -772,7 +774,7 @@ export class Chat extends React.Component<ChatProps, State> {
             loading: true
         })
         sessionStorage.setItem("loading", 'true');
-        conversationList(this.props.gid, userID, convoId)
+        conversationList(this.props.gid, userID, convoId, this.props.tenant)
         .then((res: any) => {
             this.setState({
                 pastConversations: res.data.conversations.reverse()
@@ -956,9 +958,11 @@ export class Chat extends React.Component<ChatProps, State> {
                     const campaign = parseReferrer(document.referrer, window.location.href.toLowerCase());
                     console.log("OH COME ON MAN")
                     console.log(this.props.gid)
+                    console.log(this.props)
+                    console.log(this.props.tenant)
                      
                     checkSite(this.props.gid, window.location.toString(), 
-                    conversationId, this.props.directLine.secret, user.id ).then((res: any) => {
+                    conversationId, this.props.directLine.secret, user.id, this.props.tenant, this.props.form_id ).then((res: any) => {
                         console.log("return from check site")
                         console.log(res.data)
                         if(res.data.valid_site == true){
@@ -969,7 +973,9 @@ export class Chat extends React.Component<ChatProps, State> {
                                 user.id,
                                 this.props.directLine.secret,
                                 window.location.toString(),
-                                campaign
+                                campaign, 
+                                this.props.tenant, 
+                                this.props.form_id
                             )
                             .then((res: any) => {
                                 console.log(res)
@@ -1055,7 +1061,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                     }
                                 });
         
-                                conversationHistory(this.props.gid, this.props.directLine.secret, conversationId)
+                                conversationHistory(this.props.gid, this.props.directLine.secret, conversationId, this.props.tenant)
                                 .then((res: any) => {
                                     console.log("What the hell")
                                     const state = this.store.getState();
@@ -1076,7 +1082,8 @@ export class Chat extends React.Component<ChatProps, State> {
                                     ping(
                                         this.props.gid,
                                         conversationId,
-                                        this.props.directLine.secret
+                                        this.props.directLine.secret, 
+                                        this.props.tenant
                                     );
                                 }, 10000);
         
