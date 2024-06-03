@@ -28,6 +28,8 @@ class SuggestedActions extends React.Component<MessagePaneProps, MultipleChoiceS
     constructor(props: MessagePaneProps) {
         super(props);
 
+        console.log("props multi")
+        console.log(this.props)
         this.state = {
             selected: []
         };
@@ -122,6 +124,6 @@ export const MultipleChoiceCard = connect(
         multipleSelect: stateProps.activityWithSuggestedActions &&
             stateProps.activityWithSuggestedActions.entities &&
             stateProps.activityWithSuggestedActions.entities.length > 0 &&
-            stateProps.activityWithSuggestedActions.entities[0].multiple_selection
+            stateProps.activityWithSuggestedActions.entities[0].meta.multipleSelection == true
     })
 )(SuggestedActions);
