@@ -32,6 +32,7 @@ interface EsignProps {
     sendFiles: (files: FileList) => void;
     directLine?: DirectLineOptions
     gid: string;
+    tenant: string;
     conversationId: string;
     document: string;
     documents: any;
@@ -132,7 +133,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
     handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>){
         if (e.key === 'Enter' && this.validateSignature()){
             sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, 
-                this.props.docx,this.state.initials, this.state.bankNum, this.state.documents)
+                this.props.docx,this.state.initials, this.state.bankNum, this.state.documents, this.props.tenant)
             .then((res: any) => {
                 this.setState({
                     ...this.state,
@@ -209,7 +210,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
             //need to send to api so it can be used to populate document
             //send to api and wait to receive signed pdf link, set to this.state.signedfile
             sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx, this.state.initials, 
-                this.state.bankNum, this.state.documents)
+                this.state.bankNum, this.state.documents, this.props.tenant)
             .then((res: any) => {
                 console.log("trying to work")
                 console.log(res);
@@ -894,6 +895,7 @@ export const EsignCard = connect(
             sendMessage: (text: string) => dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),
             sendFiles: (files: FileList) => dispatchProps.sendFiles(files, stateProps.user, stateProps.locale),
             gid: ownProps.gid,
+            tenant: ownProps.tenant,
             directLine: ownProps.directLine,
             conversationId: stateProps.conversationId,
             document: ownProps.activity.entities[0].pdf_link.pdf_link,

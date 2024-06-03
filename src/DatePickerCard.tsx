@@ -26,6 +26,7 @@ interface DatePickerProps {
     withTime: boolean;
     gid: string;
     directLine?: DirectLineOptions;
+    tenant: string;
     conversationId: string;
 }
 
@@ -126,6 +127,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
             node,
             gid,
             directLine,
+            tenant,
             conversationId
         } = this.props;
         const startDate = date.clone().format('YYYY-MM-DD');
@@ -136,7 +138,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         if (node && node.node_type === 'handoff') {
             const dateAvailabilitySelected = changeExcludeTime && this.state.startDate;
             this.setState({loading: true});
-            availableTimes(gid, directLine.secret, conversationId, startDate)
+            availableTimes(gid, directLine.secret, conversationId, startDate, tenant)
                 .then((res: any) => {
                     const allAvailabilities = this.mapAvailabilitiesDateWise(res.data);
                     let getAvailForDate = date;
@@ -399,6 +401,7 @@ export const DatePickerCard = connect(
             sendMessage: (text: string) => dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),
             gid: ownProps.gid,
             directLine: ownProps.directLine,
+            tenant: ownProps.tenant,
             conversationId: stateProps.conversationId
         };
     }

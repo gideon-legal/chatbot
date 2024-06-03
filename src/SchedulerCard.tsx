@@ -20,6 +20,7 @@ interface SchedulerProps {
     node: Node;
     gid: string;
     directLine?: DirectLineOptions;
+    tenant: string;
     conversationId: string;
 }
 
@@ -111,6 +112,7 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
             node,
             gid,
             directLine,
+            tenant,
             conversationId
         } = this.props;
         const startDate = date.clone().format('YYYY-MM-DD');
@@ -121,7 +123,7 @@ class Scheduler extends React.Component<SchedulerProps, SchedulerState> {
 
         const dateAvailabilitySelected = changeExcludeTime && this.state.date;
         this.setState({loading: true});
-        availableTimes(gid, directLine.secret, conversationId, startDate)
+        availableTimes(gid, directLine.secret, conversationId, startDate, tenant)
             .then((res: any) => {
               
                 const allAvailabilities = this.mapAvailabilitiesDateWise(res.data);
@@ -408,6 +410,7 @@ export const SchedulerCard = connect(
             sendMessage: (text: string) => dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),
             gid: ownProps.gid,
             directLine: ownProps.directLine,
+            tenant: ownProps.tenant,
             conversationId: stateProps.conversationId
         };
     }
