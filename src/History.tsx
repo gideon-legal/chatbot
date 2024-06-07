@@ -33,6 +33,7 @@ export interface HistoryProps {
     doCardAction: IDoCardAction;
     gid: string;
     directLine: DirectLineOptions;
+    tenant: string;
     inputEnabled: boolean;
 }
 
@@ -152,6 +153,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
             selected={ false }
             showTimestamp={ false }
             gid={null}
+            tenant={null}
             files={[]}
             addFilesToState={ null }
             index={ -1 }
@@ -247,6 +249,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                                         this.props.onClickRetry(activity);
                                     } }
                                     gid={ this.props.gid }
+                                    tenant={this.props.tenant}
                                     directLine={ this.props.directLine }
                                     files={ index in this.state.filesList ? this.state.filesList[index] : [] }
                                     addFilesToState={this.addFilesToState}
@@ -261,6 +264,7 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                                         onCardAction={ (type: CardActionTypes, value: string | object) => this.doCardAction(type, value) }
                                         onImageLoad={ () => this.autoscroll() }
                                         gid={ this.props.gid}
+                                        tenant={this.props.tenant}
                                         directLine={ this.props.directLine }
                                         addFilesToState={this.addFilesToState}
                                         index={ index }
@@ -372,6 +376,7 @@ export const History = connect(
         onClickActivity: (activity: Activity) => stateProps.connectionSelectedActivity && (() => stateProps.connectionSelectedActivity.next({ activity })),
         onCardAction: ownProps.onCardAction,
         gid: ownProps.gid,
+        tenant: ownProps.tenant,
         directLine: ownProps.directLine,
     }), {
         withRef: true
@@ -429,6 +434,7 @@ export interface WrappedActivityProps {
     onClickActivity: React.MouseEventHandler<HTMLDivElement>;
     onClickRetry: React.MouseEventHandler<HTMLAnchorElement>;
     gid: string;
+    tenant: string;
     directLine?: DirectLineOptions;
     files: { name: string, url: string }[];
     addFilesToState: (index: number, files: [{ name: string, url: string }]) => void;
@@ -548,6 +554,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                                     onImageLoad={null}
                                     gid={this.props.gid}
                                     directLine={this.props.directLine}
+                                    tenant={this.props.tenant}
                                     addFilesToState={this.props.addFilesToState}
                                     index={this.props.index}
                                 />
