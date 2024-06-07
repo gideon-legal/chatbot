@@ -21,6 +21,7 @@ interface FileUploadProps {
     sendMessage: (inputText: any) => void;
     sendFiles: (files: FileList) => void;
     gid: string;
+    tenant: string;
     index: number;
     addFilesToState: (index: number, files: Array<{ name: string, url: string }>) => void;
  }
@@ -114,7 +115,7 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                 this.state.signedUrls.push(this.state.signedUrl);
                 resolve({s3Url: this.state.signedUrl});
             } else {
-                axios.post(this.props.gid + '/api/v1/nodes/presigned_url_for_node', data)
+                axios.post(this.props.gid + '/bot/presigned_url_for_node', data)
                 .then((result: any) => {
                     if (result.data.success) {
                         const signedUrl = result.data.url;
@@ -149,7 +150,8 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                 node_id: this.props.node.node_id,
                 content_type: file.type,
                 content_type_arr: contentTypeArr,
-                msft_conversation_id: this.props.node.conversation_id
+                msft_conversation_id: sessionStorage.getItem('msft_conversation_id'),
+                tenant: this.props.tenant
             };
             promises.push(this.getSignedUrl(dataToGetSignedUrl).then((resultUrl: any) => {
                 const options = {
@@ -158,6 +160,8 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                     }
                 };
                 currUrl = resultUrl.s3Url;
+                console.log("I do not understand tbh")
+                console.log(currUrl)
                 return axios.put(resultUrl.s3Url, file, options);
             }).then((result: any) => {
                 if (result.status === 200) {
@@ -329,6 +333,7 @@ export const FileUploadCard = connect(
     sendFiles: (files: FileList) =>
       dispatchProps.sendFiles(files, stateProps.user, stateProps.locale),
     gid: ownProps.gid,
+    tenant: ownProps.tenant,
     addFilesToState: ownProps.addFilesToState,
     index: ownProps.index
   })

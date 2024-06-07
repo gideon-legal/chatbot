@@ -58,6 +58,7 @@ export interface ActivityViewProps {
     onCardAction: IDoCardAction;
     onImageLoad: () => void;
     gid: string;
+    tenant: string;
     directLine: DirectLineOptions;
     index: number;
     addFilesToState: (index: number, files: Array<{ name: string, url: string }>) => void;
