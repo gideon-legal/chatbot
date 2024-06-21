@@ -16,7 +16,7 @@ export interface Node {
   validation: string;
 }
 
-interface TimeProps {
+interface TimeCardProps {
   node: Node;
   directLine?: DirectLineOptions;
   sendMessage: (inputText: string) => void;
@@ -31,19 +31,19 @@ export interface MessageWithContact extends Message {
   email: string;
 }
 
-export interface TimeState {
+export interface TimeCardState {
     time: string;
     time_marker: string;
     timeError: string;
     time_markerError: string;
 }
 
-class TimeForm extends React.Component<TimeProps, TimeState> {
+class TimeCard extends React.Component<TimeCardProps, TimeCardState> {
   private radialInputTimeMarker: HTMLInputElement;
   private textInputTime: HTMLInputElement;
   
 
-  constructor(props: TimeProps) {
+  constructor(props: TimeCardProps) {
     super(props);
 
     this.state = {
@@ -57,12 +57,12 @@ class TimeForm extends React.Component<TimeProps, TimeState> {
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.onChangeValue = this.onChangeValue.bind(this);
-    this.clickToSubmitContactInformation = this.clickToSubmitContactInformation.bind(this);
+    this.clickToSubmitTime = this.clickToSubmitTime.bind(this);
   }
 
   private handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>): any {
     if (e.key === 'Enter' && this.validateContactInformation()) {
-        this.props.sendMessage(this.getFormattedContact());
+        this.props.sendMessage(this.getFormattedTime());
         document.removeEventListener('keypress', this.handleKeyDown.bind(this));
     }
   }
@@ -223,7 +223,7 @@ class TimeForm extends React.Component<TimeProps, TimeState> {
   }
 }
 
-export const TimeCard = connect(
+export const TimeNode = connect(
   (state: ChatState) => {
     return {
       // passed down to MessagePaneView
@@ -233,7 +233,7 @@ export const TimeCard = connect(
     };
   }, {
     sendMessage
-  }, (stateProps: any, dispatchProps: any, ownProps: any): TimeProps => {
+  }, (stateProps: any, dispatchProps: any, ownProps: any): TimeCardProps => {
     return {
       // from stateProps
       node:       ownProps.node,
@@ -245,4 +245,4 @@ export const TimeCard = connect(
       conversationId: stateProps.conversationId
     };
   }
-)(TimeForm);
+)(TimeCard);
