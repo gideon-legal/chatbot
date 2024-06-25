@@ -61,7 +61,7 @@ class TimeCard extends React.Component<TimeCardProps, TimeCardState> {
   }
 
   private handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>): any {
-    if (e.key === 'Enter' && this.validateContactInformation()) {
+    if (e.key === 'Enter' && this.validateTimeInformation()) {
         this.props.sendMessage(this.getFormattedTime());
         document.removeEventListener('keypress', this.handleKeyDown.bind(this));
     }
@@ -77,7 +77,7 @@ class TimeCard extends React.Component<TimeCardProps, TimeCardState> {
     return phoneNumber && phoneNumber.isValid();
   }
 
-  validateContactInformation = () => {
+  validateTimeInformation = () => {
     let validated = true;
 
     let time_markerError;
@@ -106,8 +106,8 @@ class TimeCard extends React.Component<TimeCardProps, TimeCardState> {
 
   getFormattedTime = () => {
     return JSON.stringify({
-      ...this.state.time && { email: this.state.time},
-      ...this.state.time_marker && { phone: this.state.time_marker }
+      ...this.state.time && { time: this.state.time},
+      ...this.state.time_marker && { time_marker: this.state.time_marker }
       
     });
   }
@@ -115,7 +115,7 @@ class TimeCard extends React.Component<TimeCardProps, TimeCardState> {
  
 
   clickToSubmitTime(e: React.MouseEvent<HTMLButtonElement>) {
-    if (!this.validateContactInformation()) { return; }
+    if (!this.validateTimeInformation()) { return; }
 
     this.props.sendMessage(this.getFormattedTime());
 
@@ -125,7 +125,7 @@ class TimeCard extends React.Component<TimeCardProps, TimeCardState> {
   }
 
   private onKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === 'Enter' && this.validateContactInformation()) {
+    if (e.key === 'Enter' && this.validateTimeInformation()) {
         this.props.sendMessage(this.getFormattedTime());
         document.removeEventListener('keypress', this.handleKeyDown.bind(this));
     }
@@ -194,7 +194,7 @@ class TimeCard extends React.Component<TimeCardProps, TimeCardState> {
           }}
 
           input={{
-            type: 'text',
+            type: 'time',
             ref: input => this.textInputTime = input,
             autoFocus: true,
             value: this.state.time,
@@ -203,7 +203,7 @@ class TimeCard extends React.Component<TimeCardProps, TimeCardState> {
               time: e.target.value
             }),
             onKeyPress: e => this.onKeyPress(e),
-            placeholder: 'HHMM',
+            placeholder: '0:00',
             ariaLabel: null,
             ariaLive: 'polite'
           }}
