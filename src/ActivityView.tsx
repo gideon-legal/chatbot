@@ -18,6 +18,7 @@ import { EndingCard } from './EndingCard'
 import { DocassembleCard } from './DocassembleCard';
 import { VideoCard } from './VideoCard';
 import {  WelcomeNode} from './WelcomeCard'
+import { TimeNode } from './TimeCard'
 
 const Attachments = (props: {
     attachments: Attachment[],
@@ -306,7 +307,11 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
           return (
                 <DocassembleCard{ ...props } files={activityCopy.entities[0].pdf_link} post_message={activityCopy.entities[0].message} post_meta={activityCopy.entities[0].meta} fullscreen={this.props.format.fullscreen } fullheight={this.props.format.fullHeight } file_format={activityCopy.entities[0].file_format}/>
           );
-        } else if (type === 'welcome'){
+        } else if (type === 'time') {
+          return (
+                <TimeNode{ ...props } node={activityCopy.entities[0]}/>
+          );
+        }else if (type === 'welcome'){
           return (
             <WelcomeNode{ ...props } meta={activityCopy.entities[0].meta} activity={activityCopy}  />
             
