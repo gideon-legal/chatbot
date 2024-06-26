@@ -144,7 +144,7 @@ class TimeCard extends React.Component<TimeCardProps, TimeCardState> {
       <div className="contact__form__card gideon__node">
         <NodeHeader
           nodeType="contact__form__card"
-          header="Contact Information"
+          header="Time"
         />
         {(<NodeCustomContainer
           nodeType="contact__form__card"
