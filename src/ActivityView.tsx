@@ -277,7 +277,7 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
             );
         } else if (type === 'handoff') {
             return(
-              <EndingCard { ...props } pre_message={activityCopy.entities[0].message} pre_meta={activityCopy.entities[0].meta} fullscreen={this.props.format.fullscreen } fullheight={this.props.format.fullHeight } post_message={activityCopy.entities[0].part2_message} post_meta={activityCopy.entities[0].part2_meta}/>
+              <EndingCard { ...props } pre_message={activityCopy.entities[0].message} pre_meta={activityCopy.entities[0].meta} fullscreen={this.props.format.fullscreen } fullheight={this.props.format.fullHeight } post_message={activityCopy.entities[0].message} post_meta={activityCopy.entities[0].meta}/>
             );
         } else if (type === 'file') {
             return (

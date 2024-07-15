@@ -553,7 +553,7 @@ export class Chat extends React.Component<ChatProps, State> {
     private reload_messages_nocount = (messageId?: string|null) => {
         const botConnection: any = this.store.getState().connection.botConnection;
         if(botConnection && botConnection.conversationId){
-            conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId, this.props.tenant)
+            conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId,  this.props.tenant, messageId,)
                 .then((res: any) => {
                     const messages = res.data.messages.reverse();
                   //  this.setState({
@@ -623,7 +623,7 @@ export class Chat extends React.Component<ChatProps, State> {
         console.log("reload me")
         const botConnection: any = this.store.getState().connection.botConnection;
         if(botConnection && botConnection.conversationId){
-            conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, messageId, this.props.tenant)
+            conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, this.props.tenant, messageId)
                 .then((res: any) => {
                     const messages = res.data.messages.reverse();
 
@@ -723,7 +723,7 @@ export class Chat extends React.Component<ChatProps, State> {
         const botConnection: any = this.store.getState().connection.botConnection;
          step(this.props.gid, botConnection.conversationId, this.props.directLine.secret, messageId, this.props.tenant)
         .then((res: any) => {
-            conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, res.data.id, this.props.tenant)
+            conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, this.props.tenant, res.data.id)
             .then((res: any) => {
                 const messages = res.data.messages.reverse();
                 const message_activities = mapMessagesToActivities(messages, this.store.getState().connection.user.id)
