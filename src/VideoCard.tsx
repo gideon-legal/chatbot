@@ -44,7 +44,7 @@ export interface VideoState {
 export class Video extends React.Component<VideoProps, VideoState> {
   constructor(props: VideoProps) {
     super(props);
-    console.log(props)
+    // console.log(props)
     
 
     this.state = { 
@@ -53,7 +53,7 @@ export class Video extends React.Component<VideoProps, VideoState> {
       videoFullscreen: false
     };
 
-    console.log(this.state)
+    // console.log(this.state)
   }
 
 
@@ -80,10 +80,10 @@ export class Video extends React.Component<VideoProps, VideoState> {
 
     // need to check if video url is youtube embed or upload - check if contains youtu.be?
     if(this.props.video_url && !this.props.video_url.includes("https://youtu.be") && !this.props.video_url.includes("https://youtube") && !this.props.video_url.includes("https://www.youtube") && !this.props.video_url.includes("https://www.youtu.be")   ){
-      console.log("checking vid 2")
-    console.log(this.props.video_url)
+      // console.log("checking vid 2")
+    // console.log(this.props.video_url)
     const string_vid = (this.props.video_url).toString()
-    console.log(string_vid)
+    // console.log(string_vid)
       // const video_source = fetch("https://www.youtube.com/watch?v=cytJLvf-eVs")
     return (
       <div>
@@ -105,8 +105,8 @@ export class Video extends React.Component<VideoProps, VideoState> {
 
     } else {
       // const video_source = fetch("https://www.youtube.com/watch?v=cytJLvf-eVs")
-      console.log("checking vid 3")
-    console.log(this.props.video_url)
+      // console.log("checking vid 3")
+    // console.log(this.props.video_url)
     var string_vid = this.props.video_url
     var vid_id = ""
     //console.log(string_vid.split("be/"))
@@ -116,15 +116,15 @@ export class Video extends React.Component<VideoProps, VideoState> {
     if(this.props.video_url.includes("https://youtu.be")){
       //need to get portion between .be/ and ?si
       vid_id = (string_vid.split('.be/')[1]).split('?si')[0]
-      console.log("after split")
-      console.log(vid_id)
+      // console.log("after split")
+      // console.log(vid_id)
 
       
     } else {
       //get portion after v=
       vid_id = string_vid.split('v=')[1];
-      console.log("after split")
-      console.log(vid_id)
+      // console.log("after split")
+      // console.log(vid_id)
     }
 
       

@@ -46,9 +46,9 @@ class WelcomeCard extends React.Component<WelcomeCardProps, WelcomeCardState> {
     //change list view to button
     render() {
         if(this.state.is_welcome == true){
-            console.log("props: ")
-        console.log(this.props)
-        console.log(this.props.activity.text)
+            // console.log("props: ")
+        // console.log(this.props)
+        // console.log(this.props.activity.text)
         if(this.props.meta.fullscreen == true && isMobile == false){
             // do fullscreen version -> modify srtyling
             if(document.getElementById('btn3') != null){

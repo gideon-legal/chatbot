@@ -71,19 +71,19 @@ export const availableTimes = (
 };
 
 export const mapMessagesToActivities = (messages: any, userId: any): Activity[] => {
-    console.log("foodies unite")
+    // console.log("foodies unite")
     
     return messages.map((m: any, i: number) => {
-        console.log({
-            id: m.id,
-            type: 'message',
-            entities: m.entities,
-            suggestedActions: m.suggestedActions,
-            from: {
-                id: m.sender_type === 'bot' ? '' : userId
-            },
-            text: m.message
-        })
+        //  console.log({
+        //     id: m.id,
+        //     type: 'message',
+        //     entities: m.entities,
+        //     suggestedActions: m.suggestedActions,
+        //     from: {
+        //         id: m.sender_type === 'bot' ? '' : userId
+        //     },
+        //     text: m.message
+        // })
         return {
             id: m.id,
             type: 'message',
@@ -126,8 +126,8 @@ export const sendSignature = (
     documents: string[],
     tenant: string
 ): any => {
-    console.log(documents)
-    console.log(typeof documents)
+    // console.log(documents)
+    // console.log(typeof documents)
    return axios.post(`${baseUrl}/bot/esign`, {
        link: document,
        signature: signature,

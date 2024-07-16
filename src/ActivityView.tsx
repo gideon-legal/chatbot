@@ -222,18 +222,18 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
     render() {
         const { activity, type, ...props } = this.props;
         const activityCopy: any = activity;
-        console.log("here")
-        console.log(activityCopy)
-        console.log("type: ")
-        console.log(type)
+        // console.log("here")
+        // console.log(activityCopy)
+        // console.log("type: ")
+        // console.log(type)
         const isDisclaimer = activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'disclaimer';
         if (type === 'message' &&  activity.type === 'message') {
-          console.log("here is message")
+          // console.log("here is message")
           /*if(activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === "welcome"){
-            console.log("welcome page spawnnn")
-            console.log("ACTIVITY COPY")
-            console.log(activityCopy)
-            console.log(this.props)
+            // console.log("welcome page spawnnn")
+            // console.log("ACTIVITY COPY")
+            // console.log(activityCopy)
+            // console.log(this.props)
             return (
               <WelcomeNode{ ...props } meta={activityCopy.entities[0].meta} activity={activityCopy}  />
               
@@ -242,7 +242,7 @@ export class ActivityView extends React.Component<ActivityViewProps, {}> {
 
           }*/
           if (isDisclaimer === true || this.formatText(activity.text).length > 0) {
-            console.log("here 4")
+            // console.log("here 4")
            
             return (
               <div>

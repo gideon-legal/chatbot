@@ -160,8 +160,8 @@ class FileUpload extends React.Component<FileUploadProps, FileUploadState> {
                     }
                 };
                 currUrl = resultUrl.s3Url;
-                console.log("I do not understand tbh")
-                console.log(currUrl)
+                // console.log("I do not understand tbh")
+                // console.log(currUrl)
                 return axios.put(resultUrl.s3Url, file, options);
             }).then((result: any) => {
                 if (result.status === 200) {

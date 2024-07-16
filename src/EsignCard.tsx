@@ -205,15 +205,15 @@ class Esign extends React.Component<EsignProps, EsignState> {
             if(!this.validateSignature()) { return;}
             
     
-            console.log("Work to be done!")
-            console.log(this.props.document)
+            // console.log("Work to be done!")
+            // console.log(this.props.document)
             //need to send to api so it can be used to populate document
             //send to api and wait to receive signed pdf link, set to this.state.signedfile
             sendSignature(this.props.gid, this.props.directLine.secret, this.props.conversationId, this.state.signature, this.props.docx, this.state.initials, 
                 this.state.bankNum, this.state.documents, this.props.tenant)
             .then((res: any) => {
-                console.log("trying to work")
-                console.log(res);
+                // console.log("trying to work")
+                // console.log(res);
                 this.setState({
                     ...this.state,
                     signedfile: res.data[0],
@@ -223,7 +223,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 var pdf_files: any[] = []
                 this.state.signedfiles.forEach( (fi: any) => {
                     var try_pdf = JSON.parse(''+fi)
-                    console.log(try_pdf)
+                    // console.log(try_pdf)
                     pdf_files.push(try_pdf.pdf_link)
                 })
                 this.setState({
@@ -534,7 +534,7 @@ class Esign extends React.Component<EsignProps, EsignState> {
     renderStartingScreen() {
         //need special styling for fullscreen
         if(this.state.isFullscreen ==  true){
-            console.log("file lngth" + this.state.file.length)
+            // console.log("file lngth" + this.state.file.length)
             let heightCheck = window.screen.height
             // not being used on Ravens screen at all
             if(heightCheck >= 924){
