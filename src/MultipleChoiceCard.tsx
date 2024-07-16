@@ -28,8 +28,8 @@ class SuggestedActions extends React.Component<MessagePaneProps, MultipleChoiceS
     constructor(props: MessagePaneProps) {
         super(props);
 
-        console.log("props multi")
-        console.log(this.props)
+        // console.log("props multi")
+        // console.log(this.props)
         this.state = {
             selected: []
         };

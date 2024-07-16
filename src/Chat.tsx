@@ -176,7 +176,7 @@ export class Chat extends React.Component<ChatProps, State> {
         const state = this.store.getState();
         this.toggleBackButton(false);
         let alreadyContains = false;
-        console.log("Please let me handle my biz :)")
+        // console.log("Please let me handle my biz :)")
         //sessionStorage.setItem("loading", 'true');
         //checking if history.activities contains same text and message type as incoming activity
         let i: any;
@@ -193,16 +193,16 @@ export class Chat extends React.Component<ChatProps, State> {
             //(lastActivity && lastActivity.text !== activityCopy.text || lastActivity.type !== activityCopy.type && "GIDEON_MESSAGE_START" !== activityCopy.text) ){
             !alreadyContains ||
             (lastActivity && lastActivity.text === activityCopy.text && lastActivity.type !== activityCopy.type && "GIDEON_MESSAGE_START" !== activityCopy.text && !alreadyContains)){
-               console.log("trying something give me a sec lol")
-               console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+               // console.log("trying something give me a sec lol")
+               // console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAA")
             switch (activity.type) {
                 case 'message':
                     // adding node count to check if first node, need to grey out back button
                     
 
-                console.log("well hello")
+                // console.log("well hello")
                     if(activity.entities) {
-                        console.log("activities")
+                        // console.log("activities")
 
                         if(activity.entities[0].node_type !== 'prompt' && activity.entities[0].type !== 'ClientCapabilities'){
                             this.addNodeCount();
@@ -270,7 +270,6 @@ export class Chat extends React.Component<ChatProps, State> {
                         this.store.dispatch<ChatActions>({type: 'Toggle_InputEnabled', inputEnabled: true});
                     }
                 }
-                    console.log("im fuckin cooked man")
                     this.store.dispatch<ChatActions>({ type: activity.from.id === state.connection.user.id ? 'Receive_Sent_Message' : 'Receive_Message', activity });
                     break;
                     
@@ -620,7 +619,7 @@ export class Chat extends React.Component<ChatProps, State> {
     }
 
     private reload_messages = (messageId?: string|null) => {
-        console.log("reload me")
+        // console.log("reload me")
         const botConnection: any = this.store.getState().connection.botConnection;
         if(botConnection && botConnection.conversationId){
             conversationHistory(this.props.gid, this.props.directLine.secret, botConnection.conversationId, this.props.tenant, messageId)
@@ -764,7 +763,7 @@ export class Chat extends React.Component<ChatProps, State> {
             });
         })
         .catch((err: any) => {
-            console.log(err);
+            // console.log(err);
         });
          
     }
@@ -785,7 +784,7 @@ export class Chat extends React.Component<ChatProps, State> {
            // sessionStorage.setItem("loading", 'false');
         })
         .catch((err: any) => {
-            console.log(err);
+            // console.log(err);
         });
     }
 
@@ -956,17 +955,15 @@ export class Chat extends React.Component<ChatProps, State> {
                     });
 
                     const campaign = parseReferrer(document.referrer, window.location.href.toLowerCase());
-                    console.log("OH COME ON MAN")
-                    console.log(this.props.gid)
-                    console.log(this.props)
-                    console.log(this.props.tenant)
+                    // console.log(this.props.gid)
+                    // console.log(this.props)
+                    // console.log(this.props.tenant)
                      
                     checkSite(this.props.gid, window.location.toString(), 
                     conversationId, this.props.directLine.secret, user.id, this.props.tenant, this.props.form_id ).then((res: any) => {
-                        console.log("return from check site")
-                        console.log(res.data)
+                        // console.log("return from check site")
+                        // console.log(res.data)
                         if(res.data.valid_site == true){
-                            console.log("sucks to be me")
                             verifyConversation(
                                 this.props.gid,
                                 conversationId,
@@ -978,12 +975,11 @@ export class Chat extends React.Component<ChatProps, State> {
                                 this.props.form_id
                             )
                             .then((res: any) => {
-                                console.log(res)
+                                // console.log(res)
                                 // Only save these when we successfully connect
                                 // uncomment when re-enabling chat history
-                                console.log("My ass does not know what im doing")
                                 if(isNew && conversationId !== sessionStorage.getItem("pastConvoID")) {
-                                    console.log("isNew?")
+                                    // console.log("isNew?")
                                     window.sessionStorage.setItem('msft_conversation_id', conversationId);
                                     window.localStorage.setItem('gid', this.props.gid);
                                     window.localStorage.setItem('msft_user_id', user.id);
@@ -1063,7 +1059,7 @@ export class Chat extends React.Component<ChatProps, State> {
         
                                 conversationHistory(this.props.gid, this.props.directLine.secret, conversationId, this.props.tenant)
                                 .then((res: any) => {
-                                    console.log("What the hell")
+                                    // console.log("What the hell")
                                     const state = this.store.getState();
                                     const messages = res.data.messages.reverse();
                             
@@ -1073,7 +1069,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                         type: 'Set_Messages',
                                         activities: mapMessagesToActivities(messages, state.connection.user.id)
                                     });
-                                    console.log("drat")
+                                    // console.log("drat")
         
                                 });
         
@@ -1109,7 +1105,7 @@ export class Chat extends React.Component<ChatProps, State> {
                             });
 
                         } else {
-                            console.log("Hey it's jason from development")
+                            // console.log("Hey it's jason from development")
                         }
                     })
 
@@ -1391,7 +1387,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                 />
                             </div>}
                             {/* current convo or history? */
-                            console.log(this.state.showConvoHistory)
+                            // console.log(this.state.showConvoHistory)
                             }
                             {!this.state.showConvoHistory ?
                                 ((this.state.loading== true && sessionStorage.getItem("loading" ) == "true")?

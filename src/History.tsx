@@ -209,12 +209,12 @@ export class HistoryView extends React.Component<HistoryProps, HistoryState> {
                 this.largeWidth = this.props.size.width * 2;
                 content = <this.measurableCarousel/>;
             } else {
-                console.log("history else")
+                // console.log("history else")
                 const activities = filteredActivities(this.props.activities, this.props.format.strings.pingMessage);
                 activityDisclaimer = activities.length > 0 ? activities[activities.length - 1] : undefined;
                 lastActivityIsDisclaimer = activityDisclaimer && activityDisclaimer.entities && activityDisclaimer.entities.length > 0 && activityDisclaimer.entities[0].node_type === 'disclaimer';
-                console.log("history activites")
-                console.log(activities);
+                // console.log("history activites")
+                // console.log(activities);
                 content = activities
                 .map((activity, index) => {
                         // for cases where user refreshes before any messages appear
@@ -470,7 +470,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
                     //check if entities has video attached
                     for (const i of activityCopy.entities){
                         if (i.node_type === 'video'){
-                            console.log("has video")
+                            // console.log("has video")
                             has_video = true;
         
                         }
@@ -534,7 +534,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
            
 
             if (nodeType === 'welcome' || nodeType === 'date' || nodeType === 'handoff' || nodeType === 'download' || nodeType === 'esign' || nodeType === 'file' || nodeType === 'imBack' || nodeType === 'contact' || nodeType === 'address' || nodeType === 'disclaimer') {
-                console.log("HERHEHEEE")
+                // console.log("HERHEHEEE")
                 let lastMessageClass = ' ';
                 if (this.props.format.fullscreen && !this.props.inputEnabled) {
                     lastMessageClass += 'wc-fullscreen-last-message';
@@ -635,7 +635,7 @@ export class WrappedActivity extends React.Component<WrappedActivityProps, {}> {
             }
         } else if (activityCopy.entities && activityCopy.entities.length > 0 && activityCopy.entities[0].node_type === 'download'){
             //docassembe card case
-            console.log("hit docassemble")
+            // console.log("hit docassemble")
             let lastMessageClass = ' ';
             if (lastMessage && this.props.format.fullscreen && !this.props.inputEnabled) {
                 lastMessageClass += 'wc-fullscreen-last-message';

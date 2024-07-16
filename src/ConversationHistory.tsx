@@ -26,7 +26,7 @@ export class ConversationHistory extends React.Component<HistoryProps, State> {
 
   private handleClickConvo = (conversation: any) => {
     // set state of convo viewer to the key
-    console.log('user wants to view ', conversation);
+    //console.log('user wants to view ', conversation);
     this.props.setCurrentConversation(conversation);
   }
 
