@@ -150,7 +150,7 @@ export const checkSite = (
     tenant: string,
     form_id: number
 ): any => {
-    return axios.get(`${baseUrl}/bot/site?directLine=${directLine}&?msft_user_id=${msft_user_id}&msft_conversation_id=${msftConversationId}&originating_url=${originatingUrl}&tenant=${tenant}&form_id=${form_id}`);
+    return axios.get(`${baseUrl}/bot/site?directLine=${directLine}&?msft_user_id=${msft_user_id}&msft_conversation_id=${msftConversationId}&tenant=${tenant}&form_id=${form_id}&originating_url=${originatingUrl}`);
 
 }
 
