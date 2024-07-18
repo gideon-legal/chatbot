@@ -47,6 +47,8 @@ export interface ContactFormState {
   lastNameError: string;
   middle_name: string;
   middleNameError: string;
+  company: string;
+  companyError: string;
 }
 
 class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
@@ -54,6 +56,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
   private textInputName: HTMLInputElement;
   private textInputEmail: HTMLInputElement;
   private textInputPhone: HTMLInputElement;
+  private textInputCompany: HTMLInputElement;
 
   constructor(props: ContactFormProps) {
     super(props);
@@ -73,7 +76,9 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
       last_name: '',
       lastNameError: undefined,
       middle_name: '',
-      middleNameError: undefined
+      middleNameError: undefined,
+      company: '',
+      companyError: undefined
     };
 
 
@@ -109,6 +114,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
     let firstNameError;
     let middleNameError;
     let lastNameError;
+    let companyError;
 
     if (this.prefixActive() && !(this.state.prefix && this.state.prefix !== '')) {
       prefixError = 'Please select a prefix';
@@ -145,6 +151,11 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
       validated = false;
     }
 
+    if (this.companyActive() && !(this.state.company && this.state.company != '')) {
+      companyError = 'Please enter company';
+      validated = false;
+    }
+
     this.setState({
       ...this.state,
       prefixError,
@@ -167,7 +178,8 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
       ...this.state.name && { name: this.state.name },
       ...this.state.first_name && { first_name: this.state.first_name },
       ...this.state.middle_name && { middle_name: this.state.middle_name },
-      ...this.state.last_name && { last_name: this.state.last_name }
+      ...this.state.last_name && { last_name: this.state.last_name },
+      ...this.state.company && { company: this.state.company }
     });
   }
 
@@ -197,6 +209,10 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
 
   middleNameActive = () => {
     return this.props.node.meta && ((this.props.node.meta.name && this.props.node.meta.middle_name) || this.props.node.meta.showMiddleName);
+  }
+
+  companyActive = () => {
+    return this.props.node.meta && ((this.props.node.meta.company ) || this.props.node.meta.showCompany);
   }
 
   clickToSubmitContactInformation(e: React.MouseEvent<HTMLButtonElement>) {
@@ -453,6 +469,35 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
           }}
 
           errorOn={this.state.emailError}
+        />)}
+        {this.companyActive() && (<NodeInputContainer
+          nodeType="contact__form__card"
+
+          title={{
+            title: 'Company ',
+            required: true
+          }}
+
+          input={{
+            type: 'text',
+            ref: input => this.textInputCompany = input,
+            autoFocus: !this.nameActive(),
+            value: this.state.email,
+            onChange: e => this.setState({
+              ...this.state,
+              email: e.target.value
+            }),
+            onKeyPress: e => this.onKeyPress(e),
+            placeholder: 'Company name here',
+            ariaLabel: null,
+            ariaLive: 'polite'
+          }}
+
+          error={{
+            message: this.state.companyError
+          }}
+
+          errorOn={this.state.companyError}
         />)}
         {this.phoneActive() && (<NodeInputContainer
           nodeType="contact__form__card"
