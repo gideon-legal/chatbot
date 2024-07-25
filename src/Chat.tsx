@@ -1032,7 +1032,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                     });
                                 }
         
-                                if (!isMobile && bot_display_options && bot_display_options.open_on_load) {
+                                if (bot_display_options && bot_display_options.open_on_load) {
                                     this.toggle();
                                 }
         
