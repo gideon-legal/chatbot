@@ -84,7 +84,7 @@ class WelcomeCard extends React.Component<WelcomeCardProps, WelcomeCardState> {
                         </div>
                     </div>
                     <div className="welcome-button">
-                        <button className="gideon-submit-button" onClick={e => this.handleContinue(e)}>{"Continue" || this.props.meta.cta}</button>
+                        <button className="gideon-submit-button" onClick={e => this.handleContinue(e)}>{this.props.meta.cta || "Continue"}</button>
                         </div>
                 
     
@@ -147,7 +147,9 @@ class WelcomeCard extends React.Component<WelcomeCardProps, WelcomeCardState> {
             is_welcome: false
         })
         document.getElementById("welcome").remove();
-        this.props.sendMessage("welcome page complete")
+        var button_message = this.props.meta.cta ? this.props.meta.cta : 'Continue'
+
+        this.props.sendMessage(button_message)
         //document.getElementById("welcome").remove();
 
        

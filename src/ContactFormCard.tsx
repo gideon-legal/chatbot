@@ -48,6 +48,7 @@ export interface ContactFormState {
   lastNameError: string;
   middle_name: string;
   middleNameError: string;
+  disabled: boolean;
 }
 
 class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
@@ -74,7 +75,8 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
       last_name: '',
       lastNameError: undefined,
       middle_name: '',
-      middleNameError: undefined
+      middleNameError: undefined,
+      disabled: false
     };
 
 
@@ -84,9 +86,21 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
   }
 
   private async handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === 'Enter' && await this.validateContactInformation()) {
-        this.props.sendMessage(this.getFormattedContact());
-        document.removeEventListener('keypress', this.handleKeyDown.bind(this));
+    if (e.key === 'Enter' && !this.state.disabled) {
+
+      console.log("You gotta be kidding me")
+        this.setState({
+          disabled: true
+        })
+
+        if(await this.validateContactInformation()) {
+          this.props.sendMessage(this.getFormattedContact());
+          document.removeEventListener('keypress', this.handleKeyDown.bind(this));
+        } else {
+          this.setState({
+            disabled: false
+          })
+        }
     }
   }
 
@@ -210,7 +224,17 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
   }
 
   async clickToSubmitContactInformation(e: React.MouseEvent<HTMLButtonElement>) {
-    if (!(await this.validateContactInformation())) { return; }
+
+    this.setState({
+      disabled: true
+    })
+
+    if (!(await this.validateContactInformation())) { 
+      this.setState({
+        disabled: false
+      })
+      return; 
+    }
 
     this.props.sendMessage(this.getFormattedContact());
 
@@ -220,9 +244,21 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
   }
 
   private async onKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === 'Enter' && await this.validateContactInformation()) {
+    if (e.key === 'Enter' && !this.state.disabled) {
+
+      this.setState({
+        disabled: true
+      })
+      if(await this.validateContactInformation() ) {
         this.props.sendMessage(this.getFormattedContact());
         document.removeEventListener('keypress', this.handleKeyDown.bind(this));
+      } else {
+        this.setState({
+          disabled: false
+        })
+      }
+
+        
     }
   }
 
@@ -490,7 +526,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
 
           errorOn={this.state.phoneError}
         />)}
-        <SubmitButton onClick={this.clickToSubmitContactInformation} />
+        <SubmitButton onClick={this.clickToSubmitContactInformation} disabled={this.state.disabled} />
       </div>
     );
   }
