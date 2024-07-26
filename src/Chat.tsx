@@ -45,6 +45,7 @@ export interface ChatProps {
     formatOptions?: FormatOptions;
     themeColor?: string;
     logoUrl?: string;
+    hide_close: boolean;
     fullscreenImageUrl?: string;
     resize?: 'none' | 'window' | 'detect';
 }
@@ -55,6 +56,7 @@ export interface State {
     display: boolean;
     orginalBodyClass: string;
     fullscreen: boolean;
+    hide_close: boolean;
     full_height: boolean;
     showConvoHistory: boolean;
     back_visible: boolean;
@@ -81,6 +83,7 @@ export class Chat extends React.Component<ChatProps, State> {
         opened: false,
         display: false,
         fullscreen: false,
+        hide_close: false,
         full_height: false,
         clicked: false,
         back_visible: false,
@@ -1006,8 +1009,8 @@ export class Chat extends React.Component<ChatProps, State> {
                                 }
         
                                 if (bot_display_options) {
-                                    const { alignment, bottomOffset, topOffset, leftOffset, rightOffset, full_height, display_name, widget_url, widget_same_as_logo, open_fullscreen  } = bot_display_options;
-        
+                                    const { alignment, bottomOffset, topOffset, leftOffset, rightOffset, full_height, display_name, widget_url, widget_same_as_logo, open_fullscreen, hide_close  } = bot_display_options;
+                                    //console.log(hide_close)
                                     this.store.dispatch({
                                         type: 'Set_Format_Options',
                                         formatOptions: {
@@ -1019,6 +1022,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                             display_name,
                                             widgetSameAsLogo: widget_same_as_logo,
                                             widgetUrl: widget_url,
+                                            hide_close: hide_close,
                                             fullscreen: open_fullscreen || false,
                                             full_height: full_height || false
                                         }
@@ -1030,6 +1034,12 @@ export class Chat extends React.Component<ChatProps, State> {
                                         type: 'Set_Logo_Img',
                                         logoUrl: bot_display_options.logo_url
                                     });
+                                }
+
+                                if(bot_display_options && bot_display_options.hide_close) {
+                                    this.setState({
+                                        hide_close: bot_display_options.hide_close
+                                    })
                                 }
         
                                 if (bot_display_options && bot_display_options.open_on_load) {
@@ -1275,7 +1285,7 @@ export class Chat extends React.Component<ChatProps, State> {
 
     render() {
         const state = this.store.getState();
-        let { open, opened, display, fullscreen } = this.state;
+        let { open, opened, display, fullscreen, hide_close } = this.state;
 
         const chatviewPanelStyle = this.calculateChatviewPanelStyle(state.format);
 
@@ -1312,6 +1322,16 @@ export class Chat extends React.Component<ChatProps, State> {
             sessionStorage.setItem("loading", 'false');
             this.reloadMsgsCalled = true;
         
+        }
+
+        let close;
+        if(!hide_close) {
+            close = <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" 
+            onClick={() => {this.toggle(); this.initialOpen = false;}} >
+                <title>wc-header--close</title>
+                <path className="wc-header--close" d="M18 2L2 18" stroke="#FCFCFC" stroke-width="3" stroke-linecap="round" />
+                <path className="wc-header--close" d="M2 2L18 18" stroke="#FCFCFC" stroke-width="3" stroke-linecap="round" />
+            </svg>
         }
 
         // only render real stuff after we know our dimensions
@@ -1352,13 +1372,9 @@ export class Chat extends React.Component<ChatProps, State> {
                                     <IconButton onClick={() => this.handleHistory(true)} className="icon__button history__button" style={{ height: "auto" }}>
                                         <HistoryInline />
                                     </IconButton>
-                                    {/* Close X image on chat */}
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" 
-                                    onClick={() => {this.toggle(); this.initialOpen = false;}} >
-                                        <title>wc-header--close</title>
-                                        <path className="wc-header--close" d="M18 2L2 18" stroke="#FCFCFC" stroke-width="3" stroke-linecap="round" />
-                                        <path className="wc-header--close" d="M2 2L18 18" stroke="#FCFCFC" stroke-width="3" stroke-linecap="round" />
-                                    </svg>
+                                    { /* Close X image on chat */}
+                                        {close}
+                                    
                                     {/* <img
                                         className="wc-header--close"
                                         onClick={() => {this.toggle(); }}
@@ -1460,7 +1476,7 @@ export class Chat extends React.Component<ChatProps, State> {
                                     </div>)
                                 :
                                 (<div className="wc-chatbot-content-right" style={{paddingTop:'67px'}}>
-                                    {console.log("bload")}
+                                    
                                     { this.state.loading ? 
                                         <div id="loading-bar-spinner" className="spinner"><div className="spinner-icon"></div></div>
                                         :
