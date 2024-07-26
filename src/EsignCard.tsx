@@ -909,10 +909,10 @@ export const EsignCard = connect(
             accountNum: ownProps.activity.entities[0].pdf_link.account_num,
             presignText: ownProps.activity.entities[0].message,
             presignHeader: ownProps.activity.entities[0].meta.header,
-            presignButton: ownProps.activity.entities[0].meta.header.cta,
-            postsignText: ownProps.activity.entities[0].message,
-            postsignHeader: ownProps.activity.entities[0].meta.header,
-            postsignButton: ownProps.activity.entities[0].meta.header.cta
+            presignButton: ownProps.activity.entities[0].meta.cta,
+            postsignText: ownProps.activity.entities[0].part2_message,
+            postsignHeader: ownProps.activity.entities[0].part2_meta.header,
+            postsignButton: ownProps.activity.entities[0].part2_meta.cta
         }
     }
 )(Esign);

@@ -121,7 +121,7 @@ class WelcomeCard extends React.Component<WelcomeCardProps, WelcomeCardState> {
                           
                         </div>
                         <div className="welcome-button">
-                        <button className="gideon-submit-button" onClick={e => this.handleContinue(e)}>{"Continue" || this.props.meta.cta}</button>
+                        <button className="gideon-submit-button" onClick={e => this.handleContinue(e)}>{this.props.meta.cta || "Continue"}</button>
                         </div>
                        
                     </div>
