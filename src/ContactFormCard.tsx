@@ -9,7 +9,6 @@ import { ChatState } from './Store';
 import { ChatActions, sendMessage } from './Store';
 import { defaultStrings } from './Strings';
 import {SubmitButton} from './SubmitButton';
-import { externalValidateEmail } from './api/bot';
 import axios from 'axios';
 
 export interface Node {
