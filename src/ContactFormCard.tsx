@@ -9,6 +9,8 @@ import { ChatState } from './Store';
 import { ChatActions, sendMessage } from './Store';
 import { defaultStrings } from './Strings';
 import {SubmitButton} from './SubmitButton';
+import { externalValidateEmail } from './api/bot';
+import axios from 'axios';
 
 export interface Node {
   node_type: string;
@@ -82,8 +84,8 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
     this.clickToSubmitContactInformation = this.clickToSubmitContactInformation.bind(this);
   }
 
-  private handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>): any {
-    if (e.key === 'Enter' && this.validateContactInformation()) {
+  private async handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter' && await this.validateContactInformation()) {
         this.props.sendMessage(this.getFormattedContact());
         document.removeEventListener('keypress', this.handleKeyDown.bind(this));
     }
@@ -94,12 +96,21 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
     return re.test(email.toLowerCase());
   }
 
+  validateEmail2 = async (email: string) => {
+    const res = await axios.get(`https://5dnw67q53jwrcrte2jhfeuiupi0qfxsu.lambda-url.us-east-2.on.aws/?email=${email}`)
+    if(res.data == 'valid') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   validatePhone = (phone: string) => {
     const phoneNumber = parsePhoneNumberFromString(phone, 'US');
     return phoneNumber && phoneNumber.isValid();
   }
 
-  validateContactInformation = () => {
+  validateContactInformation = async () => {
     let validated = true;
 
     let nameError;
@@ -120,7 +131,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
       validated = false;
     }
 
-    if (this.emailActive() && !(this.validateEmail(this.state.email))) {
+    if (this.emailActive() && !(await this.validateEmail2(this.state.email))) {
       emailError = 'That email doesn\'t look quite right';
       validated = false;
     }
@@ -199,8 +210,8 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
     return this.props.node.meta && ((this.props.node.meta.name && this.props.node.meta.middle_name) || this.props.node.meta.showMiddleName);
   }
 
-  clickToSubmitContactInformation(e: React.MouseEvent<HTMLButtonElement>) {
-    if (!this.validateContactInformation()) { return; }
+  async clickToSubmitContactInformation(e: React.MouseEvent<HTMLButtonElement>) {
+    if (!(await this.validateContactInformation())) { return; }
 
     this.props.sendMessage(this.getFormattedContact());
 
@@ -209,8 +220,8 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
     e.stopPropagation();
   }
 
-  private onKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === 'Enter' && this.validateContactInformation()) {
+  private async onKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter' && await this.validateContactInformation()) {
         this.props.sendMessage(this.getFormattedContact());
         document.removeEventListener('keypress', this.handleKeyDown.bind(this));
     }
