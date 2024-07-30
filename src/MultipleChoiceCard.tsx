@@ -61,12 +61,14 @@ class SuggestedActions extends React.Component<MessagePaneProps, MultipleChoiceS
                 selectedAnswers.push(this.props.activityWithSuggestedActions.suggestedActions.actions[index].value);
             }
         });
-        this.props.doCardAction(cardType, JSON.stringify({ selected: selectedAnswers }));
+        this.props.doCardAction(cardType, JSON.stringify(selectedAnswers ));
         this.props.resetShellInput();
         e.stopPropagation();
     }
 
     componentDidMount() {
+        console.log("multi props")
+        console.log(this.props)
         if (this.props.multipleSelect) {
             if (this.state.selected.length === 0) {
                 const defaultSelected = new Array(this.props.activityWithSuggestedActions.suggestedActions.actions.length).fill(false);
@@ -76,7 +78,7 @@ class SuggestedActions extends React.Component<MessagePaneProps, MultipleChoiceS
     }
 
     shouldComponentUpdate(nextProps: MessagePaneProps) {
-        // update only when there are actions. We want the old actions to remain displayed as it animates down.
+        // update only when there are actions. We want the old actions to remain displayed as it animates down.    
         return !!nextProps.activityWithSuggestedActions;
     }
 
@@ -90,7 +92,9 @@ class SuggestedActions extends React.Component<MessagePaneProps, MultipleChoiceS
                         { action.title }
                     </div>
                 ) }
-                {this.props.multipleSelect && <button className="wc-suggested-options-submit" onClick={e => this.submitMultipleSelect(e)}>Submit</button>}
+              
+                {this.props.multipleSelect && <button className="wc-suggested-options-submit" 
+                onClick={e => this.submitMultipleSelect(e)}>Submit</button>}
             </div>
         );
     }
@@ -124,6 +128,6 @@ export const MultipleChoiceCard = connect(
         multipleSelect: stateProps.activityWithSuggestedActions &&
             stateProps.activityWithSuggestedActions.entities &&
             stateProps.activityWithSuggestedActions.entities.length > 0 &&
-            stateProps.activityWithSuggestedActions.entities[0].meta.multipleSelection == true
+            stateProps.activityWithSuggestedActions.entities[0].meta.multipleSelection
     })
 )(SuggestedActions);
