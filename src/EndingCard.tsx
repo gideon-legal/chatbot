@@ -7,6 +7,7 @@ import { ChatActions, sendMessage } from './Store';
 import { connect } from 'react-redux';
 
 import { EsignNode, EsignPopup, EsignCheckMark } from './assets/icons/EsignIcons';
+import { FormattedText } from './FormattedText';
 import { sendSignature } from './api/bot';
 import { Hidden } from '@material-ui/core';
 import { isMobile } from 'react-device-detect';
@@ -95,8 +96,11 @@ export class EndingCard extends React.Component<EndingCardProps, {}> {
                             {this.props.post_meta.header || "Thank you for your time!" }
                         </div>
                         <div className="esign-message-handoff-small2">
-                        {this.props.post_message ||
-                     "We appreciate you taking the time out of your day to answer our questions!"}
+                        <FormattedText
+                            text={this.props.post_message || "We appreciate you taking the time out of your day to answer our questions!"}
+                            format={ 'markdown' }
+                            onImageLoad={null}
+                        />
                           
                         </div>
                     </div>

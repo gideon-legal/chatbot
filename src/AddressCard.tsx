@@ -159,7 +159,7 @@ class AddressForm extends React.Component<AddressProps, AddressState> {
                 getLatLng(results[0]);
             })
             .then(latLang => {
-                console.log('Success', address);
+                //console.log('Success', address);
             })
             .catch(error => console.error('Error', error));
     }

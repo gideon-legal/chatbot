@@ -11,6 +11,7 @@ export interface FormatOptions {
     display_name?: string;
     alignment?: string;
     widgetUrl?: string;
+    hide_close?: boolean;
     widgetSameAsLogo: boolean;
 }
 
