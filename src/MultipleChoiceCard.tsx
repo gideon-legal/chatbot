@@ -61,7 +61,7 @@ class SuggestedActions extends React.Component<MessagePaneProps, MultipleChoiceS
                 selectedAnswers.push(this.props.activityWithSuggestedActions.suggestedActions.actions[index].value);
             }
         });
-        this.props.doCardAction(cardType, JSON.stringify({ selected: selectedAnswers }));
+        this.props.doCardAction(cardType, JSON.stringify(selectedAnswers ));
         this.props.resetShellInput();
         e.stopPropagation();
     }
