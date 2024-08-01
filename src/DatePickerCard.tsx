@@ -353,7 +353,8 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
                           dateFormat={withTime ? dateFormatWithTime : dateFormat}
                           showTimeSelect={withTime}
                           // showMonthDropdown
-                          // showYearDropdown
+                          showYearDropdown
+                          scrollableMonthYearDropdown
                           dropdownMode="select"
                         />
                       </div>
