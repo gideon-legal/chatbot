@@ -399,7 +399,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
 
           title={{
             title: 'First Name ',
-            required: true
+            required: this.props.node.meta.requireFirstName
           }}
 
           input={{
@@ -430,7 +430,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
 
           title={{
             title: 'Middle Name ',
-            required: true
+            required: this.props.node.meta.requireMiddleName
           }}
 
           input={{
@@ -461,7 +461,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
 
           title={{
             title: 'Last Name ',
-            required: true
+            required: this.props.node.meta.requireLastName
           }}
 
           input={{
@@ -492,7 +492,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
 
           title={{
             title: 'Email ',
-            required: true
+            required: this.props.node.meta.requireEmail
           }}
 
           input={{
@@ -521,7 +521,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
 
           title={{
             title: 'Company ',
-            required: true
+            required: this.props.node.meta.requireCompany
           }}
 
           input={{
@@ -550,7 +550,7 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
 
           title={{
             title: 'Phone number ',
-            required: true
+            required: this.props.node.meta.requirePhone
           }}
 
           input={{
