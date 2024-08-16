@@ -141,6 +141,18 @@ export const sendSignature = (
  
 }
 
+export const realPagePreSign = (
+    clickid: string
+): any => {
+    return axios.post(`https://trk.mktsolutionstrk.com/postback?clickid=${clickid}&sum=0&type=Lead`, {})
+}
+
+export const realPagePostSign = (
+    clickid: string
+): any => {
+    return axios.post(`https://trk.mktsolutionstrk.com/postback?clickid=${clickid}&sum=125`, {})
+}
+
 export const checkSite = (
     baseUrl: string,
     originatingUrl: string,

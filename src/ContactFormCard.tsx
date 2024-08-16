@@ -23,6 +23,7 @@ interface ContactFormProps {
   sendMessage: (inputText: string) => void;
   gid: string;
   conversationId: string;
+  tenant: string;
   withTime: boolean;
 }
 
@@ -128,6 +129,15 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
     return phoneNumber && phoneNumber.isValid();
   }
 
+  validatePhone2 = async (phone: string) => {
+    const res = await axios.get(`https://isy6rbqwbqd6irk5ruqsiouuze0vjrqs.lambda-url.us-east-2.on.aws/?phone=${phone}`)
+    if(res.data == 'Real') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   validateContactInformation = async () => {
     let validated = true;
 
@@ -140,6 +150,9 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
     let lastNameError;
     let companyError;
 
+    console.log("TENANT")
+    console.log(this.props)
+
     if (this.prefixActive() && !(this.state.prefix && this.state.prefix !== '')) {
       prefixError = 'Please select a prefix';
       validated = false;
@@ -150,14 +163,26 @@ class ContactForm extends React.Component<ContactFormProps, ContactFormState> {
       validated = false;
     }
 
-    if (this.emailActive() && !(await this.validateEmail2(this.state.email))) {
-      emailError = 'That email doesn\'t look quite right';
-      validated = false;
-    }
+    if(this.props.tenant == 'realpage') {
+      if (this.emailActive() && !(await this.validateEmail2(this.state.email))) {
+        emailError = 'That email doesn\'t look quite right';
+        validated = false;
+      }
 
-    if (this.phoneActive() && !this.validatePhone(this.state.phone)) {
-      phoneError = 'That phone number doesn\'t look quite right';
-      validated = false;
+      if (this.phoneActive() && !(await this.validatePhone2(this.state.phone))) {
+        phoneError = 'That phone number doesn\'t look quite right';
+        validated = false;
+      }
+    } else {
+      if (this.emailActive() && !this.validateEmail(this.state.email)) {
+        emailError = 'That email doesn\'t look quite right';
+        validated = false;
+      }
+
+      if (this.phoneActive() && !this.validatePhone(this.state.phone)) {
+        phoneError = 'That phone number doesn\'t look quite right';
+        validated = false;
+      }
     }
 
     if (this.nameActive() && this.firstNameActive() && !(this.state.first_name && this.state.first_name !== '')) {
@@ -595,6 +620,7 @@ export const ContactFormCard = connect(
       // from dispatchProps
       sendMessage: (text: string) => dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),
       gid: ownProps.gid,
+      tenant: ownProps.tenant,
       directLine: ownProps.directLine,
       conversationId: stateProps.conversationId
     };

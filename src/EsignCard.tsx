@@ -7,7 +7,7 @@ import { ChatActions, sendMessage, sendFiles } from './Store';
 import { connect } from 'react-redux';
 import { isMobile } from 'react-device-detect';
 import { EsignNode, EsignPopup, EsignCheckMark, EsignPreSign, EsignPen, EsignPreSignFull, EsignFullTest, EsignFullTestPaper, EsignFullTestPaperSmall, EsignDocumentNext, EsignDocumentPrev, EsignDocumentNextMobile, EsignDocumentPrevMobile, EsignDocumentPrevFull, EsignDocumentNextFull } from './assets/icons/EsignIcons';
-import { sendSignature } from './api/bot';
+import { sendSignature, realPagePostSign, realPagePreSign } from './api/bot';
 import { Hidden } from '@material-ui/core';
 import { any } from 'bluebird';
 import { FileslistFormatter } from 'tslint/lib/formatters';
@@ -139,6 +139,19 @@ class Esign extends React.Component<EsignProps, EsignState> {
                     ...this.state,
                     signedfile: res.data.link
                 })
+                if(this.props.tenant == 'realpage') {
+                    var split = window.location.href.toLowerCase().split('?');
+                    var split2 = split[split.length - 1].split('&');
+                    split2.forEach(s => {
+                        var split3 = s.split('=')
+                        if(split3[0] == 'rtid') {
+                            realPagePostSign(split3[1])
+                            .then((res: any) => {
+                                //move on
+                            })
+                        }
+                    })
+                }
             })
             //once document is confirmed and received, set to this.state.signedfile, set completedDoc to true
             this.setState({
@@ -242,6 +255,19 @@ class Esign extends React.Component<EsignProps, EsignState> {
                 loading: false,
                 isModal: false
             })
+            if(this.props.tenant == 'realpage') {
+                var split = window.location.href.toLowerCase().split('?');
+                var split2 = split[split.length - 1].split('&');
+                split2.forEach(s => {
+                    var split3 = s.split('=')
+                    if(split3[0] == 'rtid') {
+                        realPagePostSign(split3[1])
+                        .then((res: any) => {
+                            //move on
+                        })
+                    }
+                })
+            }
             this.props.addFilesToState(this.props.index, files)
             this.props.sendMessage(JSON.stringify(this.state.signedfile))
             })
@@ -863,6 +889,20 @@ class Esign extends React.Component<EsignProps, EsignState> {
     //need to add fullscreen changes
     render() {
         const {willSubmit, completedDoc, isPopup, isDocument, isSignature, isModal} = this.state;
+        if(this.props.tenant == 'realpage') {
+            var split = window.location.href.toLowerCase().split('?');
+            var split2 = split[split.length - 1].split('&');
+            split2.forEach(s => {
+                var split3 = s.split('=')
+                if(split3[0] == 'rtid') {
+                    realPagePreSign(split3[1])
+                    .then((res: any) => {
+                        //move on
+                    })
+                }
+            })
+        }
+        
        return (
         <div>
             {isDocument == true && this.renderFullscreen()}
