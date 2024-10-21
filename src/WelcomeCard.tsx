@@ -16,15 +16,17 @@ import { YouTubeEmbed } from 'react-social-media-embed';
 export interface Node {
     node_type: string;
     meta: any;
-    
+
 }
 
 export interface WelcomeCardProps {
     meta: any;
     activity: any;
+    locale: any,
+    user: any,
+    conversationId: any,
+    format: any,
     sendMessage: (inputText: string) => void;
-    
-    
 }
 
 export interface WelcomeCardState {
@@ -36,108 +38,108 @@ class WelcomeCard extends React.Component<WelcomeCardProps, WelcomeCardState> {
         super(props);
 
         this.state = {
-          is_welcome: true
+            is_welcome: true
         };
     }
 
-    
-    
-
     //change list view to button
     render() {
-        if(this.state.is_welcome == true){
+        console.log("WelcomeCard render call");
+        if (this.state.is_welcome == true) {
             // console.log("props: ")
-        // console.log(this.props)
-        // console.log(this.props.activity.text)
-        if(this.props.meta.fullscreen == true && isMobile == false){
-            // do fullscreen version -> modify srtyling
-            if(document.getElementById('btn3') != null){
-                //document.getElementById('btn3').style.display = "none"
-            }
-            if(document.getElementById("presignnode")!= null){
-               //document.getElementById("presignnode").style.display = "none"
-              
-            }
-            return (
-                <div  id="welcome" className="modal-fullscreen">
-                <div className="modal-content-full">
-                <div className='presign_area_full_post'>
-                    <EsignNode />
-                </div>      
-                <div className="esign__card gideon__node">
-                    <div className="welcome-card gideon__node">
-                        <div>
-                            
-                        </div>
-                        <div className="vid_container">
-                            {this.checkVid()}
-                            
-                        </div>
-                        <div className='welcome-bigtext'>
-                            {this.props.meta.header || "Custom Header" }
-                        </div>
-                        <div className="welcome-smalltext">
-                        {this.props.activity.text ||
-                     "Welcome page"}
-                    
-                          
+            // console.log(this.props)
+            // console.log(this.props.activity.text)
+            if (this.props.format.fullscreen == true && isMobile == false) {
+                // console.log("Fullscreen");
+                // do fullscreen version -> modify srtyling
+                if (document.getElementById('btn3') != null) {
+                    //document.getElementById('btn3').style.display = "none"
+                }
+                if (document.getElementById("presignnode") != null) {
+                    //document.getElementById("presignnode").style.display = "none"
+
+                }
+                return (
+                    <div id="welcome" className="modal-fullscreen">
+                        <div className="modal-content-full">
+                            <div className='presign_area_full_post'>
+                                <EsignNode />
+                            </div>
+                            <div className="esign__card gideon__node">
+                                <div className="welcome-card gideon__node">
+                                    <div>
+
+                                    </div>
+                                    <div className="vid_container">
+                                        {this.checkVid()}
+
+                                    </div>
+                                    <div className='welcome-bigtext'>
+                                        {this.props.meta.header || "Custom Header"}
+                                    </div>
+                                    <div className="welcome-smalltext">
+                                        {this.props.activity.text ||
+                                            "Welcome page"}
+
+
+                                    </div>
+                                </div>
+                                <div className="welcome-button">
+                                    <button className="gideon-submit-button" onClick={e => this.handleContinue(e)}>{this.props.meta.cta || "Continue"}</button>
+                                </div>
+
+
+                            </div>
+
                         </div>
                     </div>
-                    <div className="welcome-button">
-                        <button className="gideon-submit-button" onClick={e => this.handleContinue(e)}>{this.props.meta.cta || "Continue"}</button>
+                )
+            } else {
+                //console.log("Not fullscreen");
+                // not fullscreen styling
+                if (document.getElementById('btn3') != null) {
+                    //document.getElementById('btn3').style.display = "none"
+                }
+                if (document.getElementById("presignnode") != null) {
+                    //document.getElementById("presignnode").style.display = "none"
+
+                }
+                return (
+                    <div id="welcome" className="modal-normal">
+                        <div className="modal-content">
+                            <div className="esign__card gideon__node">
+                                <div className="welcome-card">
+
+                                    <div className="vid_container">
+                                        {this.checkVid()}
+
+                                    </div>
+                                    <div className='welcome-bigtext'>
+                                        {this.props.meta.header || "Custom Header"}
+                                    </div>
+                                    <div className="welcome-smalltext">
+                                        {this.props.activity.text ||
+                                            "Welcome page"}
+
+                                    </div>
+                                    <div className="welcome-button">
+                                        <button className="gideon-submit-button" onClick={e => this.handleContinue(e)}>{this.props.meta.cta || "Continue"}</button>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
                         </div>
-                
-    
-                </div>
-               
-                </div>
-                </div>
-            )
-        } else {
-            // not fullscreen styling
-            if(document.getElementById('btn3') != null){
-                //document.getElementById('btn3').style.display = "none"
-            }
-            if(document.getElementById("presignnode")!= null){
-               //document.getElementById("presignnode").style.display = "none"
-              
-            }
-            return (
-                <div id="welcome" className="modal-normal">
-                <div className="modal-content">
-                <div className="esign__card gideon__node">
-                    <div className="welcome-card">
-                    
-                        <div className="vid_container">
-                            {this.checkVid()}
-                            
-                        </div>
-                        <div className='welcome-bigtext'>
-                            {this.props.meta.header || "Custom Header" }
-                        </div>
-                        <div className="welcome-smalltext">
-                        {this.props.activity.text ||
-                     "Welcome page"}
-                          
-                        </div>
-                        <div className="welcome-button">
-                        <button className="gideon-submit-button" onClick={e => this.handleContinue(e)}>{this.props.meta.cta || "Continue"}</button>
-                        </div>
-                       
+
                     </div>
+                )
 
-                </div>
-    
-                </div>
-               
-                </div>
-            )
-            
-        }
+            }
 
         }
-        
-       
+
+
     }
 
     handleContinue(e: React.MouseEvent<HTMLButtonElement>) {
@@ -152,18 +154,18 @@ class WelcomeCard extends React.Component<WelcomeCardProps, WelcomeCardState> {
         this.props.sendMessage(button_message)
         //document.getElementById("welcome").remove();
 
-       
-        
+
+
     }
 
-    checkVid(){
-        if(this.props.meta && this.props.meta.video_url){
+    checkVid() {
+        if (this.props.meta && this.props.meta.video_url) {
             return (
                 <YouTubeEmbed
-                 url={this.props.meta.video_url}
-                 width={325}
-                 height={320}
-                 /> 
+                    url={this.props.meta.video_url}
+                    width={325}
+                    height={320}
+                />
             )
 
         } else {
@@ -173,26 +175,28 @@ class WelcomeCard extends React.Component<WelcomeCardProps, WelcomeCardState> {
 }
 
 export const WelcomeNode = connect(
-    (state: ChatState) => 
-    {
+    (state: ChatState) => {
         return {
             // passed down to MessagePaneView
             locale: state.format.locale,
             user: state.connection.user,
             conversationId: state.connection.botConnection.conversationId
-        }; 
-    }, {
-        sendMessage 
-    }, (stateProps: any, dispatchProps: any, ownProps: any): WelcomeCardProps => {
-        return {
-            // from stateProps
-            meta: ownProps.activity.entities[0].meta,
-            activity: ownProps.activity,
-            // from dispatchProps
-            sendMessage: (text: string) => dispatchProps.sendMessage(text, stateProps.user, stateProps.locale),
-           
         };
-    }
+    }, {
+    sendMessage
+}, (stateProps: any, dispatchProps: any, ownProps: any): WelcomeCardProps => {
+    return {
+        // from stateProps
+        meta: ownProps.activity.entities[0].meta,
+        activity: ownProps.activity,
+        locale: stateProps.locale,
+        user: stateProps.user,
+        conversationId: stateProps.conversationId,
+        format: ownProps.format,
+        // from dispatchProps
+        sendMessage: (text: string) => dispatchProps.sendMessage(text, stateProps.user, stateProps.locale)
+    };
+}
 
 )(WelcomeCard);
 
